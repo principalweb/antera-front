@@ -1,0 +1,21 @@
+.container {
+    position: relative;
+    min-height: 200px;
+}
+
+.table-container {
+    position: relative;
+    max-height: 600px;
+    overflow: auto;
+}
+table {
+    width: 100%;
+}
+
+mat-cell,
+.mat-cell,
+mat-footer-cell,
+.mat-footer-cell,
+mat-header-cell, .mat-header-cell {
+  padding: 0.75rem !important;
+}

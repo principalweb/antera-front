@@ -1,0 +1,34 @@
+<div class="list mat-elevation-z1" fxLayout="column">
+
+    <fuse-scrumboard-board-edit-list-name
+        fxFlex="none"
+        [status]="status"
+        [total]="total"
+        (onNameChanged)="onListNameChanged($event)"
+        (remove)="removeList()">
+    </fuse-scrumboard-board-edit-list-name>
+
+    <div class="list-content" fxLayout="column">
+
+        <div class="list-cards ngx-dnd-container"
+             [model]="list" ngxDroppable="card"
+             (drop)="onDrop($event)"
+             #listScroll>
+
+            <fuse-scrumboard-board-card
+                [ngxDraggable]="['card']"
+                (click)="editArtwork(card)"
+                (pinned)="onPinCard(card, $event)"
+                class="scrumboard-board-card mat-elevation-z2 ngx-dnd-item"
+                [class.condensed]="condensed"
+                [model]="card"
+                [card]="card"
+                [condensed]="condensed"
+                [matTooltip]="tooltip(card)"
+                [matTooltipClass]="'card-tooltip'"
+                *ngFor="let card of list">
+            </fuse-scrumboard-board-card>
+        </div>
+    </div>
+
+</div>

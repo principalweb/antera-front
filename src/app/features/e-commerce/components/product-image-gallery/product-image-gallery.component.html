@@ -1,0 +1,36 @@
+<div class="tab-content p-24" fusePerfectScrollbar>
+  <div fxLayout="row wrap" fxLayoutAlign="start start">
+      <ng-container *ngIf="product.MediaContent && product.MediaContent.length > 0">
+            <div class="mr-16 mb-16" *ngFor="let image of product.MediaContent; let i=index">
+                <div *ngIf="product.MediaContent.length > 0"
+                    class="product-image" fxlayout="row" fxLayoutAlign="center center">
+                    <img class="media" [src]="image.url" (click)="editLogoBlock(i)">
+
+                    <button mat-button class="w-100-p"
+                            (click)="deleteImage(image)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+                <mat-form-field class="w-100-p">
+                    <mat-select [(value)]="image.color"
+                                (selectionChange)="changeColor($event.value, image)"
+                                placeholder="Color">
+                        <mat-option [value]="color.color" *ngFor="let color of colors">
+                            {{ color.color }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-slide-toggle [checked]="image.primary" (change)="primaryChanged($event, image);">Primary</mat-slide-toggle>
+            </div>
+      </ng-container>
+      <div class="product-image add-button"
+          fxlayout="row" fxLayoutAlign="center center"
+          (click)="openMediaDialog()">
+          <mat-icon>add</mat-icon>
+      </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

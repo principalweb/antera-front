@@ -1,0 +1,251 @@
+<div fxLayout="column" fxFlex>
+    <ng-container>
+        <div class="pl-24 p-16">
+            <div fxFlex="row" fxLayoutAlign="start center">
+        <div class="cell">
+                <button *ngIf="!isRootDir" mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="getLevelUpFolders()">
+                    <mat-icon>folder_open</mat-icon>
+                    {{currentFolder}} <mat-icon>arrow_upward</mat-icon>
+                </button>
+
+        </div>
+        <div class="cell" fxLayoutAlign="start right">
+                        <button mat-raised-button color="accent"
+		                        class="text-capitalize mr-8"
+		                        fxHide fxShow.gt-md
+		                       (click)="uploadAwsFile.click()">
+		                    <mat-icon>add</mat-icon> Files
+		                </button>
+
+		                <button mat-raised-button color="accent"
+		                        class="text-capitalize mr-8"
+		                        fxHide fxShow.gt-md
+		                        (click)="createFolder()">
+		                    <mat-icon>add</mat-icon> Folder
+		                </button>
+		                <button mat-raised-button color="accent"
+		                        class="text-capitalize mr-8"
+		                        fxHide fxShow.gt-md
+		                        (click)="reloadFolder()">
+		                    <mat-icon>refresh</mat-icon> Refresh
+		                </button>
+
+		                <button *ngIf="isSharePopup && selection.selectedIds.length > 0" mat-raised-button color="accent"
+		                        class="text-capitalize mr-8"
+		                        fxHide fxShow.gt-md
+		                        (click)="shareSelectedFiles()">
+		                    <mat-icon>cloud_download</mat-icon> Share
+		                </button>
+
+		                <button mat-raised-button color="warn"
+		                        class="text-capitalize mr-8"
+		                        fxHide fxShow.gt-md
+		                        (click)="deleteSelectedFilesFolder()">
+		                    <mat-icon>delete</mat-icon> Delete
+                       </button>
+
+
+		                <button *ngIf="filePreview" mat-raised-button color="warn"
+		                        class="text-capitalize mr-8"
+		                        fxHide fxShow.gt-md
+		                        (click)="filePreview = false">
+		                    <mat-icon>close</mat-icon> Close Preview
+                       </button>
+        </div>
+
+
+
+	        <!--div *ngIf="!isRootDir">
+	          <mat-icon class="logo-icon s-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">folder_open</mat-icon>
+	          <span class="myFilesLink" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{currentFolder}}</span>
+	          <mat-icon class="logo-icon s-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}" (click)="getLevelUpFolders()">arrow_upward</mat-icon>
+            </div-->
+
+            </div>
+        </div>
+
+	<div class="row">
+
+	</div>
+
+
+<label class="btn btn-default">
+  <input type="file" id="uploadAwsFile" (change)="selectFile($event)" multiple hidden #uploadAwsFile>
+</label>
+</ng-container>
+<ng-container>
+<div class="aws-file-table-container">
+<mat-table fxFlex #table matSort
+        [dataSource]="dataSource"
+        [@animateStagger]="{value:'50'}" *ngIf="dataSource.data.length > 0 && tabLoading">
+    <!-- Checkbox Column -->
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()" *ngIf="!restrictedFilesFolder(row)">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="icon">
+        <mat-header-cell class="header-cell header-cell-icon" *cdkHeaderCellDef>
+            <span mat-sort-header></span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" class="header-cell-icon">
+            <p class="text-truncate" *ngIf="row.isImage">
+               <img src="{{row.thumbnail}}&width=50" width="32" height="32" style="border:1px solid #666;padding:2px;">
+            </p>
+            <p class="text-truncate" *ngIf="!row.isImage">
+                <mat-icon style="font-size: 24px;">{{ row.icon }}</mat-icon>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">
+                {{ row.name }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="author">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Author</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">
+                {{ row.author }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateModified">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Date Modified</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">
+                {{ row.dateModified }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="tags">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Tags</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate" >
+                {{ row.metaData?.tags }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="email">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header></span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" (click)="$event.stopPropagation();">
+            <p *ngIf="row.metaData?.tags && artworkOrderId">
+                <button mat-icon-button  color="accent" (click)="composeDialog(row)"><mat-icon >email</mat-icon></button>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="size">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Size</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">
+                {{ row.size }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxFlex="none" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="Add/Edit Tags" (click)="editTags(row)"  *ngIf="row.type == 'file'">
+                        <mat-icon>edit</mat-icon>
+                        <span>Tags</span>
+                    </button>
+                    <button mat-menu-item aria-label="Rename Folder"  *ngIf="restrictedRenaming.indexOf(row.name) == -1" (click)="renameDir(row)"  >
+                        <mat-icon>edit</mat-icon>
+                        <span>Rename</span>
+                     </button>
+                    <button mat-menu-item  *ngIf="restrictedRenaming.indexOf(row.name) > -1" aria-label="Rename Folder"  disabled="true" (click)="renameDir(row)"  >
+                        <mat-icon>edit</mat-icon>
+                        <span>Rename</span>
+                    </button>
+                    <button mat-menu-item aria-label="Remove" *ngIf="restrictedRenaming.indexOf(row.name) == -1" (click)="deleteCurrntFilesFolder(row)" >
+                        <mat-icon>delete</mat-icon>
+                        <span >Remove</span>
+                    </button>
+                    <button mat-menu-item *ngIf="restrictedRenaming.indexOf(row.name) > -1" disabled="true" aria-label="Remove" (click)="deleteCurrntFilesFolder(row)" >
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                    <button *ngIf="isSharePopup" mat-menu-item aria-label="Share" (click)="shareCurrentFile(row)" >
+                        <mat-icon>cloud_download</mat-icon>
+                        <span>Share</span>
+                    </button>
+
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+            (click)="getSubFolders(row.id, row.type, row.url)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[row.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+</div>
+<mat-paginator #paginator
+            [length]="dataSource.data.length"
+            [pageSize]="50"
+            [pageSizeOptions]="[50, 100, 200]"
+            (page)="paginate($event)"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <span *ngIf="!savedRecords">Please save the record first.</span>
+</div>
+
+
+
+    </ng-container>
+</div>
+

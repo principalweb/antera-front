@@ -1,0 +1,58 @@
+<div class="bolt-form px-32">
+    <form name="form" [formGroup]="boltForm" >
+      <div class="mt-40 mb-16 mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+        <span class="mat-title mb-0">Card Connect BOLT Configuration</span>
+        <mat-slide-toggle labelPosition="before" formControlName="enabled">
+          Enable
+        </mat-slide-toggle>
+      </div>
+
+      <div class="mt-20 mx-400">
+        <!--div fxLayout="row" fxLayoutAlign="start center">
+          <span class="mat-body-1 w-80 mr-16 text-right">API Key</span>
+          <mat-form-field class="w-420" fxFlex>
+            <input matInput  placeholder="API Key" formControlName="apikey" required>
+                <mat-error *ngIf="boltForm.get('apikey')?.errors?.required">
+                 API Key is required
+                </mat-error>
+          </mat-form-field>
+        </div-->
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span class="mat-body-1 w-80 mr-16 text-right">HSN</span>
+          <mat-form-field fxFlex>
+            <input matInput  placeholder="HSN" formControlName="hsn" required>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span class="mat-body-1 w-80 mr-16 text-right">Merchant ID</span>
+          <mat-form-field fxFlex>
+            <input matInput  placeholder="Merchant ID" formControlName="merchantid" required>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span class="mat-body-1 w-80 mr-16 text-right"> API User Name</span>
+          <mat-form-field fxFlex>
+            <input matInput  placeholder="User Name" formControlName="username" required>
+          </mat-form-field>
+        </div>
+        <span class="mat-body-1 w-80 mr-16 text-right">(This is Not Card Connect Website Log In Username. This is API Username Provided with Merchant ID.)</span>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span class="mat-body-1 w-80 mr-16 text-right">API Password</span>
+          <mat-form-field fxFlex>
+            <input matInput  type="password" placeholder="Password" formControlName="password" required>
+          </mat-form-field>
+        </div>
+        <span class="mat-body-1 w-80 mr-16 text-right">(This is Not Card Connect Website Log In Password. This is API Password Provided with Merchant ID.)</span>
+        <!--div fxLayout="row" fxLayoutAlign="start center" class="h-64">
+          <span class="mat-body-1 w-80 mr-16 text-right">Test Mode</span>
+          <mat-checkbox  formControlName="testmode"></mat-checkbox>
+        </div-->
+        <div class="actions">
+          <button mat-raised-button class="mr-8" color="accent" (click)="save()">Save</button>
+        </div>
+      </div>
+    </form>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,538 @@
+<div id="order-confirm-modern" class="modern page-layout blank" fusePerfectScrollbar>
+
+    <div class="order-container">
+
+        <!-- order -->
+        <div class="card-order-confirmation">
+
+            <!-- HEADER -->
+
+            <div id="header" class="header-order-confirmation" fxLayout="row" fxLayoutAlign="start start">
+
+                <div fxLayout="column" fxLayoutAlign="start start">
+                    <div class="order-title">
+                        <span>{{docLabels.title}}</span>
+                    </div>
+
+                    <table class="summary mb-8">
+                        <tr>
+                            <th class="label">{{fieldLabel('orderNo', fields)}}</th>
+                            <td class="value">#{{order.orderNo}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[1].value && order.orderDate != '' && order.orderDate != '0000-00-00'">
+                            <th class="label">{{fieldLabel('orderDate', fields)}}</th>
+                            <td class="value">{{order.orderDate}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[8].value && order.salesPerson != ''">
+                            <td class="label">{{fieldLabel('salesPerson', fields)}}</td>
+                            <td class="value">{{order.salesPerson}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[9].value && order.salesPersonPhone != ''">
+                            <td class="label">{{fieldLabel('salesPersonPhone', fields)}}</td>
+                            <td class="value">{{order.salesPersonPhone}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[10].value && order.salesPersonEmail != ''">
+                            <td class="label">{{fieldLabel('salesPersonEmail', fields)}}</td>
+                            <td class="value">{{order.salesPersonEmail}}</td>
+                        </tr>
+                    </table>
+
+
+                </div>
+
+                <div class="ids" fxLayout="column">
+                    <div fxLayout="row" class="seller" fxLayoutAlign="center start">
+                        <img *ngIf="logoUrl == ''" class="logo" [src]="'assets/images/logos/karma.png'">
+                        <img *ngIf="logoUrl != ''" class="logo" [src]="logoUrl"
+                            [default]="'assets/images/logos/karma.png'">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="details" fxLayout="row">
+                <table>
+                    <tr>
+                        <td class="label">{{fieldLabel('customerPo', fields)}}</td>
+                        <td class="value">#{{order.customerPo}}</td>
+                    </tr>
+                    <tr>
+                        <!-- <td class="label">{{fieldLabel('billingCustomerName', fields)}}</td> -->
+                        <th class="label">Sold To</th>
+                        <td class="value">{{ order.billingCustomerName }}</td>
+                    </tr>
+                    <tr>
+                        <!-- <td class="label">{{fieldLabel('billingCustomerName', fields)}}</td> -->
+                        <th class="label">Address</th>
+                        <td class="value">
+                            <div class="detail">
+                                <div class="title">{{order.billingCompanyName}}</div>
+                                <div class="title">{{order.billingCustomerName}}</div>
+                                <div class="address">
+                                    {{order.billingStreet}}
+                                </div>
+                                <div class="address">
+                                    {{order.billingStreet2}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>City / State / Zip</th>
+                        <td>
+
+                            {{order.billingCity}} {{order.billingState}} {{order.shipPostalcode}}
+                            {{order.shipCountry}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td>{{ order.billingPhone}}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ order.billingEmail }}</td>
+                    </tr>
+
+                </table>
+
+                <table>
+                    <tr>
+                        <th>FOB Point</th>
+                        <td>
+                            {{ sourceSubmission?.fobChinaPort }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>In Hand Date</th>
+                        <td>{{ order.inHandDateBy }}</td>
+                    </tr>
+                    <tr>
+                        <th>Ship To</th>
+                        <td>{{ order.shippingCompanyName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact</th>
+                        <td>{{ order.shippingCustomerName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td>
+                            <div class="detail">
+                                <div class="address">
+                                    {{order.shippingStreet}}
+                                </div>
+                                <div class="address">
+                                    {{order.shippingStreet2}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>City / State / Zip</th>
+                        <td>
+                            {{order.shippingCity}} {{order.shippingState}} {{order.shipPostalcode}}
+                            {{order.shipCountry}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Phone Number</th>
+                        <td>{{ order.shippingPhone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ order.shippingEmail }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="section-header">Item Greater China Is Producing</div>
+
+            <!-- COMES FROM SOURCING SUBMISSION -->
+
+            <table class="summary">
+                <tr>
+                    <th>Item Name</th>
+                    <td colspan="2">{{ order.orderIdentity }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Item Description (Size, Color, Material(s), Packaging)</th>
+                    <th>Image / Mock Up</th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <!-- Customer Description -->
+                        {{ sourceSubmission?.source?.specifications }}
+                    </td>
+                    <td rowspan="6">
+                        <ng-container *ngIf="sourceSubmission?.source?.images?.length">
+                            <img class="source-image" [src]="sourceSubmission?.source?.images[0] | urlFix"
+                                [default]="'assets/images/ecommerce/product-image-placeholder.png'" />
+                        </ng-container>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">Decoration Information / Description</th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <!-- Decoration Information / Description -->
+                        {{ sourceSubmission?.source?.decorationType }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Quality Expectation</th>
+                    <td>
+                        <ng-container *ngIf="logistics?.qualityExpectationRetail">
+                            Retail
+                        </ng-container>
+                        <ng-container *ngIf="logistics?.qualityExpectationPromotional">
+                            Promotional
+                        </ng-container>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Logo Release Needed</th>
+                    <td>
+                        {{ logistics?.logoRelease ? 'Yes' : 'No' }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Safety Testing Required</th>
+                    <td>
+                        {{ sourceSubmission?.testingRequirements }}
+                    </td>
+                </tr>
+            </table>
+
+            <div class="content-order-confirmation">
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>Item Number</th>
+                            <th>Item Name</th>
+                            <th class="fixed-width-qty">{{docLabels.qty}}</th>
+                            <th class="fixed-width-price">{{docLabels.unitPrice}}</th>
+                            <th class="fixed-width-total">{{docLabels.totalPrice}}</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th colspan="4" class="text-right">Grand Total</th>
+                            <td>
+                                {{order.finalGrandTotalPrice | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <ng-container *ngFor="let product of lineItems">
+                            <ng-container *ngIf="!product?.lineItem?.hideLine">
+                                <tr>
+                                    <td class="first-line">
+                                        {{ product?.lineItem?.itemNo }}
+                                    </td>
+                                    <td
+                                        [ngClass]="{'fixed-width-name-3': checkDocOptions() == 0, 'fixed-width-name-2': checkDocOptions() == 1, 'fixed-width-name-1': checkDocOptions() == 2}">
+                                        <div class="title">{{product.productName}}</div>
+                                    </td>
+                                    <td class="fixed-width-qty">
+                                        {{product.quantity | number:sysconfigOrderFormQtyDecimalUpto}}
+                                    </td>
+                                    <td *ngIf="docOptions[18].value" class="first-line fixed-width-price">
+                                        {{product.price | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                                    </td>
+                                    <td *ngIf="!docOptions[18].value" class="first-line fixed-width-price">
+                                        {{product.price}}
+                                    </td>
+                                    <td *ngIf="docOptions[18].value" class="first-line fixed-width-total">
+                                        {{(product.price * product.quantity) | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                                    </td>
+                                    <td *ngIf="!docOptions[18].value" class="first-line fixed-width-total">
+                                        {{(product?.price * product?.quantity)}}
+                                    </td>
+                                </tr>
+                                <ng-container *ngIf="product.lineItem.rollAddonChargesToProduct == 0">
+                                    <tr *ngFor="let addonCharge of product.addonCharges; let i=index;">
+                                        <td colspan="8" class="noBorder">
+                                            <div class="mt-10" fxLayout="row" fxLayoutAlign="end center">
+                                                <span *ngIf="i==0" class="title-addon">
+                                                    Additional Charges
+                                                </span>
+                                                <div *ngIf="!docOptions[20].value" class="image-space"></div>
+                                                <div *ngIf="docOptions[20].value" class="image"></div>
+                                                <span class="name">
+                                                    {{addonCharge.name}}
+                                                </span>
+                                                <span class="price">
+                                                    {{addonCharge.price | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                                                </span>
+                                                <span class="quantity">
+                                                    {{addonCharge.matchOrderQty == '1' ? product?.matchOrderQty : addonCharge.quantity | number:sysconfigOrderFormQtyDecimalUpto}}
+                                                </span>
+                                                <span class="total">
+                                                    {{(addonCharge.matchOrderQty == '1' ? (addonCharge.price * product.matchOrderQty) : (addonCharge.price * addonCharge.quantity)) | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+
+                <div class="section-header">Packaging Information</div>
+
+                <table class="packaging-information detail">
+                    <tr>
+                        <th colspan="4">Carton Markings Front / Back</th>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            {{ logistics?.cartonMarkings }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Special Packaging</th>
+                        <td colspan="3">
+                            <div class="pre">
+                                {{ sourceSubmission?.packaging }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Country of Origin Placement</th>
+                        <td colspan="3">
+                            {{ logistics?.countryOfOriginPlacement }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- FOOTER -->
+
+            <div id="footer" class="footer-order-confirmation">
+                <div>
+                    <strong>Client Signature ___________________________________________</strong>
+                    <strong>Date ________________________</strong>
+                </div>
+                <div class="section-header">Thank you for your business!</div>
+                <div class="footer-contact">
+                    <div class="address">
+                        14205 SE 36th St, | Bellevue, WA 98006
+                    </div>
+                    <div>
+                        <span class="phone">Toll Free: 888.424.6847</span> |
+                        <span class="phone phone-fax">Fax: 425.643.6519</span> |
+                        <a href="https://www.greaterchina-usa.com" class="website">greaterchina-usa.com</a>
+                    </div>
+                </div>
+
+                <div *ngIf="order.orderNote != ''" class="note mt-16">Notes:</div>
+                <div *ngIf="order.orderNote != ''" fxLayout="row" fxLayoutAlign="start start">
+                    <div class="small-note pre">{{order?.orderNote}}</div>
+                </div>
+                <div *ngIf="docOptions[29]?.value" fxLayout="row" fxLayoutAlign="start start">
+                    <div class="footer-note pre">{{ displaydocDefaultOptions(docOptions[29]?.name)}}</div>
+                </div>
+            </div>
+
+            <div class="page-terms">
+                <div class="seller">
+                    <img *ngIf="logoUrl == ''" class="logo" [src]="'assets/images/logos/karma.png'">
+                    <img *ngIf="logoUrl != ''" class="logo" [src]="logoUrl" [default]="'assets/images/logos/karma.png'">
+                </div>
+                <h1 class="text-center">TERMS AND CONDITIONS</h1>
+                <ol>
+
+                    <li>
+                        <span class="text-underline">Entire Agreement.</span> Notwithstanding any other purchase order, proposals or terms and conditions
+                        additional to or different from those contained herein, this Purchase Order Confirmation (the
+                        "POC") including all terms, conditions and provisions set forth herein constitutes the entire
+                        agreement between the parties relating to this transaction. Upon acceptance by the Client, the
+                        parties shall be deemed to have agreed to be bound only by and in accordance with the terms and
+                        conditions set for in this POC.
+                    </li>
+                    <li>
+                        <span class="text-underline">Delivery.</span> Time is of the essence which means that Greater China Industries, Inc. (the "Seller")
+                        shall exert commercially reasonable efforts to complete and deliver the Items within the time
+                        period set forth in this POC. Seller is not responsible for additional costs due to delays
+                        caused by acts of God or the failure of Client to provide in a timely manner deposits, samples,
+                        artwork and other requirements of this transaction.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Cancellation.</span> Once accepted by the Client, this POC cannot be cancelled without the prior
+                        written consent of Seller. Should Client request and Seller approve a cancellation, Client is
+                        responsible for any costs incurred by Seller in performance of this transaction including a
+                        cancellation fee. Costs for tooling, molds and set-ups are pre-paid and not refundable.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Non-Disclosure, Non-Circumvent, Confidentiality.</span> It is understood that through the execution of
+                        this purchase order, Seller or Client may come to posses information that is confidential in
+                        nature to the other Party. Both Parties agree to protect this information as proprietary and
+                        confidential and not disclose to any other Party for any reason without written permission.
+                        Furthermore, it is possible that information regarding the Seller’s factory information or the
+                        Client’s customer information will not be used to circumvent the other Party for a period of 3
+                        (three) years from date of this agreement.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">30-Day Product Guarantee.</span> Products are guaranteed against defective manufacturing for thirty
+                        (30) calendar days from delivery of goods. Industry-standard production variances from a
+                        client-approved pre-production sample are not considered to be product defects. In the event of
+                        any breach of this POC or express warranty relating to the Items, Seller's liability shall be
+                        limited to (i) repair or replacement of the Item proved to be defective or, at Seller's sole
+                        discretion, ii) refund of the original purchase price. Seller shall have the right to inspect
+                        any of the Items claimed to be defective and to submit the same to such technical or other
+                        examination as Seller may determine. Seller will not be liable for any incidental or
+                        consequential damages, or any other damages, loss, cost or expense incurred or claimed by Client
+                        relating to the Items (except as specifically provided herein), or as a result of Seller's
+                        breach of this POC.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Disclaimer of Warranties.</span> Except as specifically provided above or elsewhere in the POC, Seller
+                        makes no additional representations or warranties, written or oral, express or implied
+                        (including, but not limited to the implied warranties of merchantability, patent infringement,
+                        product safety testing, or fitness for a particular purpose) regarding the condition or any
+                        other aspect of the Items including any claim that the Items infringe upon any third party
+                        patent rights.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Force Majeure.</span> No failure or omission by the Parties in the performance of any obligation of
+                        this Agreement will be deemed a breach of this Agreement or create any liability if the same
+                        will arise from any cause or causes beyond the control of the Parties, including, but not
+                        limited to, the following: acts of God; acts or omissions of any government; any rules,
+                        regulations or orders issued by any governmental authority or by any officer, department, agency
+                        or instrumentality thereof; fire; flood; storm; earthquake; accident; war; rebellion;
+                        insurrection; riot; and invasion. The affected Party shall notify the other Party of such force
+                        majeure circumstances as soon as reasonably practical and shall promptly undertake all
+                        reasonable efforts necessary to cure such force majeure circumstances.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Product Safety Testing.</span> The Seller will provide a certificate of compliance for any Product
+                        Testing that the Client requires, such Product Testing being defined by the Client on Page 1 of
+                        the POC, in section labeled “SAFETY TESTING REQUIRED”.
+                    </li>
+                    <li>
+                        <span class="text-underline">Patent Infringement.</span> The Client provides that information given in relation to patents will at
+                        all times be truthful to the best of their ability. Furthermore, if Seller produces a product
+                        with no knowledge of a holding patent then the Client will hold Seller harmless and will
+                        indemnify Seller for any subsequent judgments.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Duties Tariffs and Taxes.</span> Seller reserves the right to pass through any increase in cost due to
+                        unforeseen increases in Duties, Tariffs or Taxes imposed after the execution date of this POC.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Payments, Interest and Collection Costs.</span> All payments required to be made by Client shall be
+                        paid as and when specified on the face of this POC; provided that any payments not made when due
+                        shall bear interest at the rate of eighteen percent (18%) per annum or the maximum rate allowed
+                        by law, whichever is less, from the due date until the date when paid. Any costs or expenses
+                        (including, but not limited to, actual attorneys fees) incurred by Seller in connection with the
+                        collection of payments required to be paid by Client or the enforcement of this POC shall be
+                        paid or reimbursed by Client. In the event of payment delay, including deposits, by Client,
+                        Seller cannot be responsible for delay in final delivery of goods.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">The Client is hereby informed that any check payments made to the Seller, must be sent directly
+                        to the Seller’s PO Box exactly as shown on the invoice.</span> No payments, whatsoever, are to be sent
+                        to the Seller’s office address. The client also has the option of making payment via the
+                        Seller’s website, using the tab: “Client Services” and then “Make A Payment”. The client, by
+                        their signature below, acknowledges this, and will take all reasonable steps to implement this
+                        process into their payment procedures.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Governing Law.</span>This POC shall be governed by and construed in accordance with the laws of the
+                        State of Washington, and venue and jurisdiction of any action hereunder shall be in the Superior
+                        Court for King County, Washington.
+
+                    </li>
+                    <li>
+                        <span class="text-underline">Dispute Costs.</span> In the event of any conflict, claim or dispute between the parties and arising
+                        out of or relating to the subject matter of this POC, whether or not such conflict, claim or
+                        dispute has its basis in law or in equity, the prevailing party shall be entitled to receive
+                        from the non-prevailing party all reasonable costs and expenses of every sort whatsoever
+                        including, but not limited to, reasonable attorney’s fees incurred or expended whether or not
+                        arbitration or court proceedings are initiated.
+                    </li>
+                    <li>
+                        <span class="text-underline">Facsimile.</span> This POC may be executed by fax transmission, electronic signature or email scan with
+                        the same force and effect as an original signature.
+                    </li>
+                    <li>
+                        <span class="text-underline">Confidentiality.</span> It is agreed that customer information, logos, and trademarks are property of
+                        Client. Factory information, including pricing, products, software, inventions, specifications,
+                        designs, drawings, diagrams, engineering, techniques and documents are the proprietary
+                        information of Seller. Client and Seller agree to protect the confidential and/or proprietary
+                        nature of information.
+                    </li>
+                    <li>
+                        By executing this POC, Client acknowledges, accepts and agrees that the pricing, payment terms
+                        and other provisions set forth above are accurate and complete, and that this purchase order is
+                        subject to the additional terms, conditions and provisions set forth herein. THE PURCHASE ORDER
+                        WILL NOT BE PROCESSED UNTIL THIS CONFIRMATION IS SIGNED AND RETURNED BY THE CLIENT.
+                    </li>
+                </ol>
+                <div class="footer">
+                    <div class="mt-24">
+                        <strong>Client Signature ___________________________________________</strong>
+                        <strong>Date ________________________</strong>
+                    </div>
+                </div>
+            </div>
+            <!--
+
+            Use the following elements to add breaks to your pages. This will make sure that the section in between
+            these elements will be printed on a new page. The following two elements must be used before and after the
+            page content that you want to show as a new page. So, you have to wrap your content with them.
+
+            Elements:
+            ---------
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+            <!--
+
+            Example:
+            --------
+
+            Initial page content!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the second page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the third page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+        </div>
+        <!-- / order -->
+
+    </div>
+
+</div>

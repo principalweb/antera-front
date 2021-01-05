@@ -1,0 +1,88 @@
+<div id="admin-manage-menu-page" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+      <!-- CONTENT HEADER -->
+      <div class="header white-fg p-24" fxLayout="row" fxLayoutAlign="start center">
+          <h2>Manage Menu</h2>
+      </div>
+      <!-- / CONTENT HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card mat-white-bg">
+        
+        <!-- CONTENT -->
+        <div class="content p-48 pt-24" fusePerfectScrollbar>
+
+            <div class="menu-list">
+                <div class="menu" *ngFor="let navItem of navigationItems">
+                    <div *ngIf="navItem.id != 'antera' || navItem.title != 'Antera Admin'">
+                        <span>{{navItem.title_manage}}</span>
+                        <mat-slide-toggle (change)="sliderToggled(navItem, $event)" [checked]="checkDisplay(navItem)"></mat-slide-toggle>
+                    </div>
+                    
+                    <div class="sub-list" *ngIf="navItem.children && (navItem.id != 'antera' || navItem.title != 'Antera Admin')">
+                        <div class="item" *ngFor="let subItem of navItem.children">
+                            <div>
+                                <span>{{subItem.title_manage}}</span>
+                               
+                                <mat-slide-toggle (change)="sliderToggled(subItem, $event)" [checked]="checkDisplay(subItem)"></mat-slide-toggle>
+                                <!-- <input matInput placeholder="Order No" class="cust_order"> -->
+                                <div class="cust-sidenav" *ngIf="subItem.custom_show"><!-- <input matInput placeholder="Custom Label" (change)="changeCustomLabel(subItem, $event)" [ngModel]="subItem.cust_name"> -->
+                                    <mat-form-field class="custom-label">
+                                        <mat-label>Custom Label</mat-label>
+                                        <input matInput placeholder="Custom Label" (change)="changeCustomLabel(subItem, $event)" [ngModel]="subItem.cust_name">
+                                      </mat-form-field>
+                                      <mat-form-field class="custom-order" >
+                                        <mat-label>Order</mat-label>
+                                        <input matInput type="number" min="1"  placeholder="Custom Order" (change)="changeOrderNo(subItem, $event)" [ngModel]="subItem.cust_order">
+                                      </mat-form-field>
+                                    <mat-slide-toggle class="custom-display" (change)="sliderToggledCustom(subItem, $event)" [checked]="checkDisplayCustom(subItem)"></mat-slide-toggle>
+                                </div>
+                                    <!-- <mat-slide-toggle (change)="sliderToggled(subItem, $event)" [checked]="checkDisplay(subItem)"></mat-slide-toggle> -->
+                            
+                            </div>
+
+                            <div class="sub-list" *ngIf="subItem.children">
+                                <div class="item" *ngFor="let childItem of subItem.children">
+                                    <span>{{childItem.title_manage}}</span>
+                                    <mat-slide-toggle (change)="sliderToggled(childItem, $event)" [checked]="checkDisplay(childItem)"></mat-slide-toggle>
+                                   <!--  <div class="cust-sidenav" *ngIf="childItem.custom_show"><input matInput placeholder="Custom Label" (change)="changeCustomLabel(childItem, $event)" [ngModel]="childItem.cust_name">
+                                        <mat-slide-toggle class="custom-display" (change)="sliderToggledCustom(childItem, $event)" [checked]="checkDisplayCustom(childItem)"></mat-slide-toggle></div> -->
+                                        <div class="cust-sidenav" *ngIf="subItem.custom_show"><input matInput placeholder="Custom Label" (change)="changeCustomLabel(subItem, $event)" [ngModel]="subItem.cust_name">
+                                            <mat-form-field class="custom-label">
+                                                <mat-label>Custom Label</mat-label>
+                                                <input matInput placeholder="Custom Label" (change)="changeCustomLabel(childItem, $event)" [ngModel]="childItem.cust_name">
+                                              </mat-form-field>
+                                              <mat-form-field class="custom-order" >
+                                                <mat-label>Order</mat-label>
+                                                <input matInput type="number" min="1"   placeholder="Custom Order" (change)="changeOrderNo(childItem, $event)" [ngModel]="childItem.cust_order">
+                                              </mat-form-field>
+                                            <mat-slide-toggle class="custom-display" (change)="sliderToggledCustom(childItem, $event)" [checked]="checkDisplayCustom(childItem)"></mat-slide-toggle>
+                                        </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
+          </div>
+          <!-- / CONTENT -->
+
+      </div>
+      <!-- / CONTENT CARD -->
+
+  </div>
+  <!-- / CENTER -->
+
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

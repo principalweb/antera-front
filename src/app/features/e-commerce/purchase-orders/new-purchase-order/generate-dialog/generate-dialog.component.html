@@ -1,0 +1,59 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <div>Generate Purchase Order(s)</div>
+      <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="toolbar mt-8" fxLayout="row">
+      <button [disabled]="!vendors.length || clicked" mat-raised-button color="accent" class="text-capitalize mr-8 ml-16 mb-8" (click)="finalizeOrder()">
+        <mat-icon>done</mat-icon> Finalize Order(s)
+      </button>
+    </div>
+    <ng-container *ngIf="vendors.length">
+      <!-- Padding Indent -->
+      <div class="px-16 mb-16" fusePerfectScrollbar>
+        <h3 class="mat-title mr-8 accent-text font-weight-600">
+          Selected Items Summary
+        </h3>
+        <div fxLayout="column" class="BasicInfoLeft font-weight-600 mb-16">
+          <mat-accordion multi="true">
+            <mat-expansion-panel
+            [expanded]="true"
+            *ngFor="let vendor of vendors;">
+            <mat-expansion-panel-header>
+              <span class="font-weight-900 mr-8">Vendor:</span><span class="font-weight-900">{{vendor}}</span>
+            </mat-expansion-panel-header>
+            
+            <div class="mb-16" fxLayout="column">
+              <div fxLayout="row" fxLayoutAlign="space-around center">
+                <h4 class="font-weight-600 mt-0 mb-0 boxy-width">Order Number</h4>
+                <h4 class="font-weight-600 mt-0 mb-0 boxy-width">Item Number</h4>
+                <h4 class="font-weight-600 mt-0 mb-0 boxy-width">Type</h4>
+                <h4 class="font-weight-600 mt-0 mb-0 boxy-width">Description</h4>
+                <h4 class="font-weight-600 mt-0 mb-0 boxy-width">Quantity</h4>
+                <h4 class="font-weight-600 mt-0 mb-0 boxy-width">Unit Price</h4>
+              </div>
+              <div fxLayout="row" 
+              fxLayoutAlign="space-around center" *ngFor="let purchaseNeed of byVendor[vendor]">
+              <p class="mt-0 mb-0 boxy-width">{{purchaseNeed.refSalesOrderNo}}</p>
+              <p class="mt-0 mb-0 boxy-width">{{purchaseNeed.supplierProductId}}</p>
+              <p class="mt-0 mb-0 boxy-width">{{purchaseNeed.type}}</p>
+              <p class="mt-0 mb-0 boxy-width">{{purchaseNeed.description}}</p>
+              <p class="mt-0 mb-0 boxy-width">{{purchaseNeed.quantityOrdered}}</p>
+              <p class="mt-0 mb-0 boxy-width">${{purchaseNeed.actualUnitCost.toFixed(2)}}</p>
+              </div>
+            </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+      <!-- / Padding Indent -->
+    </ng-container>
+    <div class="loading" *ngIf="!vendors.length || loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  
+</div>

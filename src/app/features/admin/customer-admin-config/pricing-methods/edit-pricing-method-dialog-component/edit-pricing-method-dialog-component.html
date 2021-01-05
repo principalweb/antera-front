@@ -1,0 +1,205 @@
+<div
+  class="edit-pricing-margin-container"
+  [style.width.px]="columnContainerWidth"
+>
+  <h2 mat-dialog-title>Update Pricing Level</h2>
+  <h4 mat-dialog-subtitle>Method Type: {{pricingMethodType}}</h4>
+  <mat-dialog-content class="mat-typography edit-pricing-margin-container">
+    <form [formGroup]="pricingLevelForm">
+      <mat-form-field class="full-width-form">
+        <input
+          placeholder="Pricing Level Name"
+          matInput
+          formControlName="name"
+        />
+        <mat-error *ngIf="pricingLevelForm.get('name').invalid">
+          Pricing Level is required
+        </mat-error>
+      </mat-form-field>
+      <br />
+      <!-- <div  *ngIf="pricingMethodTypeNumber === '3'">
+        <mat-form-field>
+          <input
+            (keyup.enter)="pushToList()"
+            autocomplete="off"
+            autofill="false"
+            placeholder="Range Of Retail"
+            matInput
+            formControlName="rangeOnMarginCost"
+            [(ngModel)]="newPriceBreak"
+          />
+        </mat-form-field>
+
+        <button (click)="pushToList()" mat-icon-button color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+        <mat-chip-list
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <mat-chip
+            [removable]="true"
+            (removed)="remove(priceBreak)"
+            cdkDrag
+            *ngFor="let priceBreak of priceBreaks"
+          >
+            {{ priceBreak }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        <br />
+      </div> -->
+      <mat-form-field
+        *ngIf="pricingMethodTypeNumber === '3'"
+        class="full-width-form"
+      >
+        <input
+          placeholder="Range"
+          matInput
+          formControlName="rangeOnMarginCost"
+        />
+        <mat-error *ngIf="pricingLevelForm.get('rangeOnMarginCost').invalid">
+          Range is required
+        </mat-error>
+      </mat-form-field>
+      <br />
+      <mat-form-field
+        *ngIf="pricingMethodTypeNumber === '1'"
+        class="full-width-form"
+      >
+        <input
+          placeholder="Margin"
+          matInput
+          formControlName="percentageOfRetail"
+        />
+        <mat-error *ngIf="pricingLevelForm.get('percentageOfRetail').invalid">
+          Margin is required
+        </mat-error>
+      </mat-form-field>
+
+      <div *ngIf="pricingMethodTypeNumber === '2'">
+        <div
+          formArrayName="pricingLevels"
+          *ngFor="let pricingLevel of pricingLevelForm.controls.pricingLevels?.value; let i = index; trackBy: trackByFn"
+        >
+          <ng-container [formGroupName]="i">
+            <span [ngSwitch]="pricingLevel.type">
+              <div *ngSwitchCase="'2'" class="pricing-column">
+                <br />
+                <fieldset [disabled]="true">
+                <mat-form-field class="one-third-input">
+                  <input placeholder="Range" matInput formControlName="range" />
+                </mat-form-field>
+              </fieldset>
+                <br />
+
+                <label for="operator">Operator</label>
+                <mat-form-field class="one-third-input">
+                  <mat-select
+                    #select
+                    formControlName="operator"
+                    (valueChange)="updateOperator($event)"
+                  >
+                    <mat-select-trigger>
+                      <span [ngSwitch]="pricingLevel.operator">
+                        <p *ngSwitchCase="operators.greater.value">
+                          <mat-icon>{{operators.greater.icon}}</mat-icon>
+                        </p>
+                        <p *ngSwitchCase="operators.less.value">
+                          <mat-icon>{{operators.less.icon}}</mat-icon>
+                        </p>
+                        <p *ngSwitchCase="operators.equal.value">
+                          <mat-icon>{{operators.equal.icon}}</mat-icon>
+                        </p>
+                        <p *ngSwitchDefault>
+                          <mat-icon>{{operators.less}}</mat-icon>
+                        </p>
+                      </span>
+                    </mat-select-trigger>
+                    <mat-option
+                      *ngFor="let operator of operatorOptions"
+                      [value]="operator.value"
+                    >
+                      <mat-icon>{{operator.icon}}</mat-icon>
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <br />
+                <fieldset [disabled]="true">
+                  <mat-form-field class="one-third-input">
+                    <input placeholder="Qty" matInput formControlName="qty" />
+                  </mat-form-field>
+                </fieldset>
+                <br />
+                <mat-form-field class="one-third-input">
+                  <input
+                    placeholder="Margin"
+                    matInput
+                    formControlName="margin"
+                  />
+                </mat-form-field>
+              </div>
+              <p *ngSwitchCase="'3'">should be case 3</p>
+              <p *ngSwitchDefault>should be case default</p>
+            </span>
+          </ng-container>
+        </div>
+      </div>
+      <br />
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="start">
+    <mat-card-actions>
+      <span [ngSwitch]="pricingMethodTypeNumber">
+        <span *ngSwitchCase="'3'">
+          <button
+            [mat-dialog-close]="true"
+            cdkFocusInitial
+            mat-raised-button
+            (click)="updatePricingRangeOnMarginCost()"
+            color="primary"
+          >
+            Update
+          </button>
+        </span>
+        <span *ngSwitchCase="'2'">
+          <button
+            [mat-dialog-close]="true"
+            cdkFocusInitial
+            mat-raised-button
+            (click)="updatePricingLevelMethodList()"
+            color="primary"
+          >
+            Update
+          </button>
+        </span>
+        <span *ngSwitchCase="'1'">
+          <button
+            [mat-dialog-close]="true"
+            cdkFocusInitial
+            mat-raised-button
+            (click)="updatePricingPercentage()"
+            color="primary"
+          >
+            Update
+          </button>
+        </span>
+      </span>
+      <span *ngIf="editingPricingId === '1'">
+        <button
+          [mat-dialog-close]="true"
+          cdkFocusInitial
+          mat-raised-button
+          (click)="updatedefaultMethodName()"
+          color="primary"
+        >
+          Update
+        </button>
+      </span>
+      &nbsp;&nbsp;
+      <button mat-button mat-dialog-close>Cancel</button>
+    </mat-card-actions>
+  </mat-dialog-actions>
+</div>

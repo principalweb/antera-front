@@ -1,0 +1,40 @@
+<div class="inquiry">
+  <mat-toolbar class="inquiry__header">
+    <img [src]="logo?.url" class="inquiry__logo" alt="Branding" *ngIf="logo?.url" />
+
+    <div fxFlex>&nbsp;</div>
+    <button type="button" mat-raised-button color="accent" (click)="toPdf()">
+      <mat-icon>archive</mat-icon>
+      Save PDF
+    </button>
+  </mat-toolbar>
+
+  <div class="inquiry__content">
+    <div *ngIf="success" class="success__container" fxLayout="column" fxLayoutAlign="space-around center">
+      <div class="success_message">
+        Your inquiry response has been received
+      </div>
+
+      <div class="p-8">
+        <button type="button" mat-raised-button color="accent" (click)="toPdf()">Download PDF</button>
+      </div>
+
+      <div class="inquiry__preview" fxFlex>
+        <app-source-factory-response [source]="sourceDetails" [submission]="submissionDetails" #document></app-source-factory-response>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" class="" *ngIf="!success && sourceDetails && submissionDetails">
+      <div fxFlex="40" fxFlex.lt-md="100" class="inquiry__form" *ngIf="!submissionDetails?.quoteId">
+        <app-source-factory-form [submission]="submissionDetails" [source]="sourceDetails" [vendorId]="factoryDetails.id" (onSubmit)="onSubmit($event)" (changed)="onFormChange($event)"></app-source-factory-form>
+      </div>
+      <div class="inquiry__preview" fxFlex>
+        <app-source-factory-response [submission]="submissionDetails" [source]="sourceDetails"></app-source-factory-response>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

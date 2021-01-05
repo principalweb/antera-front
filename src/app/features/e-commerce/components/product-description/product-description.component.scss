@@ -1,0 +1,15 @@
+@import "src/@fuse/scss/fuse";
+
+.product-description-dialog {
+    width: 100%;
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        cursor: pointer;
+
+        img {
+            height: 100%;
+        }
+    }
+}

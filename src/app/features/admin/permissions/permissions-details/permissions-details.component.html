@@ -1,0 +1,50 @@
+<div id="permission-details" class="page-layout simple h-100-p">
+
+    <div class="header h-80 mat-accent-bg p-16 p-sm-24"
+         fxLayout="row" fxLayoutAlign="space-between center">
+
+        <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon mr-16"
+                      [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"
+                      *fuseIfOnDom>work</mat-icon>
+            <div class="logo-text h1"
+                 [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"
+                 *fuseIfOnDom>
+                <a routerLink="/admin/permissions">Permissions</a>
+                <span>
+                    &nbsp;&gt;&nbsp;Group: {{ details.name }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <mat-toolbar>
+        <button mat-raised-button color="accent"
+                class="text-capitalize mr-8"
+                [ngStyle]="{'background-color': details.status ? 'green' : 'red'}"
+                (click)="setActiveStatus()">
+                {{ details.status ? 'Active' : 'Inactive' }}
+        </button>
+    </mat-toolbar>
+    <mat-tab-group fxFlex> 
+        <mat-tab label="Entity Type Permissions">
+            <app-permissions-entity-type [entityTypes]="details.entityTypes" [groupId]="details.id">
+            </app-permissions-entity-type>
+        </mat-tab>
+        <mat-tab label="Action Permissions">
+            <app-permissions-action [actions]="details.actions" [groupId]="details.id">
+            </app-permissions-action>
+        </mat-tab>
+        <mat-tab label="Hierarchy">
+            <permissions-hierarchy [hierarchy]="details.hierarchy" [unrelated]="details.unrelated" [groupId]="details.id">
+            </permissions-hierarchy>
+        </mat-tab>
+        <mat-tab label="Users">
+            <app-permissions-user [users]="details.users" [groupId]="details.id">
+            </app-permissions-user>
+        </mat-tab>
+        <mat-tab label="Entities" *ngIf="false">
+            <app-permissions-entity [entities]="details.users" [groupId]="details.id">
+            </app-permissions-entity>
+        </mat-tab>
+    </mat-tab-group>
+</div>

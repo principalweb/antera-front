@@ -1,0 +1,38 @@
+<div class="list mat-elevation-z1" fxLayout="column">
+
+    <div class="list-header" fxFlex="none" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <fuse-scrumboard-board-edit-list-name
+            fxFlex="1 0 auto"
+            [stage]="stage"
+            (onNameChanged)="onListNameChanged($event)">
+        </fuse-scrumboard-board-edit-list-name>
+
+        <div fxFlex="0 1 auto">
+            <span class="total accent-800-fg">${{ total(list) | number }}</span>
+        </div>
+
+    </div>
+
+    <div class="list-content" fxLayout="column">
+
+        <div class="list-cards ngx-dnd-container"
+             [model]="list" ngxDroppable="card"
+             (drop)="onDrop($event)"
+             #listScroll>
+
+            <fuse-scrumboard-board-card
+                ngxDraggable
+                (click)="editOpportunity(card)"
+                (select)="onSelectCard(card, $event)"
+                class="opportunity-scrumboard-board-card mat-elevation-z2 ngx-dnd-item"
+                [class.condensed]="condensed"
+                [model]="card"
+                [card]="card"
+                matTooltipClass="card-tooltip"
+                *ngFor="let card of list">
+            </fuse-scrumboard-board-card>
+        </div>
+    </div>
+
+</div>

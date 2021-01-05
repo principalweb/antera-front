@@ -1,0 +1,38 @@
+<div id="source-details" class="page-layout simple h-100-p">
+
+    <div class="header h-80 mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}" *fuseIfOnDom>
+                shopping_cart</mat-icon>
+            <div class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}" *fuseIfOnDom>
+                <a routerLink="/e-commerce/sources">Source</a>
+                <span *ngIf="action==='edit'">
+                    &nbsp;&gt;&nbsp;Source # {{ sourceDetails.itemName }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <mat-tab-group fxFlex *ngIf="action==='edit'">
+        <mat-tab label="Details">
+            <app-source-details-tab class="w-100-p" [action]="action" [sourceDetails]="sourceDetails"
+                *ngIf="sourceDetails"></app-source-details-tab>
+        </mat-tab>
+        <!--mat-tab label="Files">
+            <source-files-tab class="w-100-p" [info]="sourceDetails"></source-files-tab>
+        </mat-tab-->
+        <mat-tab label="Files">
+            <app-aws-file-manager class="w-100-p" [recordId]="sourceDetails.id" [accountId]="sourceDetails.accountId"
+                [awsFileManagerType]="awsFileManagerType"></app-aws-file-manager>
+        </mat-tab>
+
+        <mat-tab [label]="response.vendorName" *ngFor="let response of submissions">
+           <app-source-submission-tab [sourceDetails]="sourceDetails" [submission]="response"></app-source-submission-tab>
+        </mat-tab>
+
+    </mat-tab-group>
+
+    <app-source-details-tab class="w-100-p" [action]="action" [sourceDetails]="sourceDetails"
+        *ngIf="sourceDetails && action!=='edit'"></app-source-details-tab>
+</div>

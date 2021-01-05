@@ -1,0 +1,12 @@
+<mat-list role="list">
+  <mat-list-item role="listitem" *ngFor="let v of vendors">{{ v.name }} - <span [class]="vendorStatus[v.id].class">{{ vendorStatus[v.id].status }}</span> </mat-list-item>
+</mat-list>
+<mat-progress-bar id="load"
+          *ngIf="vendors.length"
+          class="mb-8"
+          color="accent"
+          mode="buffer"
+          [value]="synced"
+          [bufferValue]="buffer"
+          >
+</mat-progress-bar>

@@ -1,0 +1,90 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div fxFlex fxLayout="column" class="details-form">
+
+        <div mat-dialog-content class="m-0">
+
+            <form name="form" [formGroup]="workflowForm"
+                  class="p-16 pb-0" fxLayout="column"
+                  fusePerfectScrollbar>
+
+                <mat-form-field>
+                    <input matInput placeholder="Order" formControlName="orderNumber">
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <input matInput placeholder="Identity" formControlName="identity" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Account" formControlName="account">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Vendor" formControlName="vendor">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Amount" formControlName="amount">
+                </mat-form-field>
+
+                <!-- <mat-form-field>
+                    <input matInput placeholder="Proof?" formControlName="proof">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Links" formControlName="links" required>
+                </mat-form-field> -->
+
+                <mat-form-field>
+                    <input matInput placeholder="In-Hands" formControlName="inHands">
+                </mat-form-field>
+
+                <!-- <mat-form-field>
+                    <input matInput placeholder="Processing" formControlName="processing">
+                </mat-form-field> -->
+
+                <mat-form-field>
+                    <input matInput placeholder="Salesrep" formControlName="salesRep" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="CSR" formControlName="csr" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Scheduled" formControlName="scheduled" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="QB Sync" formControlName="qbSync" required>
+                </mat-form-field>
+            </form>
+        </div>
+
+        <div mat-dialog-actions class="m-0 p-16"
+            fxLayout="row" fxLayoutAlign="space-between center">
+
+            <button mat-raised-button
+                    (click)="save(workflowForm)"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+
+        </div>
+    </div>
+
+</div>

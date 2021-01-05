@@ -1,0 +1,57 @@
+@import "src/@fuse/scss/fuse";
+
+.select-payment-dialog {
+  $icon-size: 56px;
+  width: 20vw;
+  overflow: hidden;
+
+  @include media-breakpoint('xs') {
+    width: 70vw !important;
+    max-width: 70vw !important;
+  }
+
+  @include media-breakpoint('sm') {
+    width: 50vw !important;
+    max-width: 50vw !important;
+  }
+
+    
+  @include media-breakpoint('md') {
+    width: 35vw !important;
+    max-width: 35vw !important;
+  }
+
+  .mat-icon {
+    width: $icon-size;
+    height: $icon-size;
+    line-height: $icon-size;
+    min-width: $icon-size;
+    min-height: $icon-size;
+    font-size: $icon-size;
+   }
+
+    .manual-icon{
+        color: #ffb300;
+    }
+
+    .credit-icon{
+        color: #fa7b17;
+    }
+
+    app-select-payment-dialog {
+        width: 80%;
+        height: 80%;
+    }
+
+    .dialog-content {
+        .manual-entry,
+        .eCheck,
+        .credit-card {
+            cursor: pointer;
+
+            &:hover {
+                background-color: #eeeeee;
+            }
+        }
+    }
+}

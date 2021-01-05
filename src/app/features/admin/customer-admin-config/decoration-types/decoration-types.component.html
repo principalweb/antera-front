@@ -1,0 +1,22 @@
+<div fxLayout="column" fxFlex>
+    <div class="toolbar">
+        <div fxFlex="row">
+            <div fxFlex="row" fxLayoutAlign="start center">
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="newDecoType()">
+                    <mat-icon>add</mat-icon> Decoration Type
+                </button>
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        (click)="clearFilters()"
+                        fxHide fxShow.gt-md>
+                    <mat-icon>layers_clear</mat-icon> Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+    <app-decoration-type-list fxLayout="column"></app-decoration-type-list>
+</div>
+

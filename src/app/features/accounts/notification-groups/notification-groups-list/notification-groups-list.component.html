@@ -1,0 +1,127 @@
+<div class="page-layout carded fullwidth inner-scroll list-page" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+  <!-- CENTER -->
+
+  <div class="center">
+
+    <mat-sidenav-container class="content-card">
+
+
+
+      <div class="toolbar">
+        <div fxFlex="row">
+          <div fxFlex="row" fxLayoutAlign="start center">
+
+            <button mat-raised-button color="accent"
+                    class="text-capitalize mr-8"
+                    routerLink="/accounts/notification/groups/add">
+              <mat-icon>add</mat-icon> Group
+            </button>
+
+
+
+            <button mat-raised-button color="warn"
+                    class="text-capitalize mr-8"
+                    (click)="deleteSelected()">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+
+          </div>
+        </div>
+      </div>
+      <div class="notification-groups-list" *ngIf="!loading">
+        <mat-table fxFlex #table
+                  matSort (matSortChange)="sortChange($event)"
+                   [dataSource]="filteredDataSource"
+                   [@animateStagger]="{value:'50'}"
+                  [formGroup]="aForm">
+
+
+
+          <ng-container cdkColumnDef="checkbox">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+              <mat-checkbox (change)="toggleAll($event)"
+        [checked]="selection.checkedAll | async"
+        [indeterminate]="selection.checkedAny | async">
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let element">
+              <mat-checkbox [checked]="checkboxes[element.notificationGroupID]"
+        (change)="onSelectedChange(element.notificationGroupID)"
+        (click)="$event.stopPropagation()">
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="groupName">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+              <span mat-sort-header>Group Name</span>
+              <input class="form-control" formControlName="groupName" (keyup)="filterSource()">
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let element">
+              <p class="text-truncate font-weight-600">{{ element.groupName }}</p>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="accounts">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+              <span mat-sort-header>Accounts</span>
+              <input class="form-control" formControlName="accounts" (keyup)="filterSource()">
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let element">
+              <p class="text-truncate font-weight-600 breaking">{{ element.accounts }}</p>
+            </mat-cell>
+          </ng-container>
+
+
+
+
+          <ng-container cdkColumnDef="buttons">
+            <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+            <mat-cell *cdkCellDef="let element">
+              <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                  <button mat-menu-item aria-label="remove" (click)="edit(element)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                  </button>
+                  <button mat-menu-item aria-label="remove" (click)="delete(element)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Remove</span>
+                  </button>
+                </mat-menu>
+              </div>
+
+            </mat-cell>
+          </ng-container>
+
+
+
+
+
+          <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *cdkRowDef="let row; columns: displayedColumns; let i = index"
+                   class="account"
+                   matRipple
+                   [@animate]="{value:'*',params:{y:'100%'}}">
+          </mat-row>
+        </mat-table>
+</div>
+          <!-- / CENTER -->
+    </mat-sidenav-container>
+  </div>
+
+  <div class="loading"
+       [@animate]="{value:'*',params:{opacity:1}}"
+       *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+    

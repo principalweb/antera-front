@@ -1,0 +1,9 @@
+.element-spacer {
+    flex: 1 1 auto;
+  }
+
+  .pricing-method-selector {
+    padding: 20px;
+    margin-left: 20px;
+    min-width: 100px;
+  }

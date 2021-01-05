@@ -1,0 +1,141 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sortChange($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->
+    
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.length"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location">
+            <mat-checkbox [checked]="checkboxes[location.id]"
+                          (change)="onSelectedChange(location.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="companyName">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterLocations()">
+            <span mat-sort-header>Company Name</span>
+            <input class="form-control" formControlName="companyName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location">
+            <p class="company text-truncate">
+                {{ location.companyName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="deliveryContact">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterLocations()">
+            <span mat-sort-header>Delivery Contact</span>
+            <input class="form-control" formControlName="deliveryContact" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location">
+            <p class="company text-truncate">
+                {{ location.deliveryContact }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="type">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterLocations()">
+            <span mat-sort-header>Type</span>
+            <input class="form-control" formControlName="type" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location" fxHide fxShow.gt-xs>
+            <p class="company text-truncate">
+                {{ location.type }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="shipCity">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterLocations()">
+            <span mat-sort-header>Shipping City</span>
+            <input class="form-control" formControlName="shipCity" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location" fxHide fxShow.gt-sm>
+            <p class="company text-truncate">
+                {{ location.shipCity }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="shipState">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterLocations()">
+            <span mat-sort-header>Shipping State</span>
+            <input class="form-control" formControlName="shipState" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location" fxHide fxShow.gt-sm>
+            <p class="company text-truncate">
+                {{ location.shipState }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="phone">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterLocations()">
+            <span mat-sort-header>Phone</span>
+            <input class="form-control" formControlName="phone" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let location">
+            <p class="company text-truncate">
+                {{ location.phone }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let location" fxFlex="none" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <!-- <button mat-menu-item aria-label="clone">
+                        <mat-icon>content_copy</mat-icon>
+                        <span>Clone</span>
+                    </button> -->
+                    <button mat-menu-item aria-label="remove" (click)="deleteLocation(location)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let location; columns: displayedColumns;"
+            class="location"
+            (click)="editLocation(location)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[location.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator fxFlex="none"
+            (page)="paginate($event)"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 5, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>

@@ -1,0 +1,50 @@
+<div id="admin-manage-menu-page" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+      <!-- CONTENT HEADER -->
+      <div class="header white-fg p-24" fxLayout="row" fxLayoutAlign="start center">
+          <h2>Manage Charts on Executive dashboard</h2>
+      </div>
+      <!-- / CONTENT HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card mat-white-bg">
+
+        <div fxFlex="none" class="m-48 mb-12">
+            <button mat-raised-button color="accent" (click)="saveChanges()">
+                <mat-icon>dehaze</mat-icon> Save Changes
+            </button>
+
+            <button mat-raised-button color="warn" [routerLink]="['/kpi/executive']">
+                <mat-icon>personal_video</mat-icon> Go to Executive dashboard
+            </button>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content p-48 pt-0" fusePerfectScrollbar>
+
+            <div class="menu-list">
+                <div class="menu" *ngFor="let dashlet of dashlets">
+                    <div>
+                        <span>{{dashlet.name}}</span>
+                        <mat-slide-toggle (change)="sliderToggled(dashlet, $event)" [checked]="dashlet.show"></mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+          <!-- / CONTENT -->
+
+      </div>
+      <!-- / CONTENT CARD -->
+
+  </div>
+  <!-- / CENTER -->
+
+</div>

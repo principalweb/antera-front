@@ -1,0 +1,41 @@
+<div>
+  <h2 mat-dialog-title>Product Name &amp; Description</h2>
+  <mat-dialog-content>
+    <div fxLayout="column" fxLayoutGap="50px" [formGroup]="form">
+      <div fxLayout fxLayoutGap="100px"
+           fxLayout.lt-md="column"
+           fxLayoutGap.lt-md="50px">
+        <div fxFlex fxLayout="row" fxLayoutGap="20px">
+          <div class="product-image ">
+            <img [src]="row.image"
+                 [alt]="row.productName"
+                 [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+          </div>
+          <mat-form-field fxFlex>
+            <input matInput placeholder="Product name"
+                  formControlName="productName">
+          </mat-form-field>
+        </div>
+        <div fxFlex></div>
+      </div>
+      <div fxLayout fxLayoutGap="100px" fxLayout.lt-md="column" fxLayoutGap.lt-md="50px">
+        <mat-form-field fxFlex>
+          <textarea rows="8" matInput placeholder="Customer Description"
+                    formControlName="customerDescription"></textarea>
+          <mat-hint>Enter the description customers will see</mat-hint>
+          <mat-hint align="end">{{form.value.customerDescription.length}} / 550</mat-hint>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <textarea rows="8" matInput placeholder="Vendor Description"
+                    formControlName="vendorDescription"></textarea>
+          <mat-hint>Enter the description vendors will see</mat-hint>
+          <mat-hint align="end">{{form.value.vendorDescription.length}} / 550</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout fxLayoutAlign="end">
+    <button mat-button color="accent" matDialogClose>Cancel</button>
+    <button mat-button color="accent" (click)="save()">Save</button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,175 @@
+<div id="report" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center" *ngIf="reportDetailService.filters$ | async as filters">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button class="mr-16" mat-icon-button [routerLink]="'/reports'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        Report: {{filters?.reportName}} | Created {{report?.dateCreated | date}}
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <div class="toolbar">
+                    <div class="mail-selection" fxFlex="row">
+                        <div fxFlex="row" fxLayoutAlign="start center">
+
+                            <mat-menu #downloadMenu="matMenu">
+                                <button mat-menu-item (click)="makePdf()">Portrait</button>
+                                <button mat-menu-item (click)="makePdf({orientation: 'landscape'})">Landscape</button>
+                                <button mat-menu-item (click)="downloadCSV()">CSV</button>
+                            </mat-menu>
+
+                            <button mat-raised-button [matMenuTriggerFor]="downloadMenu">
+                                <mat-icon>save_alt</mat-icon> Download
+                            </button>
+
+                            <!--button mat-raised-button color="accent"
+                                    class="text-capitalize mr-8">
+                                Share
+                            </button>
+    
+                            <button mat-raised-button color="accent"
+                                    class="text-capitalize mr-8">
+                                Delete
+                            </button-->
+                        </div>
+
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-raised-button [matMenuTriggerFor]="rangePicker" class="mr-8">
+                                <mat-icon>calendar_today</mat-icon>
+                                {{filters.fromDate | date }} - {{filters.toDate | date }}
+                            </button>
+                            <mat-menu #rangePicker="matMenu">
+                                <button mat-menu-item (click)="showReport('previousMonth', report)">Previous
+                                    Month</button>
+                                <button mat-menu-item *ngIf="canMoveNextMonth(filters?.fromDate)"
+                                    (click)="showReport('nextMonth', report)">Next Month</button>
+                                <mat-divider></mat-divider>
+                                <button mat-menu-item *ngIf="!isCurrentMonth(filters?.fromDate)"
+                                    (click)="showReport('currentMonth', report)">This Month</button>
+                                <button mat-menu-item (click)="showReport('quarterly', report)">This Quarter</button>
+                                <button mat-menu-item (click)="showReport('yearly', report)">This Year</button>
+                            </mat-menu>
+                            <button mat-raised-button color="accent" (click)="filterDialog()"
+                                class="text-capitalize">
+                                <mat-icon style="color:white; width: 15px;">build</mat-icon>
+                                Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report tab-content p-24">
+                    <div id="report-table" class="compact page-layout blank" fxLayout="row">
+                        <div class="report-container">
+                            <div class="card" *ngIf="report && report.data">
+                                <div class="content" *fuseIfOnDom
+                                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                                        <div fxLayout="row" class="seller" fxLayoutAlign="center start">
+                                            <img class="logo" [src]="logoUrl">
+                                        </div>
+                                        <div class="reportName" fxLayout="column" fxLayoutAlign="start end">
+                                            <span class="font-size-20">{{filters.reportName | uppercase}}</span>
+                                            <span class="font-size-12">Created: {{report?.dateCreated | date}}</span>
+                                            <span class="font-size-12" *ngIf="filters.fromDate">
+                                                Range: {{filters.fromDate | date }} -
+                                                {{filters.toDate | date }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+
+
+                                    <span class="text-capitalize" *ngIf="report.data.length === 0">No Data Found.</span>
+
+                                    <ng-container *ngIf="!isArray; else arrayTemplate">
+                                        <div class="report-div-table">
+                                        <table class="simple report-table report-table-new"
+                                            [class.dense]="(report.data[0] | keys)?.length > 4"
+                                            *ngIf="report.data.length > 0">
+                                            <thead>
+                                                <tr>
+                                                    <th *ngFor="let key of report.data[0] | keys" style="text-align:center">{{ key.key }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngFor="let data of report.data; let i=index">
+                                                    <div *ngIf="reportDetailService.reportId == 'salesCommission' && i!=0 && insertBreakValid(data)"
+                                                        class="html2pdf__page-break"></div>
+                                                    <tr>
+                                                        <td *ngFor="let obj of data | keys" [ngStyle]="myIsNaN(data[obj.key]) ? {'text-align':'left'} : {'text-align':'right'}">
+                                                            {{ data[obj.key] }}
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table></div>
+                                    </ng-container>
+
+                                    <ng-template #arrayTemplate>
+
+                                        <ng-container *ngFor="let reportData of report.data">
+                                            <table class="simple report-table"
+                                                [class.dense]="(reportData[0] | keys)?.length > 4"
+                                                *ngIf="reportData.length > 0">
+                                                <thead>
+                                                    <tr>
+                                                        <th *ngFor="let key of reportData[0] | keys" style="text-align:center">{{ key.key }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container *ngFor="let data of reportData; let i=index">
+                                                        <tr>
+                                                            <td *ngFor="let obj of data | keys" [ngStyle]="myIsNaN(data[obj.key]) ? {'text-align':'left'} : {'text-align':'right'}">
+                                                                {{ data[obj.key] }}
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </tbody>
+                                            </table>
+                                        </ng-container>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

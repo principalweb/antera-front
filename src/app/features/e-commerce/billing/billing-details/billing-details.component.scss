@@ -1,0 +1,110 @@
+@import "src/@fuse/scss/fuse";
+
+#order {
+  .header {
+    max-height: 50px !important;
+    height: 50px !important;
+    min-height: 50px !important;
+
+    .subtitle {
+      margin: 6px 0 0 0;
+    }
+
+    .order-total {
+      .profit {
+        direction: rtl;
+        font-size: 20px;
+      }
+      .total {
+        font-size: 28px;
+        span {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    position: relative;
+
+    .mat-tab-group.fixed {
+      margin-top: 64px;
+      flex: 1 1 auto;
+      max-width: 100%;
+
+      > .mat-tab-header {
+        position: absolute;
+        top: 0;
+        width: 100%;
+
+        .mat-tab-label {
+          height: 64px;
+        }
+      }
+      > .mat-tab-body-wrapper {
+        flex: 1 1 auto;
+        max-width: 100%;
+
+        > .mat-tab-body-content {
+          display: flex;
+        }
+      }
+
+      > .mat-tab-body-wrapper .tab-content--documents {
+        height: 100%;
+        overflow: hidden;
+      }
+      > .mat-tab-body-wrapper .tab-content {
+        flex: 1 1 auto;
+        max-width: 100%;
+
+        &.tab-order-form {
+          height: 100%;
+        }
+
+        &.products {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+
+          .product-row {
+            cursor: pointer;
+          }
+
+          .product-image {
+            height: 48px;
+            widows: auto;
+          }
+        }
+      }
+    }
+
+    .order-buttons {
+      position: absolute;
+      top: 140px;
+      right: 64px;
+      bottom: 0;
+      height: 60px;
+      z-index: 999;
+
+      .invoice-sync {
+        color: white !important;
+      }
+    }
+  }
+
+  .accent-text {
+    color: map-get($mat-fuseaccent, 500);
+  }
+
+  .customer.section {
+    .mat-icon-button {
+      margin-top: -6px;
+    }
+  }
+
+  span.w-100 {
+    display: inline-block;
+  }
+}

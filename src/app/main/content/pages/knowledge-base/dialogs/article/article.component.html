@@ -1,0 +1,20 @@
+<div class="dialog-content-wrapper">
+
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{data.article.title}}</span>
+            <button mat-button class="mat-icon-button"
+                  (click)="dialogRef.close()"
+                  aria-label="Close dialog">
+              <mat-icon>close</mat-icon>
+          </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+        <div *ngIf="!isPdf" [innerHTML]="data.article.content"></div>
+        <div *ngIf="isPdf"><iframe [src]="pdfUrl" style="width:50vw;height:50vh;"></iframe></div>
+        <!--div *ngIf="isPdf"><ngx-doc-viewer [url]="pdfUrl" viewer="google" style="width:50vw;height:250vh;"></ngx-doc-viewer></div-->
+    </div>
+
+</div>

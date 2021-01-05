@@ -1,0 +1,63 @@
+app-artwork-variation {
+    .artwork-image {
+        width: 160px;
+        max-height: 160px;
+        min-height: 100px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+        position: relative;
+        background: #CCCCCC url("/assets/images/backgrounds/checker.png") top left repeat;
+        img {
+            width: 100%;
+            height: 100%;
+            max-height: 240px;
+            object-fit: contain;
+        }
+
+        &.edit {
+            .remove-button {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                transition: 0.3s opacity;
+            }
+
+            &:hover {
+                .remove-button {
+                    opacity: 1;
+                }
+
+                img {
+                    opacity: .2;
+                }
+            }
+        }
+        
+    }
+        .variation-image-title{
+            font-size:14px;
+            width: 90%;
+            text-align:center;
+        }
+    .mat-form-field-infix {
+        width: auto;
+    }
+
+    .mat-subheading2 {
+        font-size: 12px;
+    }
+
+    .mat-form-field-disabled .mat-select-value-text {
+        color: #3c4252;
+    }
+    .mat-title-right{
+        float:right;
+    }
+    .mat-title-right .mat-icon-button{
+        width:32px;
+        height:32px;
+    }
+}

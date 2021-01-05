@@ -1,0 +1,22 @@
+app-sales-input {
+    .tab-content {
+        flex: 1 1 auto;
+    
+    
+        &.sales-input {
+    
+            .product-row {
+                cursor: pointer;
+            }
+
+            .form-control {
+                width: 100%;
+            }
+
+            .currency {
+                display: flex;
+            }
+    
+        }
+    }
+}

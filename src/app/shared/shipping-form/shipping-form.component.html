@@ -1,0 +1,105 @@
+<div class="dialog-content-wrapper" fxLayout="column">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+            {{dialogTitle}}
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRef.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="center">
+        <div fxFlex fxLayout="column" class="shipping-form">
+            <div mat-dialog-content class="m-0" fusePerfectScrollbar>
+                <form name="form" [formGroup]="shippingForm" >
+                    <div fxLayout="row" fxLayoutGap="16px" class="px-24 pt-24">
+                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                            <mat-select placeholder="Shipping Method" formControlName="shippingMethod" required>
+                                <mat-option *ngFor="let sm of shippingMethod" [value]="sm">
+                                   {{ sm }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                            <input matInput placeholder="Tracking Number" formControlName="trackNumber" required>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="16px" class="px-24 pt-24">
+                        <mat-form-field fxFlex>
+                            <mat-datetimepicker-toggle [for]="scheduledShipDatePicker" matSuffix></mat-datetimepicker-toggle>
+                            <mat-datetimepicker #scheduledShipDatePicker type="date" openOnFocus="true" timeInterval="5"></mat-datetimepicker>
+                            <input matInput formControlName="shipDate" [matDatetimepicker]="scheduledShipDatePicker" required autocomplete="false" placeholder="Scheduled Shipping Date">
+                        </mat-form-field>
+                        <mat-form-field fxFlex>
+                            <mat-datetimepicker-toggle [for]="shippedDatePicker" matSuffix></mat-datetimepicker-toggle>
+                            <mat-datetimepicker #shippedDatePicker type="date" openOnFocus="true" timeInterval="5"></mat-datetimepicker>
+                            <input matInput formControlName="dateShipped" [matDatetimepicker]="shippedDatePicker" required autocomplete="false" placeholder="Shipped Date">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="16px" class="px-24 pt-24">
+                        <mat-form-field fxFlex>
+                            <mat-datetimepicker-toggle [for]="inHandDatePicker" matSuffix></mat-datetimepicker-toggle>
+                            <mat-datetimepicker #inHandDatePicker type="date" openOnFocus="true" timeInterval="5"></mat-datetimepicker>
+                            <input matInput formControlName="inhandsDate" [matDatetimepicker]="inHandDatePicker" required autocomplete="false" placeholder="In Hand Date">
+                        </mat-form-field>
+                        <mat-form-field fxFlex>
+                            <mat-datetimepicker-toggle [for]="expectedArrivalDatePicker" matSuffix></mat-datetimepicker-toggle>
+                            <mat-datetimepicker #expectedArrivalDatePicker type="date" openOnFocus="true" timeInterval="5"></mat-datetimepicker>
+                            <input matInput formControlName="arrivalDate" [matDatetimepicker]="expectedArrivalDatePicker" required autocomplete="false" placeholder="Expected Arrival Date">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                        <mat-form-field fxFlex>
+                            <textarea name="note" formControlName="note" placeholder="Note" matInput type="text" rows="4"></textarea>
+                        </mat-form-field>
+
+                    </div>
+
+                </form>
+                <div mat-dialog-actions class="m-0 px-24" fxLayout="row" fxLayoutAlign="space-between center">
+                    <button  on *ngIf="action !=='edit'"
+                            mat-raised-button
+                            class="save-button mat-accent"
+                            (click)="create()"
+                            aria-label="SAVE">
+                        SAVE
+                    </button>
+
+                    <button *ngIf="action ==='edit'"
+                            mat-raised-button
+                            class="mb-16 save-button mat-accent"
+                            (click)="update()"
+                            aria-label="SAVE">
+                        SAVE
+                    </button>
+                    <button *ngIf="action ==='edit'"
+                       mat-raised-button
+                      (click)="sendEmail('customer')">
+                       <mat-icon>email</mat-icon>
+                        E-mail
+                    </button>
+
+                    <button *ngIf="action ==='edit'" mat-raised-button
+                            class="mb-16 clear-button mat-accent"
+                            (click)="clear()"
+                            aria-label="ADD">
+                        ADD ANOTHER +
+                    </button>
+
+                </div>
+
+            </div>
+            <!--shipping-form-->
+        </div>
+    </div> <!--center-->
+</div>
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

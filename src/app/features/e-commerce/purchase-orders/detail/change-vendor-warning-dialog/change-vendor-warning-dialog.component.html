@@ -1,0 +1,29 @@
+<div class="change-vendor-warning">
+  <mat-toolbar matDialogTitle class="warningDialog m-0 mb-16" fxFlex="none">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        Warning
+      </div>
+      <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div fxFlex fxLayout="column">
+    <div mat-dialog-content class="m-0">
+      <h4 class="mat-h4 ml-8 mr-8 mb-16">Changing the Vendor will <strong>cancel</strong> this purchase order and create a new one with a new Vendor. Would you like to proceed?</h4>
+    </div>
+    <div class="ml-8 mr-8 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+      <button (click)="dialogRef.close()" mat-raised-button>
+        <mat-icon>
+          clear
+        </mat-icon> Cancel
+      </button>
+      <button (click)="handleSave()" mat-raised-button color="accent">
+        <mat-icon>
+          save
+        </mat-icon> Continue
+      </button>
+    </div>
+  </div>
+</div>

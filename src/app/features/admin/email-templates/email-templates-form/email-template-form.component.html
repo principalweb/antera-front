@@ -1,0 +1,145 @@
+<div id="email-template-form" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+            fxLayoutAlign.gt-xs="space-between center">
+
+            <button class="mr-16" mat-icon-button routerLink="/admin/email-templates">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+
+            <!-- APP TITLE -->
+            <div class="m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom
+                    [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">style</mat-icon>
+                <span class="h2" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    Email Templates
+                </span>
+                <span class="subtitle secondary-text">
+                    {{ title }}
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <mat-sidenav-container class="content-card">
+            <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                fuseMatSidenavHelper="contacts-sidenav">
+                <mat-list class="p-0">
+                    <mat-list-item class="mat-accent-bg" matRipple (click)="save()">
+                        <span class="ml-8">Save</span>
+                    </mat-list-item>
+                </mat-list>
+            </mat-sidenav>
+
+            <div class="toolbar">
+                <div fxFlex="row">
+                    <div fxFlex="row" fxLayoutAlign="start center">
+                        <button mat-icon-button fxHide.gt-md fuseMatSidenavToggler="contacts-sidenav">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+
+                        <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-md
+                            (click)="save()">
+                            Save
+                        </button>
+                    </div>
+
+                    <!-- <div class="toolbar-separator"></div>
+
+                        <button mat-button class="text-capitalize more-actions"
+                                [matMenuTriggerFor]="selectMenu">
+                            More Actions
+                            <mat-icon>arrow_drop_down</mat-icon>
+                        </button>
+                        <mat-menu #selectMenu="matMenu">
+
+                        </mat-menu> -->
+
+                </div>
+            </div>
+
+
+            <form name="emailTemplateForm" [formGroup]="form" class="product w-100-p" fxLayout="column" fxFlex>
+                <div class="p-24" fxLayout="column">
+                    <div fxLayout="row">
+                        <div class="p-16" style="width:40%">
+                            <div>
+                                <mat-icon class="mr-12 mt-12">account_circle</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput name="name" formControlName="name" placeholder="Name" required [readonly]="edit">
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-icon class="mr-12 mt-12">note</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <textarea matInput name="description" formControlName="description"
+                                        placeholder="Description" rows="4"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-icon class="mr-12 mt-12">account_circle</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput name="subject" formControlName="subject" placeholder="Subject"
+                                        required>
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-icon class="mr-12 mt-12">email</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput name="bccEmail" formControlName="bccEmail" placeholder="Bcc Email">
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-icon class="mr-12 mt-12">email</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput name="ccEmail" formControlName="ccEmail" placeholder="Cc Email">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxFlex class="fuse-white-bg">
+                            <div fxLayout="row">
+                                <div fxFlex></div>
+                                <mat-form-field>
+                                    <mat-select matInput (selectionChange)="insertMergeTag($event)" placeholder="Insert merge tag">
+                                        <mat-option *ngFor="let tag of mergeTags" [value]="tag">{{ tag }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <mat-tab-group class="w-100-p h-100-p fuse-white-bg">
+                                <mat-tab label="Html">
+                                    <ckeditor #editor [editor]="Editor" formControlName="bodyHtml"></ckeditor>
+                                </mat-tab>
+                                <mat-tab label="Text">
+                                    <div class="w-100-p p-16">
+                                        <mat-form-field fxFlex>
+                                            <textarea matInput name="body" formControlName="body"
+                                                placeholder="Email text body" rows="4" matTextareaAutosize
+                                                matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                </mat-tab>
+                                <mat-tab label="Preview">
+                                    <div [innerHtml]="form.get('bodyHtml').value | safeHtml" class="w-100-p p-16"></div>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </mat-sidenav-container>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

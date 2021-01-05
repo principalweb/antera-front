@@ -1,0 +1,50 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                {{name}}
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="defaultOptionsDialogRef.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+
+    </mat-toolbar>
+
+    <mat-dialog-content class="p-24 m-0">
+        <form [formGroup]="msgForm">
+            <div fxLayout="row" fxLayout.xs="column">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+						<mat-form-field fxFlex>
+							<textarea name="description" formControlName="description" placeholder="Description" matInput type="text" rows="4"></textarea>
+						</mat-form-field>
+                </div>
+            </div>
+       </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button
+                mat-raised-button
+                (click)="save()"
+                class="save-button mat-accent"
+                aria-label="Save">
+             Save
+            </button>
+        </div>
+
+    </mat-dialog-actions>
+
+    <div class="center">
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="loading">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+</div>

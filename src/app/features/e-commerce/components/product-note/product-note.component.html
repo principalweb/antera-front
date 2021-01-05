@@ -1,0 +1,14 @@
+<div fxLayout="column">
+  <h2 mat-dialog-title class="pb-0">Add Note</h2>
+  <div class="dialog-content p-16" fxLayout="column">
+    <mat-form-field class="mt-12">
+        <textarea *ngIf="noteType == 'Vendor Note'" matInput placeholder="Vendor Notes" [formControl]="note" rows="6"></textarea>
+        <textarea *ngIf="noteType == 'Order Note'" matInput placeholder="Order Notes" [formControl]="note" rows="6"></textarea>
+        <textarea *ngIf="noteType == 'Decoration Note'" matInput placeholder="Decoration Notes" [formControl]="note" rows="6"></textarea>
+    </mat-form-field>
+  </div>
+  <div class="mt-12" fxLayout="row" fxLayoutAlign="end start" *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">
+    <button mat-button color="accent" (click)="updateNote()">Save</button>
+  </div>
+</div>
+

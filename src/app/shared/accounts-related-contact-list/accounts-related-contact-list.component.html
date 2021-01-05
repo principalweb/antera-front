@@ -1,0 +1,107 @@
+<div class="dialog-content-wrapper">
+<mat-toolbar class="mb-0" fxLayoutAlign="space-between center">
+  <div>Contacts</div>
+  <!--div *ngIf="checkbox == false" fxLayout="row" fxLayoutAlign="end center">
+    <button mat-raised-button color="accent" (click)="newContact()"><mat-icon>add</mat-icon> Contact</button>
+    <button class="ml-8" mat-raised-button color="accent" (click)="selectContacts()"><mat-icon>apps</mat-icon> Select</button>
+  </div-->
+</mat-toolbar>
+<mat-dialog-content class="p-24 m-0">
+	<div class="related-contacts-table pt-20">
+	  <mat-table #table matSort
+				(matSortChange)="sortChange($event)"
+				[dataSource]="dataSource"
+				fusePerfectScrollbar>
+
+
+		<ng-container cdkColumnDef="checkbox">
+			<mat-header-cell class="w-80" *cdkHeaderCellDef>
+				<mat-checkbox (change)="toggleAll($event)"
+				        [disableRipple]="true"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+				</mat-checkbox>
+			</mat-header-cell>
+			<mat-cell class="w-80" *cdkCellDef="let contact">
+				<mat-checkbox [(ngModel)]="checkboxes[contact.id]"
+				              [disableRipple]="true"
+							  (ngModelChange)="onSelectedChange(contact.id)"
+							  [ngModelOptions]="{standalone: true}"
+							  (click)="$event.stopPropagation()">
+				</mat-checkbox>
+			</mat-cell>
+		</ng-container>
+
+		<ng-container cdkColumnDef="contactName">
+			<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+				<span mat-sort-header>Name</span>
+				<input class="form-control" [formControl]="contactName" placeholder=""
+						(blur)="filterContacts('contactName', $event)"
+						(keyup.enter)="filterContacts('contactName', $event, true)">
+			</mat-header-cell>
+			<mat-cell *cdkCellDef="let contact">
+				<p class="text-truncate font-weight-600">
+					{{contact.contactName}}
+				</p>
+			</mat-cell>
+		</ng-container>
+
+
+		<ng-container cdkColumnDef="email">
+			<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+				<span mat-sort-header>Email</span>
+				<input class="form-control" [formControl]="email" placeholder=""
+						(blur)="filterContacts('email', $event)"
+						(keyup.enter)="filterContacts('email', $event, true)">
+			</mat-header-cell>
+			<mat-cell *cdkCellDef="let contact">
+				<p class="company text-truncate">
+					{{contact.email}}
+				</p>
+			</mat-cell>
+		</ng-container>
+
+
+		<ng-container cdkColumnDef="documents">
+			<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+				<span mat-sort-header>Documents</span>
+			</mat-header-cell>
+			<mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm (click)="editContactDocuments($event, contact)">
+					<span *ngIf="!contact.tags.length"></span>
+					<ng-container *ngFor="let tag of contact.tags; let last=last">
+						{{ tag.tagName }}{{ last ? '' : ', '}}
+					</ng-container>
+			</mat-cell>
+		</ng-container>
+
+
+
+		<mat-header-row *cdkHeaderRowDef="displayColumns"></mat-header-row>
+		<mat-row *cdkRowDef="let contact; columns: displayColumns;"
+				class="contact-row" matRipple
+				[@animate]="{value:'*',params:{y:'100%'}}">
+		</mat-row>
+	  </mat-table>
+	  <div class="h-64 text-center p-20" *ngIf="dataSource.empty">
+		You don't have contacts linked to this account.
+	  </div>
+	  <mat-paginator #paginator
+					[length]="contactsCount"
+					(page)="paginate($event)"
+					[pageSize]="10"
+					[pageSizeOptions]="[10, 20, 50, 100]"
+					[showFirstLastButtons]="true">
+	  </mat-paginator>
+
+	  <div class="loading"
+			[@animate]="{value:'*',params:{opacity:1}}"
+			*ngIf="loading">
+		<mat-spinner></mat-spinner>
+	  </div>
+	</div>
+  </mat-dialog-content>
+  <div mat-dialog-actions class="m-0 px-24" fxLayout="row" fxLayoutAlign="space-between center">
+      <button mat-raised-button color="accent" (click)="tagSelectedUsers()" >Tag Selected User(s)  </button>
+      <button mat-raised-button color="accent" mat-dialog-close>Close</button>
+  </div>
+</div>

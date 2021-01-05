@@ -1,0 +1,62 @@
+
+<div class="support-ticket-table">
+<mat-table #table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+               [@animateStagger]="{value:'50'}">
+  
+        <ng-container cdkColumnDef="company">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>User Name</mat-header-cell>
+          <mat-cell *cdkCellDef="let item" matTooltip="{{item.customer.firstName}} {{ item.customer.lastName }}">
+            <p class="text-truncate">{{ item.customer.firstName }} {{ item.customer.lastName }}</p>
+          </mat-cell>
+        </ng-container>
+  
+        <ng-container cdkColumnDef="subject">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Subject</mat-header-cell>
+          <mat-cell *cdkCellDef="let item" matTooltip="{{item.subject}}">
+            <p class="text-truncate">{{ item.subject }}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="createdAt">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Created At</mat-header-cell>
+          <mat-cell *cdkCellDef="let item" matTooltip="{{item.createdAt}}">
+            <p class="text-truncate">{{ item.createdAt | date }}</p>
+          </mat-cell>
+        </ng-container>
+        
+        <ng-container cdkColumnDef="updatedAt">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Updated At</mat-header-cell>
+          <mat-cell *cdkCellDef="let item" matTooltip="{{item.updatedAt}}">
+            <p class="text-truncate">{{ item.updatedAt | date }}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="status">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Status</mat-header-cell>
+          <mat-cell *cdkCellDef="let item" matTooltip="{{item.status}}">
+            <p class="text-truncate">{{ item.status }}</p>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let item; columns: displayedColumns;"
+                 class="activity-item"
+                 matRipple
+                 [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+    <div class="p-24 text-center" *ngIf="dataSource.data.length===0 && !loading">
+      No Tickets found
+    </div>
+    <mat-paginator #paginator
+                   [pageSize]="100"
+                   [pageSizeOptions]="[10, 20, 50, 100]"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
+</div>
+<div class="loading"
+[@animate]="{value:'*',params:{opacity:1}}"
+*ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>
+  

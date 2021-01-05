@@ -1,0 +1,186 @@
+<form fxLayout="column" [formGroup]="pricesForm" (keydown.enter)="$event.preventDefault()">
+    <div fxLayout="row" class="p-32">
+      <input type="hidden" formControlName="partId">
+  
+ 
+      <mat-form-field fxFlex class="mr-20 mw-240">
+        <input
+          matInput
+          placeholder="Name"
+          formControlName="value"
+          required
+        />
+      </mat-form-field>
+  
+      <mat-form-field fxFlex class="mr-20 mw-240">
+        <input
+          matInput
+          placeholder="PrCode"
+          formControlName="prCode"
+        />
+      </mat-form-field>
+  
+      <mat-form-field *ngIf="colors.length < listLimit" fxFlex floatPlaceholder="never" class="mw-240">
+        <mat-select formControlName="sColor"
+                    [(ngModel)]="sColor"
+                    (openedChange)="switchColor($event,sColor)"
+                    >
+            <mat-option *ngFor="let color of colors" [value]="color">
+                {{color}}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field *ngIf="colors.length >= listLimit" fxFlex placeholder="Color" class="mw-240">
+        <input matInput  #colorInput type="text" aria-label="Number"  formControlName="sColor" [(ngModel)]="sColor" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option  *ngFor="let color of filteredColors" [value]="color" (onSelectionChange)="switchColor($event, color)">
+            {{ color }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+  
+    </div>
+    <div fxLayout="row" class="p-32">
+  
+      <mat-form-field fxFlex class="mr-20 mw-240">
+        <input
+          matInput
+          placeholder="Min"
+          formControlName="min"
+        />
+      </mat-form-field>
+  
+      <mat-form-field fxFlex class="mr-20 mw-240">
+        <input
+          matInput
+          placeholder="Max"
+          formControlName="max"
+        />
+      </mat-form-field>
+
+      <mat-form-field fxFlex class="mr-20 mw-240">
+        <input
+          matInput
+          placeholder="SKU"
+          formControlName="sku"
+          required
+        />
+      </mat-form-field>
+        <mat-card *ngIf="sPriceOption.priceType=='3' && sPriceOption.saleStartDate">
+            On sale from {{sPriceOption.saleStartDate | date}} to {{sPriceOption.saleEndDate | date}}
+            <mat-card-subtitle>Sale price shown</mat-card-subtitle>
+        </mat-card>
+        <mat-card *ngIf="sPriceOption.priceType=='2'">
+            <mat-card-subtitle>Incentive price shown</mat-card-subtitle>
+        </mat-card>
+        <mat-card *ngIf="sPriceOption.priceType=='1'">
+            <mat-card-subtitle>Special price from supplier</mat-card-subtitle>
+        </mat-card>
+        <mat-card *ngIf="sColor == 'No Color'">
+            If there is a color available, please update color first. 
+        </mat-card>
+        <mat-card *ngIf="this.product.pricingErr">
+            Error: {{this.product.pricingErr}}
+        </mat-card>
+
+    </div>
+    <div fxLayout="row" class=" px-32">
+      <div fxFlex="none"
+           class="w-144 mr-16">
+        <div class="prb-label">Qty</div>
+        <div class="prb-label">Sales Price</div>
+        <div class="prb-label">Pr Code</div>
+        <div class="prb-label">Margin</div>
+        <div class="prb-label">Unit Cost</div>
+        <div class="prb-label">Unit Profit</div>
+        <div class="prb-label mt-16">Total Sales Price</div>
+        <div class="prb-label">Total Cost</div>
+        <div class="prb-label">Total Profit</div>
+      </div>
+  
+      <div fxFlex
+           formArrayName="priceBreaks"
+           fusePerfectScrollbar>
+        <div fxFlex="none"
+             class="prb-column w-144 mr-16"
+             [formGroupName]="i"
+             *ngFor="let prb of priceBreakControls.controls; let i = index;">
+          <mat-form-field>
+            <input matInput
+                   type="number"
+                   formControlName="minQuantity"
+                   (change)="updateQty($event, i)"/>
+          </mat-form-field>
+  
+          <mat-form-field>
+            <input matInput
+                   type="number"
+                   formControlName="salePrice"
+                   (change)="updateSalesPrice($event, i)"/>
+          </mat-form-field>
+  
+          <div class="prb-label">{{ sPriceOption.prCode }}&nbsp;</div>
+  
+          <mat-form-field>
+            <input matInput
+                   type="number"
+                   formControlName="margin"
+                   (change)="updateMargin($event, i)"/>
+          </mat-form-field>
+  
+          <mat-form-field>
+            <input matInput
+                   type="number"
+                   formControlName="price"
+                   (change)="updateUnitCost($event, i)"/>
+          </mat-form-field>
+  
+          <mat-form-field>
+            <input matInput
+                   type="number"
+                   formControlName="unitProfit"
+                   [disableControl]="true"
+                   (change)="updateUnitProfit($event, i)"
+                   readonly/>
+          </mat-form-field>
+  
+          <div class="prb-label mt-16">{{ getTotalSalesPrice(i) | number:'.2-2' }}</div>
+  
+          <div class="prb-label">{{ getTotalCost(i) | number:'.2-2' }}</div>
+  
+          <div class="prb-label">{{ getTotalProfit(i) | number:'.2-2' }}</div>
+  
+          <div class="mt-20">
+            <button mat-icon-button
+                    color="primary"
+                    (click)="removePriceBreak(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+  
+        <div fxFlex="none" class="prb-column w-144">
+          <button mat-button fxFlex
+                  (click)="addNewPbrForm()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="mb-20 p-32">
+      <button mat-raised-button
+              color="accent"
+              class="w-120"
+              (click)="handleSaveOption()"
+              *ngIf="action==='new'">Add</button>
+  
+      <button mat-raised-button
+              color="accent"
+              class="w-120"
+              (click)="handleSaveOption()"
+              *ngIf="action==='edit'">Update</button>
+    </div>
+  </form>
+  

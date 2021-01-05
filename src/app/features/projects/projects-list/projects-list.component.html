@@ -1,0 +1,158 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm"
+        [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox
+                (change)="toggleAll($event)"
+                [checked]="selection.checkedAll | async"
+                [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let project">
+            <mat-checkbox [checked]="checkboxes[project.id]"
+                          (change)="onSelectedChange(project.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Project Name</span>
+            <input class="form-control"
+                   formControlName="name"
+                   (keyup.enter)="filterProjects()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let project">
+            <p class="company text-truncate">
+                {{ project.name }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="estimatedStartDate">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Start Date</span>
+            <input class="form-control"
+                   formControlName="estimatedStartDate"
+                   (keyup.enter)="filterProjects()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let project">
+            <p class="company text-truncate">
+                {{ project.estimatedStartDate | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dueDate">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Due Date</span>
+            <input class="form-control"
+                   formControlName="dueDate"
+                   (keyup.enter)="filterProjects()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let project">
+            <p class="company text-truncate">
+                {{ project.dueDate | date }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="assignee">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Assigned User</span>
+            <input class="form-control"
+                   formControlName="assignee"
+                   (keyup.enter)="filterProjects()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let project">
+            <p class="company text-truncate">
+                {{ project.assignee }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Status</span>
+            <input class="form-control"
+                   formControlName="status"
+                   (keyup.enter)="filterProjects()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let project">
+            <p class="company text-truncate">
+                {{ project.status }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="priority">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Priority</span>
+            <input class="form-control"
+                   formControlName="priority"
+                   (keyup.enter)="filterProjects()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let project">
+            <p class="company text-truncate">
+                {{ project.priority }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="converted">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header></span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let project">
+            <button mat-icon-button matTooltip="Converted" *ngIf="project.converted == '1'">
+                <mat-icon class="active-icon green-500-bg white-fg s-24">check</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let project; columns: displayedColumns;"
+            class="project"
+            (click)="editProject(project)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[project.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true"
+            (page)="paginate($event)">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

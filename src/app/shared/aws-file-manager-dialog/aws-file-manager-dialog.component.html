@@ -1,0 +1,34 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>Order Details : {{ order?.orderNo}}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <ng-container>
+		<app-aws-file-manager
+		class="w-100-p"
+		[recordId]="accountId"
+		[accountId]="accountId"
+		[awsFileManagerType]="awsFileManagerType"
+		[isSharePopup]="isSharePopup"
+		[lastSharedPath]="lastSharedPath"
+		(shareFiles)="shareFiles($event)"
+		></app-aws-file-manager>
+    </ng-container>
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-raised-button color="accent"
+            (click)="dialogRef.close()"
+            >Close
+        </button>
+    </div>
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

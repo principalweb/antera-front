@@ -1,0 +1,38 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner> 
+</div>
+<form [formGroup]="credsForm">
+<div class="px-32">
+  <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">TaxJar</span>
+
+  </div>
+
+  <mat-tab-group>  
+    <mat-tab label="API">
+      <div class="px-16">
+        <mat-slide-toggle formControlName="enabled">Enabled</mat-slide-toggle>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+          <span class="mat-body-1 w-80 mr-16 text-right">API Key</span>
+          <mat-form-field fxFlex>
+              <input matInput formControlName="apiKey" class="form-control">
+          </mat-form-field>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <mat-slide-toggle formControlName="createTransaction">Create TaxJar Transaction</mat-slide-toggle>
+        </div>
+        <div class="mx-600" fxLayout="row" fxLayoutAlign="start center">
+            <mat-slide-toggle formControlName="autoTaxCalc">Calculate Tax Automatically Through TaxJar While Order Gets Booked or Invoiced</mat-slide-toggle>
+        </div>
+
+        <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+            <button class="ml-96" mat-raised-button (click)="saveConfig()" color="accent">SAVE</button>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Categories">
+      <category-list></category-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+</form>

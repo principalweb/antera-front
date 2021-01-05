@@ -1,0 +1,73 @@
+<mat-dialog-content>
+  <ng-container [formGroup]="form">
+    <mat-tab-group>
+
+      <mat-tab label="Order Note">
+        <p>Order Note - This is a note that will be placed at the bottom of all customer facing documents</p>
+
+        <mat-form-field class="w-100-p" appearance="outline">
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="4" formControlName="orderNote"></textarea>
+        </mat-form-field>
+
+      </mat-tab>
+      <mat-tab label="PO Notes">
+        <p>PO Notes - Will be shown for each line at the bottom of the PO documents</p>
+        <mat-form-field class="w-100-p" appearance="outline">
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="4" formControlName="vendorPONote"></textarea>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab label="Deco Line Notes" *ngIf="decoVendorsFormArray.controls?.length">
+        <p>Decoration Line Notes - Will be shown with each decoration</p>
+        <table class="simple" formArrayName="decoVendors">
+          <thead>
+            <tr>
+              <th style="width: 250px;">Decoration</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tr *ngFor="let vendor of decoVendorsFormArray.controls; index as i" [formGroupName]="i">
+            <td>
+              <div *ngIf="vendor.value as deco" fxLayout="row">
+                <div>
+                  <img [src]="decoThumbnail(deco)" [default]="'assets/images/ecommerce/product-image-placeholder.png'"
+                    style="max-width: 80px" [alt]="deco.designName">
+                </div>
+                <div>
+                  <div><strong>{{ deco.designModal }}</strong></div>
+                  <div>{{ deco.vendorName }}</div>
+                  <div>{{ deco.designName }}</div>
+                  <div>{{ deco.decoLocation }}</div>
+                  <div>{{ deco.decoStatus }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+			<div class="p-16 space-between" fxLayout="column">
+			<div class="p-16 space-between" fxLayout="row">
+			  <mat-checkbox formControlName="isGeneralNote"> General Note</mat-checkbox>
+			</div>
+			<div class="p-16 space-between" fxLayout="row">
+              <mat-form-field class="w-100-p" appearance="outline">
+                <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="4"
+                  formControlName="decorationNotes"></textarea>
+              </mat-form-field>
+			</div>
+			</div>
+            </td>
+          </tr>
+        </table>
+      </mat-tab>
+      <mat-tab label="Work Order Notes" *ngIf="decoVendorsFormArray.controls?.length">
+        <p>Work Order Notes - Will be shown for work order documents</p>
+        <mat-form-field class="w-100-p" appearance="outline">
+          <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="4" formControlName="workOrderNote"></textarea>
+        </mat-form-field>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+</mat-dialog-actions>

@@ -1,0 +1,95 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  color: #000000;
+  min-height: 1px;
+}
+
+.header {
+  color: #ffffff;
+
+  ::ng-deep {
+    .mat-form-field-underline {
+      background-color: #ffffff !important;
+    }
+    .mat-form-field.mat-focused .mat-form-field-ripple {
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-select-arrow,
+    .mat-select-value {
+      color: #ffffff !important;
+    }
+  }
+
+  .logo {
+    .logo-icon {
+      margin: 0 16px 0 0;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      line-height: 24px;
+    }
+  }
+
+  .invoice-action {
+    min-width: 160px !important;
+  }
+
+  .document {
+    width: 100%;
+    background: none !important;
+
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+}
+
+.document-selection {
+  width: 100%;
+  padding: 16px 0 0 16px;
+
+  .mat-form-field {
+    width: 100%;
+  }
+}
+
+.nav-subheader {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.menu-list {
+  min-width: 100%;
+  width: 100%;
+  padding-bottom: 24px;
+
+  display: block !important;
+
+  .menu {
+    margin-top: 8px;
+
+    span {
+      font-size: 16px;
+    }
+
+    mat-slide-toggle {
+      float: right;
+    }
+  }
+}
+
+::ng-deep {
+  .header {
+    .mat-form-field-appearance-legacy .mat-form-field-label,
+    .mat-select-value {
+      color: #ffffff !important;
+    }
+  }
+}

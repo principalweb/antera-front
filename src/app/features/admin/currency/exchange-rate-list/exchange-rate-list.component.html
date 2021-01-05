@@ -1,0 +1,22 @@
+<div class="exchange-rate-line-height" fxLayout="column">
+  <div class="exchange-rate-item" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center" *ngFor="let rate of currencyService.exchangeRates | async">
+    <p fxFlex="30">
+      {{ rate.fromCurrencyCode }}
+    </p>
+    <p fxFlex="30">
+      {{ rate.toCurrencyCode }}
+    </p>
+    <p>
+      {{ rate.rate }}
+    </p>
+    <p>
+      {{ rate.rateAfterPadding }}
+    </p>
+    <mat-icon class="ml-8" (click)="currencyService.deleteExchangeRate([rate.id])" [ngStyle]="{'cursor': 'pointer'}">
+      close
+    </mat-icon>
+    <mat-icon [ngClass]="{'spinningMore': currencyService.spin[rate.id]}" (click)="currencyService.syncExchangeRateIds([rate.id])" class="grn-spin">
+      sync
+    </mat-icon>
+  </div>
+</div>

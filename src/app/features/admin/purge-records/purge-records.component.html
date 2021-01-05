@@ -1,0 +1,34 @@
+<div id="purge" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">delete_forever</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Purge Records</span>
+      </div>
+      <!-- / APP TITLE -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="content-card">
+    <br /><br />
+      <mat-tab-group class="purge-tab-group-1" >
+        <mat-tab label="Modules">
+            <app-modules-purge-records></app-modules-purge-records>
+        </mat-tab>
+        <mat-tab label="Others">
+            coming soon
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

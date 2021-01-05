@@ -1,0 +1,23 @@
+<div class="px-32">
+  <div class="mt-40" fxLayout="row">
+    <span class="mat-title">Search Vendors</span>
+  </div>
+
+  <div class="px-16">
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+      <mat-form-field class="mr-16" fxFlex [hintLabel]="'Showing 7 results for ' + search">
+        <input matInput placeholder="Search" [(ngModel)]="search">
+      </mat-form-field>
+
+      <button class="mb-8" mat-raised-button color="accent">SEARCH</button>
+    </div>
+
+    <div class="mat-body-2 mt-32 mb-16">Vendors</div>
+    <div class="mx-400 mt-8" fxLayout="row"
+         fxLayoutAlign="space-between center"
+         *ngFor="let vendor of vendorsList">
+      <span class="mat-body-1">{{ vendor }}</span>
+      <mat-checkbox></mat-checkbox>
+    </div>
+  </div>
+</div>

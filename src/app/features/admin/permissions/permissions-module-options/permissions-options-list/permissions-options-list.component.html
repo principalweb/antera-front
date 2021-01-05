@@ -1,0 +1,29 @@
+<mat-table fxFlex #table matSort
+    [dataSource]="options">
+
+    <ng-container cdkColumnDef="label">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Description</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs *cdkCellDef="let option">
+            <p class="company text-truncate">
+                {{ option.label }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="enabled">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Enabled</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs *cdkCellDef="let option">
+            <mat-checkbox (change)="updateEnabled(option.id, $event)" [(ngModel)]="option.enabled"></mat-checkbox> 
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="columns"></mat-header-row>
+    <mat-row *cdkRowDef="let options; columns: columns;"
+            class="entity-type"
+            matRipple>
+    </mat-row>
+</mat-table>

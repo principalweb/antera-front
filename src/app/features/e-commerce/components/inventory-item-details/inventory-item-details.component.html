@@ -1,0 +1,68 @@
+<div class="dialog-content-wrapper" fxLayout="column">
+  <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="mat-title">Inventory Item</div>
+
+      <div>
+        <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-card fxFlex fxLayout="row, wrap" fxLayoutAlign="space-between">
+    <div>
+      <mat-chip-list aria-label="Product Information">
+        <mat-chip>Item NO: {{item.productId}}</mat-chip>
+        <mat-chip>In-House ID: {{item.inhouseId}}</mat-chip>
+        <mat-chip>{{item.productName}}</mat-chip>
+      </mat-chip-list>
+    </div>
+    <div>
+      <span *ngIf="t==1" class="mr-4 warn">If Adjust Qty is zero, Unit Price is applied on Qty on Hand. If Adjust Qty is greater than zero, Unit Price is applied on Adjust Qty</span>
+      <button *ngIf="t==1" mat-raised-button
+              (click)="asa()"
+              class="mat-accent"
+              aria-label="Adjust All"
+              matTooltip="Adjust All">
+          Adjust All
+      </button>
+      <button *ngIf="t==2" mat-raised-button
+              (click)="tsa()"
+              class="mat-accent"
+              aria-label="Transfer All"
+              matTooltip="Transfer All">
+          Transfer All
+      </button>
+      <button *ngIf="t==3" mat-raised-button
+              (click)="rsa()"
+              class="mat-accent"
+              aria-label="Unreserve All"
+              matTooltip="Unreserve All">
+          Unreserve All
+      </button>
+    </div>
+  </mat-card>
+  <mat-tab-group (selectedIndexChange)="st($event)">
+    <mat-tab label="Inventory">
+      <ng-template matTabContent>
+        <inventory-item-list></inventory-item-list>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Adjustment">
+      <ng-template matTabContent>
+        <inventory-item-adjustment></inventory-item-adjustment>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Transfer">
+      <ng-template matTabContent>
+        <inventory-item-transfer></inventory-item-transfer>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Manage Reserved">
+      <ng-template matTabContent>
+        <inventory-item-reserve></inventory-item-reserve>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

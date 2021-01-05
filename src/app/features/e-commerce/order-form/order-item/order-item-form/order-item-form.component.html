@@ -1,0 +1,148 @@
+<div mat-dialog-title>
+  <div fxLayout="row">
+    <button mat-icon-button (click)="emitClose()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div fxFlex class="text-sm">
+      <div>{{ item.vendorName }}</div>
+      <div>{{ item.productName }}</div>
+    </div>
+  </div>
+</div>
+<mat-dialog-content>
+  <div class="order__item__form">
+    <form [formGroup]="form" (submit)="save()" style="max-width: 600px;">
+
+      <div class="p-8">
+        <div class="p-8 space-between" fxLayout="row">
+          <div>Roll additional Vendor charges into product</div>
+          <mat-checkbox formControlName="rollAddonChargesToProduct"></mat-checkbox>
+        </div>
+        <div class="p-8 space-between" fxLayout="row">
+          <div>Roll decorations fees into product</div>
+          <mat-checkbox formControlName="rollDecoChargesToProduct"></mat-checkbox>
+        </div>
+        <div class="p-8 space-between" fxLayout="row">
+          <div>Roll decoration additional charges into product</div>
+          <mat-checkbox formControlName="rollDecoAddonChargesToProduct"></mat-checkbox>
+        </div>
+        <div class="p-8 space-between" fxLayout="row" *ngIf="isTaxExempt == false">
+          <div>Charge sales tax</div>
+          <ng-container checkPermissionAction [pAction]="'toggle_tax'">
+            <mat-checkbox formControlName="chargeSalesTax"></mat-checkbox>
+          </ng-container>
+        </div>
+        <div class="p-8 space-between" fxLayout="row" *ngIf="config?.module?.settings?.enableGstOnPo == '1'">
+          <div>Charge GST on PO</div>
+          <ng-container checkPermissionAction [pAction]="'toggle_tax'">
+            <mat-checkbox formControlName="chargeGstTaxOnPo"></mat-checkbox>
+          </ng-container>
+        </div>
+        <div class="p-8 space-between" fxLayout="row">
+          <div>Pay commissions</div>
+          <ng-container checkPermissionAction [pAction]="'toggle_commission'">
+            <mat-checkbox formControlName="payCommission"></mat-checkbox>
+          </ng-container>
+        </div>
+        <!--div class="p-8 space-between" fxLayout="row">
+          <div>Show Parent Kit in Docuents</div>
+          <mat-checkbox formControlName="allowParentKitCalc"></mat-checkbox>
+        </div-->
+        <div class="p-8 space-between" fxLayout="row" *ngIf="hasLinePrice == false || item.isKitChild == '1'">
+          <div>Hide from customer (Valid only if the line total is 0)</div>
+          <mat-checkbox formControlName="hideLine"></mat-checkbox>
+        </div>
+        <div class="px-8 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="w-160">Override In Hand by Date</div>
+          <mat-form-field appearance="outline">
+            <input matInput class="w-140" formControlName="inhandDate" [matDatepicker]="inHandPicker"
+              placeholder="In Hand by Date">
+            <mat-datepicker-toggle matSuffix [for]="inHandPicker"></mat-datepicker-toggle>
+            <mat-datepicker #inHandPicker></mat-datepicker>
+          </mat-form-field>
+          <mat-checkbox formControlName="overrideInHandDate"></mat-checkbox>
+        </div>
+
+        <div>
+          <div class="px-8 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="w-160">Vendor</div>
+            <mat-form-field class="w-320" appearance="outline">
+              <input type="text" formControlName="vendorName" matInput placeholder="Alternate Vendor Name"
+                autocomplete="off" [matAutocomplete]="autoVendorName" #vendorName>
+              <mat-autocomplete #autoVendorName="matAutocomplete" [displayWith]="displayName"
+                (optionSelected)="selectAlternateVendor($event)" md-clear-button="true">
+                <mat-option *ngFor="let account of filteredVendors" [value]="account">
+                  {{ account.name | capitalizeFirst }} <small class="text-boxed">{{ account.partnerType }}</small>
+                </mat-option>
+              </mat-autocomplete>
+              <mat-hint>
+                <a href="javascript:void(0)" (click)="clearAlternateVendor()"
+                  *ngIf="product && this.form.get('vendorId')?.value != product?.vendorId">
+                  Reset to default vendor for product
+                </a>
+              </mat-hint>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="px-8 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="w-160">Alternate Ship To</div>
+          <mat-form-field class="w-320" appearance="outline">
+            <input type="text" formControlName="alternateShipToAccount" matInput placeholder="Account Name"
+              [matAutocomplete]="autoAccountAssigned" #accountName>
+            <mat-autocomplete #autoAccountAssigned="matAutocomplete" [displayWith]="displayName"
+              (optionSelected)="selectAccount($event)" md-clear-button="true">
+              <mat-option *ngFor="let account of filteredAccounts" [value]="account">
+                {{ account.name | capitalizeFirst }} <small class="text-boxed">{{ account.partnerType }}</small>
+              </mat-option>
+            </mat-autocomplete>
+            <button matSuffix type="button" *ngIf="form.get('alternateShipToAccountId').value" mat-icon-button
+              (click)="clearAlternateShipTo($event)">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="locations && locations?.length" class="px-8 space-between" fxLayout="row"
+          fxLayoutAlign="space-between center">
+          <div class="w-160">Ship To Location</div>
+          <mat-form-field *ngIf="locations && locations?.length" class="w-320" appearance="outline">
+            <mat-label>Account Location</mat-label>
+            <mat-select formControlName="shipToLocationId">
+              <mat-select-trigger>
+                {{ getLocationName() }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let location of locations" [value]="location.id">
+                {{ location.locationName }}
+                <small>
+                  {{ location.billingAddressStreet }}
+                  {{ location.billingAddressStreet2 }}
+                  {{ location.billingAddressCity }}
+                  {{ location.billingAddressState }}
+                  {{ location.billingAddressPostalcode }}
+                </small>
+                <small>
+                  {{ location.shippingAddressStreet }}
+                  {{ location.shippingAddressStreet2 }}
+                  {{ location.shippingAddressCity }}
+                  {{ location.shippingAddressState }}
+                  {{ location.shippingAddressPostalcode }}
+                </small>
+              </mat-option>
+            </mat-select>
+            <span matSuffix *ngIf="form.get('shipToLocationId')?.value">
+              <button type="button" mat-icon-button (click)="clearShipToLocation($event)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </span>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="save()" class="mr-8">SAVE</button>
+  <button mat-raised-button (click)="emitClose()">CANCEL</button>
+</mat-dialog-actions>

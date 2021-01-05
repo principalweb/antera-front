@@ -1,0 +1,187 @@
+<div id="contacts" class="page-layout carded fullwidth inner-scroll list-page">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">person</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Contacts</span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <div class="search-input-wrapper mx-12 m-md-0"
+                    fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                <label for="search" class="mr-8">
+                    <mat-icon class="secondary-text">search</mat-icon>
+                </label>
+                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+                    <input matInput [formControl]="searchInput" id="search" placeholder="Search for contacts">
+                </mat-form-field>
+                <button *ngIf='searchInput.value' mat-icon-button (click)="clearSearch()">
+                    <mat-icon aria-label="Close">close</mat-icon>
+                </button>
+            </div>
+            <!-- / SEARCH -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <mat-sidenav-container class="content-card">
+            <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                         fuseMatSidenavHelper="contacts-sidenav">
+                <mat-list class="p-0">
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>add</mat-icon>
+                        <span class="ml-8">Contact</span>
+                    </mat-list-item>
+                    <!-- <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>assignment_ind</mat-icon>
+                        <span class="ml-8">Source</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>assignment</mat-icon>
+                        <span class="ml-8">Quote</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>assignment_turned_in</mat-icon>
+                        <span class="ml-8">Order</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>monetization_on</mat-icon>
+                        <span class="ml-8">QuickBooks</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>content_copy</mat-icon>
+                        <span class="ml-8">Find Duplicates</span>
+                    </mat-list-item> -->
+                    <mat-list-item class="mat-accent-bg" matRipple
+                                   (click)="clearFilters()">
+                        <mat-icon>layers_clear</mat-icon>
+                        <span class="ml-8">Clear Filters</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-warn-bg" matRipple
+                                    (click)="deleteSelectedContacts()">
+                        <mat-icon>delete</mat-icon>
+                        <span class="ml-8">Delete</span></mat-list-item>
+                    </mat-list>
+            </mat-sidenav>
+
+            <div class="toolbar">
+                <div fxFlex="row">
+                    <div fxFlex="row" fxLayoutAlign="start center">
+                        <button mat-icon-button fxHide.gt-md
+                                fuseMatSidenavToggler="contacts-sidenav">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="newContact()">
+                            <mat-icon>add</mat-icon> Contact
+                        </button>
+
+                        <!-- <button mat-raised-button color="accent" class="mr-8">
+                          <mat-icon>assignment_ind</mat-icon> Source
+                        </button>
+
+                        <button mat-raised-button color="accent" class="mr-8">
+                          <mat-icon>assignment</mat-icon> Quote
+                        </button>
+
+                        <button mat-raised-button color="accent" class="mr-8">
+                          <mat-icon>assignment_turned_in</mat-icon> Order
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>monetization_on</mat-icon> QuickBooks
+                        </button> -->
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                (click)="clearFilters()"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>layers_clear</mat-icon> Clear Filters
+                        </button>
+
+                        <button mat-raised-button color="warn"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="deleteSelectedContacts()"
+                                *checkPermission="['', 'Contact']; requiredPermission 'allowDelete'"
+                                >
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+
+                        <mat-checkbox
+                            class="ml-16 mt-4"
+                            [(ngModel)]="contactsService.viewMyItems"
+                            (ngModelChange)="changeShowMyItems($event)">
+                            View My Items
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button mat-button class="text-capitalize more-actions"
+                            [matMenuTriggerFor]="selectMenu">
+                        More Actions
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #selectMenu="matMenu">
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="openTagDialog()">Add To Tags
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="emailSelected()">Email
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="massUpdateSelected()">Mass Update
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="mergeSelected()">Merge
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Add To Target List
+                        </button>
+                        <!-- <button mat-menu-item class="text-capitalize"
+                                (click)="generateLetterSelected()">Form Letter
+                        </button> -->
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="generateLetterSelected()">Find Duplicates
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Change Log
+                        </button>
+                    </mat-menu>
+
+                </div>
+            </div>
+
+            <fuse-contacts-contact-list></fuse-contacts-contact-list>
+        </mat-sidenav-container>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

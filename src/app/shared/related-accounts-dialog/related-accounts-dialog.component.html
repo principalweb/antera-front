@@ -1,0 +1,112 @@
+<mat-toolbar class="mb-0" fxLayoutAlign="space-between center">
+    <div>Select an account</div>
+</mat-toolbar>
+<div class="table-container pt-20">
+    <mat-table #table matSort
+               (matSortChange)="sortChange($event)"
+               [dataSource]="dataSource"
+               fusePerfectScrollbar>
+
+        <ng-container cdkColumnDef="checkbox">
+            <mat-header-cell class="w-40" *cdkHeaderCellDef></mat-header-cell>
+            <mat-cell class="w-40" *cdkCellDef="let account">
+                <mat-checkbox [checked]="selected.id === account.id"
+                            (change)="changeSelected(account)"
+                            (click)="$event.stopPropagation()">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="accountName">
+            <mat-header-cell
+                class="pr-8"
+                mat-sort-header
+                *cdkHeaderCellDef>Account Name</mat-header-cell>
+            <mat-cell class="pr-8" *cdkCellDef="let account">
+                <p class="text-truncate font-weight-600">{{account.accountName }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="partnerType">
+            <mat-header-cell
+                class="pr-8"
+                mat-sort-header
+                *cdkHeaderCellDef>Type</mat-header-cell>
+            <mat-cell class="pr-8" *cdkCellDef="let account">
+                <p class="text-truncate font-weight-600">{{account.partnerType }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="salesRep">
+            <mat-header-cell
+                class="pr-8 email-col"
+                mat-sort-header
+                *cdkHeaderCellDef>Sales Rep</mat-header-cell>
+            <mat-cell class="pr-8 email-col" *cdkCellDef="let account">
+                <p class="text-truncate font-weight-600">{{account.salesRep }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="phone">
+            <mat-header-cell
+                class="pr-8"
+                mat-sort-header
+                *cdkHeaderCellDef>Phone</mat-header-cell>
+            <mat-cell class="pr-8" *cdkCellDef="let account">
+                <p class="text-truncate font-weight-600">{{account.phone }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="shipState">
+            <mat-header-cell
+                class="pr-8"
+                fxHide.xs
+                mat-sort-header
+                *cdkHeaderCellDef>Ship State</mat-header-cell>
+            <mat-cell class="pr-8" *cdkCellDef="let account">
+                <p class="text-truncate font-weight-600">{{ account.shipState }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="dateCreated">
+            <mat-header-cell
+                class="pr-8"
+                fxHide.xs
+                mat-sort-header
+                *cdkHeaderCellDef>Date Created</mat-header-cell>
+            <mat-cell class="pr-8" *cdkCellDef="let account">
+                <p class="text-truncate font-weight-600">{{ account.dateCreated }}</p>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let account; columns: displayColumns;"
+                class="account-row" matRipple
+                (click)="changeSelected(account)"
+                [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+
+    <div class="h-64 text-center p-20" *ngIf="dataSource.total === 0">
+        You don't have contacts linked to this account.
+    </div>
+
+    <mat-paginator #paginator
+                [length]="dataSource.total"
+                (page)="paginate($event)"
+                [pageSize]="10"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+    </mat-paginator>
+</div>
+<div class="p-16">
+    <button mat-raised-button
+            color="accent"
+            (click)="save()">Save</button>
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="dataSource.loading">
+    <mat-spinner></mat-spinner>
+</div>

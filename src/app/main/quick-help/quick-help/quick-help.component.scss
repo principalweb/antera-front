@@ -1,0 +1,22 @@
+:host {
+  display: flex;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  height: 100%;
+  z-index: 99;
+  flex-direction: column;
+
+  .header {
+      
+  }
+
+  .container {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .mat-slide-toggle-content {
+    flex: 1;
+  }
+}

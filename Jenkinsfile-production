@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+    environment {
+        GIT_MESSAGE = sh(script: 'git log $COMMIT --format=format:%s -1', , returnStdout: true).trim()
+        GIT_AUTHOR  = sh(script: 'git log $COMMIT -1 --pretty=format:%an', , returnStdout: true).trim()
+        GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
+    }
+    stages {
+        stage('Prod Deploy') {
+            steps {
+
+            script {
+
+                // It's necessary to define where is the docker and the paths for the tools
+                def dockerHome = tool 'default'
+                env.PATH = "${dockerHome}/bin:${env.PATH}"
+
+                env.BUILD_NUMBER = input message: 'Enter the build number', 
+                            parameters: [string(defaultValue: '', description: '', name: 'build')] 
+                    }  
+
+                // Update K8s deployment with the new ECR image
+                sh "kubectl config use-context arn:aws:eks:us-east-1:705666639440:cluster/kub02 ; kubectl -n prod-${env.GIT_REPO_NAME} set image deployment prod-${env.GIT_REPO_NAME}=705666639440.dkr.ecr.us-east-1.amazonaws.com/${env.GIT_REPO_NAME}/stg:${env.BUILD_NUMBER} --all"
+
+                // Tag Git with PROD
+                sh 'git push --delete origin PROD'
+                sh 'git fetch --tags --all'
+                sh "git checkout tags/${env.BUILD_NUMBER}"
+                sh 'git tag -d PROD'
+                sh 'git tag PROD'
+                sh 'git push origin --tags'
+
+
+                // Update helm charts deployment image
+                sh 'rm -rf helm-charts ; git clone git@github.com:Antera-Software/helm-charts.git'
+                sh 'cd helm-charts ; sed -i -e "s|image: 705666639440.dkr.ecr.us-east-1.amazonaws.com/$GIT_REPO_NAME/stg:.*|image: 705666639440.dkr.ecr.us-east-1.amazonaws.com/$GIT_REPO_NAME/stg:$BUILD_NUMBER|g" ./prod/$GIT_REPO_NAME/prod-$GIT_REPO_NAME.yaml'
+                sh 'cd helm-charts ; git add . ; git commit -m "Update production image for $GIT_REPO_NAME" ; git push'
+            }
+        }
+
+    }
+
+  post {
+        always {
+          script {
+                def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', 'ABORTED': 'danger']
+                slackSend   message: "*${currentBuild.currentResult}:* ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.RUN_DISPLAY_URL}|Open>) - ${env.GIT_MESSAGE} - started by ${env.GIT_AUTHOR}",
+                    baseUrl: "https://anterasoftware.slack.com/services/hooks/jenkins-ci/",
+                    channel: "jenkins",
+                    color: COLOR_MAP[currentBuild.currentResult],
+                    tokenCredentialId: "slack"
+                  }
+              }
+          }
+
+}

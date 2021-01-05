@@ -1,0 +1,52 @@
+<div class="px-32">
+  <div class="mt-40 mb-16 mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">Additional Charges Mapping</span>
+    <mat-slide-toggle labelPosition="before" [(ngModel)]="enabled">
+      Enable
+    </mat-slide-toggle>
+  </div>
+
+  <div class="mt-24">
+    <div fxLayout="row" fxLayoutAlign="start center" class="mb-20">
+      <span class="mat-body-2">Type</span>
+      <mat-form-field class="w-180">
+        <mat-select>
+          <mat-option value="promotional">Promotional</mat-option>
+          <mat-option value="vendorapparel">Vendor Apparel</mat-option>
+          <mat-option value="print">Print</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" class="mb-8">
+      <div class="mat-body-1 w-200">ASI Code</div>
+      <div class="mat-body-1 w-180">CRM</div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="mat-body-2">ARCH - Artwork Charge</div>
+      <mat-form-field class="w-180">
+        <mat-select>
+          <mat-option>None</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="mat-body-2">PROF - Proof Charge</div>
+      <mat-form-field class="w-180">
+        <mat-select>
+          <mat-option>None</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div class="mat-body-2">SMCH - Sample Charge</div>
+      <mat-form-field class="w-180">
+        <mat-select>
+          <mat-option>None</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="mb-16">
+      <button mat-raised-button color="accent">Save</button>
+    </div>
+  </div>
+</div>

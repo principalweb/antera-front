@@ -1,0 +1,33 @@
+<div class="px-32">
+  <form [formGroup]="dataForm" (submit)="save()">
+      <div class="px-16">
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Name" formControlName="name" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="URL" formControlName="url" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="API Key" formControlName="apikey" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+          <mat-slide-toggle formControlName="enabled">Enabled</mat-slide-toggle>
+        </div>
+        <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+          <button type="submit" class="ml-96" mat-raised-button color="accent">SAVE</button>
+        </div>
+      </div>
+  </form>
+</div>

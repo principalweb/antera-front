@@ -1,0 +1,27 @@
+@import "src/@fuse/scss/mixins/breakpoints";
+
+.knowledgebase-article-dialog {
+
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+
+    @include media-breakpoint('gt-xs') {
+        width: auto;
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    video {
+        max-height: 500px;
+        max-width: 900px;
+    }
+}

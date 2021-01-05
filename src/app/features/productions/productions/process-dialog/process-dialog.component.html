@@ -1,0 +1,81 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row>
+           Processes 
+            <button mat-button class="mat-icon-button dialog-close" aria-label="Close dialog" (click)="close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="p-16">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <button type="button" mat-icon-button color="primary" (click)="add()">
+                <mat-icon aria-label="Save new process">add</mat-icon>
+            </button>
+            <button type="button" mat-icon-button color="primary" (click)="clearNewProcess()">
+                <mat-icon aria-label="Clear process">clear</mat-icon>
+            </button>
+
+            <mat-form-field>
+                <input matInput placeholder="Name" [(ngModel)]="newProcess.name" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select placeholder="Deco Type" [(ngModel)]="newProcess.decoTypeId">
+                    <mat-option [value]="">None</mat-option>
+                    <mat-option *ngFor="let type of decoTypes" [value]="type.id">
+                        {{type.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Additional Time (Minutes)" [(ngModel)]="newProcess.additionalTime" />
+            </mat-form-field>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="mat-table-container">
+            <mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let p">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placeholder="Name" [value]="p.name" [(ngModel)]="p.name" (change)="update(p)" />
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="decoTypeName">
+                    <mat-header-cell *matHeaderCellDef>Deco Type</mat-header-cell>
+                    <mat-cell *matCellDef="let p">
+                        <mat-form-field floatLabel="never" style="max-width:180px;">
+                            <mat-select [placeholder]="p.decoTypeName" [(ngModel)]="p.decoTypeId"
+                                (selectionChange)="update(p)">
+                                <mat-option *ngFor="let type of decoTypes" [value]="type.id">
+                                    {{type.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="additionalTime">
+                    <mat-header-cell *matHeaderCellDef> Additional Time (Minutes)</mat-header-cell>
+                    <mat-cell *matCellDef="let p">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placeholder="Additional Time" [value]="p.additionalTime" [(ngModel)]="p.additionalTime" (change)="update(p)"/>
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                    <mat-cell *matCellDef="let p">
+                        <button mat-icon-button type="button" (click)="delete(p)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </div>
+    </div>
+</div>
+

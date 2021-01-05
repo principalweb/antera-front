@@ -1,0 +1,301 @@
+<div class="px-32">
+  <div class="mt-40" fxLayout="row">
+    <span class="mat-title">System Configuration</span>
+  </div>
+
+  <form [formGroup]="configForm" class="px-16 pb-32">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Default Sub Domain</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Sub domain for system, which is used in URL of system, like dev-front">
+        <input matInput formControlName="defaultSubdomain">
+      </mat-form-field>
+    </div>
+    <div class="mt-16" fxLayout="row">
+      <span fxFlexAlign="left" class="mw-240 mr-16">Locale Country</span>
+
+      <!-- <mat-form-field class="mr-16" fxFlex hintLabel="Country Code for system">
+        <input matInput formControlName="localeCountry">
+      </mat-form-field> -->
+    <mat-form-field>
+      <mat-label>Country Code</mat-label>
+      <mat-select formControlName="localeCountry">
+        <mat-option value="USA">USA</mat-option>
+        <mat-option value="CA">CA</mat-option>
+        <mat-option value="AU">AU</mat-option>
+        <mat-option value="NZ">NZ</mat-option>
+        <mat-option value="MX">MX</mat-option>
+        <mat-option value="GB">GB</mat-option>
+        <mat-option value="TR">TR</mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Default Date Format</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Date format">
+        <input matInput formControlName="defaultDateFormat">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Listing Per Page</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Listing entries per page">
+        <input matInput formControlName="listMaxEntriesPerPage">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Default Customer Terms</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Term for invoice, we can use other module now">
+        <input matInput formControlName="sysconfigCustTerms">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Customer Folder URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud customer default folder">
+        <input matInput formControlName="sysconfigLinkCloudUrl">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Login URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud login path">
+        <input matInput formControlName="sysconfigLinkLoginPathCloud">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Create Customer URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud create customer account folder">
+        <input matInput formControlName="sysconfigLinkFolderPathCloud">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Upload Doc URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud upload docs">
+        <input matInput formControlName="sysconfigLinkUploadPathCloud">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Upload Doc API URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud upload docs - API url">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudApi">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud File Preview URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="To display cloud file, we need default path to file">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudArt">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Browse URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Browse cloud folder path">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudArtBrowse">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud File Download URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="download cloud file in backend">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudArtDownlaod">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Child URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Get child files of any cloud folder">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudArtChild">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Save Note</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Save noted to cloud">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudSavenoteApi">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Get Note</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Get notes from cloud">
+        <input matInput formControlName="sysconfigLinkUploadPathCloudGatenoteApi">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Distributor</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Distrubtuor folder name at cloud">
+        <input matInput formControlName="sysconfigLinkDistributorCloud">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud User</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud user name">
+        <input matInput formControlName="sysconfigLinkUserCloud">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Password</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Cloud password">
+        <input matInput formControlName="sysconfigLinkPasswordCloud">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Cloud Next Account Ext</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Account ext for cloud folder">
+        <input matInput formControlName="sysconfigNextAcctExt">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Client Company Address</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Client Company address">
+        <input matInput formControlName="companyAddress">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Site URL</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Site URL">
+        <input matInput formControlName="siteUrl">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Next Order</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Next order #">
+        <input matInput formControlName="sysconfigNextOrderNum">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Next Quote</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Next Quote #">
+        <input matInput formControlName="sysconfigNextQuoteNum">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Default Currency Code</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Default currency">
+        <input matInput formControlName="defaultCurrencyIso4217">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Default Currency Name</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Currency name">
+        <input matInput formControlName="defaultCurrencyName">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Default Currency Symbole</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Currency symbole">
+        <input matInput formControlName="defaultCurrencySymbol">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Next Opportunity</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Next Opportunity number">
+        <input matInput formControlName="sysconfigNextOpportunityNum">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Approval Limit</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Order approval limit for order">
+        <input matInput formControlName="sysconfigOrderApprovalLimitC">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Approval User Id</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="System /admn user id">
+        <input matInput formControlName="sysconfigUserIdC">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Approval User</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Admin name">
+        <input matInput formControlName="sysconfigSpecifiedApproverC">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Client Address</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Client Company address">
+        <input matInput formControlName="sysconfigClientAddress">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Client Company Name</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Client Company name">
+        <input matInput formControlName="sysconfigClientCompany">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Form Decimal Upto (Cost/Price)</span>
+
+      <mat-form-field class="mr-16" fxFlex>
+        <input matInput formControlName="sysconfigOrderFormCostDecimalUpto">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Form Decimal Upto (Qty)</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Qty decimal upto">
+        <input matInput formControlName="sysconfigOrderFormQtyDecimalUpto">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Form Decimal Upto (Commission)</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Commsion decimal upto">
+        <input matInput formControlName="sysconfigOrderFormCommPerDecimalUpto">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Form Decimal Upto (Profit)</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Gross profit decimal upto">
+        <input matInput formControlName="sysconfigOrderFormGpPerDecimalUpto">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Order Form Default Margin</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Default Quote mrgin %">
+        <input matInput formControlName="sysconfigDefaultQuoteMargin">
+      </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mw-240 mr-16">Sage Default Margin</span>
+
+      <mat-form-field class="mr-16" fxFlex hintLabel="Sage  margin">
+        <input matInput formControlName="sysconfigSagePriceMarginC">
+      </mat-form-field>
+    </div>
+    <div class="mt-16">
+      <button mat-raised-button class="mr-8" color="accent" (click)="save()">Save</button>
+      <button mat-button color="warn" (click)="reset()">Reset</button>
+    </div>
+  </form>
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

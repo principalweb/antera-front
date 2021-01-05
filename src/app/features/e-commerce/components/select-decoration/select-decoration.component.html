@@ -1,0 +1,37 @@
+<div fxLayout="column">
+  <h2 mat-dialog-title class="pb-0">Add a Decoration</h2>
+  <div class="dialog-content p-16" fxLayout="column">
+    <div class="new-artwork p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onCreateNewArtworkSelected()">
+        <mat-icon class="deco-icon">add_box</mat-icon>
+        <div class="ml-24">
+            <div class="text-bold mat-title mb-0">Create New Artwork</div>
+            <div class="text-bold h5 secondary-text">Create new artwork for approval</div>
+        </div>
+    </div>
+    <div class="modify-artwork p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onSelectExistingDesign()">
+        <mat-icon class="deco-icon">photo</mat-icon>
+        <div class="ml-24">
+            <div class="text-bold mat-title mb-0">Select Existing Artwork</div>
+            <div class="text-bold h5 secondary-text">Select an approved artwork to re-use</div>
+        </div>
+    </div>
+    <div class="modify-artwork p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onModifyExistingDesign()">
+        <mat-icon class="deco-icon">photo_size_select_large</mat-icon>
+        <div class="ml-24">
+            <div class="text-bold mat-title mb-0">Modify Existing Artwork</div>
+            <div class="text-bold h5 secondary-text">Select a previous artwork to modify</div>
+        </div>
+    </div>
+    <div class="modify-artwork p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onSelectAttachArtwork()">
+        <mat-icon class="deco-icon">attach_file</mat-icon>
+        <div class="ml-24">
+            <div class="text-bold mat-title mb-0">Attach Files</div>
+            <div class="text-bold h5 secondary-text">Attached finished artwork files to attach to PO</div>
+        </div>
+    </div>
+  </div>
+  <div class="mt-24" fxLayout="row" fxLayoutAlign="end start">
+    <button mat-button color="accent" matDialogClose>CANCEL</button>
+  </div>
+</div>
+

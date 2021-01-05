@@ -1,0 +1,108 @@
+<div id="users" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex="1 0 auto"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">timeline</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Users</span>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <mat-sidenav-container class="content-card">
+          <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                       fuseMatSidenavHelper="user-sidenav">
+            <mat-list class="p-0">
+              <mat-list-item class="mat-accent-bg" matRipple (click)="cognitoPushUser()">
+                <mat-icon>cloud_upload</mat-icon>
+                <span class="ml-8">Congnito Push User</span>
+              </mat-list-item>
+              <mat-list-item class="mat-accent-bg" matRipple (click)="newUser()">
+                <mat-icon>add</mat-icon>
+                <span class="ml-8">Create New User</span>
+              </mat-list-item>
+              <mat-list-item *ngIf="selection.length > 0"
+                             class="mat-warn-bg" matRipple
+                             (click)="deleteSelectedUsers()">
+                <mat-icon>delete</mat-icon>
+                <span class="ml-8">Delete</span>
+              </mat-list-item>
+            </mat-list>
+          </mat-sidenav>
+
+          <div class="toolbar">
+            <div fxFlex="row">
+              <div fxFlex="row" fxLayoutAlign="start center">
+                <button mat-icon-button fxHide.gt-md
+                        fuseMatSidenavToggler="user-sidenav">
+                  <mat-icon>menu</mat-icon>
+                </button>
+                <button mat-icon-button fxHide.gt-md
+                        fuseMatSidenavToggler="user-sidenav">
+                  <mat-icon>menu</mat-icon>
+                </button>
+
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="cognitoPushUser()">
+                  <mat-icon>cloud_upload</mat-icon> Cognito Push User
+                </button>
+
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="newUser()">
+                  <mat-icon>add</mat-icon> Create New User
+                </button>
+
+                <button [disabled]="selection.length == 0"
+                        mat-raised-button color="warn"
+                        class="text-capitalize mr-8"
+                        (click)="deleteSelectedUsers()"
+                        fxHide fxShow.gt-md>
+                  <mat-icon>delete</mat-icon> Delete
+                </button>
+
+                <!--button mat-raised-button color="accent"
+                class="text-capitalize mr-8"
+                fxHide fxShow.gt-md>
+            <mat-icon>share</mat-icon> Share
+        </button>
+
+        <button mat-raised-button color="accent"
+                class="text-capitalize mr-8"
+                fxHide fxShow.gt-md>
+            <mat-icon>print</mat-icon> Print
+        </button> -->
+              </div>
+            </div>
+          </div>
+            <fuse-user-list></fuse-user-list>
+          <!-- <div *ngIf="progressBar" style="margin:25px">
+            <mat-progress-bar mode="determinate" [value]="pPercentage" color="Primary"></mat-progress-bar>
+            <div style="text-align:center;margin-top:20px">
+              Push Users ({{pPercentage}}%)
+            </div>
+          </div> -->
+        </mat-sidenav-container>
+       <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

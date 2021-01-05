@@ -1,0 +1,27 @@
+ <!--<div>
+ <embedded-purchase-order-modern
+    
+        [hidden]=false
+        (onDocumentReady)="onDocumentReady"
+        (onDocumentLoadingFailed)="onDocumentLoadingFailed">
+        
+</embedded-purchase-order-modern>
+
+<mat-dialog-actions class="mt-40" fxLayout="row" fxLayoutAlign="end start">
+        <button mat-button color="primary" mat-dialog-close>CLOSE</button>
+</mat-dialog-actions>  
+
+</div> -->
+
+
+<div class="dialog-content-wrapper" >    
+        <mat-dialog-content class="p-24 m-0">
+                        <embedded-purchase-order-modern [hidden]=false
+                        (onDocumentReady)="onDocumentReady()">
+                </embedded-purchase-order-modern>
+                <mat-dialog-actions class="mt-40" fxLayout="row" fxLayoutAlign="end start"   *ngIf="ava">
+                                <button mat-button color="primary" mat-dialog-close>CLOSE</button>
+                 </mat-dialog-actions> 
+        </mat-dialog-content>
+</div>
+

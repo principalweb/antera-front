@@ -1,0 +1,88 @@
+@import 'src/@fuse/scss/fuse.scss';
+
+#account-additional-info {
+
+    $icon-size: 16px;
+    overflow-x: hidden;
+
+    width: 100%;
+    position: absolute;
+    
+    .mat-raised-button .mat-icon {
+        color: white;
+    }
+    .mat-icon-button {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        margin-top: -4px;
+
+        .mat-icon {
+            width: $icon-size;
+            height: $icon-size;
+            line-height: $icon-size;
+            min-width: $icon-size;
+            min-height: $icon-size;
+            font-size: $icon-size;
+        }
+    }
+    .pre {
+        line-height: 1.6;
+        white-space: pre-wrap;
+   }
+
+    .mat-card {
+        position: relative;
+    }
+
+    .accent-text {
+        color: map-get($mat-fuseaccent, 500);
+    }
+
+    // .mat-subheading-1 {
+    //     display: flex;
+    //     align-items: flex-start;
+    
+    //     .info-label {
+    //         width: 160px;
+    //         flex: none;
+    //         color: #666;
+    //     }
+    
+    //     .info-value {
+    //         word-break: break-all;
+    //         width: 100%;
+    //         border-bottom: 1px solid #ccc;
+    //         line-height: 25px;
+    //         min-height: 26px;
+    //         padding: 4px 0;
+    //     }
+    // }
+
+    .logoImage {
+        width: 100%;
+        height: auto;
+    }
+
+    #fileInput {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        cursor: pointer;
+        width: 100%;
+    }
+    
+    .upload-image {
+        position: relative;
+        cursor: pointer;
+    }
+    .input-full-width {
+       width:100%;
+    }
+    .mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar{
+        height:30px;
+    }
+}

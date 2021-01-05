@@ -1,0 +1,202 @@
+<form [formGroup]="form">
+    <h2 mat-dialog-title>Decoration Selection</h2>
+    <mat-dialog-content>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+                <button mat-raised-button color="accent" (click)="addDecoration($event)" *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">Add</button>
+                <button mat-raised-button color="accent" (click)="showDecorationCharges($event)">Decorator Additional Charges</button>
+                <button mat-raised-button color="warn" (click)="deleteDecoration($event)" *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">Delete</button>
+            </div>
+            <mat-form-field>
+                <input matInput type="number"
+                    placeholder="Margin Override (%)"
+                    (change)="updateMargin()"
+                    [matAutocomplete]="autoMargin"
+                    formControlName="margin"/>
+                    <mat-icon matSuffix (click)="clearMargin()" *ngIf="form.get('margin').value">clear</mat-icon>
+                    <mat-autocomplete #autoMargin="matAutocomplete" (optionSelected)="updateMargin()">
+                        <mat-option [value]="defaultDecoMargin">
+                            Default ({{ defaultDecoMargin }}%)
+                        </mat-option>
+                    </mat-autocomplete>
+            </mat-form-field>
+        </div>
+
+        <mat-table #table [dataSource]="list" matSort
+                [@animateStagger]="{value:'50'}"
+                >
+
+            <ng-container cdkColumnDef="checkbox">
+                <mat-header-cell class="w-40" *cdkHeaderCellDef>
+                    <mat-checkbox
+                        (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+                    </mat-checkbox>
+                </mat-header-cell>
+                <mat-cell class="w-40" *cdkCellDef="let item">
+                    <mat-checkbox
+                        [checked]="checkboxes[item.id]"
+                        (change)="onSelectedChange(item.id)"
+                        (click)="$event.stopPropagation()">
+                    </mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="designNo">
+                <mat-header-cell class="p-8 w-100" *cdkHeaderCellDef>Artwork #</mat-header-cell>
+                <mat-cell class="p-8 w-100" *cdkCellDef="let item">
+                    <a class="text-truncate clickable" (click)="gotoArtwork(item)">{{ item.designNo }}</a>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="image">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Image</mat-header-cell>
+                <mat-cell class="p-8 clickable" (click)="showVariations(item)" *cdkCellDef="let item">
+                    <img class="design-image"
+                        [src]="item.image"
+                        [alt]="item.designNo"
+                        *ngIf="item.image">
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="name">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Name</mat-header-cell>
+                <mat-cell class="p-8" *cdkCellDef="let item">
+                    <p class="text-truncate">{{ item.name }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="decoLocation">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Location</mat-header-cell>
+                <mat-cell class="p-8" *cdkCellDef="let item; let i=index" (click)="$event.stopPropagation()">
+                    <mat-form-field class="w-100-p location" floatLabel="never">
+                        <mat-select placeholder="Location"
+                                    [formControlName]="'decoLocation'+i"
+                                    required>
+                            <mat-option [value]="location"
+                                        *ngFor="let location of designLocations">
+                                {{ location }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="decoTypeName">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Decoration Type</mat-header-cell>
+                <mat-cell class="p-8" *cdkCellDef="let item">
+                    <p class="text-truncate">{{ item.decoTypeName }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="decoVendor">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Decoration Vendor</mat-header-cell>
+                <mat-cell class="p-8" *cdkCellDef="let item;let i=index">
+                    <ng-container *ngIf="!form.get('vendorSupplierDecorated' + i)?.value">
+                        <mat-form-field class="w-100-p" floatLabel="never">
+                            <input type="hidden" [formControlName]="'decoVendorId'+i" />
+                            <input type="text" matInput
+                                    (focus)="getDecoVendors(item)"
+                                    placeholder="Vendor Name"
+                                    [formControlName]="'decoVendorName'+i"
+                                    [matAutocomplete]="autoVendor"
+                                    required/>
+                            <mat-autocomplete #autoVendor="matAutocomplete"
+                                                [displayWith]="displayName"
+                                                (optionSelected)="selectDecoVendor($event, i)">
+                                <mat-option [value]="vendor"
+                                            *ngFor="let vendor of filteredVendors | async">
+                                    {{ vendor.vendor }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </ng-container>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="vendorSupplierDecorated">
+                <mat-header-cell class="p-8 w-80 text-center" *cdkHeaderCellDef>Supplier Decorated</mat-header-cell>
+                <mat-cell class="p-8 w-80 text-center" *cdkCellDef="let item; let i=index">
+                    <mat-checkbox [formControlName]="'vendorSupplierDecorated'+i"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="quantity">
+                <mat-header-cell class="p-8 w-80 text-center" *cdkHeaderCellDef>Quantity</mat-header-cell>
+                <mat-cell class="p-8 w-80 text-center" *cdkCellDef="let item">
+                    <p class="text-truncate">{{ item.quantity }}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="cost">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Cost</mat-header-cell>
+                <mat-cell class="p-8" *cdkCellDef="let item; let i=index">
+                    <mat-form-field>
+                        <input matInput [formControlName]="'cost'+i">
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="price">
+                <mat-header-cell class="p-8" *cdkHeaderCellDef>Price</mat-header-cell>
+                <mat-cell class="p-8" *cdkCellDef="let item; let i=index">
+                    <mat-form-field>
+                        <input matInput [formControlName]="'price'+i">
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="actions">
+                <mat-header-cell class="header-cell w-40" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                </mat-header-cell>
+                <mat-cell class="w-40" *cdkCellDef="let item; let i=index" fxHide fxShow.gt-xs>
+                    <div fxFlex="row" fxLayoutAlign="end center">
+                        <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                (click)="$event.stopPropagation();">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #moreMenu="matMenu">
+                            <button mat-menu-item aria-label="remove" (click)="editDecorationNotes(item, i)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Decoration Notes</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+            <mat-row *cdkRowDef="let item; columns: displayedColumns;"
+                    class="decoration-row"
+                    matRipple
+                    [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+        </mat-table>
+        <div class="p-24 text-center" *ngIf="list.length === 0">
+            No designs added.
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+        <ng-container *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">
+            <button mat-raised-button type="submit"
+                    color="accent"
+                    (click)="save()">SAVE</button>
+
+            <button mat-raised-button color="accent"
+                    matTooltip="Apply to all line items after this"
+                    (click)="applyToRemaining()"
+                    >APPLY TO REMAINING</button>
+
+            <button mat-raised-button color="accent"
+                    matTooltip="Apply to all line items"
+                    (click)="applyToAll()"
+                    >APPLY TO ALL</button>
+        </ng-container>
+        <button mat-raised-button color="warn" mat-dialog-close>CANCEL</button>
+    </mat-dialog-actions>
+</form>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

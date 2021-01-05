@@ -1,0 +1,114 @@
+<mat-table #table matSort
+           [dataSource]="dataSource"
+           [formGroup]="filterForm"
+           (matSortChange)="sortChange($event)"
+           [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="identity">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterRecevings()">
+            <span mat-sort-header>Identity</span>
+            <input class="form-control" formControlName="identity" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{receiving.identity}}
+            </p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="orderNumber">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterRecevings()">
+            <span mat-sort-header>Order #</span>
+            <input class="form-control" formControlName="orderNumber" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving">
+            <p class="email text-truncate">
+                {{receiving.orderNumber}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="customerPo">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterRecevings()">
+            <span mat-sort-header>Customer Po</span>
+            <input class="form-control" formControlName="customerPo" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving">
+            <p class="email text-truncate">
+                {{receiving.customerPo}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendorName">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterRecevings()">
+            <span mat-sort-header>Vendor Name</span>
+            <input class="form-control" formControlName="vendorName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving">
+            <p class="email text-truncate">
+                {{receiving.vendorName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="customerName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterRecevings()">
+            <span mat-sort-header>Customer Name</span>
+            <input class="form-control" formControlName="customerName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving" fxHide fxShow.gt-xs>
+            <p class="email text-truncate">
+                {{receiving.customerName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="orderDate">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterRecevings()">
+            <span mat-sort-header>Order Date</span>
+            <input class="form-control" formControlName="orderDate" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving" fxHide fxShow.gt-md>
+            <p class="email text-truncate">
+                {{receiving.orderDate | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let receiving">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="showReceivingItems(receiving);">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteReceiving(receiving)">
+                        <span>Receive</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let receiving; columns: displayedColumns;"
+             class="receiving"
+             (click)="showReceivingItems(receiving)"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                (page)="paginate($event)"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>

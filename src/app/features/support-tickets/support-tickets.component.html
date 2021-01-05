@@ -1,0 +1,115 @@
+<div id="support-tickets" class="page-layout carded fullwidth inner-scroll list-page" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex="1 0 auto"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">list</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Support Tickets</span>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <div class="toolbar">
+                <!-- <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        (click)="newOrder()">
+                    <mat-icon>add</mat-icon> Quote
+                </button> -->
+                <!-- <button mat-raised-button color="accent"
+                class="text-capitalize mr-8"
+                        >
+                    <mat-icon>add</mat-icon> Ticket
+                </button> -->
+                <mat-form-field class="mw-200 mt-8 ml-16"
+                floatPlaceholder="never">
+                
+                    <mat-select 
+                                [(ngModel)]="status"
+                                (selectionChange)="selectStatus($event)"
+                                placeholder="Status"
+                                >
+                            <mat-option [value]="status.code" *ngFor="let status of ticketStatus">{{status.name}}</mat-option>
+                                
+                      </mat-select>
+                </mat-form-field>
+               
+                        <mat-form-field class="mw-200 ml-16 mt-8"
+                                        floatLabel="never"
+                                        data-role="selectAssignedUserMenu">
+                            <mat-select placeholder="Select User" disableRipple
+                                        [(ngModel)]="selectedAssignees"
+                                        (ngModelChange)="changeAssignees()">
+                                <mat-option class="hide-checkbox" (click)="$event.preventDefault()" (keydown)="$event.stopPropagation()" disabled>
+                                    <mat-form-field floatLabel="never" fxFlex>
+                                        <input matInput autocomplete="off"
+                                               placeholder="Search Users"
+                                               [formControl]="assigneeSearch"/>
+                                    </mat-form-field>
+                                </mat-option>
+                                <mat-option *ngIf="isLoading" class="hide-checkbox">
+                                    <div fxLayout="row" fxLayoutAlign="center center">
+                                        <mat-spinner color="accent" diameter="20"></mat-spinner>
+                                    </div>
+                                </mat-option>
+                                <ng-container *ngFor="let assignee of assignees">
+                                    <mat-option [value]="assignee" *ngIf="assignee">
+                                        {{ assignee.name }}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+                <!-- <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-xs
+                        (click)="clearFilters()">
+                    <mat-icon>layers_clear</mat-icon> Clear Filters
+                </button> -->
+
+               <!--  <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        [disabled]="selectedCheckboxCount() != 1"
+                        (click)="cloneOrder()">
+                    <mat-icon>content_copy</mat-icon> Clone
+                </button> -->
+
+               <!--  <button mat-raised-button color="warn"
+                        class="text-capitalize mr-8"
+                        (click)="deleteOrders()">
+                    <mat-icon>highlight_off</mat-icon> Cancel
+                </button> -->
+
+                <!-- <mat-checkbox
+                    class="ml-16 mt-4"
+                    [(ngModel)]="viewMyItems"
+                    (ngModelChange)="fetchList()">
+                    View My Items
+                </mat-checkbox> -->
+            </div>
+            <app-support-tickets-list></app-support-tickets-list>
+        </div>
+        
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<!-- <div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div> -->

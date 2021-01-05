@@ -1,0 +1,414 @@
+<div class="order__row__item" *ngIf="row" [class.unsaved]="!row.matrixUpdateId" [class.destroy]="row._destroy">
+
+  <div [formGroup]="formGroup" *ngIf="formGroup">
+    <div class="order__row__header" fxLayout="row" fxFlexAlign="start center" [class.valid]="formGroup.valid"
+      [class.invalid]="formGroup.invalid">
+
+      <div class="col col--checkbox" *ngIf="selection && config?.edit">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </div>
+
+      <div class="col col--expand">
+        <mat-icon (click)="toggleExpand()">
+          {{ expand ? 'arrow_drop_down' : 'arrow_right' }}
+        </mat-icon>
+      </div>
+
+      <div class="col col--image">
+        <ng-container *ngIf="config?.edit">
+          <div class="item__preview item__preview--edit" (click)="changeImage()" matTooltip="Change image">
+            <img [src]="row.imageUrl" default="assets/images/ecommerce/product-image-placeholder.png">
+          </div>
+        </ng-container>
+        <ng-template #imagePreview>
+          <div class="item__preview">
+            <img [src]="row.imageUrl" default="assets/images/ecommerce/product-image-placeholder.png">
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Should contain header level details for the line item -->
+      <div class="col col--description">
+
+        <div *ngIf="row?.calculatorData && row?.calculatorData[0] && row?.calculatorData[0]?.formatted" class='item-calculator-data'>
+          {{ row.calculatorData[0].formatted }}
+        </div>
+
+        <!-- Configure product variations inline -->
+        <div fxLayout="row">
+          <div *ngIf="product && config?.edit && !row.isMatrixVouched; else missingProduct">
+
+            <mat-form-field appearance="outline" *ngIf="item.showAttribSize == '1'">
+              <mat-label>Size</mat-label>
+              <mat-select formControlName="size" (selectionChange)="applyMatchingSku()">
+                <mat-option *ngFor="let size of sizes" [value]="size">{{ size }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" *ngIf="item.showAttribColor == '1'">
+              <mat-label>Color</mat-label>
+              <mat-select formControlName="color" (selectionChange)="applyMatchingSku()">
+                <mat-option *ngFor="let color of colors" [value]="color">{{ color }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <ng-template #missingProduct>
+            <div>
+              <div *ngIf="item.showAttribSize == '1'">Size: {{ row.size }}</div>
+              <div *ngIf="item.showAttribColor == '1'">Color: {{ row.color}}</div>
+            </div>
+          </ng-template>
+
+        </div>
+
+        <div class="decorations" *ngIf="!expand" (click)="toggleExpand()">
+          <span class="decoration" *ngFor="let deco of decorations">
+            <mat-icon [class.orange-fg]="deco.decoStatus !== 'Done'" [class.green-fg]="deco.decoStatus === 'Done'">
+              palette</mat-icon>
+          </span>
+        </div>
+      </div>
+      
+        <div class="tighter-margin" fxLayout="column" fxLayoutAlign="start center" *ngIf="!config?.hideCost && !adminFeeEnabled && !isFreightOrDiscount()">
+          <p>GP</p>
+          {{ calculateMargin(row.price, row.cost) | roundString: 2 }}%
+        </div>
+
+        <div class="tighter-margin" fxLayout="column" fxLayoutAlign="start center"
+          *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails && !isFreightOrDiscount()">
+          <p>GP</p>
+          {{ calculateMargin(row.price, calculateAdminFeeCost(row.price, row.cost, orderDetails.adminFeeRate)) | roundString: 2 }}%
+        </div>
+      
+      <div class="col col--fulfillment">
+        <ng-container formArrayName="fulfillments">
+          <div class="fulfillment" *ngFor="let fulfillment of fulfillmentsFormArray.controls; let i = index"
+            [formGroupName]="i">
+            <ng-container *ngIf="config?.edit && !row.isMatrixVouched; else sourceReadOnly">
+
+              <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Source</mat-label>
+                <mat-select class="warehouse__select" [value]="fulfillment.get('sourceWarehouseSelectKey').value"
+                  [compareWith]="compareWarehouse" (selectionChange)="chooseSourceWarehouse($event, i)">
+                  <mat-optgroup label="Stock" *ngIf="product?.poType === 'Stock' && localFob?.length">
+                    <ng-container *ngFor="let warehouse of localFob">
+                      <mat-option [value]="warehouse">
+                        <div class="warehouse__select__option">
+                          <div class="warehouse__select__label">
+                            {{ warehouse.fobCity }}
+                          </div>
+                          <div class="warehouse__select__quantity">
+                            <ng-container>
+                              {{ productInventory && productInventory['local'][row.itemSku] && productInventory['local'][row.itemSku][warehouse.fobId] || 0 }}
+                            </ng-container>
+                            <ng-template #loadingLocalInventory>
+                              <mat-spinner diameter="24"></mat-spinner>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </mat-option>
+                    </ng-container>
+                  </mat-optgroup>
+
+                  <mat-optgroup label="Dropship">
+                    <ng-container *ngIf="productFob?.length; else fallbackDropship">
+                      <mat-option *ngFor="let warehouse of productFob" [value]="warehouse">
+                        <div class="warehouse__select__option">
+                          <div class="warehouse__select__label">
+                            {{ warehouse.fobCity }}, {{ warehouse.fobState}}
+                          </div>
+                          <div class="warehouse__select__quantity">
+                            <ng-container
+                              *ngIf="(productInventory && productInventory['universal'] && productInventory['universal'][row.itemSku])">
+                              {{ productInventory['universal'][row.itemSku] && productInventory['universal'][row.itemSku][warehouse.fobId] || 0 }}
+                            </ng-container>
+                            <ng-template #loadingUniversal>
+                              <mat-spinner diameter="24"></mat-spinner>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </mat-option>
+                    </ng-container>
+                    <ng-template #fallbackDropship>
+                      <mat-option [value]="fallbackWarehouse">Main</mat-option>
+                    </ng-template>
+                  </mat-optgroup>
+                </mat-select>
+              </mat-form-field>
+
+              
+              <mat-form-field appearance="outline"
+                *ngIf="fulfillment.get('type').value === 'DropShip' && this?.product?.poType === 'Stock'"
+                floatLabel="always">
+                <mat-label>Incoming Warehouse</mat-label>
+                <mat-select class="warehouse__select warehouse__select--incoming"
+                  [compareWith]="compareIncomingWarehouse" [value]="fulfillment.get('incomingWarehouse')?.value"
+                  (selectionChange)="chooseIncomingWarehouse($event, i)">
+                  <mat-optgroup label="Stock">
+                    <ng-container *ngFor="let warehouse of localFob">
+                      <mat-option [value]="warehouse">
+                        <div class="warehouse__select__option">
+                          <div class="warehouse__select__label">
+                            {{ warehouse.fobCity }}
+                          </div>
+                        </div>
+                      </mat-option>
+                    </ng-container>
+                  </mat-optgroup>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+
+            
+
+            <ng-template #sourceReadOnly>
+              <ng-container *ngIf="fulfillment.value as f">
+                <div class="mat-caption">{{ f.type }}</div>
+                <div fxLayout="row">
+                  
+                  <div class="fulfillment-source">
+                    {{ f.sourceWarehouseName }}
+                  </div>
+                  <ng-container *ngIf="f.type === 'DropShip'">
+                    <mat-icon>arrow_right_alt</mat-icon>
+                    <div class="fulfillment-receiving">
+                      {{ f.incomingWarehouseName }}
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </ng-template>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- These columns can be dynamic but should remain short -->
+      <div class="col col--qty">
+        <ng-container *ngIf="config?.edit; else previewQty">
+          <div fxLayout="column">
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Quantity</mat-label> -->
+              <input matInput type="number" step="any" formControlName="unitQuantity" autocomplete="off"
+                (change)="syncQuantity($event)" (keyup)="syncQuantity($event)">
+            </mat-form-field>
+            <div>
+              <mat-form-field *ngIf="currencyEnabled && !vendorCurrencyMatches() && !config?.hideCost" class="mt-8" appearance="outline">
+                <mat-label>Rate</mat-label>
+                <input matInput type="number" disabled step="any" [value]="costExchangeRate | async | roundString: 4"
+                  autocomplete="off">
+              </mat-form-field>
+          </div>
+          </div>
+          <mat-icon *ngIf="row.reqMinOrderQty && row.reqMinOrderQty > 0" class="mr-12 mt-12 warn-fg" matTooltip="Less than minimum pricebreak qty on order">info</mat-icon>
+          <ng-container *ngIf="product?.uomDetails?.length">
+            <mat-select formControlName="uomId" (selectionChange)="changeUom($event)">
+              <mat-option [value]="null">-</mat-option>
+              <mat-option *ngFor="let uom of product.uomDetails" [value]="uom.id">{{ uom.name }}</mat-option>
+            </mat-select>
+          </ng-container>
+
+          <ng-container *ngIf="product?.calculatorType == '1'">
+            <button mat-icon-button [class.green-fg]="row?.calculatorData" (click)="openCalculator($event)"
+              matTooltip="Area calculator">
+              <mat-icon>square_foot</mat-icon>
+            </button>
+          </ng-container>
+        </ng-container>
+        <ng-template #previewQty>
+          {{ row.quantity }}
+        </ng-template>
+        <div fxLayout="row">
+        </div>
+      </div>
+
+      <div class="vendor-currency-pair" *ngIf="!config?.hideCost">
+        <div *ngIf="currencyEnabled && baseCurrency" fxLayout="column">
+          <p>{{ baseCurrency }}</p>
+          <p *ngIf="!vendorCurrencyMatches() && vendorCurrencyCode">{{ vendorCurrencyCode }}</p>
+        </div>
+      </div>
+      <div class="col col--cost" *ngIf="!config?.hideCost">
+
+        <ng-container *ngIf="config?.edit && !row.isMatrixVouched; else previewCost">
+
+          <div fxLayout="column">
+            <mat-form-field appearance="outline">
+              <input matInput type="number" step="any" formControlName="cost" autocomplete="off" (change)="syncOrigPriceCost()"
+                (keyup)="setCostStrategyToManual($event)">
+            </mat-form-field>
+
+            <mat-form-field *ngIf="currencyEnabled && !vendorCurrencyMatches()" class="mt-8" appearance="outline">
+              <input formControlName="costConverted" matInput type="number" step="any" [value]="displayCostConverted()" autocomplete="off">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row">
+            <button mat-icon-button (click)="copyCost()" matTooltip="Copy cost to all variations">
+              <mat-icon>format_line_spacing</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="toggleCostStrategy()"
+              [matTooltip]="row.costStrategy === 'PRICE_BREAK' ? 'Automatic price breaks enabled' : 'Automatic price breaks disabled'"
+              [class.grey-300-fg]="row.costStrategy != 'PRICE_BREAK'"
+              [class.green-fg]="row.costStrategy === 'PRICE_BREAK'">
+              <mat-icon>{{ row.costStrategy === 'PRICE_BREAK' ? 'sync' : 'sync_disabled' }}</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #previewCost>
+            {{ row.cost }}
+        </ng-template>
+      </div>
+
+      <!-- ADMIN FEE RATE -->
+
+      <div class="col col--cost" *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails && orderDetails.adminFeeRate && !isFreightOrDiscount()">
+      
+        <ng-container *ngIf="config?.edit && !row.isMatrixVouched; else previewCost">
+      
+          <mat-form-field appearance="outline">
+            <input [value]="orderDetails.adminFeeRate | roundString: 2" matInput formControlName="adminFeeCost">
+          </mat-form-field>
+        </ng-container>
+      
+        <ng-template #previewCost>
+          {{ orderDetails.adminFeeRate | roundString: '2' }}%
+        </ng-template>
+      </div>
+
+      <!-- / ADMIN FEE RATE -->
+
+      <!-- SUBTOTAL -->
+      
+      <div class="col col--cost" *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails && !isFreightOrDiscount()">
+      
+        <ng-container *ngIf="config?.edit && !row.isMatrixVouched; else previewCost">
+      
+          <mat-form-field appearance="outline">
+            <input [value]="calculateAdminFeeCost(row.price, row.cost, orderDetails.adminFeeRate)" matInput formControlName="revisedCost">
+          </mat-form-field>
+        </ng-container>
+      
+        <ng-template #previewCost>
+          {{ row.unitCostIncludingAdminFee.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+          }) }}
+        </ng-template>
+      </div>
+      
+      <!-- / SUBTOTAL -->
+      
+      <div class="vendor-currency-pair" *ngIf="!config?.hideCost && !row.isMatrixVouched && currencyEnabled && baseCurrency && customerCurrencyCode">
+        <div fxLayout="column">
+          <p>{{ baseCurrency }}</p>
+          <p *ngIf="!customerCurrencyMatches()">{{ customerCurrencyCode }}</p>
+        </div>
+      </div>
+
+      <div class="col col--price">
+        <ng-container *ngIf="config?.edit; else previewPrice">
+          <div fxLayout="column">
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Price</mat-label> -->
+              <input matInput type="number" step="any" formControlName="price" autocomplete="off" (change)="syncOrigPriceCost()"
+                (keyup)="setPriceStrategyToManual($event)">
+            </mat-form-field>
+            <mat-form-field *ngIf="!config?.hideCost && currencyEnabled && !customerCurrencyMatches()" class="mt-8" appearance="outline">
+              <input formControlName="priceConverted" matInput type="number" step="any" [value]="displayPriceConverted() | roundString: 2" autocomplete="off">
+            </mat-form-field>
+          </div>
+
+          <div fxLayout="row">
+            <button mat-icon-button (click)="copyPrice()"
+              [disabled]="config?.permissions?.restrict_order_sales_pricing?.data"
+              matTooltip="Copy customer price to all variations">
+              <mat-icon>format_line_spacing</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="togglePriceStrategy()"
+              [disabled]="config?.permissions?.restrict_order_sales_pricing?.data"
+              [matTooltip]="row.priceStrategy === 'PRICE_BREAK' ? 'Automatic price breaks enabled' : 'Automatic price breaks disabled'"
+              [class.grey-300-fg]="row.priceStrategy != 'PRICE_BREAK'"
+              [class.green-fg]="row.priceStrategy === 'PRICE_BREAK'">
+              <mat-icon>{{ row.priceStrategy === 'PRICE_BREAK' ? 'sync' : 'sync_disabled' }}</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #previewPrice>
+          {{ row.price }}
+        </ng-template>
+      </div>
+      <div class="col col--total">
+        <div fxLayout="column" fxLayoutAlign="start center">
+          <!-- TODO: Should we calc here? -->
+          <p matTooltip="{{'$' + row.totalPrice}}" matTooltipClass="priceTip" class="small-margin-total-price">{{ row.totalPrice | currency:'USD':'symbol':'1.2-15' | ellipsis: 10 }}</p>
+          <mat-form-field *ngIf="currencyEnabled && !customerCurrencyMatches() && !config?.hideCost"
+            appearance="outline">
+            <mat-label>Rate</mat-label>
+            <input matInput type="number" disabled step="any" [value]="customerExchangeRate | async | roundString: 4"
+              autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col col--menu" *ngIf="config?.edit && !row.isMatrixVouched">
+
+        <mat-menu #itemMenu="matMenu">
+          <!-- <button mat-menu-item (click)="convertToSeparateLineItem()">Convert to Line Item</button> -->
+          <button mat-menu-item (click)="openDecorationList()">Add Decorations</button>
+          <button mat-menu-item (click)="copyRowDecorations()">Copy Decorations</button>
+          <mat-divider></mat-divider>
+          <button  mat-menu-item class="warn-fg" (click)="deleteRow()">Delete</button>
+        </mat-menu>
+
+        <mat-icon [matMenuTriggerFor]="itemMenu">more_vert</mat-icon>
+      </div>
+    </div>
+    <div class="order__row__decorations" *ngIf="expand && row.matrixUpdateId">
+
+      <div fxLayout="row" fxLayoutAlign="start center" *ngIf="config?.edit" class="order__row__decorations__toolbar">
+
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="isAnyRowSelected() && isAllSelected()"
+          [indeterminate]="isAnyRowSelected() && !isAllSelected()" [disabled]="decorations?.length === 0">
+        </mat-checkbox>
+
+        <h3 class="pr-8 pl-8">Decorations</h3>
+
+        <button mat-button (click)="openDecorationList()">
+          <mat-icon>add</mat-icon> Add
+        </button>
+
+        <div *ngIf="isAnyRowSelected()">
+          With selected decorations:
+          <button mat-button (click)="bulkAction('copySelectedDecorations')">Copy</button>
+          <!-- <button mat-button (click)="bulkAction('applySelectedDecorationsToAll')">Apply To All</button> -->
+          <button mat-button color="warn" (click)="bulkAction('deleteSelectedDecorations')">Delete</button>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let deco of decorations; trackBy: trackByDeco">
+        <app-order-item-deco [currencyEnabled]="currencyEnabled" 
+        [adminFeeEnabled]="adminFeeEnabled" 
+        [deco]="deco" 
+        [calculateMargin]="calculateMargin"
+        [calculateAdminFeeCost]="calculateAdminFeeCost"
+        [item]="item" 
+        [product]="product" 
+        [row]="row" 
+        [selection]="decoSelection"
+        [config]="config" (actions)="handleDecoActions($event)"
+        [baseCurrency]="baseCurrency"
+        [orderDetails]="orderDetails"
+        [costExchangeRate]="costExchangeRate | async"
+        [customerExchangeRate]="customerExchangeRate | async"
+        [vendorCurrencyCode]="vendorCurrencyCode"
+        [customerCurrencyCode]="customerCurrencyCode"
+          ></app-order-item-deco>
+      </ng-container>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div cdkDropListGroup>
+    <div class="example-container">
+        <h2>Jobs</h2>
+        <div
+            cdkDropList
+            #jobList="cdkDropList"
+            [cdkDropListData]="jobs"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let job of jobs" cdkDrag [cdkDragData]="job">
+                {{ job.batchMaster ? 'Batch job' : job.orderName }} : {{ job.variationName }} : {{ job.decoTypeName }}
+            </div>
+        </div>
+    </div>
+    <div class="example-container">
+      <h2>Equipment</h2>
+
+        <machine-card *ngFor="let e of equipment"
+            class="machine-card"
+            [equipment]="e"
+            >
+        </machine-card>
+    </div>
+</div>

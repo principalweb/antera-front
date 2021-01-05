@@ -1,0 +1,247 @@
+<div class="search-dialog-content" fxLayout="column">
+    <ng-container *ngIf="results?.failed?.length && view == 'search'">
+        <h2 class="warn-fg">Error adding the following products:</h2>
+        <table class="simple">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Vendor</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let error of results.failed">
+                    <td>
+                        <img class="product-image" [alt]="error?.product?.productName" [src]="error?.product | productImage" [default]="defaultImage" />
+                    </td>
+                    <td>{{ error?.product?.productName }}</td>
+                    <td>{{ error?.vendor }}</td>
+                    <td class="warn-fg">{{ error?.msg }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div fxLayout="row">
+            <button mat-raised-button color="accent" class="mr-8" type="button" (click)="results = {}">Back to search</button>
+            <button mat-raised-button type="button" (click)="closeDialog()">Close</button>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!results?.failed?.length && view == 'search'" #searchSection>
+
+        <h2 class="mat-title">Search Database to add a Product</h2>
+        <span class="mat-body-1">Filter through available databases to search for products to add to your order</span>
+
+        <div class="mt-20" fxFlex="none" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <div fxLayout="row">
+                <mat-checkbox class="mr-16" fxFlex="none" [(ngModel)]="databases[source.api]" *ngFor="let source of sources">{{source.api}}
+                </mat-checkbox>
+            </div>
+
+            <div class="search-actions">
+                <mat-chip-list *ngIf="currentSearch!=''">
+                    <mat-chip color="accent" selected>{{currentSearch}}</mat-chip>
+                </mat-chip-list>
+                <mat-spinner color="white" diameter="16" class="mr-8" *ngIf="loading"></mat-spinner>
+                <button mat-raised-button color="warn" (click)="cancelSearch()" *ngIf="loading">Cancel</button>
+
+                <button mat-raised-button color="accent" class="search-btn" (click)="search()" *ngIf="!loading">
+                    <mat-icon>search</mat-icon> Search
+                </button>
+
+                <button mat-raised-button color="warn" (click)="clearFilters()">
+                    <mat-icon>layers_clear</mat-icon>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-16" flex="none">
+            <mat-checkbox class="mr-16" fxFlex="none" [(ngModel)]="preferredVendor">Preferred Vendor</mat-checkbox>
+
+            <mat-checkbox class="mr-16" fxFlex="none" [(ngModel)]="eqpVendor">EQP Vendor</mat-checkbox>
+            <mat-checkbox class="mr-16" fxFlex="none" [(ngModel)]="exactMatch">Exact Match<span class="info" *ngIf="exactMatch && databases['ASI']"> Not available for ASI</span></mat-checkbox>
+        </div>
+
+        <ng-container>
+            <mat-table [dataSource]="datasource" class="mt-20" fxFlex [formGroup]="filterForm" fusePerfectScrollbar>
+                <ng-container cdkColumnDef="checkbox">
+                    <mat-header-cell class="checkbox" *cdkHeaderCellDef>
+                        <mat-checkbox (change)="toggleAll()" [checked]="allChecked" [indeterminate]="anyChecked">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell class="checkbox" *cdkCellDef="let product; let i=index;">
+                        <mat-checkbox [checked]="checkboxes[i]" (change)="checkSelection(i)"
+                            (click)="$event.stopPropagation()">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="itemNo">
+                    <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>
+                        <div>
+                            <div>Item #</div>
+                            <div class="h-20">
+                                <input class="form-control" formControlName="productId" (keydown.enter)="search()" />
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-80" *cdkCellDef="let product" (click)="getProductDetails($event, product)">
+                        <p class="text-truncate">{{product.productId}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="image">
+                    <mat-header-cell class="header-cell mw-60" *cdkHeaderCellDef>
+                        <div>
+                            <div>Image</div>
+                            <div class="h-20"></div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-60" [matTooltip]="product.color" *cdkCellDef="let product">
+                        <img class="product-image" [alt]="product.productName" [src]="product | productImage"
+                            [default]="defaultImage" />
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="name">
+                    <mat-header-cell class="header-cell mw-120" *cdkHeaderCellDef>
+                        <div>
+                            <div>Name</div>
+                            <div class="h-20">
+                                <input class="form-control" formControlName="name" (keydown.enter)="search()" />
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-120" *cdkCellDef="let product">
+                        <p class="text-truncate">{{product.productName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="brand">
+                    <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>
+                        <div>
+                            <div>Brand</div>
+                            <div class="h-20">
+                                <input class="form-control" formControlName="productBrand" (keydown.enter)="search()" />
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-80" *cdkCellDef="let product">
+                        <p class="text-truncate">{{product.productBrand}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="vendor">
+                    <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>
+                        <div>
+                            <div>Supplier</div>
+                            <div class="h-20">
+                                <input class="form-control" formControlName="vendor" (keydown.enter)="search()" />
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-80" *cdkCellDef="let product">
+                        <p class="text-truncate">{{product.vendor}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="price">
+                    <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>
+                        <div>
+                            <div>Price</div>
+                            <div class="h-20">
+                                <input class="price-input form-control" formControlName="salepriceMin" (keydown.enter)="search()" />-<input class="price-input form-control" formControlName="salepriceMax" (keydown.enter)="search()" />
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-80" *cdkCellDef="let product">
+                        <p class="text-truncate" [title]="product.saleprice">{{product.saleprice}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="source">
+                    <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>
+                        <div>
+                            <div>Source</div>
+                            <div class="h-20">
+                                <mat-select formControlName="source" class="form-control"  panelClass="product-source-srch">
+                                    <mat-option value="">All</mat-option>
+                                    <mat-option [value]="source.code" *ngFor="let source of sources">
+                                        {{ source.api }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-80" *cdkCellDef="let product">
+                        <p class="text-truncate">{{product.source}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="category">
+                    <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>
+                        <div>
+                            <div>Category</div>
+                            <div class="h-20">
+                                <input class="form-control" formControlName="category" (keydown.enter)="search()" />
+                            </div>
+                        </div>
+                    </mat-header-cell>
+                    <mat-cell class="mw-80" *cdkCellDef="let product">
+                        <p class="text-truncate"
+                            *ngIf="product && product.ProductCategoryArray && product.ProductCategoryArray[0]">
+                            <span class="text-truncate" *ngFor="let category of product.ProductCategoryArray">
+                                {{ category.category + ',' || '' }}
+                            </span>
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *cdkRowDef="let product; columns: displayedColumns;" [class.advertisement]="product.Ad && product.Ad.Id" [class.product]="true" (click)="showDetail(product)" matRipple>
+                </mat-row>
+            </mat-table>
+        </ng-container>
+        <mat-paginator #paginator [class.hidden]="datasource.data.length === 0" [pageIndex]="0" [pageSize]="10"
+            [showFirstLastButtons]="true" (page)="refreshChecks()" [pageSizeOptions]="[10, 20, 50, 100]">
+        </mat-paginator>
+
+        <div class="text-center p-24" fxFlex *ngIf="datasource.data.length === 0 && !loading">
+            Currently no results.<br>
+            Start a new search above.
+        </div>
+        <div class="text-center p-24" fxFlex *ngIf="datasource.data.length === 0 && loading">
+            Loading...
+        </div>
+
+        <div fxFlex="none" fxLayout="row" fxLayoutAlign="end start">
+            <div>
+                <button mat-button color="accent" matDialogClose>CANCEL</button>
+
+                <button mat-button color="accent"
+                    matTooltip="Save currently selected products in your local database for future use"
+                    (click)="showCategoryDialog('product')" *ngIf="data.addTo === 'order'">
+                    SAVE FOR LATER
+                </button>
+
+                <button mat-button color="accent" matTooltip="Add currently selected products the order"
+                    (click)="showCategoryDialog('order')" *ngIf="data.addTo === 'order'">
+                    <span class="text-uppercase">
+                        Add to {{ data.context == 'quote' ? 'Quote' : 'Order' }}
+                    </span>
+                </button>
+
+                <button mat-button color="accent" matTooltip="Save currently selected products in your local database"
+                    (click)="showCategoryDialog('product')" *ngIf="data.addTo === 'product'">
+                    ADD PRODUCTS
+                </button>
+            </div>
+        </div>
+    </ng-container>
+    <product-import-detail *ngIf="view == 'detail'" [product]="productDetail" (close)="closeDetail()"></product-import-detail>
+
+    <div class="loading" *ngIf="saving">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

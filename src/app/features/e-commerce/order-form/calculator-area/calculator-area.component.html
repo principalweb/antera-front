@@ -1,0 +1,33 @@
+<h3 mat-dialog-title>Square area calculator</h3>
+<div mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <div class="value">
+      <mat-form-field>
+        <mat-label>Length Inches</mat-label>
+        <input matInput formControlName="x" type="number" min="0" step="any" autocomplete="off" />
+      </mat-form-field>
+    </div>
+    <div class="operator">
+      X
+    </div>
+    <div class="value">
+      <mat-form-field>
+        <mat-label>Width Inches</mat-label>
+        <input matInput formControlName="y" type="number" min="0" step="any" autocomplete="off" />
+      </mat-form-field>
+    </div>
+    <div class="operator">
+      =
+    </div>
+    <div class="result">
+      <mat-form-field>
+        <mat-label>Square Feet</mat-label>
+        <input matInput type="text" readonly formControlName="area">
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="clearForm()" class="w-100-p">Clear</button>
+  <button mat-button (click)="save()" color="primary" class="w-100-p">Save</button>
+</div>

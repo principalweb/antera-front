@@ -1,0 +1,17 @@
+<div class="w-100-p p-16">
+    <mat-toolbar>
+        <button mat-raised-button [routerLink]="['/e-commerce', 'quotes', submissionDetails.quoteId]" *ngIf="submissionDetails?.quoteId">Go to Quote</button>
+        <button mat-raised-button color="success" (click)="convertToQuote()" *ngIf="!submissionDetails?.quoteId">Convert to Quote</button>
+        <div fxFlex></div>
+        <button mat-raised-button color="accent" (click)="toPdf()">Download PDF</button>
+    </mat-toolbar>
+
+    <div fxLayout="column" fxLayout.gt-md="row" *ngIf="submissionDetails && sourceDetails">
+        <div fxFlex.gt-md="50" *ngIf="!submissionDetails?.quoteId">
+            <app-source-factory-form [submission]="submissionDetails" [source]="sourceDetails" [vendorId]="submissionDetails.vendorId" (onSubmit)="onSubmit($event)" (changed)="onFormChange($event)"></app-source-factory-form>
+        </div>
+        <div [fxFlex.gt-md]="submissionDetails?.quoteId ? 50 : 100">
+            <app-source-factory-response [submission]="submissionDetails" [source]="sourceDetails" ></app-source-factory-response>
+        </div>
+    </div>
+</div>

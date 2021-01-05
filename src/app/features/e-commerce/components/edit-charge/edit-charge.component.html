@@ -1,0 +1,66 @@
+<form fxLayout="column" [formGroup]="form" (submit)="onClose(true)">
+  <div fxLayout fxLayoutAlign="space-between center" class="mat-accent-bg p-12" fxFlex="none">
+    <h1 class="mat-dialog-title white-fg">Edit Charge</h1>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-dialog-content fusePerfectScrollbar>
+    <div class="px-24">
+      <mat-form-field>
+        <input matInput placeholder="Item Code" formControlName="code" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Description" formControlName="description" autocomplete="off" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Quantity" formControlName="quantity" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Cost" formControlName="cost" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" placeholder="Price" formControlName="price" autocomplete="off" required />
+      </mat-form-field>
+    </div>
+    <div class="px-24" fxLayout="row">
+      <mat-form-field fxFlex>
+        <mat-select placeholder="Charge Type" formControlName="addonChargesType">
+          <mat-option [value]="type" *ngFor="let type of chargeTypes">
+            {{ type }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="text-left ml-16">
+      <div>
+        <mat-checkbox [checked]="!form?.get('itemTaxOff')?.value" (change)="toggleTax()">
+          Charge Sales Tax
+        </mat-checkbox>
+      </div>
+      <div>
+        <!-- Todo match order quantity  -->
+        <mat-checkbox [checked]="form?.get('matchOrderQty').value" (change)="toggleMatchQuantity()"> Match order quantity </mat-checkbox>
+      </div>
+      <div *ngIf="data?.vendor">
+        <mat-checkbox formControlName="rollbackDistributeRows">Rollback price / cost to all variations</mat-checkbox>
+      </div>
+      <div *ngIf="orderConfig?.enableGstOnPo">
+        <mat-checkbox formControlName="chargeGstTaxOnPo">Charge GST Tax on PO</mat-checkbox>
+      </div>
+      <div>
+        <mat-checkbox formControlName="isCommissionEnabled">Enable commissions</mat-checkbox>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <div class="p-12" fxFlex="none" fxLayout="row" fxLayoutAlign="end center">
+    <button class="mr-8" mat-raised-button color="accent" type="submit">Save</button>
+    <button mat-raised-button color="accent" (click)="onClose()">Close</button>
+  </div>
+</form>

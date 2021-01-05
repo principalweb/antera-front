@@ -1,0 +1,205 @@
+<mat-table fxFlex #table matSort
+            [dataSource]="dataSource"
+            (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [disableRipple]="true"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          [disableRipple]="true"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>       
+
+    <!-- Location Name Column -->
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input *ngIf="showFilters" class="form-control" formControlName="name" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="text text-truncate">{{row.name}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container cdkColumnDef="description">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Description</span>
+            <input *ngIf="showFilters" class="form-control" formControlName="description" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{ row.description }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Sales Rep Column -->
+    <ng-container cdkColumnDef="assignedSalesRep">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Assigned To</span>
+            <input *ngIf="showFilters" class="form-control" formControlName="assignedSalesRep" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{row.assignedSalesRep}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Order GP Column -->
+    <!--ng-container cdkColumnDef="orderGP">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+          <span mat-sort-header>Order GP</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="orderGP" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+          <p class="text text-truncate">{{row.orderGP}}</p>
+      </mat-cell>
+    </ng-container-->
+
+    
+    <!-- Profit Target Column -->
+    <ng-container cdkColumnDef="profitTarget">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+          <span mat-sort-header>Order GP % Target</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="profitTarget" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+          <p class="text text-truncate">{{row.profitTarget}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Profit Percent Column -->
+    <ng-container cdkColumnDef="profitPercent">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+          <span mat-sort-header>Order GP %</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="profitPercent" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+          <p class="text text-truncate">{{row.profitPercent}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Net Profit Percent Column -->
+    <!--ng-container cdkColumnDef="netProfitPercent">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Net Profit Percent</span>
+            <input *ngIf="showFilters" class="form-control" formControlName="profitPercent" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{row.netProfitPercent}}</p>
+        </mat-cell>
+    </ng-container-->
+
+    <!-- Revenue Target Column -->
+    <ng-container cdkColumnDef="revenueTarget">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+          <span mat-sort-header>Revenue Target</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="revenue" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+          <p class="text text-truncate">{{row.revenueTarget}}</p>
+      </mat-cell>
+    </ng-container>
+
+
+    <!-- Revenue Column -->
+    <ng-container cdkColumnDef="revenue">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+          <span mat-sort-header>Revenue %</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="revenue" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+          <p class="text text-truncate">{{row.revenue}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- CAP Column -->
+    <ng-container cdkColumnDef="cap">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+          <span mat-sort-header>Commission Cap</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="cap" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+          <p class="text text-truncate">{{row.cap}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Calculation Type Column -->
+    <!--ng-container cdkColumnDef="calulationType">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+          <span mat-sort-header>Calculation Type</span>
+          <input *ngIf="showFilters" class="form-control" formControlName="calulationType" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+          <p class="text text-truncate">{{row.calulationType}}</p>
+      </mat-cell>
+    </ng-container-->
+
+    <!-- Paid on Paid Column -->
+    <!-- <ng-container cdkColumnDef="paidOnPaid">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+          <span mat-sort-header>Paid on Paid</span>
+          <input class="form-control" formControlName="paidOnPaid" (keyup.enter)="filterCommissions()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+          <p class="text text-truncate">{{row.paidOnPaid}}</p>
+      </mat-cell>
+    </ng-container> -->
+
+    <!-- ModifiedByName Column -->
+    <ng-container cdkColumnDef="modifiedByName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Modified By</span>
+            <input *ngIf="showFilters" class="form-control" formControlName="modifiedByName" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.modifiedByName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Date Modified Column -->
+    <!-- <ng-container cdkColumnDef="dateModified">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Date Modified</span>
+            <input class="form-control" formControlName="dateModified" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.dateModified | date}}</p>
+        </mat-cell>
+    </ng-container> -->
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="dropdown"
+        (click)="commissionClicked(row.id)"
+        matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

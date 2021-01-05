@@ -1,0 +1,32 @@
+<mat-list class="header">
+  <h2 matSubheader>
+    <span>Help</span><span *ngIf="helpModule">&nbsp;-&nbsp;{{ helpModule }}</span>
+  </h2>
+</mat-list>
+<mat-divider></mat-divider>
+<div class="container" fusePerfectScrollbar>
+  <div class="p-16 text-cener">
+    Please Email support@anterasoftware.com to request additional videos.
+  </div>
+  <ng-container *ngIf="filtered?.length > 0">
+    <mat-nav-list *ngFor="let item of filtered">
+      <a mat-list-item (click)="readArticle(item)">
+        <div mat-line>
+          {{ item.title }}
+        </div>
+        <div>
+          {{ item.duration }}
+        </div>
+      </a>
+    </mat-nav-list>
+  </ng-container>
+
+  <div class="p-16 text-center">
+    <ng-container *ngIf="filtered?.length === 0">
+      There are videos linked to this module yet.
+    </ng-container>
+  </div>
+  <div class="text-center">
+    <a mat-button [routerLink]="['/pages', 'knowledge-base']">View All Videos</a>
+  </div>
+</div>

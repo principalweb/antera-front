@@ -1,0 +1,16 @@
+app-product-config-dialog {
+    .space-between {
+        justify-content: space-between;
+    }
+
+    .mat-form-field-infix {
+        width: 120px;
+    }
+}
+
+
+.product-config-dialog {
+    .mat-dialog-container {
+        padding: 0;
+    }
+}

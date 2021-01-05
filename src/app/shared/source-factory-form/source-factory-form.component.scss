@@ -1,0 +1,16 @@
+.images__preview {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .image {
+    display: flex;
+    flex-direction: column;
+    justify-content: center center;
+    align-items: center center;
+    padding: 4px;
+    img {
+      max-height: 50px;
+    }
+  }
+}

@@ -1,0 +1,31 @@
+#admin-configuration {
+  .content-card {
+    background: white;
+  }
+
+  .mat-tab-label {
+    height: 64px;
+  }
+
+  .mat-tab-header {
+    background: #fafafa;
+  }
+
+  .mat-tab-group,
+  .mat-tab-body-wrapper,
+  .tab-content {
+      flex: 1 1 auto;
+      max-width: 100%;
+  }
+
+  .tab-content {
+    flex: 1 1 auto;
+    &.content {
+      display: flex;
+    }
+  }
+
+  .mat-tab-body-content {
+    display: flex;
+  }  
+}

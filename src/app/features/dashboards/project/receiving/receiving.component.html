@@ -1,0 +1,283 @@
+<div id="home-dashboard" class="content">
+
+    <mat-tab-group dynamicHeight>
+
+        <mat-tab label="Home">
+            
+            <div class="widget-group grey-100-bg p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                    [@animateStagger]="{value:'50'}">
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div *ngIf="widgetRecevingData && widgetRecevingData.total" class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetRecevingData.total.today.totalOrder}}/{{widgetRecevingData.total.today.totalQuantity}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Today
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-truncate">
+                                Receiving
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div *ngIf="widgetRecevingData && widgetRecevingData.total" class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetRecevingData.total.tomorrow.totalOrder}}/{{widgetRecevingData.total.tomorrow.totalQuantity}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Tomorrow
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-truncate">
+                                Receiving
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div *ngIf="widgetRecevingData && widgetRecevingData.total" class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetRecevingData.total.thisweek.totalOrder}}/{{widgetRecevingData.total.thisweek.totalQuantity}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due This Week
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            >
+                            <div class="mat-caption text-truncate">
+                                Receiving
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div *ngIf="widgetRecevingData && widgetRecevingData.total" class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetRecevingData.total.nextweek.totalOrder}}/{{widgetRecevingData.total.nextweek.totalQuantity}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Next Week
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-truncate">
+                                Receiving
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+               
+               <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div *ngIf="widgetRecevingData && widgetRecevingData.total" class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetRecevingData.total.future.totalOrder}}/{{widgetRecevingData.total.future.totalQuantity}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Future
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-truncate">
+                                Receiving
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div class="pb-8 green-fg font-size-36 line-height-48 text-truncate">
+                                
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                fxFlex="100" fxFlex.gt-sm="60">
+
+                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                    <div class="h3 px-16 py-24">
+                        All Orders
+                    </div>
+
+                    <mat-divider></mat-divider>
+                    <mat-table fxFlex #table *ngIf="widgetRecevingData" [dataSource]="widgetRecevingData.orders">
+                        <ng-container cdkColumnDef="customerName">
+                            <mat-header-cell *cdkHeaderCellDef> Customer </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.customerName}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="orderNumber">
+                            <mat-header-cell *cdkHeaderCellDef> Order # </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.orderNumber}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="po">
+                            <mat-header-cell *cdkHeaderCellDef> PO </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.orderNumber}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="decoration">
+                            <mat-header-cell *cdkHeaderCellDef> Decoration </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.decorationType}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="status">
+                            <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.orderStatus}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="quantity">
+                            <mat-header-cell *cdkHeaderCellDef> QTY </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.quantity}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="dueDate">
+                            <mat-header-cell *cdkHeaderCellDef> Due Date </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.orderDate}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *cdkHeaderRowDef="orderColumns"></mat-header-row>
+                        <mat-row *cdkRowDef="let order; columns: orderColumns"></mat-row>
+                    </mat-table>
+                </div>
+
+                </fuse-widget>
+               
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                fxFlex="100" fxFlex.gt-sm="40">
+
+                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                    <div class="h3 px-16 py-24">
+                        Tasks
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <mat-table [dataSource]="widgetRecevingData.tasks" *ngIf="widgetRecevingData" [@animateStagger]="{value:'50'}">
+
+                        <ng-container cdkColumnDef="orderNumber">
+                            <!-- Added filter row by Olena -->
+                            <mat-header-cell class="pr-8" *cdkHeaderCellDef>Order #</mat-header-cell>
+                            <mat-cell class="pr-8" *cdkCellDef="let task">
+                                <p class="text-truncate font-weight-600">{{ task.orderNumber }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container cdkColumnDef="task">
+                            <!-- Added filter row by Olena -->
+                            <mat-header-cell class="pr-8" *cdkHeaderCellDef>Task</mat-header-cell>
+                            <mat-cell class="pr-8" *cdkCellDef="let task">
+                                <p class="text-truncate font-weight-600">{{ task.name }}</p>
+                            </mat-cell>
+                        </ng-container>
+                       
+                        <mat-header-row *cdkHeaderRowDef="taskColumns"></mat-header-row>
+                        <mat-row *cdkRowDef="let task; columns: taskColumns;"
+                                matRipple [@animate]="{value:'*',params:{y:'100%'}}">
+                        </mat-row>
+                    </mat-table>
+
+                </div>
+
+                </fuse-widget>
+            </div>
+            <!-- / WIDGET GROUP -->
+
+        </mat-tab>
+
+        </mat-tab-group>
+
+</div>

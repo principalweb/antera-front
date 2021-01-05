@@ -1,0 +1,80 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                {{dialogTitle}}
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRef.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-horizontal-stepper [linear]="isEditable" #stepper>
+        <mat-step [stepControl]="reportNameFormGroup">
+        <form [formGroup]="reportNameFormGroup">
+            <ng-template matStepLabel>Fill out Report Name</ng-template>
+            <mat-form-field>
+                <input matInput placeholder="Report Name" formControlName="reportNameCtrl" required>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+        </mat-step>
+        <mat-step [stepControl]="columnsFormGroup">
+            <form [formGroup]="columnsFormGroup">
+                <ng-template matStepLabel>Choose the Columns</ng-template>
+                <mat-form-field>
+                    <input matInput placeholder="Columns" formControlName="columnsCtrl" required>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-select formControlName="departmentCtrl" [(ngModel)]="selectedValue" placeholder="Department Type" required>
+                        <mat-option [value]="dept.id" *ngFor="let dept of departments">{{ dept.name }}</mat-option>
+                    </mat-select>
+                    <p> Selected value: {{selectedValue}} </p>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="filtersFormGroup">
+            <form [formGroup]="filtersFormGroup">
+                <ng-template matStepLabel>Choose the Filters</ng-template>
+                <mat-form-field>
+                    <input matInput placeholder="Filters" formControlName="filtersCtrl" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="sortFormGroup">
+            <form [formGroup]="sortFormGroup">
+                <ng-template matStepLabel>Choose the Sorting Option</ng-template>
+                <mat-form-field>
+                    <input matInput placeholder="Sort" formControlName="sortCtrl" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Finish</ng-template>
+            You are now done.
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+            </div>
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

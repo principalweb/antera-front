@@ -1,0 +1,48 @@
+
+@import "src/@fuse/scss/fuse";
+
+:host {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    height: 100%;
+
+    .header {
+
+        .logo {
+
+            .logo-icon {
+                margin: 0 16px 0 0;
+            }
+
+            .logo-text {
+                font-size: 24px;
+                line-height: 24px;
+            }
+        }
+
+        .account {
+            width: 100%;
+        }
+    }
+
+    .nav-subheader {
+        font-size: 18px;
+    }
+
+    .menu-list {
+
+        min-width: 100%;
+        width: 100%;
+        height: 100%;
+        padding: 0 24px;
+
+        display: block !important;
+
+        .menu {
+            margin-top: 20px;
+        }
+    }
+
+}
+

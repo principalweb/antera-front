@@ -1,0 +1,77 @@
+<div mat-dialog-content>
+    <ng-container [formGroup]="form">
+
+        <table class="simple">
+          <thead>
+            <tr>
+              <th style="width: 150px;">Item</th>
+              <th style="width: 150px;">Image</th>
+              <th style="width: 100px;">Color</th>
+              <th style="width: 100px;">Size</th>
+              <th style="width: 100px;">Quantity</th>
+              <th style="width: 200px;">
+                  <div fxLayout="row">
+                      <ng-container>
+                      <mat-form-field class="w-200-p">
+                          <input matInput formControlName="boxNotesPLColumn" [(ngModel)]="boxNotesPLColumn" placeholder="Box Notes Column">
+                      </mat-form-field>
+                      </ng-container>
+                  </div>
+              </th>
+            </tr>
+          </thead>
+          <ng-container formArrayName="packingListQuantity">
+          <tr *ngFor="let item of packingListQuantityArray.controls; index as i" [formGroupName]="i">
+            <td class="left">
+              <div *ngIf="item.value as pl" fxLayout="row">
+                  <div>{{pl.itemNo}}</div>
+              </div>
+            </td>
+            <td class="left">
+              <div *ngIf="item.value as pl" fxLayout="row">
+                  <div>
+                  <img [src]="pl.imageUrl" [default]="'assets/images/ecommerce/product-image-placeholder.png'"
+                    style="max-width: 80px" [alt]="pl.itemNo">
+                  </div>
+              </div>
+            </td>
+            <td class="left">
+              <div *ngIf="item.value as pl" fxLayout="row">
+                  <div>{{pl.color}}</div>
+              </div>
+            </td>
+            <td class="left">
+              <div *ngIf="item.value as pl" fxLayout="row">
+                  <div>{{pl.size}}</div>
+              </div>
+            </td>
+            <td class="right">
+              <div fxLayout="row">
+                  <mat-form-field class="w-25-p">
+                      <input matInput formControlName="quantity" placeholder="Quantity">
+                  </mat-form-field>
+              </div>
+            </td>
+            <td class="right">
+              <div fxLayout="row">
+                  <mat-form-field class="w-100-p">
+                      <input matInput formControlName="boxNotes" placeholder="Box Note">
+                  </mat-form-field>
+              </div>
+            </td>
+          </tr>
+          </ng-container>
+        </table>
+          <div fxLayout="row">
+              <mat-form-field class="w-100-p">
+                    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="4"
+                      formControlName="customPLNote"  placeholder="Notes"></textarea>
+              </mat-form-field>
+          </div>
+    </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="save()" class="mr-8">UPDATE</button>
+  <button mat-button class="red-fg" (click)="close()">CANCEL</button>
+</div>

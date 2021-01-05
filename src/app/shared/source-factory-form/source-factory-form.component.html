@@ -1,0 +1,154 @@
+<div class="inquiry__form">
+  <form *ngIf="sourceForm && !success" [formGroup]="sourceForm" class="p-16" fusePerfectScrollbar
+    (submit)="sendResponse()">
+    <div class="px-16 two-columns">
+      <mat-form-field>
+        <input matInput name="itemName" formControlName="itemName" placeholder="Factory Item Name">
+        <app-error [group]="sourceForm" field="itemName" label="Item Name"></app-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" name="itemNumber" formControlName="itemNumber" placeholder="Factory Item Number">
+        <app-error [group]="sourceForm" field="itemNumber" label="Item Number"></app-error>
+      </mat-form-field>
+    </div>
+    <div class="px-16 factory-prices">
+      <div class="two-columns" *ngIf="submission.quantity1">
+        <mat-form-field>
+          <input matInput type="number" placeholder="Quantity 1" formControlName="quantity1" readonly />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Price Per Qty 1" formControlName="pricePerQty1" />
+        </mat-form-field>
+      </div>
+      <div class="two-columns" *ngIf="submission.quantity2">
+        <mat-form-field>
+          <input matInput type="number" placeholder="Quantity 2" formControlName="quantity2" readonly />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Price Per Qty 2" formControlName="pricePerQty2" />
+        </mat-form-field>
+      </div>
+      <div class="two-columns" *ngIf="submission.quantity3">
+        <mat-form-field>
+          <input matInput type="number" placeholder="Quantity 3" formControlName="quantity3" readonly />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Price Per Qty 3" formControlName="pricePerQty3" />
+        </mat-form-field>
+      </div>
+      <div class="two-columns" *ngIf="submission.quantity4">
+        <mat-form-field>
+          <input matInput type="number" placeholder="Quantity 4" formControlName="quantity4" readonly />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Price Per Qty 4" formControlName="pricePerQty4" />
+        </mat-form-field>
+      </div>
+      <div class="two-columns" *ngIf="submission.quantity5">
+        <mat-form-field>
+          <input matInput type="number" placeholder="Quantity 5" formControlName="quantity5" readonly />
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Price Per Qty 5" formControlName="pricePerQty5" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="px-16 two-columns">
+      <mat-form-field>
+        <input matInput [matDatepicker]="quoteDatePicker" (focus)="quoteDatePicker.open()"
+          [matDatepicker]="quoteDatePicker" formControlName="quoteValidThrough" placeholder="Quote Valid Through">
+        <mat-datepicker-toggle matSuffix [for]="quoteDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #quoteDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" name="artCharge" formControlName="artCharge" placeholder="Art Charge">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" name="toolingCharge" formControlName="toolingCharge" placeholder="Tooling Charge">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" name="toolingTime" formControlName="toolingTime" placeholder="Tooling Time">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" name="sampleCost" formControlName="sampleCost" placeholder="Sample Cost">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" name="sampleTime" formControlName="sampleTime" placeholder="Sample Time">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" name="productionLeadTime" formControlName="productionLeadTime"
+          placeholder="Production Lead Time">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="packaging" formControlName="packaging" placeholder="Packaging">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="masterCartonWidth" formControlName="masterCartonWidth" placeholder="Master Carton Width">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="masterCartonHeight" formControlName="masterCartonHeight"
+          placeholder="Master Carton Height">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="masterCartonDepth" formControlName="masterCartonDepth" placeholder="Master Carton Depth">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="masterCartonWeight" formControlName="masterCartonWeight"
+          placeholder="Master Carton Weight">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="fobChinaPort" formControlName="fobChinaPort" placeholder="Fob China Port">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="certificates" formControlName="certificates" placeholder="Certificates">
+      </mat-form-field>
+    </div>
+
+    <div class="px-16">
+      <mat-form-field class="w-100-p">
+        <textarea matInput cdkTextareaAutosize formControlName="factoryRemarks" cdkAutosizeMinRows="2"
+          name="factoryTerms" formControlName="factoryTerms" placeholder="Factory Terms"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="px-16">
+      <mat-form-field class="w-100-p">
+        <textarea matInput cdkTextareaAutosize formControlName="factoryRemarks" cdkAutosizeMinRows="2"
+          placeholder="Factory Remarks" cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </div>
+
+
+    <div class="px-16">
+      <h3>Files</h3>
+
+      <button type="button" mat-raised-button (click)="fileUpload.click()" class="w-100-p">
+        <mat-icon>attach_file</mat-icon>
+        Attach Files
+      </button>
+      <input type="file" id="fileUpload" (change)="filesSelected($event)" multiple hidden #fileUpload>
+
+
+
+      <div class="images__preview">
+        <div *ngFor="let file of sourceForm.get('imagesFromFactory').value; let i=index" class="image" fxLayout="row">
+          <img [src]="file" alt="Factory image" />
+          <div fxFlex></div>
+          <button type="button" mat-icon-button (click)="removeImageFromFactory(i)" class="image__delete">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <mat-list>
+        <mat-list-item *ngFor="let file of files">
+          <h4 mat-line>{{file.name}}</h4>
+          <mat-progress-bar *ngIf="progress && progress[file.name]" mode="determinate" [value]="progress[file.name]">
+          </mat-progress-bar>
+        </mat-list-item>
+      </mat-list>
+
+    </div>
+
+    <div class="px-16">
+      <button type="submit" mat-raised-button color="accent" class="w-100-p">{{ submitText }}</button>
+    </div>
+  </form>

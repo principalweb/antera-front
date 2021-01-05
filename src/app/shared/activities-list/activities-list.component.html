@@ -1,0 +1,353 @@
+<mat-table #table matSort
+        [dataSource]="dataSource"
+        (matSortChange)="sortChange($event)"
+        [formGroup]="filterForm"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.length"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity">
+            <mat-checkbox [(ngModel)]="checkboxes[activity.id]"
+                          (ngModelChange)="onSelectedChange(activity.id)"
+                          [ngModelOptions]="{standalone: true}"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="type">
+        <mat-header-cell class="header-cell" [ngClass]="(project && !isActivities)?'mat-hide-col':'header-cell'" *cdkHeaderCellDef>
+            <span mat-sort-header>Type</span>
+            <mat-select
+                class="form-control"
+                [(ngModel)]="selectedActivityType"
+                [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="fetchList()">
+                <mat-option [value]="">All</mat-option>
+                <mat-option [value]="taskType.value" *ngFor="let taskType of taskTypes">
+                    {{ taskType.label }}
+                </mat-option>
+            </mat-select>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" [ngClass]="(project && !isActivities)?'mat-hide-col':''" (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.type | capitalizeFirst}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header *ngIf="(project && !isActivities)">Item Name</span>
+            <span mat-sort-header *ngIf="(isActivities)">Subject</span>
+            <input class="form-control"
+                   formControlName="name"
+                   (keyup.enter)="fetchList()"
+                   (blur)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.value.name | capitalizeFirst }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="phone">
+        <mat-header-cell class="header-cell" [ngClass]="(project && !isActivities)?'mat-hide-col':'header-cell'" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Phone</span>
+            <input class="form-control"
+                   formControlName="phone"
+                   (keyup.enter)="fetchList()"
+                   (blur)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-xs [ngClass]="(project && !isActivities)?'mat-hide-col':''" (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.value.phone}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="refType">
+        <mat-header-cell class="header-cell" [ngClass]="(project && !isActivities)?'mat-hide-col':'header-cell'" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Related To</span>
+            <mat-select
+                        class="form-control"
+                        [(ngModel)]="selectedRefType"
+                        [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="fetchList()"
+                        >
+                <mat-option [value]="">All</mat-option>        
+                <mat-option [value]="refType.value" *ngFor="let refType of refTypes">
+                    {{ refType.label }}
+                </mat-option>
+            </mat-select>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-xs [ngClass]="(project && !isActivities)?'mat-hide-col':''" (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.refType | capitalizeFirst }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="refName">
+        <mat-header-cell class="header-cell" [ngClass]="(project && !isActivities)?'mat-hide-col':'header-cell'" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Related Item</span>
+            <input type="hidden" formControlName="refId"/>
+            <input type="text"
+                    class="form-control"
+                    [value]="displayName(filterForm.value.refName)"
+                    [matAutocomplete]="autoRefId"
+                    formControlName="refName">
+            <mat-autocomplete #autoRefId="matAutocomplete"
+                            [displayWith]="displayName"
+                            (optionSelected)="selectRef($event)">
+                <mat-option *ngFor="let ref of filteredRefs" [value]="ref">
+                    {{ ref.name }}
+                </mat-option>
+            </mat-autocomplete>
+            <!-- <input class="form-control"
+                   formControlName="refName"
+                   (keyup.enter)="fetchList()"
+                   (blur)="fetchList()"> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-xs [ngClass]="(project && !isActivities)?'mat-hide-col':''">
+            <p class="text-truncate text-link" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}" (click)="onLinkModule(activity.refType,activity.refId)">
+                {{ activity.refName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="assigned">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Assigned To</span>
+            <input class="form-control"
+                   formControlName="assigned"
+                   (keyup.enter)="fetchList()"
+                   (blur)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-sm  (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.assignedName | capitalizeFirst  }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dueDate">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" [ngClass]="(project && !isActivities)?'mat-hide-col':'header-cell'" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header style="white-space: nowrap;">Due Date</span>
+            <input class="form-control"
+                  formControlName="dueDate"
+                  [matDatepicker]="activityPicker"
+                  (dateChange)="fetchList()"
+                  (blur)="fetchList()">
+                  <mat-datepicker-toggle matSuffix [for]="activityPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #activityPicker></mat-datepicker>
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let activity" [ngClass]="(project && !isActivities)?'mat-hide-col':''" fxHide fxShow.gt-sm (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.dueDate | date }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateEntered">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header style="white-space: nowrap;">Date Entered</span>
+            <input class="form-control"
+                  formControlName="dateEntered"
+                  [matDatepicker]="activityPickerEntered"
+                  (dateChange)="fetchList()"
+                  (blur)="fetchList()">
+                  <mat-datepicker-toggle matSuffix [for]="activityPickerEntered"></mat-datepicker-toggle>
+                  <mat-datepicker #activityPickerEntered></mat-datepicker>
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let activity" fxHide fxShow.gt-sm (click)="editActivity(activity)">
+            <p class="text-truncate" *ngIf="activity.dateEntered" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                  {{ activity.dateEntered | date:"medium" }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="owner">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header *ngIf="(project && !isActivities)">Sale Rep</span>
+            <span mat-sort-header *ngIf="(isActivities)">Owner</span>
+            <input class="form-control"
+                   formControlName="owner"
+                   (keyup.enter)="fetchList()"
+                   (blur)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-md (click)="editActivity(activity)">
+            <p class="text-truncate" [ngClass]="{'mark-red': isPastDueActivity(activity) == true, 'mark-normal': isPastDueActivity(activity) == false}">
+                {{ activity.ownerName | capitalizeFirst }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="priority">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Priority</span>
+            <mat-select
+                class="form-control"
+                [(ngModel)]="selectedPriorityType"
+                [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="fetchList()"
+                >
+                <mat-option [value]="">All</mat-option>
+                <mat-option [value]="priority.value" *ngFor="let priority of prioritiesList">
+                    {{ priority.value }}
+                </mat-option>
+            </mat-select>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-md (click)="editActivity(activity)">
+            <p class="text-truncate mark-normal">{{activity.value.priority}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Status</span>
+        </mat-header-cell>
+        <ng-container *ngIf="statusTypes.length < 3">
+            <mat-cell fxLayoutAlign="center" *cdkCellDef="let activity" fxHide fxShow.gt-md (click)="editActivity(activity)">
+                <button mat-icon-button matTooltip="{{activity.status}}" *ngIf="activity.status === 'Completed'" (click)="updateStatus(activity,'Pending', $event)">
+                    <mat-icon class="active-icon green-500-bg white-fg s-24">check</mat-icon>
+                </button>
+                <button mat-icon-button matTooltip="{{activity.status}}" *ngIf="activity.status === 'Pending'" (click)="updateStatus(activity,'Completed', $event)">
+                    <mat-icon class="active-icon orange-500-fg s-32">alarm</mat-icon>
+                </button>
+    
+                <button mat-icon-button matTooltip="{{activity.status}}" *ngIf="activity.status !== 'Pending' && activity.status !== 'Completed'" (click)="updateStatus(activity,'Completed', $event)">
+                    <mat-icon class="active-icon accent-500-fg s-32">info</mat-icon>
+                </button>
+    
+            </mat-cell>
+        </ng-container>
+        <ng-container *ngIf="statusTypes.length > 2">
+            <mat-cell fxLayoutAlign="right" *cdkCellDef="let activity" fxFlex="none" class="w-40" (click)="editActivity(activity)">
+                <button mat-icon-button matTooltip="{{activity.status}}" [matMenuTriggerFor]="moreStatusTypes" aria-label="More"
+                    (click)="$event.stopPropagation();">
+                    <mat-icon class="active-icon green-500-bg white-fg s-24" *ngIf="activity.status === 'Completed'">check</mat-icon>
+                    <mat-icon class="active-icon orange-500-fg s-32" *ngIf="activity.status === 'Pending'">alarm</mat-icon>
+                    <mat-icon class="active-icon accent-500-fg s-32" *ngIf="activity.status !== 'Pending' && activity.status !== 'Completed'">info</mat-icon>
+                </button>
+                <mat-menu #moreStatusTypes="matMenu">
+                    <ng-container *ngFor="let status of statusTypes">
+                        <ng-container *ngIf="status.value !== activity.status">
+                            <button mat-menu-item aria-label="More" (click)="updateStatus(activity,status.value, $event)">
+                                <mat-icon *ngIf="status.value === 'Completed'">check</mat-icon>
+                                <mat-icon *ngIf="status.value === 'Pending'">alarm</mat-icon>
+                                <mat-icon *ngIf="status.value !== 'Pending' && status.value !== 'Completed'">info</mat-icon>
+                                <span>{{status.value}}</span>
+                            </button>
+                        </ng-container>
+                    </ng-container>
+                </mat-menu>
+            </mat-cell>
+        </ng-container>
+        
+    </ng-container>
+
+
+
+    <!-- <ng-container cdkColumnDef="approved">
+
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header *ngIf="selectedActivityType === 'Project Task'">Approved</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-md>
+            <button mat-icon-button matTooltip="Approved on {{ activity.value.approvalDate | date}}" *ngIf="(selectedActivityType === 'Project Task' || activity.type === 'Project Task') && activity.value.approved == '1'" (click)="updateApproved(activity, $event)">
+                <mat-icon class="active-icon green-500-bg white-fg s-24">check_box</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Not Approved" *ngIf="(selectedActivityType === 'Project Task' || activity.type === 'Project Task') && activity.value.approved != '1'" (click)="updateApproved(activity, $event)">
+                <mat-icon class="active-icon orange-500-fg s-32">check_box_outline_blank</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container> -->
+
+    <!-- <ng-container cdkColumnDef="direction">
+        <mat-header-cell class="header-cell w-80" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header *ngIf="selectedActivityType === 'Call'">Direction</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxHide fxShow.gt-md class="w-80">
+            <button mat-icon-button matTooltip="In Bound" *ngIf="activity.value.direction === 'Inbound'"  (click)="updateCallDirection(activity, $event)">
+                <mat-icon class="active-icon green-500-fg s-32">call</mat-icon>
+                <mat-icon class="active-icon green-500-fg s-32">arrow_left</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Out Bound" *ngIf="activity.value.direction === 'Outbound'" (click)="updateCallDirection(activity, $event)">
+                <mat-icon class="active-icon orange-500-fg s-32">call</mat-icon>
+                <mat-icon class="active-icon orange-500-fg s-32">arrow_right</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container> -->
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let activity" fxFlex="none" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+
+                    <button mat-menu-item aria-label="remove" (click)="newProjectTaskActivity(activity)" *ngIf="(project && !isActivities)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Add Activity</span>
+                    </button>
+                    <button mat-menu-item aria-label="remove" (click)="deleteActivity(activity)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                    <button *ngIf="activity.status !== 'Completed'" mat-menu-item aria-label="complete" (click)="updateActivity(activity, 'Completed')">
+                        <mat-icon>unarchive</mat-icon>
+                        <span>Complete</span>
+                    </button>
+                    <!-- <button mat-menu-item aria-label="clone">
+                        <mat-icon>content_copy</mat-icon>
+                        <span>Clone</span>
+                    </button> -->
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let activity; columns: displayedColumns;"
+            class="activity"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[activity.id]}"
+            matRipple
+            [matTooltip]="tooltip(activity)"
+            [matTooltipClass]="'activity-row-tooltip'"
+            [matTooltipPosition]="'above'"
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="paginate($event)"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

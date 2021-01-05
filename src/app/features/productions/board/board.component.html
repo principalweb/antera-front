@@ -1,0 +1,22 @@
+<div class="board-content ngx-dnd-container p-16 p-mat-24" #board>
+
+    <div fxLayout="row" ngxDroppable="status"
+         [model]="statusList" (drop)="onDrop($event)">
+
+        <fuse-scrumboard-board-list
+            class="scrumboard-board-list list-wrapper ngx-dnd-item"
+            [condensed]="condensed"
+            [model]="st" ngxDraggable
+            [list]="statusGroup[st.id]"
+            [status]="st" fxFlex="none"
+            (selectCard)="onSelectCard($event)"
+            *ngFor="let st of statusList">
+        </fuse-scrumboard-board-list>
+
+        <fuse-scrumboard-board-add-list
+            ngxDraggable
+            [moves]="false"
+            (onlistAdd)="onListAdd($event)"
+        ></fuse-scrumboard-board-add-list>
+    </div>
+</div>

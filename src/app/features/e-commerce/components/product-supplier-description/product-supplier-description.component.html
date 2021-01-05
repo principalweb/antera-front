@@ -1,0 +1,19 @@
+<div class="tab-content p-24" [formGroup]="form" fusePerfectScrollbar>
+    <div fxLayout="row" formGroupName="DescriptionArray">
+        <div fxLayout="column"
+             fxFlex
+             class="mr-20">
+
+            <mat-form-field fxFlex class="mr-20" *ngFor="let sd of descriptions">
+                <textarea matInput
+                       [name]="sd.type"
+                       [formControlName]="sd.type"
+                       [placeholder]="sd.type"
+                       rows="5"
+                       [maxlength]="sd.limit">
+                </textarea>
+                <mat-hint align="end">{{form.controls.DescriptionArray.controls[sd.type].value.length}} / {{sd.limit}}</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+</div>

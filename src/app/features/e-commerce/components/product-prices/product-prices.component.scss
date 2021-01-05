@@ -1,0 +1,46 @@
+app-product-prices {
+    flex: 1;
+
+    form {
+        color: #333;
+    
+        .mat-form-field-infix {
+            width: 144px;
+        }
+
+        .mat-form-field-wrapper {
+            margin-bottom: -1.25em;
+        }
+
+        .prb-label {
+            font-weight: 400;
+            font-size: 16px;
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            line-height: 1.125;
+            padding: 0.4375em 0;
+            border-top: 0.84375em solid transparent;
+            border-bottom: 1px solid transparent;
+        }
+
+        .prb-column {
+            .prb-label {
+                color: #666;
+                font-weight: 600;
+            }
+
+            .mat-button .mat-icon {
+                height: 72px;
+                width: 72px;
+                font-size: 72px;
+            }
+        }
+    }
+
+    .mw-240 {
+        max-width: 240px;
+    }
+
+    .mat-card, .mat-card-subtitle {
+        color:#f44336;
+    }
+}

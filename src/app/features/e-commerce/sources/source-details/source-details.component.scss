@@ -1,0 +1,15 @@
+app-source-details {
+    .header {
+        max-height: 50px !important;
+        height: 50px !important;
+        min-height: 50px !important;
+    }
+    .logo-text a {
+        color: white;
+        cursor: pointer;
+    }
+
+    .mat-tab-body-wrapper {
+        flex: 1;
+    }
+}

@@ -1,0 +1,22 @@
+<div fxLayout="column" fxFlex>
+    <div class="toolbar">
+        <div fxFlex="row">
+            <div fxFlex="row" fxLayoutAlign="start center">
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="newUomGroups()">
+                    <mat-icon>add</mat-icon> Uom Group
+                </button>
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        (click)="clearFilters()"
+                        fxHide fxShow.gt-md>
+                    <mat-icon>layers_clear</mat-icon> Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+    <app-uom-groups-list fxLayout="column"></app-uom-groups-list>
+</div>
+

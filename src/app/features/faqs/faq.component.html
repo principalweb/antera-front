@@ -1,0 +1,117 @@
+<div id="faq" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- HEADER -->
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+
+        <div class="hero-text mb-32">
+            <h1>We're here to help</h1>
+            <h3>Frequently asked questions</h3>
+        </div>
+
+        <div class="search mat-white-bg mat-elevation-z7" flex fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon>search</mat-icon>
+            <input [formControl]="searchInput" placeholder="Search in faqs.." fxFlex>
+            <button *ngIf='searchInput.value' mat-icon-button (click)="clearSearch()">
+                <mat-icon aria-label="Close">close</mat-icon>
+            </button>
+        </div>
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content px-16 py-24 px-sm-24 py-sm-32">
+
+        <div class="h4 green-600-fg text-bold mt-12 mb-12">Answered</div>
+        <div *ngIf="faqsApproved.length == 0" class="h6 mt-12 mb-12">No Questions approved.</div>
+        <mat-accordion id="answered" class="faqs-accordion">
+            <mat-expansion-panel *ngFor="let faq of faqsApproved; let i = index" [expanded]="step === i" (opened)="setStep(i)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title flex fxLayout="row" fxLayoutAlign="start center">
+                        <button mat-icon-button *ngIf="userType === 'AnteraAdmin'" [matMenuTriggerFor]="moreMenu" aria-label="More"
+                            (click)="$event.stopPropagation();">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #moreMenu="matMenu">
+                            <button mat-menu-item aria-label="remove" (click)="deleteFaq(faq)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Remove</span>
+                            </button>
+                            <button mat-menu-item aria-label="update" (click)="updateFaq(faq)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <!-- <button mat-menu-item aria-label="publish" (click)="publishFaq(faq)">
+                                <mat-icon>share</mat-icon>
+                                <span>Publish</span>
+                            </button> -->
+                        </mat-menu>
+                        <!-- <mat-icon class="mr-8">help_outline</mat-icon> -->
+                        {{faq.question}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                {{faq.answer}}
+                <div></div>
+                <div class="link" fxLayout="column">
+                    <ng-container *ngFor="let link of faq.linkArray" >
+                        <a href="{{link}}">{{link}}</a>
+                    </ng-container>
+                </div>
+                <div fxLayout="row">
+                    <div class="mr-16 mb-16 col-md-2" *ngFor="let image of faq.imageContent; let i=index">
+                        <div *ngIf="faq.imageContent.length > 0"
+                            class="product-image" fxlayout="row" fxLayoutAlign="center center">
+                            <img class="media" width="50%" [src]="image.url" (click)="openimage(image.url)">                                     
+                        </div>   
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <div class="h4 warn-600-fg text-bold mt-36 mb-12">Pending</div>
+        <div *ngIf="faqsPending.length == 0" class="h6 mt-12 mb-12">No Pending Questions.</div>
+        <mat-accordion id="pending" class="faqs-accordion">
+            <mat-expansion-panel *ngFor="let faq of faqsPending; let i = index">
+                <mat-expansion-panel-header>
+                    <mat-panel-title flex fxLayout="row" fxLayoutAlign="start center">
+                        <button mat-icon-button *ngIf="userType === 'AnteraAdmin'" [matMenuTriggerFor]="moreMenu" aria-label="More"
+                            (click)="$event.stopPropagation();">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #moreMenu="matMenu">
+                            <button mat-menu-item aria-label="remove" (click)="deleteFaq(faq)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Remove</span>
+                            </button>
+                            <button mat-menu-item aria-label="update" (click)="updateFaq(faq)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit</span>
+                            </button>
+                            <!-- <button mat-menu-item aria-label="publish" (click)="publishFaq(faq)">
+                                <mat-icon>share</mat-icon>
+                                <span>Publish</span>
+                            </button> -->
+                        </mat-menu>
+                        <!-- <mat-icon class="mr-8">help_outline</mat-icon> -->
+                        {{faq.question}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+<!-- ADD QUESTION BUTTON -->
+<button mat-mini-fab class="mat-accent-bg add-button" id="add-contact-button" (click)="newFaq()" aria-label="Ask a question"
+*fuseIfOnDom [@animate]="{value:'*', params:{delay:'300ms',scale:'.2'}}">
+<mat-icon>add</mat-icon>
+</button>
+<!-- / ADD QUESTION BUTTON -->
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,105 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <form [formGroup]="decoLocationForm" class="p-16" fusePerfectScrollbar>
+        <div class="px-16 two-columns">
+            <mat-form-field>
+                <input matInput
+                    name="locationName"
+                    formControlName="locationName"
+                    placeholder="Location Name" required>
+                <app-error [group]="decoLocationForm" field="locationName" label="Location Name"></app-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    name="description"
+                    formControlName="description"
+                    placeholder="Description">
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                    name="locationHexColor"
+                    formControlName="locationHexColor"
+                    placeholder="Location Color (Hex Code)" required>
+                <app-error [group]="decoLocationForm" field="locationHexColor" label="Location Color (Hex Code)"></app-error>
+                        <!--fuse-material-color-picker
+                                                    >
+                        </fuse-material-color-picker-->
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="displayOrder"
+                    formControlName="displayOrder"
+                    placeholder="Order">
+            </mat-form-field>
+
+					<div class="customer-view" fxLayout="column">
+						<div class="mat-title" fxFlex="none">Location Image</div>
+						<div class="feature-image" fxFlex>
+							<div fxFlex fxLayout="column" fxLayoutAlign="center center" class="upload-button"
+								*ngIf="!decoLocationDetails.locationImage">
+								<mat-icon class="font-size-100 secondary-text h-100 w-100">file_upload</mat-icon>
+								<input type="file" formControlName="uploadAwsFile" id="uploadAwsFile" (change)="onFileUploadEventForAws($event)" hidden
+									#uploadAwsFile>
+								<button mat-stroked-button color="accent" (click)="uploadAwsFile.click()">Choose
+									File</button>
+							</div>
+							<div fxFlex fxLayout="column" fxLayoutAlign="center center" class="remove-button"
+								*ngIf="decoLocationDetails.locationImage">
+								<button mat-raised-button color="warn" (click)="removeLocationImage()">
+									<mat-icon>delete</mat-icon> Remove
+								</button>
+							</div>
+							<div class="uploaded-image" *ngIf="decoLocationDetails.locationImage">
+								<img [src]="decoLocationDetails.locationImage" fxFlex
+									[default]="'assets/images/ecommerce/product-image-placeholder.png'">
+							</div>
+						</div>
+                    </div>
+
+
+        </div>
+        <input type="hidden" formControlName="dateEntered"/>
+        <input type="hidden" formControlName="dateModified"/>
+        <input type="hidden" formControlName="createdById"/>
+        <input type="hidden" formControlName="createdByName"/>
+        <input type="hidden" formControlName="modifiedById"/>
+        <input type="hidden" formControlName="modifiedByName"/>
+
+    </form>
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

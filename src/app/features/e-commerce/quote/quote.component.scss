@@ -1,0 +1,125 @@
+@import "src/@fuse/scss/fuse";
+
+.mat-tab-body {
+  margin: 0;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+.mat-tab {
+  margin: 0;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+#quote {
+  .header {
+    .subtitle {
+      margin: 6px 0 0 0;
+    }
+
+    .order-total {
+      .profit {
+        direction: rtl;
+        font-size: 20px;
+      }
+      .total {
+        font-size: 28px;
+        span {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    position: relative;
+
+    .mat-tab-group {
+      margin-top: 64px;
+    }
+
+    .mat-tab-header {
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    .mat-tab-group,
+    .mat-tab-body-wrapper,
+    .tab-content {
+      flex: 1 1 auto;
+      max-width: 100%;
+    }
+
+    .tab-content.tab-content--documents {
+      height: 100%;
+      overflow: hidden;
+    }
+    .tab-content {
+      flex: 1 1 auto;
+
+      &.products {
+        display: flex;
+
+        .product-row {
+          cursor: pointer;
+        }
+
+        .product-image {
+          height: 56px;
+          widows: auto;
+        }
+      }
+    }
+
+    .mat-tab-body-content {
+      display: flex;
+    }
+
+    .mat-tab-label {
+      height: 64px;
+    }
+  }
+
+  .accent-text {
+    color: map-get($mat-fuseaccent, 500);
+  }
+
+  .customer.section {
+    .mat-icon-button {
+      margin-top: -6px;
+    }
+  }
+
+  span.w-100 {
+    display: inline-block;
+  }
+}
+
+.example-button-container {
+  position: absolute;
+  top: 125px;
+  right: 20px;
+  z-index: 1000;
+  transition: right 700ms;
+  transition-timing-function: ease-in;
+}
+
+.btn-moved {
+  position: absolute;
+  top: 125px;
+  right: 320px;
+  z-index: 1000;
+  transition: right 700ms;
+  transition-timing-function: ease-out;
+}
+
+mat-sidenav-container {
+  height: 100vh;
+}
+
+mat-sidenav {
+  top: 63px!important;
+}

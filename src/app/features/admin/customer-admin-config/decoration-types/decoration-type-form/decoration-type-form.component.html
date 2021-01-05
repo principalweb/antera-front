@@ -1,0 +1,130 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <form [formGroup]="decoTypeForm" class="p-16" fusePerfectScrollbar>
+        <div class="px-16 two-columns">
+            <mat-form-field>
+                <input matInput
+                    name="name"
+                    formControlName="name"
+                    placeholder="Name" required>
+                <app-error [group]="decoTypeForm" field="name" label="Name"></app-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="action ==='edit'">
+                <input matInput
+                    name="code"
+                    formControlName="code"
+                    placeholder="Code">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    name="detailName"
+                    formControlName="detailName"
+                    placeholder="Detail Name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    name="sku"
+                    formControlName="sku"
+                    placeholder="Sku">
+            </mat-form-field>
+
+            <mat-checkbox class="ml-8 mt-20"
+                formControlName="active">
+                Active
+            </mat-checkbox>
+
+            <mat-form-field>
+                <mat-select formControlName="incomeAccount"
+                            placeholder="Income">
+                    <mat-option [value]="i.id" *ngFor="let i of incomeAccounts">
+                        {{ i.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-select formControlName="expenseAccount"
+                            placeholder="Expense">
+                    <mat-option [value]="i.id" *ngFor="let i of expenseAccounts">
+                        {{ i.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-select formControlName="decorationGroup"
+                            placeholder="Group">
+                    <mat-option [value]="">
+                    </mat-option>
+                    <mat-option [value]="i.id" *ngFor="let i of decorationGroups">
+                        {{ i.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                    name="productionHour"
+                    formControlName="productionHour"
+                    placeholder="Production/Hour">
+            </mat-form-field>
+
+        </div>
+        <input type="hidden" formControlName="dateCreated"/>
+        <input type="hidden" formControlName="dateModified"/>
+        <input type="hidden" formControlName="createdById"/>
+        <input type="hidden" formControlName="createdByName"/>
+        <input type="hidden" formControlName="modifiedById"/>
+        <input type="hidden" formControlName="modifiedByName"/>
+        <input type="hidden" formControlName="code"
+        >
+        <mat-toolbar class="mb-8 mt-24 details-section-header">Detail Options</mat-toolbar>
+
+        <div class="p-16" fxLayout="row wrap">
+            <div fxFlex="none" *ngFor="let option of decoTypeForm.get('detailOptions')['controls']; let i=index;">
+                <form [formGroup]="option">
+                    <mat-form-field>
+                        <input matInput placeholder="Value" formControlName="option"/>
+                        <mat-error *ngIf="optionError">Value is a required field.</mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+            <button mat-button color="accent" (click)="addDetailOption()">
+                <mat-icon class="accent-500-fg">add</mat-icon>
+            </button>
+        </div>
+
+    </form>
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

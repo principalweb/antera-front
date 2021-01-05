@@ -1,0 +1,44 @@
+<div mat-dialog-content>
+    <ng-container [formGroup]="form">
+        <table class="simple" formArrayName="simpleQuoteContent">
+          <thead>
+            <tr>
+              <th style="width: 250px;">Product</th>
+              <th>Content</th>
+            </tr>
+          </thead>
+          <tr *ngFor="let item of simpleQuoteContentArray.controls; index as i" [formGroupName]="i">
+            <td class="left">
+              <div *ngIf="item.value as product" fxLayout="row">
+                <div>
+                  <img [src]="product.imageUrl" [default]="'assets/images/ecommerce/product-image-placeholder.png'"
+                    style="max-width: 80px" [alt]="product.itemNo">
+                </div>
+                <div>
+                  <div><strong>{{ product.itemNo }}</strong></div>
+                  <div>{{ product.productName }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="right">
+              <div class="ck-editor-box">
+				  <!--mat-form-field class="w-100-p" appearance="outline">
+					  <input matInput formControlName="simpleQuoteProductHeading" placeholder="Title">
+				  </mat-form-field-->
+				  <!--mat-form-field class="w-100-p" appearance="outline">
+					<textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="4"
+					  formControlName="simpleQuoteProductDescription"  placeholder="Description"></textarea>
+				  </mat-form-field-->
+				  <ckeditor #editor [config]="{ toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList' ] }" [editor]="Editor" formControlName="simpleQuoteProductDescription"></ckeditor>
+				  <!--ckeditor #editor [editor]="Editor" formControlName="simpleQuoteProductDescription"></ckeditor-->
+              </div>
+            </td>
+          </tr>
+        </table>
+    </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="save()" class="mr-8">SAVE</button>
+  <button mat-button class="red-fg" (click)="close()">CANCEL</button>
+</div>

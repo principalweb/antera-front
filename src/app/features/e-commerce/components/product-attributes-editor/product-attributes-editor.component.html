@@ -1,0 +1,101 @@
+<div class="product-pricing" fxFlex>
+  <div fxLayout="row" class="px-16">
+    <h3 *ngIf="showPriceBreakOnly">Price Breakdown</h3>
+    <h3 *ngIf="!showPriceBreakOnly">Product Attributes</h3>
+    <button data-role="saveProductPriceBreakdownButton" *ngIf="editAttributes" mat-icon-button (click)="saveAttributes()">
+      <mat-icon color="primary">save</mat-icon>
+    </button>
+    <button data-role="editProductPriceBreakdownButton" mat-icon-button (click)="editAttributes = !editAttributes">
+      <mat-icon *ngIf="!editAttributes" color="primary">edit</mat-icon>
+      <mat-icon *ngIf="editAttributes" color="primary" >close</mat-icon>
+    </button>
+  </div>
+  <div class="px-16 product-attributes" *ngIf="editAttributes">
+    <form [formGroup]="attributeForm" *ngIf="attributeForm">
+      <div *ngIf="!showPriceBreakOnly">
+        <mat-slide-toggle formControlName="showSize">Show Size</mat-slide-toggle>
+        <mat-form-field class="w-100-p">
+          <mat-chip-list #sizeList>
+            <mat-chip *ngFor="let size of attributeForm.get('sizes').controls; let index = index" [selectable]="true"
+              [value]="size" [removable]="true" (removed)="removeSizeAttribute($event, index)">
+              {{ size.value?.value }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input #sizeInput placeholder="Add Size" [matChipInputFor]="sizeList"
+              (matChipInputTokenEnd)="addSizeAttribute($event)" />
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <div *ngIf="!showPriceBreakOnly">
+      <mat-slide-toggle formControlName="showColor">Show Color</mat-slide-toggle>
+      <mat-form-field class="w-100-p">
+        <mat-chip-list #colorList>
+          <mat-chip *ngFor="let color of attributeForm.get('colors').controls; let index = index" [selectable]="true"
+            [removable]="true" [value]="color" (removed)="removeColorAttribute($event, index)">
+            {{ color.value?.value }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input matInput #colorInput placeholder="Add Color" [matChipInputFor]="colorList"
+            (matChipInputTokenEnd)="addColorAttribute($event)" />
+        </mat-chip-list>
+
+      </mat-form-field>
+      </div>
+      <div *ngIf="showPriceBreakOnly">
+        <h3>Price Breaks</h3>
+        <mat-form-field class="w-100-p">
+          <mat-chip-list #quantityList>
+            <mat-chip *ngFor="let quantity of attributeForm.get('quantities').controls; let index = index" [value]="quantity"
+              [selectable]="true" [removable]="true" (removed)="removeQuantityAttribute($event, index)">
+              {{ quantity.value?.value }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input matInput #quanityInput placeholder="Quantities" [matChipInputFor]="quantityList"
+              (matChipInputTokenEnd)="addQuantityAttribute($event)" />
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <mat-slide-toggle formControlName="orderMinPricebreak">Do not allow less than minimum pricebreak qty on order
+      </mat-slide-toggle>
+
+    </form>
+  </div>
+  <div>
+    <div *ngIf="!editAttributes">
+      <mat-card *ngIf="showPriceBreakOnly" class="attribute-card mat-elevation-z0">
+        <mat-card-header>
+          <mat-card-title>Quantities</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="attribute-card-content">
+          <ng-container class="center-container" *ngFor="let quantity of quantities; let last = last">
+            <span>{{ quantity }}</span>
+            {{ last ? '' : ',' }}
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngIf="!showPriceBreakOnly" class="attribute-card mat-elevation-z0">
+        <mat-card-header>
+          <mat-card-title>Sizes<span *ngIf="!product.showSize"> - Hidden</span></mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="attribute-card-content">
+          <ng-container *ngFor="let prGroup of priceTable; let last = last">
+            <span>{{ prGroup.size }}</span>
+            {{ last ? '' : ',' }}
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="!showPriceBreakOnly" class="attribute-card mat-elevation-z0">
+        <mat-card-header>
+          <mat-card-title>Colors<span *ngIf="!product.showColor"> - Hidden</span></mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="attribute-card-content ">
+          <ng-container *ngFor="let color of colors; let last = last">
+            <span> {{ color }}</span>
+            {{ last ? '' : ',' }}
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

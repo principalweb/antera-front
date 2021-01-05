@@ -1,0 +1,59 @@
+<div id="project-details" class="page-layout simple h-100-p">
+
+    <div class="header h-80 mat-accent-bg p-16 p-sm-24"
+         fxLayout="row" fxLayoutAlign="space-between center">
+
+        <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon mr-16"
+                      [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"
+                      *fuseIfOnDom>work</mat-icon>
+            <div class="logo-text h1"
+                 [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"
+                 *fuseIfOnDom>
+                <a routerLink="/projects">Project</a>
+                <span *ngIf="action==='edit'">
+                    &nbsp;&gt;&nbsp; {{ details.name }} <span *ngIf="details.converted == '1'">(Converted to Artwork)</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <mat-tab-group fxFlex *ngIf="action==='edit'">
+        <mat-tab label="Details">
+            <app-project-details-tab
+                class="w-100-p"
+                [action]="action"
+                [project]="details"
+                *ngIf="details"
+            ></app-project-details-tab>
+        </mat-tab>
+        <mat-tab label="Project Tasks" *ngIf="action==='edit'">
+          <div class="products tab-content" fusePerfectScrollbar *ngIf="action==='edit'">
+              <app-project-tasks-list
+                [project]="details"
+                [isActivities]="false">
+              </app-project-tasks-list>
+          </div>
+        </mat-tab>
+
+        <!--mat-tab label="Activites" *ngIf="action==='edit'">
+          <div class="products tab-content" fusePerfectScrollbar *ngIf="action==='edit'">
+              <app-project-tasks-list
+                [project]="details"
+                [isActivities]="true">
+              </app-project-tasks-list>
+          </div>
+        </mat-tab-->
+
+    </mat-tab-group>
+
+    <app-project-details-tab
+        class="w-100-p"
+        [action]="action"
+        [project]="details"
+        (afterCreate)="afterCreate.emit($event)"
+        *ngIf="details && action!=='edit'"
+    ></app-project-details-tab>
+
+
+</div>

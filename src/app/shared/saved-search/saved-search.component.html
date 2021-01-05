@@ -1,0 +1,22 @@
+<button mat-raised-button color="accent" [matMenuTriggerFor]="popoverMenu" class="text-capitalize mr-8"
+    (click)="getSavedSearches();" fxHide fxShow.gt-md>
+    <mat-icon>more_horiz</mat-icon> Saved search
+</button>
+
+
+<mat-menu #popoverMenu="matMenu" class="workflow-menu">
+    <div class="search-popover">
+        <div class="search-popover-content">
+            <button mat-raised-button (click)="saveCurrentSearch()" class="text-capitalize mr-8" color="accent">
+                Save current search
+            </button>
+            <ng-container>
+                <ul>
+                    <li *ngFor="let search of savedSearches">
+                        <div (click)="sendSearchCriteria(search)">Search name: {{ search.setting }}</div>
+                    </li>
+                </ul>
+            </ng-container>
+        </div>
+    </div>
+</mat-menu>

@@ -1,0 +1,39 @@
+<div class="order-messages">
+  <mat-dialog-content>
+    <button mat-raised-button color="accent" (click)="addMessage()">ADD NEW MESSAGE</button>
+    <div class="message-container" *ngFor="let message of data.messages; let i=index;">
+      <div>
+        <form>
+          <mat-form-field>
+            <input matInput placeholder="Type" [(ngModel)]="message.type" name="type">
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="my-16">
+        <mat-checkbox [(ngModel)]="message.is_default">(Default)</mat-checkbox>
+      </div>
+      <div class="mb-20">
+        <form>
+          <mat-form-field>
+            <textarea rows="5" matInput placeholder="Description" [(ngModel)]="message.description"></textarea>
+            <mat-hint align="end">{{message.description.length}} / 30000</mat-hint>
+          </mat-form-field>
+        </form>
+      </div>
+      <div fxLayout fxLayoutAlign="end">
+        <button mat-raised-button>SAVE</button>
+        <button mat-raised-button (click)="closeMessage(i)">CLOSE</button>
+      </div>
+    </div>
+    <div class="mt-20">
+      <form>
+        <mat-form-field>
+          <textarea rows="7" matInput placeholder="Selected Order Messages" [(ngModel)]="data.selected_messages"></textarea>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout fxLayoutAlign="end">
+    <button mat-raised-button (click)="close()">CLOSE</button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,120 @@
+<div class="dialog-content-wrapper" fxLayout="column" [formGroup]="configForm">
+  <mat-toolbar
+    class="m-0" fxFlex="none"
+    fxLayout="row" fxLayoutAlign="space-between center"
+  >
+    <span class="title dialog-title">Configuration</span>
+
+    <button mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="p-16">
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Roll additional Vendor charges into product</div>
+      <mat-checkbox
+        formControlName="rollAddonChargesToProduct"
+      ></mat-checkbox>
+    </div>
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Roll decorations fees into product</div>
+      <mat-checkbox
+        formControlName="rollDecoChargesToProduct"
+      ></mat-checkbox>
+    </div>
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Roll decoration additional charges into product</div>
+      <mat-checkbox
+        formControlName="rollDecoAddonChargesToProduct"
+        ></mat-checkbox>
+    </div>
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Charge sales tax</div>
+      <ng-container checkPermissionAction [pAction]="'toggle_tax'">
+          <mat-checkbox
+            formControlName="chargeSalesTax"
+            ></mat-checkbox>
+      </ng-container>
+    </div>
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Charge GST on PO</div>
+      <ng-container checkPermissionAction [pAction]="'toggle_tax'">
+          <mat-checkbox
+            formControlName="chargeGstTaxOnPo"
+            ></mat-checkbox>
+      </ng-container>
+    </div>
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Pay commissions</div>
+      <ng-container checkPermissionAction [pAction]="'toggle_commission'">
+          <mat-checkbox
+            formControlName="payCommission"
+            ></mat-checkbox>
+      </ng-container>
+    </div>
+    <div class="p-16 space-between" fxLayout="row">
+      <div>Hide completely from customer</div>
+      <mat-checkbox
+        formControlName="hideLine"
+        ></mat-checkbox>
+    </div>
+    <div class="px-16 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="w-160">Override In Hand by Date</div>
+      <mat-form-field floatLabel="never">
+        <input matInput class="w-140" formControlName="inhandDate" [matDatepicker]="inHandPicker" placeholder="In Hand by Date">
+        <mat-datepicker-toggle matSuffix [for]="inHandPicker"></mat-datepicker-toggle>
+        <mat-datepicker #inHandPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-checkbox
+        formControlName="overrideInHandDate"
+        ></mat-checkbox>
+    </div>
+    <div class="px-16 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="w-160">Alternate Ship To</div>
+      <mat-form-field class="w-320">
+        <input type="hidden" formControlName="alternateShipToAccountId"/>
+        <input type="text"
+               formControlName="alternateShipToAccount"
+               matInput
+               placeholder="Account Name"
+               [matAutocomplete]="autoAccountAssigned"
+               #accountName>
+        <mat-autocomplete #autoAccountAssigned="matAutocomplete"
+                          [displayWith]="displayName"
+                          (optionSelected)="selectAccount($event)" md-clear-button="true">
+          <mat-option *ngFor="let account of filteredAccounts" [value]="account">
+            {{ account.name | capitalizeFirst }} <small class="text-boxed">{{ account.partnerType }}</small>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div class="w-40 px-12">
+			 <button  mat-icon-button (click)="clearAlternateShipTo()">
+					  <mat-icon>clear</mat-icon>
+			</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="p-24">
+    <ng-container *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">
+        <button mat-raised-button color="accent"
+                (click)="save('save')"
+                >SAVE</button>
+
+        <button mat-raised-button color="accent"
+                matTooltip="Apply to all line items after this"
+                (click)="save('apply-to-remaining')"
+                >APPLY TO REMAINING</button>
+
+        <button mat-raised-button color="accent"
+                matTooltip="Apply to all line items"
+                (click)="save('apply-to-all')"
+                >APPLY TO ALL</button>
+    </ng-container>
+    <button mat-raised-button color="warn"
+            matDialogClose
+            >CANCEL</button>
+  </div>
+</div>

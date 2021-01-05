@@ -1,0 +1,12 @@
+  <div mat-dialog-content fxLayout="column">
+    <p>Want to change the department? Please select the Department that you want to edit.</p>
+    <mat-form-field fxFlex>
+        <mat-select  [formControl]="departments" multiple placeholder="Department">
+           <mat-option [value]="department.value" *ngFor="let department of departmentList">{{ department.label | titlecase}}</mat-option>
+         </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+      <button mat-button [mat-dialog-close]="departments" tabindex="2">Ok</button>
+      <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>
+  </div>

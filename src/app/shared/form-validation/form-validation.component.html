@@ -1,0 +1,29 @@
+<div class="dialog-content-wrapper" fxLayout="column">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        <span class="title dialog-title">
+         All fields marked with an asterisk (*) are required
+       </span>
+
+        <button mat-icon-button
+                class="mat-icon-button"
+                (click)="close()"
+                aria-label="Close dialog">
+
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-dialog-content class="p-24 m-0">
+        <mat-list role="list">
+          <mat-list-item role="listitem"  *ngFor="let row of invalidControls">Valid&nbsp;<strong>{{fieldLabel(row, fields)}}</strong>&nbsp;is required</mat-list-item>
+        </mat-list>
+    </mat-dialog-content>
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between right">
+        <button mat-raised-button color="accent"
+            (click)="close()"
+            >Close
+       </button>
+    </div>
+</div>

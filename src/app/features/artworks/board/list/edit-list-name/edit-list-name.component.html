@@ -1,0 +1,30 @@
+<div class="list-header-name"
+     fxLayout="row" fxLayoutAlign="start center"
+     (click)="openForm()"
+     *ngIf="!formActive"
+>
+    <button mat-icon-button
+            fxFlex="none"
+            (click)="removeList()"
+            class="list-header-option-button">
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <div fxFlex>{{ status.label }}</div>
+
+    <div fxFlex="none" class="total accent-fg">{{ total }}</div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()"
+      fxLayout="row" class="pl-16 w-100-p"
+      *ngIf="formActive">
+
+    <input fxFlex formControlName="name" #nameInput placeholder="Write a list Name">
+
+    <button mat-icon-button fxFlex="none">
+        <mat-icon>check</mat-icon>
+    </button>
+    <button mat-icon-button fxFlex="none" (click)="closeForm()" type="button">
+        <mat-icon>close</mat-icon>
+    </button>
+</form>

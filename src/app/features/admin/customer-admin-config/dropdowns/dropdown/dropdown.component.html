@@ -1,0 +1,103 @@
+<div id="admin-dropdown-options" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <button class="mr-8" mat-icon-button routerLink="/admin/config" [queryParams]="{prop:'dropdowns'}">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Dropdown : {{ dropdown.labelName | titlecase}} <span *ngIf="dropdown.readOnly == '1'">(Read Only)</span></span>
+      </div>
+      <!-- / APP TITLE -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <div fxFlex class="content-card p-20">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button mat-raised-button
+                    color="accent"
+                    class="text-capitalize"
+                    (click)="newOption()">
+                <mat-icon>add</mat-icon> New Option
+            </button>
+        </div>
+        <div class="dropdown-options mt-20" fusePerfectScrollbar>
+            <table class="dropdown-option-table">
+                <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Value</th>
+                        <th>Description</th>
+                        <th>Created By</th>
+                        <th>Updated By</th>
+                        <th>Date Modified</th>
+                        <th>&nbsp;&nbsp;&nbsp;Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let option of dropdown.options; let i=index;">
+                        <td>
+                            <span>
+                                {{option.label | titlecase}}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{option.value}}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{option.description}}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{option.createdByName}}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{option.modifiedByName}}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{option.dateModified | date}}
+                            </span>
+                        </td>
+                        <td>
+                            <div fxLayout="row" fxLayoutAlign="space-between center">
+                                <div fxLayout="row" >
+                                    <button mat-icon-button (click)='editDropdown(option)'>
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)='deleteDropdown(option)' *ngIf="option.readOnly !== '1'">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,17 @@
+.center-container {
+    padding-left: 20px;
+}
+
+.attribute-card{
+    margin-top: 10px;
+    padding-top: 10px;
+    max-width: 400px;
+    width: 100%;
+    justify-content: center !important ;
+    align-items: flex-start !important;
+}
+
+.attribute-card-content{
+    padding-left: 100 px;
+    padding-left: inherit;
+}

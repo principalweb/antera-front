@@ -1,0 +1,146 @@
+<div class="dialog-content-wrapper">
+
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row>
+            Equipment
+            <button mat-button class="mat-icon-button dialog-close" aria-label="Close dialog" (click)="close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="p-16">
+
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <button type="button" mat-icon-button color="primary" (click)="add()">
+                <mat-icon aria-label="Save new equipment">add</mat-icon>
+            </button>
+            <button type="button" mat-icon-button color="primary" (click)="clearNewEquipment()">
+                <mat-icon aria-label="Clear equipment">clear</mat-icon>
+            </button>
+
+            <mat-form-field>
+                <input matInput placeholder="Name" [(ngModel)]="newEquipment.name" />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select placeholder="Deco Type" [(ngModel)]="newEquipment.decoTypes" multiple>
+                    <mat-option [value]="">None</mat-option>
+                    <mat-option *ngFor="let type of decoTypes" [value]="type">
+                        {{type.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Heads" [(ngModel)]="newEquipment.heads" />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Production/Hour" [(ngModel)]="newEquipment.prodHour" />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Stitches/Minute" [(ngModel)]="newEquipment.spm" />
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Capacity" [(ngModel)]="newEquipment.capacity" />
+            </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="mat-table-container">
+            <mat-table [dataSource]="dataSource">
+                <!-- Machine Number -->
+                <ng-container matColumnDef="id">
+
+                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        {{eq.id}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Save -->
+                <ng-container matColumnDef="save">
+                    <mat-header-cell *matHeaderCellDef> Save </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <button mat-icon-button type="button" (click)="update(eq)">
+                            <mat-icon>save</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                    <mat-header-cell *matHeaderCellDef> Save </mat-header-cell>
+                <!-- Name -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placholder="Name" [value]="eq.name" [(ngModel)]="eq.name">
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <!-- Deco Type -->
+                <ng-container matColumnDef="decoTypeName">
+                    <mat-header-cell *matHeaderCellDef> Deco Type</mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <mat-form-field floatLabel="never" style="max-width:180px;">
+                            <mat-select [(ngModel)]="eq.decoTypes" [compareWith]="compareFn" multiple>
+                                <mat-select-trigger>
+                                    {{eq.decoTypes.length > 0 ? eq.decoTypes[0].name : ''}}
+                                    <span *ngIf="eq.decoTypes.length > 1" class="additional-selection">
+                                        (+{{eq.decoTypes.length - 1}} {{eq.decoTypes.length === 2 ? 'other' : 'others'}})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let type of decoTypeSelect" [value]="type">
+                                    {{type.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <!-- Heads -->
+                <ng-container matColumnDef="heads">
+                    <mat-header-cell *matHeaderCellDef> Heads </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placholder="Heads" [value]="eq.heads" [(ngModel)]="eq.heads">
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <!-- Production/Hour -->
+                <ng-container matColumnDef="prodHour">
+                    <mat-header-cell *matHeaderCellDef> Production/Hour </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placholder="Production/Hour" [value]="eq.prodHour" [(ngModel)]="eq.prodHour">
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <!-- Stitches/Minute -->
+                <ng-container matColumnDef="spm">
+                    <mat-header-cell *matHeaderCellDef> Stitches/Minute </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placholder="Stitches/Minute" [value]="eq.spm" [(ngModel)]="eq.spm">
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <!-- Capacity -->
+                <ng-container matColumnDef="capacity">
+                    <mat-header-cell *matHeaderCellDef> Capacity </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <mat-form-field floatLabel="never">
+                            <input matInput placholder="Capacity" [value]="eq.capacity" [(ngModel)]="eq.capacity">
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <!-- Delete -->
+                <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                    <mat-cell *matCellDef="let eq">
+                        <button mat-icon-button type="button" (click)="delete(eq)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+</div>

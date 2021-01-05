@@ -1,0 +1,43 @@
+<mat-table fxFlex #table
+    [dataSource]="dataSource">
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="store">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Name</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.store}}">{{data.store}}</p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="margin">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Margin</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.margin}}">{{data.margin}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data;let i = index; columns: displayedColumns;"
+            class="category-row"
+            (click)="showDetail(data, i);"
+            >
+    </mat-row>
+</mat-table>

@@ -1,0 +1,11 @@
+.cp-access-radio-group {
+    display: flex;
+    flex-direction: column;
+    mat-radio-button {
+        margin-bottom: 5px;
+    }
+}
+
+.bolder {
+    font-weight: bold;
+}

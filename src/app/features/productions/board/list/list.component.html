@@ -1,0 +1,33 @@
+<div [ngClass]="{'list': true, 'mat-elevation-z1': true, 'list-selected-border': isSelected()}" fxLayout="column">
+    <div fxLayout="row">
+        <fuse-scrumboard-board-edit-list-name fxFlex="90" [status]="status" [total]="total"
+            (onNameChanged)="onListNameChanged($event)" (remove)="removeList()">
+        </fuse-scrumboard-board-edit-list-name>
+        <div fxFlexAlign="center" fxLayout="row" fxLayoutAlign="end">
+            <mat-icon class="mt-8 mr-8 delete-grey-icon" [ngStyle]="{'cursor': 'pointer'}" (click)="removeList()"
+                matTooltipClass="removeListTip" matTooltip="Delete Column">delete</mat-icon>
+        </div>
+    </div>
+    <div class="list-content" fxLayout="column">
+
+        <div class="list-cards ngx-dnd-container"
+             [model]="list" ngxDroppable="card"
+             (drop)="onDrop($event)"
+             #listScroll>
+
+            <fuse-scrumboard-board-card
+                ngxDraggable
+                (click)="editProduction(card)"
+                (select)="onSelectCard(card, $event)"
+                (pinned)="onPinCard(card, $event)"
+                class="scrumboard-board-card mat-elevation-z2 ngx-dnd-item"
+                [class.condensed]="condensed"
+                [model]="card"
+                [card]="card"
+                [matTooltip]="tooltip(card)"
+                [matTooltipClass]="'card-tooltip'"
+                *ngFor="let card of list">
+            </fuse-scrumboard-board-card>
+        </div>
+    </div>
+</div>

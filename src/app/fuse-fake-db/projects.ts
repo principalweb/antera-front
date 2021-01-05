@@ -1,0 +1,65 @@
+export class ProjectsFakeDb
+{
+    public static projects = [
+        {
+            id: '1',
+            name: 'Project X',
+            startDate: '2017-08-26',
+            endDate: '2017-11-01',
+            status: 'Draft',
+            priority: 'Medium',
+            salesRep: 'John Doe',
+            description: '',
+        },
+        {
+            id: '2',
+            name: 'Boxes',
+            startDate: '08-07-2017',
+            endDate: '08-31-2017',
+            status: 'Draft',
+            priority: 'High',
+            salesRep: 'Michael Pycher',
+            description: '',
+        },
+        {
+            id: '3',
+            name: 'Hats',
+            startDate: '08-07-2017',
+            endDate: '08-31-2017',
+            status: 'Draft',
+            priority: 'High',
+            salesRep: 'Michael Pycher',
+            description: '',
+        },
+        {
+            id: '4',
+            name: 'New Hats',
+            startDate: '07-20-2017',
+            endDate: '07-31-2017',
+            status: 'Draft',
+            priority: 'High',
+            salesRep: 'Antera Support',
+            description: 'Need sourcing',
+        },
+        {
+            id: '5',
+            name: 'Testing',
+            startDate: '12-31-2014',
+            endDate: '01-31-2015',
+            status: 'Draft',
+            priority: 'High',
+            salesRep: 'Daniel Ostertag',
+            description: 'Testing',
+        },
+        {
+            id: '6',
+            name: 'Antera',
+            startDate: '06-24-2013',
+            endDate: '07-31-2013',
+            status: 'In Review',
+            priority: 'High',
+            salesRep: '',
+            description: '',
+        }
+    ];
+}

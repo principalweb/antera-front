@@ -1,0 +1,176 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+
+    <h2 mat-dialog-title class="pb-0">Update Payment Status</h2>
+
+    <div *ngIf="pMethod == 'none'" fxLayout="column" fxLayoutAlign="center center" class="p-16 mx-8">
+        <div class="payment-method" fxLayout="column">
+            <div class="dialog-content p-16" fxLayout="column">
+              <div class="credit-card p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onCreditCardSelected()">
+                  <mat-icon class="credit-icon">credit_card</mat-icon>
+                  <div class="ml-24">
+                      <div class="text-bold mat-title mb-0">Credit Card</div>
+                      <div class="h5 secondary-text">Pay with credit card</div>
+                  </div>
+              </div>
+              <div class="eCheck p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onECheckSelected()">
+                  <mat-icon class="echeck-icon">account_balance</mat-icon>
+                  <div class="ml-24">
+                      <div class="deco-bold mat-title mb-0">eCheck</div>
+                      <div class="h5 secondary-text">Pay with eCheck</div>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="pMethod == 'credit'" fxLayout="column" fxLayoutAlign="center center" class="p-16 mx-8">
+        <div class="credit-card" fxLayout="column"> 
+            <mat-card>
+                <form name="form" [formGroup]="ccForm">
+                    <div fxLayout="column">
+                        <input type="hidden" formControlName="oId" required/>
+                        <input type="hidden" formControlName="accttype" required/>
+
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <span class="card-name mat-subheading-2">Credit Card Number :</span>
+                            <iframe *ngIf="isSandbox" id="tokenframe" name="tokenframe" src="https://fts.cardconnect.com:6443/itoke/ajax-tokenizer.html?css=%2Eerror{color:%20red;}" frameborder="0" scrolling="no" width="200" height="30" size="30"></iframe>
+                            <iframe *ngIf="!isSandbox" id="tokenframe" name="tokenframe" src="https://fts.cardconnect.com:8443/itoke/ajax-tokenizer.html?css=%2Eerror{color:%20red;}" frameborder="0" scrolling="no" width="200" height="30" size="30"></iframe>
+                        </div>
+                      
+                        <input #token type="hidden" formControlName="mytoken"/>  
+
+                        <mat-form-field>
+                            <input matInput placeholder="Amount" formControlName="paymentAmount" required>
+                        </mat-form-field>
+                        
+                        <mat-form-field>
+                            <input matInput placeholder="Expiration Date" formControlName="expDate" maxlength="4" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="CVV" formControlName="cvv" required maxlength="4">
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="First Name" formControlName="firstName" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Last Name" formControlName="lastName" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Email" formControlName="email" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Phone" formControlName="phone" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Address" formControlName="address" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="City" formControlName="city" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput  placeholder="State" formControlName="state" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="ZipCode" formControlName="zipCode" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Country" formControlName="country" required>
+                        </mat-form-field>
+
+                        <button 
+                            mat-raised-button 
+                            (click)="pay('credit')" 
+                            class="save-button mat-accent" 
+                            matTooltip="Pay with CreditCard">
+                            Pay Now
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+    </div>
+
+    <div *ngIf="pMethod == 'ECHK'" fxLayout="column" fxLayoutAlign="center center" class="p-16 mx-8">
+        <div class="echeck" fxLayout="column">
+            <mat-card>
+                <form name="form" [formGroup]="eCheckForm">
+                    <div fxLayout="column">
+                        <input type="hidden" formControlName="oId" required/>
+                        <input type="hidden" formControlName="accttype" required/>
+
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <span class="card-name mat-subheading-2">RoutingNumber/AccountNumber :</span>
+                            <iframe *ngIf="isSandbox" id="tokenframe" name="tokenframe" src="https://fts.cardconnect.com:6443/itoke/ajax-tokenizer.html?css=%2Eerror{color:%20red;}" frameborder="0" scrolling="no" width="200" height="30" size="30"></iframe>
+                            <iframe *ngIf="!isSandbox" id="tokenframe" name="tokenframe" src="https://fts.cardconnect.com:8443/itoke/ajax-tokenizer.html?css=%2Eerror{color:%20red;}" frameborder="0" scrolling="no" width="200" height="30" size="30"></iframe>                        
+                        </div>
+                        
+                        <input #token type="hidden" formControlName="mytoken"/>  
+
+                        <mat-form-field>
+                            <input matInput placeholder="Amount" formControlName="paymentAmount" required>
+                        </mat-form-field>
+                        
+                        <mat-form-field>
+                            <input matInput placeholder="First Name" formControlName="firstName" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Last Name" formControlName="lastName" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Email" formControlName="email" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Phone" formControlName="phone" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Address" formControlName="address" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="City" formControlName="city" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput  placeholder="State" formControlName="state" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="ZipCode" formControlName="zipCode" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput placeholder="Country" formControlName="country" required>
+                        </mat-form-field>
+
+                        <button 
+                            mat-raised-button 
+                            (click)="pay('ECHK')" 
+                            class="save-button mat-accent" 
+                            matTooltip="Pay with eCheck">
+                            Pay Now
+                        </button>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+    </div>
+
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

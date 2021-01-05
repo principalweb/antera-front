@@ -1,0 +1,4 @@
+<form [formGroup]="orderedForm">
+  <input class="form-control" [ngStyle]="{'text-align': 'right'}" formControlName="orderCost" class="form-control"
+    [value]="myOrderCost || purchaseNeed.actualUnitCost" placeholder="" type="number">
+</form>

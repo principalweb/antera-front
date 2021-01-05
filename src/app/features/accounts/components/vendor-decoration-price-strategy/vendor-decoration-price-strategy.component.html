@@ -1,0 +1,102 @@
+<div id="vendor-decoration-price-strategy">
+  <div class="p-24">
+    <mat-card fxFlex>
+      <div fxLayout="row" class="px-24">
+        <h3 class="mat-title accent-text"> Add Decoration Price Strategy</h3>
+        <ng-container *checkPermission="[account.id, 'Account']; requiredPermission 'allowEdit'">
+            <button *ngIf="editingInfo" mat-icon-button (click)="savePriceStrategy()">
+                <mat-icon>save</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="editPriceStrategy()">
+              <mat-icon *ngIf="!editingInfo">add</mat-icon>
+              <mat-icon *ngIf="editingInfo">close</mat-icon>
+            </button>
+        </ng-container>
+      </div>
+      <form name="priceStrategyForm" [formGroup]="priceStrategyForm">
+        <div  fxLayout="row wrap" fxLayoutAlign="start stretch" class="credit px-16 mx--8" >
+            <ng-container *ngIf="tabName == 'PriceStrategys'">
+              <div class="balance-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <mat-form-field>
+                      <mat-label>Deco Type</mat-label>
+                        <mat-select formControlName="decoTypeId" (selectionChange)="selectDecoType($event)">
+                            <mat-option [value]="dt.id" *ngFor="let dt of decoTypes">{{ dt.name }}</mat-option>
+                        </mat-select>
+                  </mat-form-field>
+                  <mat-form-field>
+                      <mat-label>Price Strategy</mat-label>
+                        <mat-select formControlName="priceStrategy" (selectionChange)="selectFilteredPriceStrategy($event)">
+                            <mat-option [value]="ps.value" *ngFor="let ps of filteredPriceStrategy">{{ ps.label }}</mat-option>
+                        </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-container>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" class="p-16 mx--8">
+    <div class="m-8" fxFlex="100">
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16">attach_money</mat-icon>
+            <div class="h2 secondary-text">Decoration Price Strategy List</div>
+        </div>
+        <table class="simple">
+            <thead>
+                <tr>
+                    <th>Deco Type</th>
+                    <th>Price Strategy</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let strategy of priceStrategyList; let i=index;">
+                    <td>
+                        <span>
+                            {{strategy.decoTypeName}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{strategy.priceStrategy}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                           &nbsp;
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                          &nbsp;
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                    <button mat-menu-item aria-label="remove" (click)="deletePriceStrategy(strategy.id)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+    </div>
+</div>
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

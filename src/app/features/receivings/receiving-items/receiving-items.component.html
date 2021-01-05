@@ -1,0 +1,191 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>Receiving PO #:</span>
+                <span class="mr-16">{{ po.orderNumber }}</span>
+                <span>Vendor Name:</span>
+                <span>{{ po.vendorName }}</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner>
+    </div>
+
+    <mat-dialog-content class="p-24 m-0">
+
+        <mat-table #table matSort
+                   [dataSource]="dataSource"
+                   [@animateStagger]="{value:'50'}">
+
+            <ng-container cdkColumnDef="itemNo">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Product #</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.itemNo}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="sku">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>SKU</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.sku}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="image">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Image</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <ng-container>
+                        <div class="item__preview item__preview--edit">
+                           <img *ngIf="po.imageUrl" [src]="po.imageUrl">
+                            <img *ngIf="!po.imageUrl" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                        </div>
+                    </ng-container>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="inhouseid">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Inhouse Id</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.inhouseId}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+            
+            <ng-container cdkColumnDef="color">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Color</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.color}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="size">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Size</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.size}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="site">
+                <mat-header-cell *cdkHeaderCellDef class="site"
+                                 fxHide fxShow.gt-xs>Site</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs class="site">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="po.site" [compareWith]="compareFob">
+                            <mat-option [value]="site"
+                                        *ngFor="let site of sites">
+                                {{ site.fobCity }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="bin">
+                <mat-header-cell *cdkHeaderCellDef class="bin"
+                                 fxHide fxShow.gt-xs>Bin</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs class="bin">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="po.bin" [compareWith]="compareBin">
+                            <mat-option [value]="bin"
+                                        *ngFor="let bin of po.site.bins">{{ bin.bin }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="qtyInput">
+                <mat-header-cell *cdkHeaderCellDef class="qtyInput"
+                                 fxHide fxShow.gt-xs>Balance Qty</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs class="qtyInput">
+                    <mat-form-field>
+                        <input matInput [(ngModel)]="po.quantity"/>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="receivedQuantity">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Received Qty</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.receivedQuantity}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="poQuantity">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>PO Qty</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.poQuantity}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="remainingQty">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Balance Qty</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.quantity}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="buttons">
+                <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+                <mat-cell *cdkCellDef="let po">
+                    <div fxFlex="row" fxLayoutAlign="end center">
+                        <button mat-raised-button color="accent" [disabled]="loading" aria-label="More"
+                                (click)="receive(po);" *ngIf="!received">
+                            Receive
+                        </button>
+                        <button mat-raised-button color="accent" [disabled]="loading" aria-label="More"
+                                (click)="undoReceipt(po);" *ngIf="received">
+                            Undo Receipt
+                        </button>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *cdkRowDef="let po; columns: displayedColumns;"
+                    class="product"
+                    matRipple
+                    [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+        </mat-table>
+        <div fxLayout="row" fxLayoutAlign="end center" class="mt-20 mr-16">
+            <button mat-raised-button color="accent" (click)="receiveAll();" [disabled]="loading" *ngIf="!received">
+                Receive All
+            </button>
+            <button mat-raised-button color="accent" (click)="undoReceiptAll();" [disabled]="loading" *ngIf="received">
+                Undo Receipt All
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

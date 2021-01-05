@@ -1,0 +1,97 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div fxFill fxLayout="column" class="details-form">
+
+        <div mat-dialog-content class="m-0">
+
+            <form name="form" [formGroup]="webstoreForm"
+                  class="p-16 pb-0" fxLayout="column"
+                  fusePerfectScrollbar>
+
+                <div fxLayout="row" fxFlex="none">
+                        <mat-form-field  class="w-100-p mr-16" floatPlaceholder="never">
+                            <input matInput
+                                placeholder="Add store..."
+                            />
+                        </mat-form-field>
+
+                        <div fxFlex="none" class="pt-16">
+                            <button mat-button class="mat-button"
+                                    color="primary"
+                                    (click)="dialogRef.close()"
+                                    aria-label="Close dialog">
+                                <mat-icon>store</mat-icon>
+                                Go To Store Management
+                            </button>
+                        </div>
+                </div>
+
+                <mat-form-field>
+                    <input matInput placeholder="Logo" formControlName="logo">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Host Name" formControlName="hostName" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Crm Url" formControlName="crmUrl">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Crm Account" formControlName="crmAccount">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Order Type" formControlName="orderType">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Sales Person" formControlName="salesPerson">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Currency" formControlName="currency" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <textarea matInput placeholder="CSS"
+                              formControlName="css" rows="8">
+                    </textarea>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Enabled" formControlName="enabled">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Distributor" formControlName="distributor" required>
+                </mat-form-field>
+            </form>
+        </div>
+
+        <div mat-dialog-actions class="m-0 p-16"
+            fxLayout="row" fxLayoutAlign="space-between center">
+
+            <button mat-raised-button
+                    (click)="save(webstoreForm)"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+        </div>
+    </div>
+
+</div>

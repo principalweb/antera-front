@@ -1,0 +1,71 @@
+@import "src/@fuse/scss/fuse";
+@import "src/@fuse/scss/variables/_theme";
+
+.order-additional-charges{
+
+  mat-dialog-content{
+    max-height: none;
+  }
+
+  mat-dialog-actions{
+    display: block !important;
+    border-top: 2px solid #ddd;
+    button{
+      float: right;
+      margin-right: 15px;
+      margin-bottom: 10px;
+    }
+  }
+
+  mat-table{
+    min-height: 350px;
+    max-height: 500px;
+
+    mat-header-cell, mat-cell{
+      padding: 0 12px;
+      text-align: left;
+      width: 139px;
+    }
+
+    mat-row{
+      cursor: pointer;
+    }
+
+    .mat-cell-checkbox{
+      display: flex;
+      justify-content: center;
+      color: black;
+      text-align: center;
+
+      .mat-checkbox {
+          .mat-checkbox-ripple {
+              display: none !important; //fix for broken rendering
+          }
+      }
+    }
+
+    .w-p-30 {
+      min-width: 25%;
+    }
+  }
+}
+
+.mat-pseudo-checkbox-checked{
+  background: mat-color($accent) !important;
+}
+
+.filter-input {
+  .mat-option-pseudo-checkbox {
+    display: none;
+  }
+
+  .mat-icon-button {
+    position: absolute;
+    top: 4px;
+    right: 0;
+
+    .mat-icon {
+      margin: 0;
+    }
+  }
+}

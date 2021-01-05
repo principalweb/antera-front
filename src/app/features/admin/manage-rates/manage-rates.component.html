@@ -1,0 +1,27 @@
+<div class="manage-rates">
+  <h3 class="mat-subheading">Manage Rates</h3>
+
+  <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+    <mat-form-field fxFlex="30">
+      <mat-select [(ngModel)]="fromCurrency" placeholder="From Currency">
+        <mat-option [value]="c.id" *ngFor="let c of currencyService.currencies | async">
+          {{ c.currency + ' - ' + c.code + ' - ' + c.symbol }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex="30">
+      <mat-select [(ngModel)]="toCurrency" placeholder="To Currency">
+        <mat-option [value]="c.id" *ngFor="let c of currencyService.currencies | async">
+          {{ c.currency + ' - ' + c.code + ' - ' + c.symbol }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <input matInput [(ngModel)]="rate" placeholder="Rate">
+    </mat-form-field>
+    <div class="w-88 mb-12" fxFlex="none">
+      <button [disabled]="exchangeRateFull()" mat-raised-button color="accent" (click)="addRate()">Add</button>
+    </div>
+  </div>
+</div> 
+<exchange-rate-list></exchange-rate-list> 

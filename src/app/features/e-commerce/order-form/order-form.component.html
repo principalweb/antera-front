@@ -1,0 +1,93 @@
+<div class="order" cdkFocusRegionStart>
+  <!-- <div *ngIf="dropshipList?.length > 0" style="padding: 32px">
+    <h3>Available for Dropship PO</h3>
+
+    <div>
+      <h5>Notes</h5>
+      <p>What if we separate all items that are tagged as dropship, and allow them to configure these items in a
+        separate flow</p>
+    </div>
+    <ng-container *ngFor="let vendor of dropshipList">
+      {{ vendor.name }}
+      {{ vendor.items?.length }}
+      <div *ngFor="let line of vendor.items">
+        {{ line.productName }}
+        <div>
+          <ng-container *ngFor="let row of line.matrixRows">
+            <span>
+              {{ row.size }} - {{ row.color }}
+            </span>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div> -->
+
+  <div class="fuse-white-bg" fxLayout="row" *ngIf="config?.edit" class="p-4">
+    <button mat-button type="button" (click)="findProducts()">
+      <mat-icon>search</mat-icon>
+      Find Products
+    </button>
+    <button mat-button type="button" *ngIf="config?.taxJarEnabled > 0" (click)="syncTaxJar()">
+      <mat-icon>attach_money</mat-icon>
+      Tax
+    </button>
+    <!--button mat-button type="button" *ngIf="config?.edit" (click) = "toggleTax()">
+      <mat-icon>attach_money</mat-icon>
+      Toggle Tax
+    </button-->
+    
+    <button mat-button type="button" *ngIf="config?.shipStationEnabled" (click)="syncShipStation()">
+      <mat-icon>local_shipping</mat-icon>
+      ShipStation
+    </button>
+
+    <div *ngIf="orderList.selection.hasValue()" class="p-4">
+      With Selection:
+      <button type="button" mat-button class="warn-fg" (click)="deleteSelection()">Delete</button>
+
+      <ng-container *ngIf="copyDecorationPayload || copyChargesPayload">
+        <mat-menu #pasteMenu="matMenu">
+          <button mat-menu-item (click)="pasteSelectedDecorations()" *ngIf="copyDecorationPayload?.selection?.length">
+            Decorations
+          </button>
+          <button mat-menu-item (click)="pasteSelectedCharges()" *ngIf="copyChargesPayload?.selection?.length">
+            Addon Charges
+          </button>
+        </mat-menu>
+        <button mat-button [matMenuTriggerFor]="pasteMenu" *ngIf="orderList.selection.hasValue()">
+          Paste <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+
+    <div fxFlex></div>
+
+    <ng-container *ngIf="config.dirty">
+      <button mat-button (click)="resetLocalChanges()">
+        Reset
+      </button>
+      <button mat-raised-button appDebounceClick (debounceClick)="save.emit(true)" [debounceTime]="500" color="accent">
+        <mat-icon>save</mat-icon> Save
+      </button>
+    </ng-container>
+
+  </div>
+  <div *ngIf="(copyDecorationPayload || copyChargesPayload) && !orderList.selection.hasValue()"
+    class="copy__decorations accent-50">
+    Select items in order to paste
+  </div>
+
+
+
+  <app-order-item-list #orderList [inventoryMap]="(vm.inventoryMap$ | async)" [localFob]="(vm.localFob$ | async)"
+    [productMap]="(vm.productMap$ | async)" [productFobMap]="(vm.productFobMap$ | async)" [items]="order.lineItems"
+    [orders]="order"
+    (paste)="onPaste($event)" (actions)="handleAction($event)" [config]="config">
+  </app-order-item-list>
+
+</div>
+
+<div class="loading" style="flex-direction: column" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

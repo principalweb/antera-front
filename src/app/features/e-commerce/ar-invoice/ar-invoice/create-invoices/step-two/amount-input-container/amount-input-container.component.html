@@ -1,0 +1,4 @@
+<form [formGroup]="orderedForm">
+  <input class="form-control" [ngStyle]="{'text-align': 'right'}" formControlName="invoiceAmount" class="form-control"
+    [value]="quantityInvoiced || lineItem.invoiceQuantity" placeholder="" type="number">
+</form>

@@ -1,0 +1,22 @@
+<div class="px-32">
+  <div class="mt-40 mb-16 mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">Generate API Token</span>
+    <button mat-raised-button color="accent"
+            class="text-capitalize mr-8"
+            [ngStyle]="{'background-color': enabled ? 'green' : 'red'}"
+            (click)="toggleEnable()">
+            {{ enabled ? 'Enabled' : 'Disabled' }}
+    </button>
+  </div>
+
+  <p class="mat-body-1">
+    Generating a new token will overwrite the previous token. This token is used to access the Antera API.
+  </p>
+
+  <div>
+    <button mat-raised-button class="mr-16" color="accent" (click)="generateToken()">GENERATE</button>
+    <mat-form-field class="w-320">
+      <input matInput placeholder="API Token" readonly [(ngModel)]="token">
+    </mat-form-field>
+  </div>
+</div>

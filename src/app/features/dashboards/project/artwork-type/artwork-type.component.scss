@@ -1,0 +1,67 @@
+@import 'src/@fuse/scss/fuse.scss';
+
+#home-dashboard {
+
+  .blue {
+    color: map-get($mat-light-blue , 500);
+  }
+  
+  .red {
+    color: map-get($mat-red, 500);
+  }
+  
+  .amber {
+    color: map-get($mat-amber, 500);
+  }
+  
+  .purple {
+    color: map-get($mat-deep-purple, 500);
+  }
+  
+  .teal {
+    color: map-get($mat-teal, 500);
+  }
+  
+  .green {
+    color: map-get($mat-green, 500);
+  }
+  
+  .card {
+    width: 16.66%;
+    cursor: pointer;
+    
+
+    .secondary-text {
+      font-size: 12px;
+    }
+
+    @include media-breakpoint('xs') {
+        width: 100% !important
+    }
+  
+    @include media-breakpoint('sm') {
+        width: 50% !important
+    }
+  
+    @include media-breakpoint('md') {
+        width: 33.33% !important
+    }
+
+  }
+
+  .side-cards .card {
+    width: 100% !important;
+  }
+
+  .widget5 {
+    width: 100%;
+
+    & > .fuse-widget-front {
+      overflow: visible;
+    }
+    
+    .full-height {
+      height: 100%;
+    }
+  }
+}

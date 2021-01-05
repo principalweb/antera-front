@@ -1,0 +1,20 @@
+.form-control {
+      background-color: #e2e2e2;
+      margin-top: 5px !important;
+      height: 20px !important;
+      border-radius: 2px;
+      color: #4f4f4f;
+      padding-left: 2px;
+      padding-right: 2px;
+      width: 90% !important;
+      max-width: 150px;
+      text-align: left;
+
+      @media screen and (max-width: 1920px) {
+        width: 130px;
+      }
+
+      @media (min-width: 1280px) and (max-width: 1919px) {
+        width: 90px;
+      }
+    }

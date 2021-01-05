@@ -1,0 +1,94 @@
+<div id="accounts" class="page-layout carded fullwidth inner-scroll list-page" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+  <!-- CENTER -->
+
+  <div class="center" fxFlex="column"  fxLayoutAlign="none center">
+
+    <mat-sidenav-container class="content-card">
+      <div class="toolbar">
+        <div fxFlex="row">
+          <div fxFlex="row" fxLayoutAlign="start center">
+
+            <button mat-raised-button color="accent"
+                    class="text-capitalize mr-8"
+                    *ngIf="this.aForm.valid"
+                    (click)="save()">
+              <mat-icon>add</mat-icon> Save
+            </button>
+
+
+
+            <button mat-raised-button color="warn"
+                    class="text-capitalize mr-8"
+                    routerLink="/accounts/notification/groups">
+              <mat-icon>delete</mat-icon> Cancel
+            </button>
+
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayout.xs="column">
+        <div fxLayout="column"
+             fxFlex
+             class="mr-20">
+          <form [formGroup]="aForm" fxFlex="100" fxLayoutAlign="space-between cente" fxLayout="column" class="vendor-form p-2">
+            
+            <div class="mat-error" *ngIf="uniqueCheck" style="margin: auto;">Group name already exists</div>
+            <mat-form-field appearance="outline" fxFlex="100" class="p-2">
+              <mat-label>Group Name</mat-label>
+
+              <input type="text"
+                     placeholder=""
+                     (keyup)="checkUnique()"
+                     (blur)="showUnique()"
+                     matInput
+                     formControlName="name">
+              <mat-error *ngIf="aForm.controls.name.errors?.required">Please provide a name</mat-error>
+            </mat-form-field>
+            <mat-card class="marginDif">
+              <mat-card-header fxLayoutAlign="center">
+                <mat-card-subtitle><h2>Account List</h2></mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div fxLayoutAlign="space-between">
+                  <mat-form-field class="w-100">
+                            <input type="text"
+                            placeholder=""
+                            aria-label="Number"
+                            matInput
+                            formControlName="accountName"
+                            [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="getName.bind(this)">
+                      <mat-option *ngFor="let data of accountData" [value]="data">
+                        {{data.name}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <button mat-mini-fab color="primary" (click)="addItem($event)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <div  >
+                  <mat-selection-list class="nocheckbox">
+                    <mat-list-option class="nocheckbox" *ngFor="let item of getNotDeleted()" checkboxPosition="before" (mouseenter)="item.isActive=true" (mouseleave)="item.isActive=false">
+                      <div fxLayoutAlign="space-between center">
+                        <span class="text-truncate">{{ item.text.name }}</span>
+                        <button mat-icon-button (click)="item.deleted = true;" color="warn" >
+                          <mat-icon>delete_forever</mat-icon>
+                        </button>
+                      </div>
+                    </mat-list-option>
+                  </mat-selection-list>
+                    </div>
+
+              </mat-card-content>
+            </mat-card>
+          </form>
+        </div>
+      </div>
+      </mat-sidenav-container>
+</div>
+  </div>

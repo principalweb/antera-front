@@ -1,0 +1,153 @@
+<mat-table fxFlex #table matSort
+        [dataSource]="dataSource"
+        (matSortChange)="sortChange($event)"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+           <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedUsers.length > 0 && selectedUsers.length === paginator.length"
+                        [indeterminate]="selectedUsers.length > 0 && selectedUsers.length < paginator.length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let user">
+            <mat-checkbox [(ngModel)]="checkboxes[user.id]" (ngModelChange)="onSelectedChange(user.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox> 
+        </mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="userName">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>User Name</span>
+            <input class="form-control" [formControl]="userName" placeholder=""
+                   (blur)="filterUsers('userName', $event)"
+                   (keyup.enter)="filterUsers('userName', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let user">
+            <p class="text-truncate font-weight-600">
+                {{user. userName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="fullName">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef >
+            <span mat-sort-header>Full Name</span>
+            <input class="form-control" [formControl]="fullName" placeholder=""
+                   (blur)="filterUsers('fullName', $event)"
+                   (keyup.enter)="filterUsers('fullName', $event, true)">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let user">
+            <p class="text-truncate">
+                {{user.fullName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="userEmail">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef >
+            <span mat-sort-header>User Email</span>
+            <input class="form-control" [formControl]="userEmail" placeholder=""
+                   (blur)="filterUsers('userEmail', $event)"
+                   (keyup.enter)="filterUsers('userEmail', $event, true)">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let user">
+            <p class="text-truncate">
+                {{user.userEmail}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="phone">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef >
+            <span mat-sort-header>Phone</span>
+            <input class="form-control" [formControl]="phone" placeholder=""
+                   (blur)="filterUsers('phone', $event)"
+                   (keyup.enter)="filterUsers('phone', $event, true)">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let user">
+            <p class="text-truncate">
+                {{user.phone}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="userStatus">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef >
+            <span mat-sort-header>User Status</span>
+            <input class="form-control" [formControl]="userStatus" placeholder=""
+                   (blur)="filterUsers('userStatus', $event)"
+                   (keyup.enter)="filterUsers('userStatus', $event, true)">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let user">
+            <p class="text-truncate">
+                {{user.userStatus}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef >
+            <span mat-sort-header>Date created</span>
+            <input class="form-control" [formControl]="dateCreated" placeholder=""
+                   (blur)="filterUsers('dateCreated', $event)"
+                   (keyup.enter)="filterUsers('dateCreated', $event, true)">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let user">
+            <p class="company text-truncate">
+                {{ user.dateCreated }}
+            </p>
+        </mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="createdBy">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef >
+            <span mat-sort-header>Created by</span>
+            <input class="form-control" [formControl]="createdBy" placeholder=""
+                   (blur)="filterUsers('createdBy', $event)"
+                   (keyup.enter)="filterUsers('createdBy', $event, true)">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let user">
+            <p class="company text-truncate">
+                {{ user.createdBy }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Buttons Column -->
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let user">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button (click)="$event.stopPropagation();filterUsers(user)" aria-label="Edit report">
+                    <mat-icon>mode_edit</mat-icon>
+                </button>
+
+                <button mat-icon-button (click)="$event.stopPropagation();filterUsers(user)" aria-label="Filter report">
+                    <mat-icon>build</mat-icon>
+                </button>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let user; columns: displayedColumns;"
+            class="user"
+            (click)="viewUser(user)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[user.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+<mat-paginator #paginator fxFlex="none"
+                [length]="dataSource.total"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                (page)="paginate($event)"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

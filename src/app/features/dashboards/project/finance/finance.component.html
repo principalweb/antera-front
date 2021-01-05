@@ -1,0 +1,471 @@
+<div class="content">
+
+    <mat-tab-group dynamicHeight>
+
+        <mat-tab label="Home">
+
+            <div class="widget-group grey-100-bg" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                [@animateStagger]="{value:'50'}">
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
+                             fxFlex="100" fxFlex.gt-sm="50">
+
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+                        <div class="h3 px-16 py-24">
+                            Revenue - Total
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <div class="h-400 p-16">
+                            <ngx-charts-bar-vertical-stacked
+                                *fuseIfOnDom
+                                [scheme]="widget5.scheme"
+                                [results]="this.widgets.widget5.mainChart[this.widget5.currentRange]"
+                                [gradient]="widget5.gradient"
+                                [xAxis]="widget5.xAxis"
+                                [yAxis]="widget5.yAxis"
+                                [legend]="widget5.legend"
+                                [showXAxisLabel]="widget5.showXAxisLabel"
+                                [showYAxisLabel]="widget5.showYAxisLabel"
+                                [xAxisLabel]="widget5.xAxisLabel"
+                                [yAxisLabel]="widget5.yAxisLabel"
+                                (select)="widget5.onSelect($event)">
+                            </ngx-charts-bar-vertical-stacked>
+                        </div>
+
+                    </div>
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                    fxFlex="100" fxFlex.gt-sm="50">
+
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="h3 px-16 py-24">
+                            Revenue - Category
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <div class="h-400">
+                            <ngx-charts-pie-chart
+                                *fuseIfOnDom
+                                [scheme]="widget8.scheme"
+                                [results]="widgets.widget8.mainChart"
+                                [legend]="widget8.legend"
+                                [explodeSlices]="widget8.explodeSlices"
+                                [labels]="widget8.labels"
+                                [doughnut]="widget8.doughnut"
+                                [gradient]="widget8.gradient"
+                                (select)="widget8.onSelect($event)">
+                            </ngx-charts-pie-chart>
+                        </div>
+
+                    </div>
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                    fxFlex="100" fxFlex.gt-sm="50">
+
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="h3 px-16 py-24">
+                            Sales Rep - Top 10
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <mat-table [dataSource]="dataSource1" [@animateStagger]="{value:'50'}">
+
+                            <ng-container cdkColumnDef="name">
+                                <!-- Added filter row by Olena -->
+                                <mat-header-cell class="pr-8" *cdkHeaderCellDef>Name</mat-header-cell>
+                                <mat-cell class="pr-8" *cdkCellDef="let rep">
+                                    <p class="text-truncate font-weight-600">{{ rep.name }}</p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="sales">
+                                <!-- Added filter row by Olena -->
+                                <mat-header-cell class="pr-8" *cdkHeaderCellDef>Sales</mat-header-cell>
+                                <mat-cell class="pr-8" *cdkCellDef="let rep">
+                                    <p class="text-truncate font-weight-600">{{ rep.sales }}</p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="phone">
+                                <!-- Added filter row by Olena -->
+                                <mat-header-cell class="pr-8" *cdkHeaderCellDef>Phone #</mat-header-cell>
+                                <mat-cell class="pr-8" *cdkCellDef="let rep">
+                                    <p class="text-truncate font-weight-600">{{ rep.phone }}</p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *cdkHeaderRowDef="salesRepTopColumns"></mat-header-row>
+                            <mat-row *cdkRowDef="let rep; columns: salesRepTopColumns;"
+                                     matRipple [@animate]="{value:'*',params:{y:'100%'}}">
+                            </mat-row>
+                        </mat-table>
+
+                    </div>
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                    fxFlex="100" fxFlex.gt-sm="50">
+
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="h3 px-16 py-24">
+                            Sales Rep - Margin
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <mat-table [dataSource]="dataSource2" [@animateStagger]="{value:'50'}">
+
+                            <ng-container cdkColumnDef="name">
+                                <!-- Added filter row by Olena -->
+                                <mat-header-cell class="pr-8" *cdkHeaderCellDef>Name</mat-header-cell>
+                                <mat-cell class="pr-8" *cdkCellDef="let rep">
+                                    <p class="text-truncate font-weight-600">{{ rep.name }}</p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="margin">
+                                <!-- Added filter row by Olena -->
+                                <mat-header-cell class="pr-8" *cdkHeaderCellDef>Margin</mat-header-cell>
+                                <mat-cell class="pr-8" *cdkCellDef="let rep">
+                                    <p class="text-truncate font-weight-600">{{ rep.margin }}</p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="phone">
+                                <!-- Added filter row by Olena -->
+                                <mat-header-cell class="pr-8" *cdkHeaderCellDef>Phone #</mat-header-cell>
+                                <mat-cell class="pr-8" *cdkCellDef="let rep">
+                                    <p class="text-truncate font-weight-600">{{ rep.phone }}</p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *cdkHeaderRowDef="salesRepMarginColumns"></mat-header-row>
+                            <mat-row *cdkRowDef="let rep; columns: salesRepMarginColumns;"
+                                     matRipple [@animate]="{value:'*',params:{y:'100%'}}">
+                            </mat-row>
+                        </mat-table>
+
+                    </div>
+
+                </fuse-widget>
+
+            </div>
+
+        </mat-tab>
+
+        <mat-tab label="Budget Summary" *ngIf="enableBudgetSummary" >
+
+            <!-- WIDGET GROUP -->
+            <div class="widget-group grey-100-bg" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                    [@animateStagger]="{value:'50'}">
+
+                <!-- WIDGET 8 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                fxFlex="100" fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="h3 px-16 py-24">
+                            {{widgets.widget8.title}}
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <div class="h-400">
+                            <ngx-charts-pie-chart
+                                *fuseIfOnDom
+                                [scheme]="widget8.scheme"
+                                [results]="widgets.widget8.mainChart"
+                                [legend]="widget8.legend"
+                                [explodeSlices]="widget8.explodeSlices"
+                                [labels]="widget8.labels"
+                                [doughnut]="widget8.doughnut"
+                                [gradient]="widget8.gradient"
+                                (select)="widget8.onSelect($event)">
+                            </ngx-charts-pie-chart>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 8 -->
+
+                <!-- WIDGET 9 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                fxFlex="100" fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="px-16 py-12 border-bottom" fxLayout="row"
+                                fxLayoutAlign="space-between center">
+                            <div class="h3">{{widgets.widget9.title}}</div>
+                            <mat-form-field>
+                                <mat-select [(ngModel)]="widget9.currentRange" aria-label="Change range">
+                                    <mat-option *ngFor="let range of widgets.widget9.ranges | keys"
+                                                [value]="range.key">
+                                        {{range.value}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
+                                fxLayout.gt-xs="row"
+                                fxLayoutAlign.gt-xs="space-between end">
+                            <div fxFlex="0 1 auto">
+                                <div class="h4 secondary-text">{{widgets.widget9.weeklySpent.title}}</div>
+                                <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+                                    <span class="secondary-text">$</span>
+                                    <span>{{widgets.widget9.weeklySpent.count[widget9.currentRange]}}</span>
+                                </div>
+                            </div>
+                            <div class="h-52" fxFlex>
+                                <ngx-charts-area-chart
+                                    *fuseIfOnDom
+                                    [results]="widgets.widget9.weeklySpent.chart[widget9.currentRange]"
+                                    [scheme]="widget9.scheme"
+                                    [gradient]="widget9.gradient"
+                                    [xAxis]="widget9.xAxis"
+                                    [yAxis]="widget9.yAxis"
+                                    [legend]="widget9.legend"
+                                    [showXAxisLabel]="widget9.showXAxisLabel"
+                                    [showYAxisLabel]="widget9.showYAxisLabel"
+                                    [xAxisLabel]="widget9.xAxisLabel"
+                                    [yAxisLabel]="widget9.yAxisLabel"
+                                    [curve]="widget9.curve">
+                                </ngx-charts-area-chart>
+                            </div>
+                        </div>
+
+                        <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
+                                fxLayout.gt-xs="row"
+                                fxLayoutAlign.gt-xs="space-between end">
+                            <div fxFlex="0 1 auto">
+                                <div class="h4 secondary-text">{{widgets.widget9.totalSpent.title}}</div>
+                                <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+                                    <span class="secondary-text">$</span>
+                                    <span>{{widgets.widget9.totalSpent.count[widget9.currentRange]}}</span>
+                                </div>
+                            </div>
+                            <div class="h-52" fxFlex>
+                                <ngx-charts-area-chart
+                                    *fuseIfOnDom
+                                    [results]="widgets.widget9.totalSpent.chart[widget9.currentRange]"
+                                    [scheme]="widget9.scheme"
+                                    [gradient]="widget9.gradient"
+                                    [xAxis]="widget9.xAxis"
+                                    [yAxis]="widget9.yAxis"
+                                    [legend]="widget9.legend"
+                                    [showXAxisLabel]="widget9.showXAxisLabel"
+                                    [showYAxisLabel]="widget9.showYAxisLabel"
+                                    [xAxisLabel]="widget9.xAxisLabel"
+                                    [yAxisLabel]="widget9.yAxisLabel"
+                                    [curve]="widget9.curve">
+                                </ngx-charts-area-chart>
+                            </div>
+                        </div>
+
+                        <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
+                                fxLayout.gt-xs="row"
+                                fxLayoutAlign.gt-xs="space-between end">
+                            <div fxFlex="0 1 auto">
+                                <div class="h4 secondary-text">{{widgets.widget9.remaining.title}}</div>
+                                <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+                                    <span class="secondary-text">$</span>
+                                    <span>{{widgets.widget9.remaining.count[widget9.currentRange]}}</span>
+                                </div>
+                            </div>
+                            <div class="h-52" fxFlex>
+                                <ngx-charts-area-chart
+                                    *fuseIfOnDom
+                                    [results]="widgets.widget9.remaining.chart[widget9.currentRange]"
+                                    [scheme]="widget9.scheme"
+                                    [gradient]="widget9.gradient"
+                                    [xAxis]="widget9.xAxis"
+                                    [yAxis]="widget9.yAxis"
+                                    [legend]="widget9.legend"
+                                    [showXAxisLabel]="widget9.showXAxisLabel"
+                                    [showYAxisLabel]="widget9.showYAxisLabel"
+                                    [xAxisLabel]="widget9.xAxisLabel"
+                                    [yAxisLabel]="widget9.yAxisLabel"
+                                    [curve]="widget9.curve">
+                                </ngx-charts-area-chart>
+                            </div>
+                        </div>
+
+                        <div class="px-16 py-24 border-top">
+                            <div class="h4 secondary-text">{{widgets.widget9.totalBudget.title}}</div>
+                            <div class="pt-8 mat-display-1 m-0 font-weight-300">
+                                <span class="secondary-text">$</span>
+                                <span>{{widgets.widget9.totalBudget.count}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 9 -->
+
+                <!-- WIDGET 10 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
+                                fxFlex="100">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+                        <div class="simple-table-container" ms-responsive-table>
+                            <div class=" table-title">
+                                {{widgets.widget10.title}}
+                            </div>
+
+                            <table class="simple">
+
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let column of widgets.widget10.table.columns">
+                                            {{column.title}}
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let row of widgets.widget10.table.rows">
+                                        <td *ngFor="let cell of row">
+                                            <span class="p-4" [ngClass]="cell.classes">
+                                                {{cell.value}}
+                                            </span>
+                                            <mat-icon *ngIf="cell.icon" class="s-16">{{cell.icon}}
+                                            </mat-icon>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 10 -->
+
+            </div>
+            <!-- / WIDGET GROUP -->
+
+        </mat-tab>
+
+<!--         <mat-tab label="Team Members">
+ -->
+            <!-- WIDGET GROUP -->
+<!--             <div class="widget-group grey-100-bg" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                    [@animateStagger]="{value:'50'}">
+ -->
+                <!-- WIDGET 11 -->
+<!--                 <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
+                                fxFlex="100">
+ -->
+                    <!-- Front -->
+<!--                     <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+                        <div class="p-24 mb-8 border-bottom" fxLayout="row"
+                                fxLayoutAlign="space-between center">
+                            <div class="h2">{{widgets.widget11.title}}</div>
+                            <div class="text-boxed red-bg white-fg m-0">
+                                {{widgets.widget11.table.rows.length}}
+                                members
+                            </div>
+                        </div>
+
+                        <mat-table #table [dataSource]="widget11.dataSource">
+ -->
+                            <!-- Avatar Column -->
+<!--                             <ng-container cdkColumnDef="avatar">
+                                <mat-header-cell fxFlex="64px" *cdkHeaderCellDef></mat-header-cell>
+                                <mat-cell fxFlex="64px" *cdkCellDef="let contact">
+                                    <img class="avatar" *ngIf="contact.avatar" [alt]="contact.name"
+                                            [src]="contact.avatar"/>
+                                </mat-cell>
+                            </ng-container>
+ -->
+                            <!-- Name Column -->
+<!--                             <ng-container cdkColumnDef="name">
+                                <mat-header-cell *cdkHeaderCellDef>Name</mat-header-cell>
+                                <mat-cell *cdkCellDef="let contact">
+                                    <p class="text-truncate font-weight-600">{{contact.name}}
+                                        {{contact.lastName}}</p>
+                                </mat-cell>
+                            </ng-container>
+ -->
+                            <!-- Position Column -->
+<!--                             <ng-container cdkColumnDef="position">
+                                <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-sm>Position
+                                </mat-header-cell>
+                                <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+                                    <p class="position text-truncate">
+                                        {{contact.position}}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+ -->
+                            <!-- Office Column -->
+<!--                             <ng-container cdkColumnDef="office">
+                                <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-md>Office
+                                </mat-header-cell>
+                                <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+                                    <p class="office text-truncate">
+                                        {{contact.office}}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+ -->
+                            <!-- Email Column -->
+<!--                             <ng-container cdkColumnDef="email">
+                                <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-sm>Email
+                                </mat-header-cell>
+                                <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+                                    <p class="email text-truncate">
+                                        {{contact.email}}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+ -->
+                            <!-- Phone Column -->
+<!--                             <ng-container cdkColumnDef="phone">
+                                <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-md>Phone
+                                </mat-header-cell>
+                                <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+                                    <p class="phone text-truncate">
+                                        {{contact.phone}}
+                                    </p>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row
+                                *cdkHeaderRowDef="widgets.widget11.table.columns"></mat-header-row>
+                            <mat-row *cdkRowDef="let contact; columns: widgets.widget11.table.columns;">
+                            </mat-row>
+                        </mat-table>
+                    </div>
+ -->                    <!-- / Front -->
+
+<!--                 </fuse-widget>
+ -->                <!-- / WIDGET 11 -->
+
+<!--             </div>
+ -->            <!-- / WIDGET GROUP -->
+
+<!--         </mat-tab>
+ -->    </mat-tab-group>
+
+</div>

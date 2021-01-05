@@ -1,0 +1,92 @@
+<div class="toolbar" fxLayout="row" fxLayoutAign="start center">
+  <button [disabled]="!pendingService.summaryInvoices.length || clicked" mat-raised-button color="accent" class="text-capitalize mr-8 ml-16 mb-8"
+    (click)="finalizeInvoices()">
+    <mat-icon>done</mat-icon> Finalize Invoice(s)
+  </button>
+</div>
+
+<ng-container *ngIf="pendingService.summaryInvoices.length">
+  <div class="px-16 mb-16" fusePerfectScrollbar>
+    <h3 class="mat-title mr-8 accent-text font-weight-600">
+      Selected Invoices Summary
+    </h3>
+    <div fxLayout="column" class="BasicInfoLeft font-weight-600 mb-16">
+      <mat-accordion multi="true">
+        <mat-expansion-panel [expanded]="true" *ngFor="let invoice of pendingService.summaryInvoices">
+          <mat-expansion-panel-header>
+            <div class="full-width-here" fxLayout="row" fxLayoutAlign="space-between center">
+              <span class="font-weight-900 mr-8">Customer:
+                {{invoice.customer}}</span>
+              <span class="font-weight-900 mr-8">Sales Total: ${{invoice.salesAmount | roundString: 2}}</span>
+            </div>
+          </mat-expansion-panel-header>
+          <p class="font-weight-900">No. {{invoice.number}}</p>
+          <div class="mb-16 full-width-here" fxLayout="column">
+            <div class="full-width-here" fxLayout="row" fxLayoutAlign="space-around center">
+              <h4 fxFlex="40" class="font-weight-600 mt-0 mb-0 attr-width">Name</h4>
+              <h4 class="font-weight-600 mt-0 mb-0 attr-width">Color</h4>
+              <h4 class="font-weight-600 mt-0 mb-0 attr-width">Size</h4>
+              <h4 class="font-weight-600 mt-0 mb-0 attr-width">Quantity</h4>
+              <h4 class="font-weight-600 mt-0 mb-0 attr-width">Unit Price</h4>
+              <h4 class="font-weight-600 mt-0 mb-0 attr-width">Total Price</h4>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let lineItem of filterVariation(invoice.lineItems)">
+              <p fxFlex="40" class="mt-0 mb-0 attr-width">{{lineItem.productName}}</p>
+              <p class="mt-0 mb-0 attr-width">{{lineItem.color}}</p>
+              <p class="mt-0 mb-0 attr-width">{{lineItem.size}}</p>
+              <p class="mt-0 mb-0 attr-width">{{lineItem.invoiceQuantity}}</p>
+              <p class="mt-0 mb-0 attr-width">${{lineItem.unitPrice | roundString: 2}}</p>
+              <p class="mt-0 mb-0 attr-width">${{lineItem.extendedPrice | roundString: 2}}</p>
+            </div>
+
+            <!-- Addon Charges -->
+
+            <ng-container *ngIf="filterCharge(invoice.lineItems).length">
+              <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let lineItem of filterCharge(invoice.lineItems)">
+                <p fxFlex="40" class="mt-0 mb-0 attr-width">{{lineItem.description || 'Addon Charge'}}</p>
+                <p class="mt-0 mb-0 attr-width"></p>
+                <p class="mt-0 mb-0 attr-width"></p>
+                <p class="mt-0 mb-0 attr-width">{{lineItem.invoiceQuantity}}</p>
+                <p class="mt-0 mb-0 attr-width">${{lineItem.unitPrice | roundString: 2}}</p>
+                <p class="mt-0 mb-0 attr-width">${{lineItem.extendedPrice | roundString: 2}}</p>
+              </div>
+            </ng-container>
+
+           <!-- / End Addon Charges -->
+
+           <!-- Decorations -->
+
+          <ng-container *ngIf="filterDecoration(invoice.lineItems).length">
+            <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let lineItem of filterDecoration(invoice.lineItems)">
+              <p fxFlex="40" class="mt-0 mb-0 attr-width">{{lineItem.description || 'Decoration'}}</p>
+              <p class="mt-0 mb-0 attr-width"></p>
+              <p class="mt-0 mb-0 attr-width"></p>
+              <p class="mt-0 mb-0 attr-width">{{lineItem.invoiceQuantity}}</p>
+              <p class="mt-0 mb-0 attr-width">${{lineItem.unitPrice | roundString: 2}}</p>
+              <p class="mt-0 mb-0 attr-width">${{lineItem.extendedPrice | roundString: 2}}</p>
+            </div>
+          </ng-container>
+           <!-- / Decorations -->
+
+
+            <div class="pad-it-right-invoice" fxLayout="column" fxLayoutAlign="start end">
+              <div fxLayout="row" class="shipping-invoice">
+                <p class="font-weight-900 mb-0 mt-0">Shipping:</p>
+                <p class="font-weight-500 mb-0 mt-0 ml-16">${{invoice.shippingAmount |roundString: 2}}</p>
+              </div>
+              <div fxLayout="row" class="tax-invoice">
+                <p class="font-weight-900 mb-0 mt-0">Sales Tax:</p>
+                <p class="font-weight-500 mb-0 mt-0 ml-16">${{invoice.taxAmount | roundString: 2}}</p>
+              </div>
+              <div fxLayout="row" class="price-invoice">
+                <p class="font-weight-900 mb-0 mt-0">Invoice Total:</p>
+                <p class="font-weight-500 mb-0 mt-0 ml-16">${{invoice.invoiceAmount | roundString: 2}}</p>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+</ng-container>

@@ -1,0 +1,169 @@
+<form name="form" class="p-20" [formGroup]="accountForm">
+  <mat-card>
+    <div class="two-columns">
+      <mat-form-field>
+        <input matInput placeholder="Account Name" formControlName="accountName" required>
+        <app-error [group]="accountForm" field="accountName" label="Account Name"></app-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Parent Account" formControlName="parentAccount">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select formControlName="rating" placeholder="Rating">
+          <mat-option [value]="rating" *ngFor="let rating of ratings">
+            {{ rating }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select formControlName="partnerType" placeholder="Partner Type" required>
+          <mat-option [value]="type" *ngFor="let type of pTypes">{{ type }}</mat-option>
+        </mat-select>
+        <app-error [group]="accountForm" field="partnerType" label="Partner Type"></app-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select formControlName="timeZone" placeholder="Timezone">
+          <mat-option [value]="tz.value" *ngFor="let tz of timezones">{{tz.label}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Account Extension" formControlName="accountExtension">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Website" formControlName="website">
+      </mat-form-field>
+    </div>
+
+    <div class="two-columns">
+      <mat-form-field>
+        <input matInput placeholder="Shipping Address 1" formControlName="shipAddress1">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Shipping Address 2" formControlName="shipAddress2">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Shipping City" formControlName="shipCity">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Shipping State" formControlName="shipState">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Shipping Postal Code" formControlName="shipPostalcode">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Shipping Country" formControlName="shipCountry">
+      </mat-form-field>
+    </div>
+
+    <div class="two-columns">
+      <mat-form-field>
+        <input matInput placeholder="Assigned To" formControlName="salesRep">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Phone" formControlName="phone">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Fax" formControlName="fax">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Prior Assigned To" formControlName="priorSalesRep">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Account Type" formControlName="accountType">
+      </mat-form-field>
+    </div>
+
+    <div class="two-columns">
+      <mat-form-field>
+        <input matInput placeholder="Billing Address 1" formControlName="billAddress1">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Billing Address 2" formControlName="billAddress2">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Billing City" formControlName="billCity">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Billing State" formControlName="billState">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Billing Postal Code" formControlName="billPostalcode">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Billing Country" formControlName="billCountry">
+      </mat-form-field>
+    </div>
+
+    <div class="two-columns">
+      <mat-form-field>
+        <input matInput placeholder="Tax Status" formControlName="taxStatus">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Tax Exempt #" formControlName="taxExemptNo">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Tax Exempt" formControlName="taxExempt">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="VIP Discounts For Orders" formControlName="vipDiscountsForOrders">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="YTD Sales" formControlName="ytdSales">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Last Year Sales" formControlName="lastYearSales">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="High Credit Limit" formControlName="highCreditLimit">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Default Tax Rate" formControlName="defaultTaxRate">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="w-100-p">
+        <input matInput placeholder="Web Store Url" formControlName="webstoreUrl">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="w-100-p">
+        <textarea matInput placeholder="General Info" formControlName="generalInfo" rows="4"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="mt-20">
+      <button mat-raised-button color="accent" (click)="updateAccount()">
+        Save
+      </button>
+    </div>
+  </mat-card>
+</form>

@@ -1,0 +1,718 @@
+<form [formGroup]="form" id="artwork-details-design" class="mat-white-bg" fxLayout="column" *ngIf="artwork && form">
+    <div fxLayout="column" #printArea style="min-height:1px;">
+
+
+
+        <mat-toolbar class="mb-20" fxLayout fxLayoutAlign="start center" *ngIf="action === 'edit' && !printing">
+            <ng-container *ngIf="action === 'edit'">
+                <div *checkPermission="['', 'Artwork']; requiredPermission 'allowEdit'">
+                    <button mat-icon-button (click)="toggleEdit()" *ngIf="!edit">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+                <ng-container *ngIf="edit">
+                    <button mat-icon-button (click)="saveInfo()">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="toggleEdit()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                </ng-container>
+
+            </ng-container>
+
+            <button mat-button (click)="downloadPDF()">
+                <mat-icon>print</mat-icon> Print
+            </button>
+        <div class="p-8 statusBar"  fxLayout="row" fxLayoutAlign="end center"  *ngIf="action==='edit'">
+            <mat-button-toggle-group>
+                <mat-button-toggle [ngClass]="(status.id === artwork.statusId)?'accent':''"
+                    (click)="changeArtworkStatus(status.id, status.name, status.label)"
+                    *ngFor="let status of statusList | async">{{ status.label }}</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        </mat-toolbar>
+
+
+        <div fxLayout="column" fxLayoutAlign="start stretch" class="mb-20" fxLayout.lt-md="column">
+            <div ngClass.lt-md="{'mr-16': false}" style="min-height:0; overflow: auto;">
+                <div class="section">
+                    <div fxLayout="row" *ngIf="!edit">
+
+                        <div fxFlex="70" class="p-4" *ngIf="!edit">
+<mat-card class="top-artwork-details">
+                        <div fxFlex="50" fxLayout="column" class="p-4">
+
+                            <!--div class="p-4" *ngIf="artwork.orderNum != '' && visibleField('orderNum', fields)">
+                                {{fieldLabel('orderIdentity', fields)}}: <a mat-button class="accent-900-fg"
+                                    (click)="openOrderDetailDialog()">{{ artwork.orderNum }}</a></div>
+                            <div class="p-4"
+                                *ngIf="artwork.orderIdentity != '' && visibleField('orderIdentity', fields)">
+                                {{fieldLabel('orderIdentity', fields)}}:
+                                {{ artwork.orderIdentity }}</div-->
+
+                            <div class="p-4" *ngIf="artwork.relatedOrders[0]?.orderId != '' && visibleField('orderNum', fields)">
+                                Order #: <a mat-button class="accent-900-fg"
+                                    (click)="openOrderDetailDialog(artwork.relatedOrders[0].orderId)">{{ artwork.relatedOrders[0]?.orderNum }}</a></div>
+                            <div class="p-4"
+                                *ngIf="artwork.relatedOrders[0]?.orderIdentity != '' && visibleField('orderIdentity', fields)">
+                                {{fieldLabel('orderIdentity', fields)}}:
+                                {{ artwork.relatedOrders[0]?.orderIdentity }}</div>
+
+
+                            <div class="p-4" *ngIf="visibleField('customerName', fields)">
+                                {{fieldLabel('customerName', fields)}}: {{ artwork.customerName }}</div>
+                            <div class="p-4" *ngIf="visibleField('salesRep', fields)">
+                                {{fieldLabel('salesRep', fields)}}: {{ artwork.salesRep }}</div>
+                            <div class="p-4" *ngIf="visibleField('designNo', fields)">
+                                {{fieldLabel('designNo', fields)}}: {{ artwork.designNo }}</div>
+
+
+                            <div class="p-4" *ngIf="visibleField('identity', fields)">
+                                {{fieldLabel('identity', fields)}}: {{ artwork.identity }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('artworkContactName', fields)">
+                                {{fieldLabel('artworkContactName', fields)}}: {{ artwork.artworkContactName }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('artworkContactEmail', fields)">
+                                {{fieldLabel('artworkContactEmail', fields)}}: {{ artwork.artworkContactEmail }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('royaltyRetail', fields)">
+                                {{fieldLabel('royaltyRetail', fields)}}:
+                                <span
+                                    *ngIf="artwork.royaltyRetailAmountType == 'A' && artwork.royaltyRetail > 0">$</span>
+                                {{ artwork.royaltyRetail }}
+                                <span
+                                    *ngIf="artwork.royaltyRetailAmountType == 'P' && artwork.royaltyRetail > 0">%</span>
+                            </div>
+                            <div class="p-4" *ngIf="visibleField('royaltyWholesale', fields)">
+                                {{fieldLabel('royaltyWholesale', fields)}}: <span
+                                    *ngIf="artwork.royaltyWholesaleAmountType == 'A' && artwork.royaltyWholesale > 0">$</span>{{ artwork.royaltyWholesale }}<span
+                                    *ngIf="artwork.royaltyWholesaleAmountType == 'P' && artwork.royaltyWholesale > 0">%</span>
+                            </div>
+
+                            <div class="p-4" *ngIf="visibleField('createdDate', fields)">
+                                {{fieldLabel('createdDate', fields)}}: {{ artwork.createdDate | date }}</div>
+
+
+                        </div>
+                        <div fxFlex="50" fxLayout="column" class="p-4">
+
+                            <div class="p-4" *ngIf="visibleField('dueDate', fields)">{{fieldLabel('dueDate', fields)}}:
+                                {{ artwork.dueDate | date }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('designTypeName', fields)">
+                                {{fieldLabel('designTypeName', fields)}}: {{ artwork.designTypeName }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('decoVendorName', fields)">
+                                {{fieldLabel('decoVendorName', fields)}}: {{ artwork.design.decoVendorName }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('stitchCount', fields)">{{detailLabel}}:
+                                {{ artwork.design.stitchCount }}</div>
+
+
+                            <div class="p-4" *ngIf="visibleField('size', fields)">
+                                {{fieldLabel('size', fields)}}: {{ artwork.design.size }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('priority', fields)">
+                                {{fieldLabel('priority', fields)}}: {{ artwork.priority }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('estimated', fields)">
+                                {{fieldLabel('estimated', fields)}}: {{ artwork.estimated }} hours</div>
+
+                            <div class="p-4" *ngIf="visibleField('assignee', fields)">
+                                {{fieldLabel('assignee', fields)}}: {{ artwork.assignee }}</div>
+
+                            <div class="p-4" *ngIf="visibleField('usageStatus', fields)">
+                                {{fieldLabel('usageStatus', fields)}}:
+                                <span
+                                    *ngIf="artwork.usageStatus == 'A'">Active</span>
+                                <span
+                                    *ngIf="artwork.usageStatus == 'I'">Inactive</span>
+                            </div>
+
+                            <div class="p-4" *ngIf="visibleField('dateApproved', fields)">
+                                {{fieldLabel('dateApproved', fields)}}: <span *ngIf="artwork.dateApproved !='0000-00-00 00:00:00'">{{ artwork.dateApproved | date}}</span></div>
+
+                            <div class="p-4" *ngIf="visibleField('approvedBy', fields)">
+                                {{fieldLabel('approvedBy', fields)}}: {{ artwork.approvedBy }}</div>
+
+
+                            <div class="p-4" *ngIf="visibleField('notes', fields)">{{fieldLabel('notes', fields)}}: <div
+                                    class="small-note pre">{{ artwork.notes }}</div>
+                            </div>
+
+
+                        </div>
+ </mat-card>
+ </div>
+
+                        <div fxFlex="30" fxLayout="column" class="p-4 artworkDescription" *ngIf="!edit && action==='edit'">
+
+<mat-card class="top-artwork-details">
+                                <mat-toolbar>
+                                    <span class="mr-8 h3">Artwork Description</span>
+                                    <div  *checkPermission="['', 'Artwork']; requiredPermission 'allowEdit'">
+                                        <button mat-icon-button (click)="toggleEditDescriptions()" *ngIf="!editDescriptions">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                    </div>
+
+                                    <button mat-icon-button (click)="saveDescriptions()" *ngIf="editDescriptions">
+                                        <mat-icon>save</mat-icon>
+                                    </button>
+
+                                    <button mat-icon-button (click)="cancelEditDescriptions()" *ngIf="editDescriptions">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                </mat-toolbar>
+
+                                <div class="px-8" fxLayout="column" formArrayName="designDescriptionStitches" *ngIf="editDescriptions">
+                                    <div *ngFor="let desc of form.controls.designDescriptionStitches.controls; let i = index">
+                                        <div fxLayout="row" [formGroupName]="i">
+                                            <div fxFlex="none" class="w-60 vcenter">
+                                                {{ i + 1 }}
+                                                <input type="hidden" formControlName="No" />
+                                            </div>
+                                            <div fxFlex>
+                                                <mat-form-field class="px-8" fxFlex>
+                                                    <input matInput floatLabel="never" placeholder="Description"
+                                                        formControlName="Description">
+                                                </mat-form-field>
+                                            </div>
+                                            <!-- <div fxFlex="none">
+                                                <mat-form-field class="px-8" fxFlex>
+                                                    <input type="number" matInput
+                                                           floatLabel="never"
+                                                           placeholder="Details"
+                                                           formControlName="Stitches">
+                                                </mat-form-field>
+                                            </div> -->
+                                            <div class="pt-8" fxFlex="none">
+                                                <button mat-icon-button (click)="deleteDescription(i)">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="px-16 mb-20 ml-60">
+                                    <button mat-button color="accent" (click)="addDescription()" *ngIf="editDescriptions">
+                                        <mat-icon class="accent-500-fg">add</mat-icon> Add
+                                    </button>
+                                </div>
+
+                                <div class="description-stitches" *ngIf="!editDescriptions">
+                                    <div class="row row-header">
+                                        <div class="no" fxFlex="none">No</div>
+                                        <div class="description" fxFlex>Description</div>
+                                        <!-- <div class="stitches" fxFlex="none">Details</div> -->
+                                    </div>
+                                    <div class="row" fxLayout="row"
+                                        *ngFor="let desc of form.value.designDescriptionStitches; let i = index">
+                                        <div class="no pl-4" fxFlex="none">{{desc.No}}</div>
+                                        <div class="description pl-4" fxFlex>{{ desc.Description }}</div>
+                                        <!-- <div class="stitches pl-4" fxFlex="none">{{ desc.Stitches }}</div> -->
+                                    </div>
+
+                                    <div class="text-center mb-32 row" *ngIf="form.value.designDescriptionStitches.length === 0">
+                                        No descriptions. Please add descriptions.
+                                    </div>
+                                </div>
+                                </mat-card>
+                        </div>
+
+
+                        <ng-container *ngIf="action==='edit'">
+                            <div class="customer-view">
+                                <h1>Artwork #: {{ artwork.designNo }}</h1>
+                                <div class="feature-image">
+
+                                    <div fxLayout="column" fxLayoutAlign="center center" class="upload-button"
+                                        *ngIf="!form.value.featureImage">
+                                        <mat-icon class="font-size-100 secondary-text h-100 w-100">file_upload
+                                        </mat-icon>
+                                        <input type="file" id="uploadAwsFile" (change)="onFileUploadEventForAws($event)"
+                                            hidden #uploadAwsFile>
+                                        <button mat-stroked-button color="accent" (click)="uploadAwsFile.click()">Choose
+                                            File</button>
+                                    </div>
+                                    <div fxLayout="column" fxLayoutAlign="center center"
+                                        *ngIf="!form.value.featureImage && loading">
+                                        <mat-spinner></mat-spinner>
+                                    </div>
+                                    <div fxLayout="column" fxLayoutAlign="center center" class="remove-button"
+                                        *ngIf="form.value.featureImage && !printing">
+                                        <button mat-raised-button color="warn" (click)="removeFeaturedImage()">
+                                            <mat-icon>delete</mat-icon> Remove
+                                        </button>
+                                    </div>
+                                    <div class="uploaded-image" *ngIf="form.value.featureImage">
+                                        <img [src]="form.value.thumbnail"
+                                            [default]="'assets/images/ecommerce/product-image-placeholder.png'">
+                                    </div>
+                                </div>
+                                <div class="text-center" *ngIf="form.value.thumbnail"
+                                    title="{{ GetVariationFilename(form.value.thumbnail) }}">
+                                    {{ GetVariationFilename(form.value.thumbnail) }}
+                                </div>
+                            </div>
+                        </ng-container>
+
+                    </div>
+
+                    <div class="two-columns pl-16" *ngIf="edit">
+
+                        <mat-form-field *ngIf="visibleField('customerName', fields) && isRequiredForNewArtwork('customerName')">
+                            <input type="hidden" formControlName="customerId" />
+                            <input matInput formControlName="customerName" [matAutocomplete]="autoCustomer"
+                                placeholder="{{fieldLabel('customerName', fields)}}"
+                                [required]="requiredField('customerName',fields)" />
+                            <mat-autocomplete #autoCustomer="matAutocomplete" [displayWith]="displayName"
+                                (optionSelected)="selectCustomer($event)">
+                                <mat-option [value]="c" *ngFor="let c of filteredCustomers | async">
+                                    {{ c.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button *ngIf="form?.get('customerId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearCustomer()">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                            <app-error *ngIf="requiredField('customerName',fields)" [group]="form" field="customerName" label="{{fieldLabel('customerName', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('dueDate', fields) && isRequiredForNewArtwork('dueDate')">
+                            <input matInput type="text" formControlName="dueDate" [matDatepicker]="dueDate"
+                                (focus)="dueDate.open()" placeholder="{{fieldLabel('dueDate', fields)}}"
+                                [required]="requiredField('dueDate',fields)">
+                            <mat-datepicker-toggle matSuffix [for]="dueDate"></mat-datepicker-toggle>
+                            <mat-datepicker #dueDate></mat-datepicker>
+                            <app-error *ngIf="requiredField('dueDate',fields)" [group]="form" field="dueDate" label="{{fieldLabel('dueDate', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('identity', fields) && isRequiredForNewArtwork('identity')">
+                            <input matInput type="text" formControlName="identity"
+                                placeholder="{{fieldLabel('identity', fields)}}"
+                                [required]="requiredField('identity',fields)">
+                                <app-error *ngIf="requiredField('identity',fields)" [group]="form" field="identity" label="{{fieldLabel('identity', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('designTypeName', fields) && isRequiredForNewArtwork('designTypeName')">
+                            <mat-select formControlName="designTypeId"
+                                placeholder="{{fieldLabel('designTypeName', fields)}}"
+                                (selectionChange)="selectDesignType($event)">
+                                <mat-option [value]="dtype.id" *ngFor="let dtype of designTypes">
+                                    {{ dtype.name }}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('designTypeName',fields)" [group]="form" field="designTypeName" label="{{fieldLabel('designTypeName', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('designNo', fields) && isRequiredForNewArtwork('designNo')">
+                            <input matInput type="text" formControlName="designNo"
+                                placeholder="{{fieldLabel('designNo', fields)}}">
+                                <app-error *ngIf="requiredField('designNo',fields)" [group]="form" field="designNo" label="{{fieldLabel('designNo', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('decoVendorName', fields) && isRequiredForNewArtwork('decoVendorName')">
+                            <input type="hidden" formControlName="decoVendorId" />
+                            <input type="text" matInput placeholder="{{fieldLabel('decoVendorName', fields)}}"
+                                formControlName="decoVendorName" [matAutocomplete]="autoVendor"
+                                [required]="requiredField('decoVendorName',fields)" />
+                            <mat-error class="no-vendor" *ngIf="designTypeTouched && filteredVendors.length === 0">
+                                No decoration vendors found. Please change artwork type.
+                            </mat-error>
+                            <mat-autocomplete #autoVendor="matAutocomplete" [displayWith]="displayName"
+                                (optionSelected)="selectDecoVendor($event)">
+                                <mat-option [value]="vendor" *ngFor="let vendor of filteredVendors">
+                                    {{ vendor.vendor }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <!--mat-error *ngIf="form.get('decoVendorId')?.errors?.required" class="text-error">
+                                An existing embroidery vendor must be selected from the list
+                            </mat-error-->
+                            <button *ngIf="form?.get('decoVendorId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearDecoVendor()">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                            <app-error *ngIf="requiredField('decoVendorName',fields)" [group]="form" field="decoVendorName" label="{{fieldLabel('decoVendorName', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="visibleField('artworkContactName', fields) && isRequiredForNewArtwork('artworkContactName')">
+                            <input type="hidden" formControlName="artworkContactId" />
+                            <input type="text" matInput placeholder="{{fieldLabel('artworkContactName', fields)}}"
+                                formControlName="artworkContactName" [matAutocomplete]="autoContact" />
+                            <mat-autocomplete #autoContact="matAutocomplete" [displayWith]="displayName"
+                                (optionSelected)="selectArtworkContact($event)">
+                                <mat-option [value]="contact" *ngFor="let contact of filteredContacts | async">
+                                    {{ contact.name | capitalizeFirst }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button *ngIf="form?.get('artworkContactId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearArtworkContact()">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                            <app-error *ngIf="requiredField('artworkContactName',fields)" [group]="form" field="artworkContactName" label="{{fieldLabel('artworkContactName', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="detail" [placeholder]="detailLabel">
+                                <mat-option [value]="detail * 1" *ngFor="let detail of details">
+                                    {{ detail * 1}}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('detail',fields)" [group]="form" field="detail" label="{{fieldLabel('detail', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="visibleField('artworkContactEmail', fields) && isRequiredForNewArtwork('artworkContactEmail')">
+                            <input matInput type="text" formControlName="artworkContactEmail"
+                                placeholder="{{fieldLabel('artworkContactEmail', fields)}}"
+                                [required]="requiredField('artworContactEmail',fields)">
+                                <app-error *ngIf="requiredField('artworkContactEmail',fields)" [group]="form" field="artworkContactEmail" label="{{fieldLabel('artworkContactEmail', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="visibleField('size', fields) && isRequiredForNewArtwork('size')">
+                            <input matInput type="text" formControlName="size"
+                                placeholder="{{fieldLabel('size', fields)}}"
+                                [required]="requiredField('size',fields)">
+                                <app-error *ngIf="requiredField('size',fields)" [group]="form" field="size" label="{{fieldLabel('size', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+
+                        <mat-form-field *ngIf="visibleField('royaltyRetail', fields) && isRequiredForNewArtwork('royaltyRetail')">
+                            <input matInput type="number" formControlName="royaltyRetail"
+                                placeholder="{{fieldLabel('royaltyRetail', fields)}}" step="0.01">
+                                <app-error *ngIf="requiredField('royaltyRetail',fields)" [group]="form" field="royaltyRetail" label="{{fieldLabel('royaltyRetail', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('priority', fields) && isRequiredForNewArtwork('priority')">
+                            <mat-select formControlName="priority" placeholder="{{fieldLabel('priority', fields)}}"
+                                [required]="requiredField('priority',fields)">
+                                <mat-option [value]="priority.value" *ngFor="let priority of priorities">
+                                    {{ priority.label }}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('priority',fields)" [group]="form" field="priority" label="{{fieldLabel('priority', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="visibleField('royaltyRetailAmountType', fields) && isRequiredForNewArtwork('royaltyRetailAmountType')">
+                            <mat-select formControlName="royaltyRetailAmountType"
+                                placeholder="{{fieldLabel('royaltyRetailAmountType', fields)}}">
+                                <mat-option [value]="aType.value" *ngFor="let aType of amountTypeList">
+                                    {{ aType.label }}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('royaltyRetailAmountType',fields)" [group]="form" field="royaltyRetailAmountType" label="{{fieldLabel('royaltyRetailAmountType', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+
+                        <mat-form-field *ngIf="visibleField('estimated', fields) && isRequiredForNewArtwork('estimated')">
+                            <input matInput type="number" formControlName="estimated"
+                                placeholder="{{fieldLabel('estimated', fields)}}" step="0.01">
+                                <app-error *ngIf="requiredField('estimated',fields)" [group]="form" field="estimated" label="{{fieldLabel('estimated', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+
+                        <mat-form-field *ngIf="visibleField('royaltyWholesale', fields) && isRequiredForNewArtwork('royaltyWholesale')">
+                            <input matInput type="number" formControlName="royaltyWholesale"
+                                placeholder="{{fieldLabel('royaltyWholesale', fields)}}" step="0.01">
+                                <app-error *ngIf="requiredField('royaltyWholesale',fields)" [group]="form" field="royaltyWholesale" label="{{fieldLabel('royaltyWholesale', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('assignee', fields) && isRequiredForNewArtwork('assignee')">
+                            <input type="hidden" formControlName="assignedId" />
+                            <input type="text" matInput placeholder="{{fieldLabel('assignee', fields)}}"
+                                formControlName="assignee" [matAutocomplete]="autoAssignee" />
+                            <mat-autocomplete #autoAssignee="matAutocomplete" [displayWith]="displayName"
+                                (optionSelected)="selectAssignee($event)">
+                                <mat-option [value]="assignee" *ngFor="let assignee of filteredAssignees | async">
+                                    {{ assignee.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button *ngIf="form?.get('assignedId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAssignee()">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                            <app-error *ngIf="requiredField('assignee',fields)" [group]="form" field="assignee" label="{{fieldLabel('assignee', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('royaltyWholesaleAmountType', fields) && isRequiredForNewArtwork('royaltyWholesaleAmountType')">
+                            <mat-select formControlName="royaltyWholesaleAmountType"
+                                placeholder="{{fieldLabel('royaltyWholesaleAmountType', fields)}}">
+                                <mat-option [value]="aType.value" *ngFor="let aType of amountTypeList">
+                                    {{ aType.label }}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('royaltyWholesaleAmountType',fields)" [group]="form" field="royaltyWholesaleAmountType" label="{{fieldLabel('royaltyWholesaleAmountType', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="visibleField('statusName', fields) && isRequiredForNewArtwork('statusName')">
+                            <input type="hidden" formControlName="statusId">
+                            <mat-select formControlName="statusName" placeholder="{{fieldLabel('statusName', fields)}}"
+                                (selectionChange)="changeStatus($event)"
+                                [required]="requiredField('statusName',fields)">
+                                <mat-option [value]="status.name" *ngFor="let status of statusList | async">
+                                    {{ status.label }}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('statusName',fields)" [group]="form" field="statusName" label="{{fieldLabel('statusName', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('usageStatus', fields)">
+                            <mat-select formControlName="usageStatus"
+                                placeholder="{{fieldLabel('usageStatus', fields)}}">
+                                <mat-option [value]="usType.value" *ngFor="let usType of usageStatusList">
+                                    {{ usType.label }}
+                                </mat-option>
+                            </mat-select>
+                            <app-error *ngIf="requiredField('usageStatus',fields)" [group]="form" field="usageStatus" label="{{fieldLabel('usageStatus', fields)}}"></app-error>
+                        </mat-form-field>
+
+                        <mat-form-field *ngIf="visibleField('dateApproved', fields) && isRequiredForNewArtwork('dateApproved')">
+                            <input matInput type="text" formControlName="dateApproved" [matDatepicker]="dateApproved"
+                                (focus)="dateApproved.open()" placeholder="{{fieldLabel('dateApproved', fields)}}"
+                                [required]="requiredField('dateApproved',fields)">
+                            <mat-datepicker-toggle matSuffix [for]="dateApproved"></mat-datepicker-toggle>
+                            <mat-datepicker #dateApproved></mat-datepicker>
+                            <app-error *ngIf="requiredField('dateApproved',fields)" [group]="form" field="dateApproved" label="{{fieldLabel('dateApproved', fields)}}"></app-error>
+                        </mat-form-field>
+
+
+                        <mat-form-field *ngIf="visibleField('approvedBy', fields) && isRequiredForNewArtwork('approvedBy')">
+                            <input matInput type="text" formControlName="approvedBy"
+                                placeholder="{{fieldLabel('approvedBy', fields)}}"
+                                [required]="requiredField('artworContactEmail',fields)">
+                                <app-error *ngIf="requiredField('approvedBy',fields)" [group]="form" field="approvedBy" label="{{fieldLabel('approvedBy', fields)}}"></app-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div fxLayout="column" class="pl-16" *ngIf="edit">
+                        <mat-form-field *ngIf="visibleField('notes', fields) && isRequiredForNewArtwork('notes')">
+                            <textarea matInput formControlName="notes" placeholder="{{fieldLabel('notes', fields)}}">
+                        </textarea>
+                        <app-error *ngIf="requiredField('notes',fields)" [group]="form" field="notes" label="{{fieldLabel('notes', fields)}}"></app-error>
+                        </mat-form-field>
+                        <mat-form-field fxFlex>
+                            <mat-label>{{fieldLabel('salesRep', fields)}}</mat-label>
+                            <input type="hidden" formControlName="salesRepId"/>
+                            <input type="text"
+                                   formControlName="salesRep"
+                                   matInput
+                                   placeholder="{{fieldLabel('salesRep', fields)}}"
+                                   [matAutocomplete]="autoAssigned"
+                                   >
+                            <mat-autocomplete #autoAssigned="matAutocomplete"
+                                              [displayWith]="displayName"
+                                              (optionSelected)="selectSalesRep($event)">
+                                <mat-option *ngFor="let salesRep of filteredUsers" [value]="salesRep">
+                                    {{ salesRep.name | capitalizeFirst }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <button *ngIf="form?.get('salesRepId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearSaleRep()">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                            <!-- <app-error [group]="contactForm" field="salesRep" label="This field"></app-error> -->
+                            <app-error *ngIf="requiredField('salesRep',fields)" [group]="form" field="salesRep" label="{{fieldLabel('salesRep', fields)}}"></app-error>
+                        </mat-form-field>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="form-actions" *ngIf="action!=='edit'">
+                <button mat-raised-button color="accent" (click)="create()">Create</button>
+
+                <button mat-raised-button color="warn" class="ml-10 cancel" routerLink="/artworks" *ngIf="!embedded">Cancel</button>
+            </div>
+        </div>
+
+
+<div cdkDropListGroup>
+<div class="artCardHeader" *ngIf="action==='edit'">
+  <div class="variationBoxHeader">
+
+            <mat-toolbar class="mb-20">
+                <span class="mr-8">Variations</span>
+                <!--button mat-icon-button (click)="toggleEditVariations()" *ngIf="!editVariations">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="saveVariations()" *ngIf="editVariations">
+                    <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button (click)="cancelEditVariations()" *ngIf="editVariations">
+                    <mat-icon>close</mat-icon>
+                </button-->
+            </mat-toolbar>
+
+  </div>
+  <div class="productBoxHeader">
+            <mat-toolbar class="mb-20">
+                <span class="mr-8">Product Details</span>
+            </mat-toolbar>
+  </div>
+</div>
+
+<div class="artCard" *ngIf="action==='edit'">
+  <div class="variationBox">
+
+        <div class="section section--variations example-container" *ngIf="action==='edit'" >
+
+            <div class="px-8">
+                <div fxLayout="column" >
+                <div fxLayout="column" cdkDropList  cdkDropListSortingDisabled   (cdkDropListDropped)="dropVariation($event)"    [cdkDropListData]="form.controls.variation.controls"           class="example-list">
+                    <div fxFlex="column" *ngFor="let variation of form.controls.variation.controls;let i=index" cdkDrag [cdkDragData]="variation">
+
+  <!--div class="example-handle" cdkDragHandle>
+    <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
+      <path d="M0 0h24v24H0z" fill="none"></path>
+    </svg>
+  </div-->
+                        <!--<app-artwork-variation [form]="variation"
+                                            [index]="i"
+                                            [edit]="editVariations"
+                                            [designDistId]="designDist && designDist.id"
+                                            (add)="addColorThreadPMS(variation)"
+                                            (close)="closeVariation(i)">
+                        </app-artwork-variation> -->
+                        <app-artwork-variation [form]="variation" [index]="i" [accountId]="artwork.customerId"
+                            [designNumber]="artwork.designNo" [source]="sourceType" [edit]="editVariations" [designDistId]=""
+                            (add)="addColorThreadPMS(variation)" (close)="closeVariation(i)" (save)="saveVariation()" >
+                        </app-artwork-variation>
+                            <div *cdkDragPreview class="imgCdkDragPreview"><img [src]="variation.value.itemImageThumbnail" [default]= "'assets/images/ecommerce/product-image-placeholder.png'"></div>
+                    </div>
+                    </div>
+                    <div class="w-300 mx-8" fxLayout="column" fxLayoutAlign="start stretch">
+                        <button mat-button color="accent" class="add-variation" (click)="addVariation()">
+                            <mat-icon class="accent-500-fg">add</mat-icon> Add Variation
+                        </button>
+                    </div>
+                <div class="w-300 mx-8 text-center" fxLayout="column" fxLayoutAlign="start stretch" *ngIf="form.value.variation.length === 0 && !editVariations && sourceType == 'artwork'">
+                    No variations. Please add variations
+                </div>
+                </div>
+                <div class="p-20 text-center" fxFlex *ngIf="form.value.variation.length === 0 && !editVariations && sourceType == 'order'">
+                    No variations. Please add variations
+                </div>
+            </div>
+        </div>
+
+  </div>
+  <div class="productBox">
+
+        <div class="section example-container" *ngIf="action==='edit' && !printing && artCardDecoDetails?.length > 0" >
+
+            <div class="px-2" fxLayout="column" fxLayoutAlign="space-around none">
+                <div *ngFor="let decoDetails of artCardDecoDetails" fxLayout="column" fxLayoutAlign="space-around none" class="mat-card-outer-box" >
+                            <a mat-button class="accent-900-fg avOrderNo"
+                            (click)="openRelatedOrderDetailDialog(decoDetails.orderId)">
+                            {{ decoDetails.orderNum }} : {{ decoDetails.orderIdentity }}
+                            </a>
+                <div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+                  <mat-spinner></mat-spinner>
+                </div>
+                <div fxLayout="row wrap">
+                <div  class="deco-details example-list"
+
+cdkDropList  cdkDropListSortingDisabled cdkDropListDisabled (cdkDropListDropped)="dropVariation($event, data)"    [cdkDropListData]="decoDetails.products" *ngFor="let data of decoDetails.products;"
+
+                >
+
+<span>{{ data.decoLocation }}</span>
+
+                                <mat-card class="art-card-deco-details" cdkDrag cdkDragDisabled [cdkDragData]="data">
+
+                                    <mat-card-header>
+                                        <mat-card-title>
+
+                                        <mat-icon matTooltip="Variation Assigned" class="active-icon green-500-bg white-fg s-24" *ngIf="data.variationDropped == '1'">check</mat-icon>
+                                        <mat-icon matTooltip="Disconnect Variation" class="active-icon red-500-bg white-fg s-24 revert-variation" (click)="revertVariation(data)" *ngIf="data.variationDropped == '1'">clear</mat-icon>
+                                        <!--mat-icon matTooltip="Variation and product color not matched" class="active-icon orange-500-bg white-fg s-24" *ngIf="data.decoProductColor != data.decoDesignVariation.design_variation_color">check</mat-icon-->
+                                        </mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-content class="art-card-deco-details-content">
+                                      <div fxLayout="row" fxLayoutAlign="space-around center">
+                                        <div fxLayout="column" class="art-card-deco-details-content-left">
+                                      <img mat-card-image title="Item : {{data.decoProductName}}, Color : {{data.decoProductColor}}" class="logoImage" [src]="data.imageUrl" [default]= "'assets/images/ecommerce/placeholder-image.png'">
+                                        <p class="itemCodeText">{{ data.decoProductItemNo }}</p>
+                                        <p class="itemCodeText">{{ data.decoProductColor }}</p>
+                                        </div>
+                                        <div fxLayout="column" class="art-card-deco-details-content-right">
+<span class="itemCodeText">Size</span>
+<div fxLayout="row wrap" fxLayoutAlign="flex-start">
+    <p fxLayout="column" fxLayoutAlign="space-around start" *ngFor="let row of data.decoDetails;">
+    {{row.decoProductSize}}
+    </p>
+</div>
+
+                            <!--mat-table fxFlex #table
+                                [dataSource]="data.decoDetails">
+
+
+                                <ng-container cdkColumnDef="decoProductSize">
+                                    <mat-header-cell class="header-cell header-cell-size" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                                        <span>Size</span>
+                                    </mat-header-cell>
+                                    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm class="header-cell-size">
+                                        <p class="text-truncate" matTooltip="{{row.decoProductSize}}">{{row.decoProductSize}}</p>
+                                    </mat-cell>
+                                </ng-container>
+                                <mat-header-row *cdkHeaderRowDef="displayedDecoDetailsColumns"></mat-header-row>
+                                <mat-row *cdkRowDef="let row; columns: displayedDecoDetailsColumns;"
+                                        class="category-row">
+                                </mat-row>
+                            </mat-table-->
+
+
+                                        </div>
+                                      </div>
+                                    </mat-card-content>
+                                    <mat-card-footer>
+                                    {{ data.decoDesignVariation.design_variation_title }}
+                                    </mat-card-footer>
+                                </mat-card>
+
+    <!--div class="example-custom-placeholder" *cdkDragPlaceholder></div-->
+
+                                </div>
+                 </div>
+                </div>
+            </div>
+        </div>
+  </div>
+</div>
+
+
+
+
+</div>
+        <div class="section" *ngIf="action==='edit' && !printing && artwork.relatedOrders?.length > 0">
+            <mat-toolbar class="mb-20">
+                <span class="mr-8">Related Orders</span>
+            </mat-toolbar>
+            <div class="px-2" fxLayout="row">
+                <div *ngFor="let order of artwork.relatedOrders">
+                    <div fxFlex fxLayout="column" class="p-16">
+                        <div fxFlex="none" class="vcenter">
+                            <a mat-button class="accent-900-fg"
+                            (click)="openRelatedOrderDetailDialog(order.orderId)">
+                            {{ order.orderNum }} : {{ order.orderIdentity }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<div *ngIf="!artwork || loading">
+    <mat-spinner></mat-spinner>
+</div>

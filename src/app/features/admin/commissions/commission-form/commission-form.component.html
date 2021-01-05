@@ -1,0 +1,146 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <form [formGroup]="commissionForm" class="p-16" fusePerfectScrollbar>
+        <div class="px-16 two-columns">
+            <mat-form-field>
+                <input matInput
+                    name="name"
+                    formControlName="name"
+                    placeholder="Name" required>
+                <app-error [group]="commissionForm" field="name" label="Name"></app-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    name="description"
+                    formControlName="description"
+                    placeholder="Description">
+            </mat-form-field>
+            <mat-form-field>
+                <input type="hidden" formControlName="assignedSalesRepId" required/>
+                <input type="text" matInput
+                        placeholder="Assigned To"
+                        formControlName="assignedSalesRep"
+                        [matAutocomplete]="autoAssignee" required/>
+                <mat-autocomplete #autoAssignee="matAutocomplete"
+                                    [displayWith]="displayName"
+                                    (optionSelected)="selectAssignee($event)">
+                    <mat-option [value]="salesRep"
+                                *ngFor="let salesRep of filteredAssignees | async">
+                        {{ salesRep.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <app-error [group]="commissionForm" field="assignedSalesRep" label="Assigned To"></app-error>
+            </mat-form-field>
+            <!--mat-form-field>
+                <input matInput
+                    type="number"
+                    name="orderGP"
+                    formControlName="orderGP"
+                    placeholder="Order GP">
+            </mat-form-field-->
+        </div>
+        <div class="px-16 two-columns">
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="profitTarget"
+                    step="0.01"
+                    formControlName="profitTarget"
+                    placeholder="Order Gross Profit % Target">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="profitPercent"
+                    step="0.01"
+                    formControlName="profitPercent"
+                    placeholder="Order Gross Profit %">
+            </mat-form-field>
+            <!--mat-form-field>
+                <input matInput
+                    type="number"
+                    name="netProfitPercent"
+                    formControlName="netProfitPercent"
+                    placeholder="Net Profit Percent">
+            </mat-form-field-->
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="revenueTarget"
+                    step="0.01"
+                    formControlName="revenueTarget"
+                    placeholder="Revenue Target">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="revenue"
+                    step="0.01"
+                    formControlName="revenue"
+                    placeholder="Revenue %">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="cap"
+                    step="0.01"
+                    formControlName="cap"
+                    placeholder="Commission Cap">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select placeholder="Calculation Type" formControlName="calulationType">
+                <!--Import is commission segregation of sales repo for Import Vendor order-->
+                    <mat-option [value]="type" *ngFor="let type of ['A','A-Import','B','B-Import','C','C-Import','D','D-Import']">
+                        {{ type }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox
+                class="ml-8"
+                formControlName="paidOnPaid">
+                Paid On Paid
+            </mat-checkbox>
+        </div>
+        <input type="hidden" formControlName="dateEntered"/>
+        <input type="hidden" formControlName="dateModified"/>
+        <input type="hidden" formControlName="createdById"/>
+        <input type="hidden" formControlName="createdByName"/>
+        <input type="hidden" formControlName="modifiedById"/>
+        <input type="hidden" formControlName="modifiedByName"/>
+        <input type="hidden" formControlName="orderGP"/>
+        <input type="hidden" formControlName="netProfitPercent"/>
+
+    </form>
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

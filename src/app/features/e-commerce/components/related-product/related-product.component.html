@@ -1,0 +1,65 @@
+<div fxLayout="column" *ngIf="view=='related'">
+    <div class="p-16 py-8" fxFlex>
+        <div class="toolbar">
+            <div fxFlex="row" fxLayoutAlign="start center">
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8" (click)="showView('list')"
+                        fxHide fxShow.gt-md>
+                    <mat-icon>add</mat-icon> Product
+                </button>
+
+                <button mat-raised-button color="warn"
+                        class="text-capitalize mr-8" (click)="deleteSelectedData()"
+                        fxHide fxShow.gt-md>
+                    <mat-icon>delete</mat-icon> Delete
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <related-product-list fxLayout="column" [product]="product"></related-product-list>
+</div>
+
+  <!-- Show product-add screen: List view & Tile view -->
+  <ng-container *ngIf="view==='images' || view==='list'">
+    <div class="p-16 pb-8" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <button mat-icon-button class="mr-16" (click)="showView('related')">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-raised-button color="accent" (click)="addToList()">
+          <mat-icon>playlist_add</mat-icon>
+          Relate
+        </button>
+        <button mat-raised-button color="accent" (click)="newProduct()">
+          <mat-icon>add</mat-icon>
+          New Product
+        </button>
+        <button mat-raised-button color="accent" (click)="clearFilters()">
+          <mat-icon>layers_clear</mat-icon>
+          Clear Filters
+        </button>
+        <button mat-raised-button color="accent" (click)="openAdvanceSearchDialog()" *ngIf="false">
+          <mat-icon>search</mat-icon>
+          Advanced Search
+        </button>
+        <button mat-raised-button color="warn" (click)="deleteSelectedProducts()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </div>
+
+      <mat-button-toggle-group fxFlex="none"
+          [value]="view" (change)="showView($event.value)">
+          <mat-button-toggle value="list" matTooltip="Products List">
+              <mat-icon>view_list</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="images" matTooltip="Product Images">
+              <mat-icon>featured_video</mat-icon>
+          </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <app-product-list [disableRow]="true" fxLayout="column" *ngIf="view==='list'"></app-product-list>
+    <app-product-images [disableItem]="true" fxLayout="column" *ngIf="view==='images'"></app-product-images>
+  </ng-container>

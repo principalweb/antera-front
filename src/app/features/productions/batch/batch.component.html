@@ -1,0 +1,33 @@
+<div class="container batch-box">
+    <div cdkDropListGroup fxLayout="row">
+        <div class="example-container" fxFlex="25">
+            <h2>Jobs</h2>
+            <div
+                cdkDropList
+                #jobList="cdkDropList"
+                [cdkDropListData]="jobs"
+                class="example-list"
+                (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let job of jobs" cdkDrag [cdkDragData]="job">
+                    {{ job.orderName }} : {{ job.variationName }} : {{ job.decoTypeName }} : Hours ({{ job.hours }}) : {{job.statusName}}
+                </div>
+            </div>
+        </div>
+        <div class="example-container" fxFlex="75">
+            <h2>
+                Batch Jobs
+                <button mat-button (click)="addEmptyMaster()" aria-label="Add empty batch master">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </h2>
+
+            <div fxLayout="row wrap" class="container">
+                <batch-job-card *ngFor="let j of batchJobMasters" fxFlex="33"
+                    class="batch-job-card"
+                    [job]="j"
+                    >
+                </batch-job-card>
+            </div>
+        </div>
+    </div>
+</div>

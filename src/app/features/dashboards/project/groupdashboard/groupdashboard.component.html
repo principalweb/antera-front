@@ -1,0 +1,245 @@
+<div id="home-dashboard" class="content">
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="Home">
+      <div class="widget-group grey-100-bg p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+      [@animateStagger]="{value:'50'}">
+           
+          <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                    fxLayoutAlign="end center">
+                </div>
+
+                <div class="pt-8 pb-8 clickable"
+                    fxLayout="column" fxLayoutAlign="center center"
+                    (click)="goto('/e-commerce/orders', 'Pending')">
+                    <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                        {{widgetData.groupdashboarddata.orderEntered}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">
+                        Today
+                    </div>
+                </div>
+
+                <div class="p-16 grey-50-bg border-top"
+                    fxLayout="row" fxLayoutAlign="start center"
+                    (click)="goto('/e-commerce/orders')">
+                    <div class="mat-caption text-truncate">
+                      Order Entered
+                    </div>
+                    <!-- <div class="mat-caption ml-8">
+                        {{widgetMgmData.activitiesCard.total}}
+                    </div> -->
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                        aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    <!-- {{widgetMgmData.activities.detail}} -->
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+          <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                    fxLayoutAlign="end center">
+                </div>
+
+                <div class="pt-8 pb-8 clickable"
+                    fxLayout="column" fxLayoutAlign="center center"
+                    (click)="goto('/e-commerce/orders', 'Pending')">
+                    <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                        {{widgetData.groupdashboarddata.dueorders.todaytotal}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">
+                        Today
+                    </div>
+                </div>
+
+                <div class="p-16 grey-50-bg border-top"
+                    fxLayout="row" fxLayoutAlign="start center"
+                    (click)="goto('/e-commerce/orders')">
+                    <div class="mat-caption text-truncate">
+                      Orders Due
+                    </div>
+                    <!-- <div class="mat-caption ml-8">
+                        {{widgetMgmData.activitiesCard.total}}
+                    </div> -->
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                        aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    <!-- {{widgetMgmData.activities.detail}} -->
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+          <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                    fxLayoutAlign="end center">
+                </div>
+
+                <div class="pt-8 pb-8 clickable"
+                    fxLayout="column" fxLayoutAlign="center center"
+                    (click)="goto('/e-commerce/orders', 'Pending')">
+                    <div class="pb-8 blue-fg font-size-20 line-height-48 text-truncate">
+                        {{widgetData.groupdashboarddata.dueorders.pastduetotal}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">
+                        Past
+                    </div>
+                </div>
+
+                <div class="p-16 grey-50-bg border-top"
+                    fxLayout="row" fxLayoutAlign="start center"
+                    (click)="goto('/e-commerce/orders')">
+                    <div class="mat-caption text-truncate">
+                      Orders Due
+                    </div>
+                    <!-- <div class="mat-caption ml-8">
+                        {{widgetMgmData.activitiesCard.total}}
+                    </div> -->
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                        aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    <!-- {{widgetMgmData.activities.detail}} -->
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+          <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                    fxLayoutAlign="end center">
+                </div>
+
+                <div class="pt-8 pb-8 clickable"
+                    fxLayout="column" fxLayoutAlign="center center"
+                    (click)="goto('/workflow', 'Pending')">
+                    <div class="pb-8 blue-fg font-size-20 line-height-48 text-truncate">
+                        {{widgetData.groupdashboarddata.todayshipped.total}}
+                    </div>
+                    <div class="h3 secondary-text font-weight-500">
+                         Today
+                    </div>
+                </div>
+
+                <div class="p-16 grey-50-bg border-top"
+                    fxLayout="row" fxLayoutAlign="start center"
+                    (click)="goto('/workflow')">
+                    <div class="mat-caption text-truncate">
+                       Shipped Orders
+                    </div>
+                    <!-- <div class="mat-caption ml-8">
+                        {{widgetMgmData.activitiesCard.total}}
+                    </div> -->
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                        aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    <!-- {{widgetMgmData.activities.detail}} -->
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+          <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                    fxLayoutAlign="end center">
+                </div>
+
+                <div class="pt-8 pb-8 clickable"
+                    fxLayout="column" fxLayoutAlign="center center">
+                    <div class="pb-8 blue-fg font-size-20 line-height-48 text-truncate">
+                        {{todayshipped}}
+                    </div>
+                    <div class="simplifieddiv">                        
+                       <mat-select  class="simplified" [(ngModel)]="currentrange" (selectionChange)="changeDue()"
+                                   aria-label="Change range">
+                           <mat-option *ngFor="let range of widgetData.groupdashboarddata.ranges | keys"
+                                       [value]="range.key">
+                               {{range.value}}
+                           </mat-option>
+                       </mat-select>      
+                    </div> 
+                </div>
+
+                <div class="p-16 grey-50-bg border-top"
+                    fxLayout="row" fxLayoutAlign="start center"
+                    >
+                    <div class="mat-caption text-truncate">
+                        Total Billed                      
+                    </div>
+                    <!-- <div class="mat-caption ml-8">
+                        {{widgetMgmData.activitiesCard.total}}
+                    </div> -->
+                </div>
+            </div>
+            <!-- / Front -->
+
+            <!-- Back -->
+            <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                        aria-label="Flip widget">
+                    <mat-icon class="s-16">close</mat-icon>
+                </button>
+
+                <div>
+                    <!-- {{widgetMgmData.activities.detail}} -->
+                </div>
+            </div>
+            <!-- / Back -->
+
+        </fuse-widget>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

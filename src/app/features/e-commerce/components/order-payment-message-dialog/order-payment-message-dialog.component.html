@@ -1,0 +1,60 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row>
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button dialog-close"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+
+    <mat-sidenav-container class="content-card">
+
+        <mat-dialog-content *ngIf="paymentStatus == 'error'" class="p-24 m-0">
+            <div class="warn-600-fg text-bold h4 mb-8">Error Name</div>
+            <div class="h4">{{ pData }}</div>
+        </mat-dialog-content>
+
+        <mat-dialog-content *ngIf="paymentStatus == 'success'" class="p-24 m-0">
+            <div class="green-600-fg text-bold h4 mb-8">Approved</div>
+            <div class="h4">Card was successfully processed. Please chooose your form of receipt.</div>
+        </mat-dialog-content>
+
+        <mat-dialog-actions *ngIf="paymentStatus == 'success'" class="m-0 p-16 pb-36" fxLayout="row" fxLayoutAlign="space-between center">
+            <button
+                    mat-raised-button
+                    (click)="onActionButtons('Download')"
+                    class="save-button mat-accent"
+                    aria-label="Download">
+                Download
+            </button>
+            <button
+                    mat-raised-button
+                    (click)="onActionButtons('Email')"
+                    class="save-button mat-accent"
+                    aria-label="Download">
+                Email
+            </button>
+            <button
+                    mat-raised-button
+                    (click)="onActionButtons('Close')"
+                    class="save-button mat-accent"
+                    aria-label="Download">
+                Close
+            </button>
+        </mat-dialog-actions>
+
+        <mat-dialog-actions *ngIf="paymentStatus == 'error'" class="m-0 p-16 pb-36" fxLayout="row" fxLayoutAlign="space-between center">
+            <button
+                    mat-raised-button
+                    (click)="onActionButtons('Retry')"
+                    class="save-button mat-accent"
+                    aria-label="Download">
+                Retry
+            </button>
+        </mat-dialog-actions>
+    </mat-sidenav-container>
+</div>

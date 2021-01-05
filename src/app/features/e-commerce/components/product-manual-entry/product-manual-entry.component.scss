@@ -1,0 +1,20 @@
+.product-manual-entry-dialog {
+  width: 80vw;
+  height: 80vh;
+
+  .dialog-content {
+    overflow: hidden;
+
+    .mat-dialog-container {
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0 0;
+    }
+
+    app-product-manual-entry,
+    app-product-form {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

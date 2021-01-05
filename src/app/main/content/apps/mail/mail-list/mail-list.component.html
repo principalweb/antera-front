@@ -1,0 +1,24 @@
+<mat-paginator
+              #paginator
+              [length]="totalCount"
+              [pageSize]="25"
+              [showFirstLastButtons]="true"
+              (page)="paginate($event)">
+</mat-paginator>
+
+<div *ngIf="mails && mails.length === 0" fxLayout="column" fxLayoutAlign="center center" fxFlexFill>
+    <span class="no-messages-text hint-text">{{ 'MAIL.NO_MESSAGES' | translate }}</span>
+    <span class="no-messages-text hint-text">{{ errorMsg }}</span>
+</div>
+
+<div class="mail-list" *fuseIfOnDom>
+    <fuse-mail-list-item matRipple *ngFor="let mail of mails" [mail]="mail" (click)="readMail(mail.uid)"
+                         [ngClass]="{'current-mail':mail?.uid == currentMail?.uid}">
+    </fuse-mail-list-item>
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

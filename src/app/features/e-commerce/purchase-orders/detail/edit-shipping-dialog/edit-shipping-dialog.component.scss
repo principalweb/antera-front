@@ -1,0 +1,26 @@
+.full-width {
+    width: 100% !important;
+    height: 3em !important;
+    font-size: 18.0px !important;
+    margin-bottom: 1em !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.antera-details-dialog .mat-dialog-container, .antera-details-dialog-w60 .mat-dialog-container {
+        width: 400px !important;
+    }
+
+    .cdk-over
+
+.larger-icon {
+    transform: scale(1.75);
+    margin-right: 2px;
+}
+
+.scroll {
+    div[mat-dialog-content] {
+        overflow: scroll !important;
+    } 
+}

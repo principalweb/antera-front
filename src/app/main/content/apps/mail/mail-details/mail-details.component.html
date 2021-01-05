@@ -1,0 +1,114 @@
+<div *ngIf="!mail" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+    <mat-icon class="s-128 mb-16 select-message-icon" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'300ms',scale:'0.2'}}">
+        email
+    </mat-icon>
+    <span class="select-message-text hint-text" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'400ms'}}">
+        <span>{{ 'MAIL.SELECT_A_MESSAGE_TO_READ' | translate }}</span>
+    </span>
+</div>
+
+<div *ngIf="mail">
+
+    <div class="mail-header" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <div>
+            <div class="subject" flex>{{mail.subject}}</div>
+        </div>
+
+    </div>
+
+    <div class="mail-content"> 
+
+        <div class="info" fxLayout="row" fxLayoutAlign="space-between start">
+
+            <div fxFlex fxLayout="column" fxLayoutAlign="start start">
+
+                <div fxLayout="row" fxLayoutAlign="start start">
+
+                    <div fxLayout="column" fxLayoutAlign="start start">
+
+                        <div class="name">
+                        </div>
+
+                        <div *ngIf = "paramas == 'inbox'"  fxLayout="row" fxLayoutAlign="start center">
+                            <div class="to-text"> Form: </div>
+                            <div >{{mail.from}}</div> 
+                        </div>
+
+                        <div *ngIf = "paramas == 'sent'"  fxLayout="row" fxLayoutAlign="start center">
+                            <div class="to-text"> To: </div>
+                            <div >{{mail.to.join()}}</div> 
+                        </div>
+
+                    </div>
+                </div>
+
+                <a class="toggle-details" (click)="showDetails = !showDetails">
+                    <span *ngIf="!showDetails">Show Details</span>
+                    <span *ngIf="showDetails">Hide Details</span>
+                </a>
+
+                <div *ngIf="showDetails" class="details" fxLayout="row" fxLayoutAlign="start start">
+
+                    <div fxLayout="column">
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <span class="title">From:</span>
+                            <span class="detail">{{mail.from}}</span>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <span class="title">To:</span>
+                            <span class="detail">{{mail.to}}</span>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <span class="title">Date:</span>
+                            <span class="detail">{{mail.date | date:'h:mm a dd MMM'}}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button mat-button [matMenuTriggerFor]="moreMenu" aria-label="More" class="mat-icon-button"
+                    (click)="$event.stopPropagation()">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item aria-label="Reply" (click)="replyMessage(mail)">
+                    <mat-icon>reply</mat-icon>
+                    <span>Reply</span>
+                </button>
+
+                <button mat-menu-item aria-label="Forward" (click)="forwardMessage(mail)">
+                    <mat-icon>forward</mat-icon>
+                    <span>Forward</span>
+                </button>
+            </mat-menu> 
+        </div>
+
+        <mail-body [htmlContent]="mail.body"></mail-body>
+
+    </div>
+
+    <div *ngIf="mail.attachments && mail.attachments.length > 0" class="mail-attachments">
+
+        <div class="title">
+            <span>Attachments</span>
+            ({{mail.attachments.length}})
+        </div>
+
+        <div class="attachment-list" fxLayout="row wrap">
+
+            <div class="attachment mr-8" fxLayout="column" 
+                *ngFor="let attachment of mail.attachments">
+
+                <div fxLayout="column">
+                    <a (click)="download(attachment.filename)">{{attachment.filename}}</a> 
+                    <div class="size">({{attachment.size}})</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

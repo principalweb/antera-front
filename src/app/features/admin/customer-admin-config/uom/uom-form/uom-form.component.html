@@ -1,0 +1,107 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <form [formGroup]="uomForm" class="p-16" fusePerfectScrollbar>
+        <div class="px-16 two-columns">
+            <mat-form-field>
+                <input matInput
+                    name="name"
+                    formControlName="name"
+                    placeholder="Name" required>
+                <app-error [group]="uomForm" field="name" label="Name"></app-error>
+            </mat-form-field>
+			<mat-form-field>
+				<mat-select formControlName="type"
+							placeholder="Uom Type">
+					<mat-option  [value]="type" *ngFor="let type of uomType">
+						{{ type }}
+					</mat-option>
+				</mat-select>
+				<app-error [group]="uomForm" field="type" label="Uom Type"></app-error>
+			</mat-form-field>
+
+			<mat-form-field>
+				<mat-select formControlName="uomGroupId"
+							placeholder="Uom Group">
+					<mat-option  [value]="group.id" *ngFor="let group of uomGroups">
+						{{ group.name }}
+					</mat-option>
+				</mat-select>
+				<app-error [group]="uomForm" field="uomGroupId" label="Uom Group"></app-error>
+			</mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                    name="abbreviation"
+                    formControlName="abbreviation"
+                    placeholder="Abbreviation" required>
+                <app-error [group]="uomForm" field="abbreviation" label="abbreviation"></app-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput
+                    type="number"
+                    name="conversionRatio"
+                    formControlName="conversionRatio"
+                    placeholder="Conversion Ratio" required>
+                <app-error [group]="uomForm" field="conversionRatio" label="conversionRatio"></app-error>
+            </mat-form-field>
+
+
+			<mat-form-field>
+				<mat-select formControlName="isBase"
+							placeholder="Base">
+					<mat-option  [value]="base.value" *ngFor="let base of uomBaseType">
+						{{ base.name }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+
+			<mat-form-field>
+				<textarea matInput
+						name="description"
+						formControlName="description"
+						placeholder="Uom Description"
+						rows="5">
+				</textarea>
+			</mat-form-field>
+            <mat-checkbox class="ml-8 mt-20"
+                formControlName="status">
+                Status
+            </mat-checkbox>
+        </div>
+
+
+    </form>
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE
+        </button>
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

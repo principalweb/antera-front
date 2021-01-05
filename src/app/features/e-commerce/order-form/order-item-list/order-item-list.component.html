@@ -1,0 +1,58 @@
+<div fxLayout="row" class="item__list__header">
+  <div class="col col--checkbox" *ngIf="selectable && config?.edit">
+    <mat-checkbox (change)="$event ? masterToggleAll() : null" [checked]="selection.hasValue() && isAllSelected()"
+      [indeterminate]="selection.hasValue() && !isAllSelected()">
+    </mat-checkbox>
+  </div>
+  <div class="col col--description">
+    <ng-container *ngIf="selection.hasValue() && isAllSelected(); else selectAllTemplate">
+      Remove Selection
+    </ng-container>
+    <ng-template #selectAllTemplate>
+      Select All
+    </ng-template>
+  </div>
+  <div class="col col--qty">Source</div>
+  <div class="spacer-thirty" *ngIf="currencyEnabled"></div>
+  <div *ngIf="!currencyEnabled && !adminFeeEnabled" class="col col--qty">Qty</div>
+  <div *ngIf="!currencyEnabled && adminFeeEnabled" class="col col--qty">Qty</div>
+  <div fxFlex="9" *ngIf="currencyEnabled && !adminFeeEnabled" class="col col--qty center-text-order-item-list">Qty</div>
+  <div fxFlex="5" *ngIf="currencyEnabled && adminFeeEnabled" class="col col--qty center-text-order-item-list">Qty</div>
+  <div *ngIf="!currencyEnabled && !adminFeeEnabled" class="col col--cost">Cost</div>
+  <div *ngIf="!currencyEnabled && adminFeeEnabled" class="col col--cost">Cost</div>
+  <div *ngIf="currencyEnabled && !adminFeeEnabled" class="col col--cost center-text-order-item-list">Cost</div>
+  <div fxFlex="8" *ngIf="currencyEnabled && adminFeeEnabled" class="col col--cost center-text-order-item-list">Cost</div>
+  <div fxFlex="{{ currencyEnabled ? '7' : '7'}}" class="col col--price center-text-order-item-list" *ngIf="!config?.hideCost && adminFeeEnabled">{{fieldLabel('adminFeeType', fields)}}</div>
+  <div fxFlex="{{ currencyEnabled ? '5' : '5'}}" class="col col--price center-text-order-item-list" *ngIf="!config?.hideCost && adminFeeEnabled">Subtotal</div>
+  <div [ngClass]="{'col': true, 'col--price': true, 'center-text-order-item-list': currencyEnabled || adminFeeEnabled}" fxFlex="{{!currencyEnabled && !adminFeeEnabled ? 'none' : currencyEnabled && adminFeeEnabled ? '11' : 
+  !currencyEnabled && adminFeeEnabled ? '6' : '10'}}" class="col col--price">Price</div>
+  <div fxFlex="none" [ngClass]="{'col': true, 'col--total': !currencyEnabled, 'new-col-total': currencyEnabled}" class="col col--total">Total</div>
+  <div class="col col--menu" *ngIf="config?.edit">&nbsp;</div>
+</div>
+<!-- <button type="button" mat-fab (click)="createNewItem()">
+  <mat-icon>add</mat-icon>
+</button> -->
+<div cdkDropList (cdkDropListDropped)="onTaskDrop($event)" class="item__list">
+  <ng-container *ngFor="let item of items; trackBy: trackBy; let odd=odd; let even=even; let order=orders">
+    <app-order-item (paste)="onPaste('add_item', $event)" 
+      [product]="productMap[item.productId]"
+      [productFob]="productFobMap[item.productId]"
+      [adminFeeEnabled]="adminFeeEnabled"
+      [localFob]="localFob"
+      [productInventory]="inventoryMap[item.productId]"
+      [item]="item" [order]="orders" #viewItem [expandable]="!item._destroy" [draggable]="true" [class.odd]="odd" [class.even]="even"
+      [selection]="selection" [config]="config" (actions)="handleItemAction($event)"
+      (priceDialogTrigger)="propagateEvent('priceDialogTrigger', $event)" cdkDrag>
+      <div *cdkDragPreview slot="drag-preview">
+        <app-order-item [item]="item" [order]="orders" [config]="config"></app-order-item>
+      </div>
+      <div slot="drag-handle" class="uploaded-file__drag-handle" cdkDragHandle>
+        <mat-icon>drag_indicator</mat-icon>
+      </div>
+    </app-order-item>
+  </ng-container>
+</div>
+<div>
+  <app-order-add-item *ngIf="config?.edit" (productSelected)="createNewItemFromProduct($event)"
+  (createNewSelected)="createNewProduct($event)"></app-order-add-item>
+</div>

@@ -1,0 +1,79 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">Edit Selected Sku Pricing</span>
+      <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+
+
+    <form *ngIf="variationForm" name="form" [formGroup]="variationForm" (submit)="save()">
+
+      <p>Updating {{selection.length}} SKUs</p>
+
+      <div fxLayout="row">
+        <mat-form-field>
+          <input type="text" matInput placeholder="PR Code" formControlName="prCode">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="text" matInput placeholder="Min" formControlName="min">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="text" matInput placeholder="Max" formControlName="max">
+        </mat-form-field>
+      </div>
+
+
+      <div fxLayout="row" class="row-header">
+        <div class="col-label">
+          &nbsp;
+        </div>
+        <ng-container *ngFor="let quantity of variationForm.get('partPrice').controls; let i=index"
+          formArrayName="partPrice">
+          <div class="col-quantity" [formGroupName]="i">
+            <mat-form-field>
+              <input matInput type="text" formControlName="minQuantity">
+            </mat-form-field>
+          </div>
+        </ng-container>
+      </div>
+      <div fxLayout="row">
+        <div class="col-label">
+          <div>Sales Price</div>
+          <div>Margin</div>
+          <div>Cost</div>
+          <div>Profit</div>
+        </div>
+        <ng-container *ngFor="let quantity of variationForm.get('partPrice').controls; let i=index"
+          formArrayName="partPrice">
+          <div class="col-quantity" [formGroupName]="i">
+            <div>
+              <mat-form-field>
+                <input matInput type="text" (change)="salePriceUpdated($event, i)" formControlName="salePrice">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput type="text" (change)="marginUpdated($event, i)" formControlName="margin">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput type="text" (change)="priceUpdated($event, i)" formControlName="price">
+              </mat-form-field>
+            </div>
+            <div> {{ quantity?.value?.unitProfit }} </div>
+          </div>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button tabindex="2" (click)="close()">Cancel</button>
+    <button mat-raised-button color="accent" tabindex="1" (click)="save()">Update</button>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<form *ngIf="form" [formGroup]="form" class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <mat-toolbar-row>
+      <div fxFlex>Contact Documents</div>
+      <button mat-button class="mat-icon-button dialog-close" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div fxLayout="row" class="p-8" *ngIf="availableDocuments?.length > 0">
+    <mat-form-field fxFlex>
+      <mat-select placeholder="Add Documents" [compareWith]="compareDocuments" panelClass="contact-add-document"
+        formControlName="addDocument" (selectionChange)="addDocument($event)">
+        <mat-option *ngFor="let row of availableDocuments" [value]="row.id">{{row.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-dialog-content class="p-24 m-0">
+
+    <div *ngIf="form.get('tags')?.controls?.length === 0" class="text-center">
+      <div>
+        <strong>Account: </strong> {{ account.accountName }}
+      </div>
+      <div>
+        <strong>Contact: </strong> {{ contact.contactName }}
+      </div>
+      <p>Select documents from the dropdown to add this contact as a default recipient.</p>
+    </div>
+
+    <div formArrayName="tags" *ngFor="let item of form.get('tags')?.controls; let i = index;">
+      <div [formGroupName]="i" fxLayout="row">
+        <mat-form-field fxFlex floatLabel="never" class="mr-8">
+          <input matInput formControlName="tagName" placeholder="Document Type" readonly>
+        </mat-form-field>
+
+        <mat-form-field fxFlex floatLabel="never" class="mr-8">
+          <mat-select placeholder="Mail Type" formControlName="mailTo">
+            <mat-option value="To">TO</mat-option>
+            <mat-option value="Cc">CC</mat-option>
+            <mat-option value="Bcc">BCC</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="w-64">
+          <button mat-icon-button (click)="removeDocument(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </mat-dialog-content>
+
+  <div mat-dialog-actions class="m-0 px-24" fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <ng-container>
+      <button mat-raised-button color="accent" mat-dialog-close>Close</button>
+    </ng-container>
+  </div>
+</form>

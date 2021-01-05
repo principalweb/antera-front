@@ -1,0 +1,171 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm"
+        [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox
+                (change)="toggleAll($event)"
+                [checked]="selection.checkedAll | async"
+                [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let production">{{production.id}}
+            <mat-checkbox [checked]="checkboxes[production.id]"
+                          (change)="onSelectedChange(production.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="id">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Job #</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let production">
+            <p class="company text-truncate">
+                {{ production.id }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="customerName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Customer</span>
+            <input class="form-control"
+                   formControlName="customerName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let production">
+            <p class="company text-truncate">
+                {{ production.customerName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="orderName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Order</span>
+            <input class="form-control"
+                   formControlName="orderName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8"  fxHide fxShow.gt-sm
+                  *cdkCellDef="let production">
+            <p class="company text-truncate">
+                {{ production.orderName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="productName">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Product Name</span>
+            <input class="form-control"
+                   formControlName="productName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let production">
+            <p class="company text-truncate" [matTooltip]="production.productName">
+                {{ production.productName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="machineName">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Equipment</span>
+            <input class="form-control"
+                   formControlName="machineName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let production">
+            <p class="company text-truncate" [matTooltip]="production.machineName">
+                {{ production.machineName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="decoTypeName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Decoration Type</span>
+            <input class="form-control"
+                   formControlName="decoTypeName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm  
+                  *cdkCellDef="let production">
+            <p class="company text-truncate">
+                {{ production.decoTypeName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="variationName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Variation</span>
+            <input class="form-control"
+                   formControlName="variationName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let production" fxHide fxShow.gt-sm
+            (click)="addFilter($event, 'variationName')">
+            <p class="company text-truncate">
+                {{ production.variationName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="statusName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Status</span>
+            <input class="form-control"
+                   formControlName="statusName"
+                   (keyup.enter)="filterProductions()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                *cdkCellDef="let production">
+            <p class="company text-truncate" >
+                {{ production.statusName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let production; columns: displayedColumns;"
+            class="production"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[production.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true"
+            (page)="paginate($event)">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

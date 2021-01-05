@@ -1,0 +1,201 @@
+<mat-table #table matSort
+           [dataSource]="dataSource"
+           (matSortChange)="sortChange($event)"
+           [@animateStagger]="{value:'50'}">
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedContacts.length > 0 && selectedContacts.length === paginator.length"
+                        [indeterminate]="selectedContacts.length > 0 && selectedContacts.length < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact">
+            <mat-checkbox [(ngModel)]="checkboxes[contact.id]" (ngModelChange)="onSelectedChange(contact.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="contactName">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input class="form-control" [formControl]="contactName" placeholder=""
+                   (blur)="filterContacts('contactName', $event)"
+                   (keyup.enter)="filterContacts('contactName', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact">
+            <p class="text-truncate font-weight-600">
+                {{contact.contactName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="title">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Title</span>
+            <input class="form-control" [formControl]="title" placeholder=""
+                   (blur)="filterContacts('title', $event)"
+                   (keyup.enter)="filterContacts('title', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-xs>
+            <p class="email text-truncate">
+                {{contact.title}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="shipCity">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>City</span>
+            <input class="form-control" [formControl]="city" placeholder=""
+                   (blur)="filterContacts('city', $event)"
+                   (keyup.enter)="filterContacts('city', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-xs>
+            <p class="email text-truncate">
+                {{contact.city}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="shipState">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>State</span>
+            <input class="form-control" [formControl]="state" placeholder=""
+                   (blur)="filterContacts('state', $event)"
+                   (keyup.enter)="filterContacts('state', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+            <p class="phone text-truncate">
+                {{contact.state}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="leadSource">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Lead Source</span>
+            <input class="form-control" [formControl]="leadSource" placeholder=""
+                   (blur)="filterContacts('leadSource', $event)"
+                   (keyup.enter)="filterContacts('leadSource', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+            <p class="phone text-truncate">
+                {{contact.leadSource}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="phone">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Phone</span>
+            <input class="form-control" [formControl]="phone" placeholder=""
+                   (blur)="filterContacts('phone', $event)"
+                   (keyup.enter)="filterContacts('phone', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+            <p class="company text-truncate">
+                {{contact.phone}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="email">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Email</span>
+            <input class="form-control" [formControl]="email" placeholder=""
+                   (blur)="filterContacts('email', $event)"
+                   (keyup.enter)="filterContacts('email', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+            <p class="company text-truncate">
+                {{contact.email}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="salesRep">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Assigned To</span>
+            <input class="form-control" [formControl]="salesRep" placeholder=""
+                   (blur)="filterContacts('salesRep', $event)"
+                   (keyup.enter)="filterContacts('salesRep', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+            <p class="company text-truncate">
+                {{contact.salesRep}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Created</span>
+            <input class="form-control" [formControl]="dateCreated" placeholder=""
+                   (blur)="filterContacts('dateCreated', $event)"
+                   (keyup.enter)="filterContacts('dateCreated', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{contact.dateCreated | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateModified">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Modified</span>
+            <input class="form-control" [formControl]="dateModified" placeholder=""
+                   (blur)="filterContacts('dateModified', $event)"
+                   (keyup.enter)="filterContacts('dateModified', $event, true)">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{contact.dateModified | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let contact" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteContact(contact)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let contact; columns: displayedColumns;"
+             class="contact"
+             (click)="editContact(contact)"
+             [ngClass]="{'mat-light-blue-50-bg':checkboxes[contact.id]}"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+                [length]="dataSource.total"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                (page)="paginate($event)"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

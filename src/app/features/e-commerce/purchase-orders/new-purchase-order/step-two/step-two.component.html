@@ -1,0 +1,318 @@
+<p *ngIf="itemService.orderCostError" fxLayout="row" fxLayoutAlign="center" class="mat-h3 font-weight-800 redder">
+  Order cost entered must be a real number.
+</p>
+<div class="toolbar no-bottom-border more-close" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxLayout="row center">
+    <button class="mr-8 half-height" mat-raised-button matStepperPrevious color="accent">
+      <mat-icon>navigate_before</mat-icon> Back</button>
+    <button class="half-height" [disabled]="itemService.selectedNeeds.length === 0" mat-raised-button matStepperNext color="accent">
+      Next <mat-icon>navigate_next</mat-icon></button>
+      <button class="half-height" [disabled]="itemService.checkIfDirty() || itemService.selectedNeeds.length === 0 || !itemService.isDifferentQuantity" mat-raised-button
+        color="accent" (click)="itemService.calculatePriceBreak()" class="text-capitalize ml-8">
+        <mat-icon>save</mat-icon> Save
+      </button>
+      <p *ngIf="itemService.isDifferentQuantity" class="ml-16 mb-0 mat-h3 font-weight-800 redder">Your quantity has changed. Click save to get a more accurate total.</p>
+  </div>
+  <mat-button-toggle-group *ngIf="!itemService.isDifferentQuantity" class="ml-16" [value]="viewMode"
+    (change)="changeView($event)">
+    <mat-button-toggle color="accent" value="summaryView" matTooltip="Summary View">
+      <mat-icon>view_list</mat-icon> Summary View
+    </mat-button-toggle>
+    <mat-button-toggle color="accent" value="detailView" matTooltip="Detail View">
+      <mat-icon>details</mat-icon> Detail View
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+  <p class="mat-h1 mr-16 mb-0 font-weight-800 cener-total">Estimated Total: ${{ itemService.totalCost.toLocaleString("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+  }) }}</p>
+</div>
+<div *ngIf="itemService.isDifferentQuantity" fxLayout="row" fxLayoutAlign="end center">
+<mat-button-toggle-group class="ml-16" [value]="viewMode" (change)="changeView($event)">
+  <mat-button-toggle color="accent" value="summaryView" matTooltip="Summary View">
+    <mat-icon>view_list</mat-icon> Summary View
+  </mat-button-toggle>
+  <mat-button-toggle color="accent" value="detailView" matTooltip="Detail View">
+    <mat-icon>details</mat-icon> Detail View
+  </mat-button-toggle>
+</mat-button-toggle-group>
+</div>
+<!-- SECOND TOOLBAR -->
+<form [formGroup]="filterForm">
+<div class="toolbar more-close" fxLayout="row" fxLayoutAlign="space-between center">
+  <div>
+    <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="clearFilters()">
+      <mat-icon>layers_clear</mat-icon> Clear Filters
+    </button>
+    
+    <button *ngIf="viewMode === 'detailView'" mat-raised-button color="accent" class="text-capitalize"
+      (click)="selectFiltered()">
+      <mat-icon>track_changes</mat-icon> Select Filtered Only
+    </button>
+  </div>
+  
+  
+    <!-- <mat-form-field>
+                  <mat-label>
+                    Order#
+                  </mat-label>
+                  <input formControlName="refSalesOrderId" matInput placeholder="Order#" type="text">
+                </mat-form-field> -->
+    <!-- <mat-form-field>
+      <mat-select [value]="itemService.productFilters.refSalesOrderNo" id="orderNumberSelector" (selectionChange)="ordersSelected($event)" multiple
+        placeholder="Order Number">
+        <mat-option *ngFor="let orderNumber of itemService.orderNumbers" [value]="orderNumber">
+          {{orderNumber}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field> -->
+    <mat-form-field>
+      <mat-label>
+        Customer
+      </mat-label>
+      <input formControlName="customer" [value]="itemService.productFilters.customer" matInput placeholder="Customer" type="text" [matAutocomplete]="autoCustomers">
+      <mat-autocomplete #autoCustomers="matAutocomplete" (optionSelected)="selectCustomer($event)">
+        <mat-option *ngFor="let customer of customers | async" [value]="customer">
+          {{ customer.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>
+        Vendor
+      </mat-label>
+      <input [value]="itemService.productFilters.vendor" formControlName="vendor" matInput placeholder="Vendor" type="text">
+    </mat-form-field>
+  
+</div>
+<div fxLayout="row wrap">
+  <mat-form-field class="wider">
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let chip of itemService.chips" color="primary" [selectable]="true" [removable]="true"
+        (removed)="remove(chip)">
+        {{chip}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input #autoTrigger="matAutocompleteTrigger" (focus)="populateOrderNumbers()" placeholder="Order Numbers" #orderInput [matAutocomplete]="autoOrders" [matChipInputFor]="chipList"
+        formControlName="orderNumbers" (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+    <mat-autocomplete #autoOrders="matAutocomplete" (optionSelected)="selectOrder($event)">
+      <mat-option *ngFor="let orderNumber of itemService.orderNumberData" [value]="orderNumber.refSalesOrderNo">
+        {{ orderNumber.refSalesOrderNo + ' - ' + orderNumber.customer + ' - ' + orderNumber.identity }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+
+<!-- / SECOND TOOLBAR -->
+<summary-view *ngIf="viewMode === 'summaryView'; else detailView;"></summary-view>
+<ng-template #detailView>
+  <div class="sticky-table">
+    <mat-table disableClear matSortActive="description" matSortDirection="asc" matSort (matSortChange)="sortChange($event)" *ngIf="!loading" [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+      <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell class="w-60" *cdkHeaderCellDef>
+          <mat-checkbox (change)="toggleAll()" [checked]="selectedAll">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell class="w-60" *cdkCellDef="let purchaseNeed" (click)="$event.stopPropagation()">
+          <mat-checkbox [checked]="itemService.checkboxes[purchaseNeed.id]"
+            (change)="onSelectedChangeDetail(purchaseNeed.id, $event, purchaseNeed)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <ng-container cdkColumnDef="orderNumber">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Order Number</span>
+        </mat-header-cell>
+        <mat-cell (click)="$event.stopPropagation()" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs
+          [matTooltip]="purchaseNeed.refSalesOrderNo">
+          <!-- <input class="form-control" value={{purchaseNeed.refSalesOrderId | ellipsis}} placeholder=""> -->
+          <a routerLink="/e-commerce/orders/{{purchaseNeed.refSalesOrderId}}">
+            <p class="text-truncate">{{purchaseNeed.refSalesOrderNo | ellipsis: 15}}</p>
+          </a>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- ITEM COLUMN START -->
+      <ng-container cdkColumnDef="item">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Item</span>
+          <input class="form-control" [value]="itemService.productFilters.supplierProductId"
+            formControlName="supplierProductId" placeholder="">
+        </mat-header-cell>
+        <mat-cell class="cell-right" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs
+          [matTooltip]="purchaseNeed.supplierProductId">
+          <p class="text-truncate">{{purchaseNeed.supplierProductId | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- ITEM COLUMN END -->
+    
+      <!-- NAME COLUMN START -->
+      <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Name</span>
+          <input class="form-control" [value]="itemService.productFilters.name" formControlName="name" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.name">
+          <p class="text-truncate mr-16">{{purchaseNeed.name | ellipsis: 50}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- NAME COLUMN END -->
+    
+      <!-- <ng-container cdkColumnDef="type">
+                              <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                                <span>Type</span>
+                              </mat-header-cell>
+                              <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs> -->
+      <!-- <input class="form-control" value={{purchaseNeed.quantityNeeded}} placeholder=""> -->
+      <!-- <p class="text-truncate">{{purchaseNeed.type | ellipsis: 15}}</p>
+                              </mat-cell>
+                            </ng-container> -->
+    
+      <!-- <ng-container cdkColumnDef="description">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Attributes</span>
+          <input class="form-control" [value]="itemService.productFilters.description" formControlName="description"
+            placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="purchaseNeed.description" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+          <p class="full-height">{{ purchaseNeed.description }}</p>
+        </mat-cell>
+      </ng-container> -->
+
+      <!-- COLOR COLUMN -->
+      <ng-container cdkColumnDef="color">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Color</span>
+          <input class="form-control" [value]="itemService.productFilters.color" formControlName="color"
+            placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="purchaseNeed.color" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+          <p class="full-height">{{ purchaseNeed.color }}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- / COLOR COLUMN -->
+
+      <!-- SIZE COLUMN -->
+      <ng-container cdkColumnDef="size">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Size</span>
+          <input class="form-control" [value]="itemService.productFilters.size" formControlName="size" placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="purchaseNeed.size" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+          <p class="full-height">{{ purchaseNeed.size }}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- / SIZE COLUMN -->
+
+
+
+
+
+    
+      <ng-container cdkColumnDef="vendor">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Vendor</span>
+          <!-- <input class="form-control" formControlName="vendor" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.vendor"
+          [matTooltipPosition]="'above'">
+          <a routerLink="/accounts/{{purchaseNeed.vendorId}}">
+            <p class="text-truncate mr-8">{{purchaseNeed.vendor | ellipsis: 12}}</p>
+          </a>
+        </mat-cell>
+      </ng-container>
+
+
+    
+      <ng-container cdkColumnDef="customer">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Customer</span>
+          <!-- <input class="form-control" formControlName="customer" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell (click)="$event.stopPropagation()" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs
+          [matTooltip]="purchaseNeed.customer" [matTooltipPosition]="'above'">
+    
+          <a routerLink="/accounts/{{purchaseNeed.customerId}}">
+            <p class="text-truncate mr-16">{{purchaseNeed.customer | ellipsis: 10}}</p>
+          </a>
+    
+        </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="inHouseId">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>In House Id</span>
+          <input class="form-control" [value]="itemService.productFilters.inhouseId" formControlName="inhouseId"
+            placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="purchaseNeed.inhouseId" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+          <p class="text-truncate">{{ purchaseNeed.inhouseId | ellipsis: 14 }}</p>
+        </mat-cell>
+      </ng-container>
+      
+      <ng-container cdkColumnDef="quantityNeeded">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Quantity Needed</span>
+        </mat-header-cell>
+        <mat-cell class="cell-right" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs
+          [matTooltip]="purchaseNeed.quantityNeeded">
+          <!-- <input class="form-control" value={{purchaseNeed.quantityNeeded}} placeholder=""> -->
+          <p class="text-truncate">{{purchaseNeed.quantityNeeded | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+    
+      <ng-container cdkColumnDef="quantityOrdered">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Quantity Ordered</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.quantityOrdered">
+          <!-- <input class="form-control" value={{purchaseNeed.quantityOrdered}} placeholder=""> -->
+          <quantity-input-container [purchaseNeed]="purchaseNeed" [quantityOrderedInput]="purchaseNeed.quantityOrdered">
+    
+          </quantity-input-container>
+        </mat-cell>
+      </ng-container>
+    
+      <ng-container cdkColumnDef="estimatedCost">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Order Cost</span>
+        </mat-header-cell>
+        <mat-cell (click)="$event.stopPropagation()" class="cell-right" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+          <!-- <p class="text-truncate">${{purchaseNeed.estimatedUnitCost.toFixed(2)}}</p> -->
+          <cost-input-container [purchaseNeed]="purchaseNeed"></cost-input-container>
+        </mat-cell>
+      </ng-container>
+    
+      <ng-container cdkColumnDef="actualCost">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Actual Cost</span>
+        </mat-header-cell>
+        <mat-cell class="cell-right" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+          <p class="text-truncate">${{purchaseNeed.actualUnitCost.toFixed(2)}}</p>
+        </mat-cell>
+      </ng-container>
+
+      <!-- DUE DATE COLUMN START -->
+      <ng-container cdkColumnDef="dueDate">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Due Date</span>
+      
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.dueDate">
+          <p class="text-truncate">{{ purchaseNeed.dueDate === '0000-00-00' ? '' : (purchaseNeed.dueDate | date) }}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- DUE DATE COLUMN END -->
+    
+    
+      <mat-header-row *cdkHeaderRowDef="expandedColumns; sticky: true"></mat-header-row>
+      <mat-row [ngStyle]="{'cursor': 'pointer'}" class="row"
+        *cdkRowDef="let purchaseNeed; columns: expandedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator (page)="paginate($event)" [length]="itemService.detailCount" [pageIndex]="0"
+      [pageSize]="50" [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</ng-template>
+</form>

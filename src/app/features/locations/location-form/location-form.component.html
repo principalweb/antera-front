@@ -1,0 +1,178 @@
+<div class="dialog-content-wrapper dialog-content-wrapper-location">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div fxFill fxLayout="column" class="details-form">
+
+        <div mat-dialog-content class="m-0">
+
+            <form name="form" [formGroup]="locationForm"
+                  class="p-16 pb-0" fxLayout="column">
+
+                <mat-tab-group >
+                    <mat-tab label="Company" fusePerfectScrollbar>
+                        <div class="p-16 pb-0 two-columns">
+                            <mat-form-field>
+                                <input matInput placeholder="Company Name" formControlName="companyName" required>
+                                <app-error
+                                    [group]="locationForm"
+                                    field="companyName"
+                                    label="Company Name"
+                                ></app-error>
+                            </mat-form-field>
+
+                            <!--mat-form-field>
+                                <input matInput placeholder="Delivery Contact" formControlName="deliveryContact">
+                            </mat-form-field-->
+
+							<mat-form-field>
+								<input type="hidden" formControlName="deliveryContactId" />
+								<input type="text" formControlName="deliveryContact" matInput
+									placeholder="Delivery Contact"
+									[matAutocomplete]="autoContactAssigned" required>
+								<mat-autocomplete #autoContactAssigned="matAutocomplete" [displayWith]="displayName"
+									(optionSelected)="selectContact($event)">
+									<mat-option *ngFor="let contact of filteredContacts" [value]="contact">
+										{{ contact.name | capitalizeFirst }}
+									</mat-option>
+								</mat-autocomplete>
+								<button *ngIf="locationForm?.get('deliveryContactId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearContact()">
+								  <mat-icon>close</mat-icon>
+								</button>
+							</mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Assigned To</mat-label>
+                                <input type="text"
+                                       formControlName="salesRep"
+                                       minlength="3"
+                                       matInput
+                                       [matAutocomplete]="autoAssigned">
+                                <mat-autocomplete #autoAssigned="matAutocomplete"
+                                                  [displayWith]="displayName"
+                                                  (optionSelected)="selectAssignee($event)">
+                                    <mat-option *ngFor="let salesRep of filteredUsers" [value]="salesRep">
+                                        {{ salesRep.name | capitalizeFirst }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button *ngIf="locationForm?.get('salesRepId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAssignee()">
+                                  <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Location Name" formControlName="locationName" required>
+                                <app-error
+                                    [group]="locationForm"
+                                    field="locationName"
+                                    label="Location Name"
+                                ></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Phone" formControlName="phoneOffice">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Type" formControlName="locationType">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Fax" formControlName="phoneFax">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="px-16 two-columns">
+                            <mat-form-field class="w-100-p">
+                                <textarea matInput placeholder="General Info" formControlName="description" rows="4">
+                                </textarea>
+                            </mat-form-field>
+                        </div>
+
+                    </mat-tab>
+
+                    <mat-tab label="Shipping" fusePerfectScrollbar>
+
+                        <div class="two-columns px-16">
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Address 1" formControlName="shippingAddressStreet">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Address 2" formControlName="shippingAddressStreet2">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping City" formControlName="shippingAddressCity">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping State" formControlName="shippingAddressState">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Postal Code" formControlName="shippingAddressPostalcode">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Country" formControlName="shippingAddressCountry">
+                            </mat-form-field>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Billing" fusePerfectScrollbar>
+
+                        <div class="two-columns px-16">
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Address 1" formControlName="billingAddressStreet">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Address 2" formControlName="billingAddressStreet2">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing City" formControlName="billingAddressCity">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing State" formControlName="billingAddressState">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Postal Code" formControlName="billingAddressPostalcode">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Country" formControlName="billingAddressCountry">
+                            </mat-form-field>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </form>
+        </div>
+
+        <div mat-dialog-actions class="m-0 p-16"
+            fxLayout="row" fxLayoutAlign="space-between center">
+
+            <button mat-raised-button
+                    (click)="save(locationForm)"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+
+        </div>
+    </div>
+
+</div>

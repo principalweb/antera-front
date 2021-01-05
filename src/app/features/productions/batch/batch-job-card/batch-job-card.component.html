@@ -1,0 +1,43 @@
+<div class="list-card-details"
+    cdkDropList
+    (cdkDropListDropped)="dropJob($event)"
+    [cdkDropListData]="job.batchJobs"
+    (click)="toggle()"
+    >
+    <div class="list-card-name condensed" >
+        {{ job.id == 0 ? "New " : "" }}  Batch Job {{ job.id > 0 ? "#" + job.id.toString() : "" }} - {{ job.statusName }}
+    </div>
+
+    <div class="list-card-badges">
+        <span class="badge">
+            Design #: {{ job.variationName }}
+        </span>
+        <span class="badge">
+            Jobs: {{ job.batchJobs.length }}
+        </span>
+        <span class="badge">
+            Hours: {{ job.hours }}
+        </span>
+    </div>
+    <div class="list-card-badges">
+        <span class="badge">
+            Quantity: {{ job.qty }}
+        </span>
+        <span class="badge">
+            Due: {{ job.due && job.due != '0000-00-00' ? (job.due | date:"mediumDate") : "N/A" }}
+        </span>
+    </div>
+    <div class="list-card-badges">
+        <span class="badge">
+            Customer(s): {{customerNames}}
+        </span>
+    </div>
+    <ng-container *ngIf="showJobs">
+        <div class="example-container example-list">
+            <div class="example-box" *ngFor="let batchJob of job.batchJobs" cdkDrag [cdkDragData]="batchJob">
+                {{ batchJob.orderName }} : {{ batchJob.variationName }} : {{ batchJob.decoTypeName }}
+            </div>
+        </div>
+    </ng-container>
+</div>
+

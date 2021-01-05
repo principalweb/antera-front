@@ -1,0 +1,35 @@
+.decorations-list-dialog {
+    .mat-dialog-container {
+        width: 80vw;
+    }
+
+    .decoration-row {
+        position: relative;
+    }
+
+    .design-image {
+        height: 60px;
+        object-fit: contain;
+    }
+
+    .mat-checkbox-ripple {
+        display: none;
+    }
+
+    .mat-select-value-text,
+    .mat-input-element {
+        font-size: 14px;
+    }
+    
+    .location {
+        padding-top: 0.25em;
+    }
+
+    .mat-table {
+
+        .mat-row {
+            max-height: 65px !important;
+            min-height: 65px !important;
+        }
+    }
+}

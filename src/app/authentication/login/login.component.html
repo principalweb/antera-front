@@ -1,0 +1,81 @@
+<div id="login" fxLayout="row" fxLayoutAlign="start" *ngIf="!loading">
+
+    <div id="login-intro" fxFlex fxHide fxShow.gt-xs>
+
+        <div class="panel" fxLayout="row" fxLayoutAlign="space-between stretch">
+            <div class="left-panel">
+
+                <div class="logo" *fuseIfOnDom [@animate]="{value:'*',params:{scale:'0.2'}}">
+                    <img class="logo-icon" src="assets/images/logos/logo.png">
+                    <img class="logo-icon1" src="assets/images/logos/dvance.png">
+                </div>
+
+                <div class="title mt-36 ml-36" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',y:'25px'}}">
+                    <div class="mb-8" style="font-size: 42px;">
+                        Welcome to the Antera <span style="white-space: nowrap;">ADVANCE System</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="right-panel" fxLayout="row" fxLayoutAlign="start center" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'150ms',y:'25px'}}">
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="login-form-wrapper" fusePerfectScrollbar *fuseIfOnDom
+         [@animate]="{value:'*',params:{delay:'300ms',x:'100%'}}">
+
+        <div class="logos" *fuseIfOnDom [@animate]="{value:'*',params:{scale:'0.2'}}">
+            <img class="logo-icon" src="assets/images/logos/logo.png">
+            <img class="logo-icon1" src="assets/images/logos/dvance.png">
+        </div>
+
+        <div id="login-form">
+
+            <div class="logo" fxHide.gt-xs>
+                <span>A</span>
+            </div>
+
+            <div class="title">LOGIN TO YOUR ACCOUNT</div>
+
+            <form name="loginForm" [formGroup]="loginForm" novalidate>
+
+                <mat-form-field>
+                    <input matInput placeholder="Username" formControlName="username" autocomplete="username">
+                    <mat-error *ngIf="loginFormErrors.username.required">
+                        Username is required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="password" placeholder="Password" formControlName="password" autocomplete="current-password">
+                    <mat-error *ngIf="loginFormErrors.password.required">
+                        Password is required
+                    </mat-error>
+                </mat-form-field>
+
+                <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
+                     fxLayoutAlign="space-between center">
+                    <a class="forgot-password" [routerLink]="'/forgot-password'">Reset Password</a>
+                </div>
+
+                <button mat-raised-button color="accent" (click)="signInWithUsernameAndPassword()" class="submit-button" aria-label="LOGIN"
+                        [disabled]="loginForm.invalid">
+                    LOGIN
+                </button>
+
+            </form>
+
+            <div class="register" fxLayout="column" fxLayoutAlign="center center">
+                <span class="text">Don't have an account?</span>
+                <a class="link" href="https://anterasoftware.com/index.php/en/contact/contact-us">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

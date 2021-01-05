@@ -1,0 +1,134 @@
+.spaceLeftRight {
+      margin-left: 50px;
+      margin-right: 10px;
+    }
+  .differentLeftRight {
+    margin-left: 75px;
+    margin-right: 15px;
+  }
+.example-tree-invisible {
+        display: none;
+      }
+      
+    .example-tree ul,
+    .example-tree li {
+        margin-top: 0;
+        margin-bottom: 0;
+        list-style-type: none;
+    }
+
+    .horizontal {
+      display: inline-block;
+    }
+
+
+    .detail-col-img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .border-black {
+      border: 2px solid black !important;
+      border-radius: 10px !important;
+      padding: 1%;
+      line-height: 2em;
+      width: 100% !important;
+      margin-bottom: 1em;
+    }
+
+    .closer {
+      margin-right: 25px;
+    }
+
+    .addressTip {
+      white-space: pre-line !important;
+      font-size: 16.0px;
+    }
+
+    .equal-width {
+      width: 100px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .longer-width {
+      width: 150px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .middle-width {
+      width: 125px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .greyed {
+      color: rgb(228,228,228) !important;
+    }
+
+    .icon-crimson {
+      color: crimson !important;
+    }
+
+    .editShipping {
+      display: flex !important;
+      justify-content: center !important;
+    }
+
+    .vendorWarning {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 400px;
+      height: auto;
+      .warningDialog {
+        background-color: crimson !important;
+        color: white !important
+      }
+      .mat-dialog-container {
+          padding: 0px !important;
+          overflow-x: hidden !important;
+        }
+      .change-vendor-warning {
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    .po-doc{
+        height:100%;
+    }
+    .doc-toolbar{
+    float:right;
+    }
+
+    .make-green {
+      background-color: green !important;
+      color: white !important;
+    }
+
+    .more-full-width {
+      width: 100%;
+      height: auto;
+    }
+
+    .fuller {
+      display: block !important;
+      .mat-form-field {
+      display: block !important;
+    }
+    }
+
+    .more-color {
+      
+    }
+
+    .attr-width {
+        width: 85px;
+    }
+    
+
+
+
+  

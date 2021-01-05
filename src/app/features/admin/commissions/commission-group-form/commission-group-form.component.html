@@ -1,0 +1,113 @@
+<div class="dialog-content-wrapper" fxFlex>
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+
+    <div fxLayout="column" fxFlex>
+        <form [formGroup]="form" class="p-16" fusePerfectScrollbar>
+            <div class="px-16 w-100-p" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput name="name" formControlName="name" placeholder="Name" required>
+                    <app-error [group]="form" field="name" label="Name"></app-error>
+                </mat-form-field>
+            </div>
+            <div class="px-16 w-100-p" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput name="description" formControlName="description" placeholder="Description">
+                </mat-form-field>
+            </div>
+        </form>
+
+        <ng-container *ngIf="group.id">
+
+            <mat-toolbar>
+                <div class="mr-16">Commission Plans</div>
+                <div *ngIf="!editCommissions">
+                    <button type="button" mat-button (click)="toggleEditCommissions()">Edit</button>
+                </div>
+                <div *ngIf="editCommissions">
+                    <button type="button" mat-button (click)="cancelEditCommissions()">Cancel</button>
+                    <button type="button" mat-raised-button color="accent" (click)="saveEditCommissions()">Save</button>
+                </div>
+            </mat-toolbar>
+
+            <mat-table [dataSource]="group.commissions" matSort *ngIf="!editCommissions">
+
+                <!-- commissionName Column -->
+                <ng-container cdkColumnDef="commissionName">
+                    <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                        <span mat-sort-header>Name</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+                        <p class="text text-truncate">{{row.commissionName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container cdkColumnDef="description">
+                    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                        <span mat-sort-header>Description</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+                        <p class="text text-truncate">{{ row.description }}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- dateEntered Column -->
+                <ng-container cdkColumnDef="dateEntered">
+                    <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+                        <span mat-sort-header>Created Date</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+                        <p class="text text-truncate">{{row.dateEntered | date}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- ModifiedByName Column -->
+                <ng-container cdkColumnDef="dateModified">
+                    <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+                        <span mat-sort-header>Modified Date</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+                        <p class="text text-truncate">{{row.dateModified | date}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+
+
+            <div *ngIf="editCommissions" fxFlex fxLayout="column">
+                <app-commission-list [changesResetSelection]="false" [showFilters]="false" clickAction="select" fxFlex>
+                </app-commission-list>
+            </div>
+        </ng-container>
+
+    </div>
+
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center"
+        *ngIf="!editCommissions">
+
+        <button *ngIf="action !=='edit'" mat-raised-button (click)="create()" class="save-button mat-accent"
+            aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'" mat-raised-button (click)="update()" class="save-button mat-accent"
+            aria-label="SAVE">SAVE
+        </button>
+
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

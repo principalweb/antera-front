@@ -1,0 +1,59 @@
+<div class="antera-settings-currency px-32">
+
+  <div class="mt-40 currency-settings-title-width" fxLayout="row wrap">
+    <span class="mat-title w-240">Currency Settings</span>
+    <mat-slide-toggle class="mt-4 mr-16" (change)="updateEnableSettings($event)" labelPosition="before" [(ngModel)]="enable">
+      Enable
+    </mat-slide-toggle>
+    <mat-slide-toggle (change)="updateAutoUpdateSettings($event)" class="mt-4" labelPosition="before" [(ngModel)]="autoUpdate">
+      Auto Update
+    </mat-slide-toggle>
+    
+      <p fxFlexAlign="start" class="core-currency"> Core Currency:</p>
+      <mat-form-field class="mt-0 no-border mr-8">
+        <mat-select class="mt-0 no-select-border" [(ngModel)]="baseCurrency">
+          <mat-option class="mt-0" [value]="currency.code" *ngFor="let currency of currencyService.currencies | async">
+            {{ currency.code }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="half-height">
+        <button [disabled]="loadedCurrency === baseCurrency" mat-raised-button color="accent" class="text-capitalize mr-8" (click)="saveCoreCurrency()">
+          Save
+          <mat-icon>save</mat-icon> 
+        </button>
+      </div>
+
+      <p fxFlexAlign="start" class="core-currency"> Rate Padding %:</p>
+
+        <mat-form-field [style.width.px]="45" class="mt-0 no-border mr-8">
+          <input matInput type="number" [(ngModel)]="padding">
+        </mat-form-field>
+      <div class="half-height">
+        <button [disabled]="loadedPadding === padding" mat-raised-button color="accent" class="text-capitalize mr-8"
+          (click)="saveRatePadding()">
+          Save
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+      <div class="half-height ml-8">
+        <button mat-raised-button class="text-capitalize mr-8 grn-sync-btn"
+          (click)="currencyService.syncAllExchangeRates()">
+          Sync All Rates
+          <mat-icon color="white">sync</mat-icon>
+        </button>
+      </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutGap="32px">
+    <div fxFlex="50" fxFlex.lt-md="100">
+      <app-manage-currency></app-manage-currency>
+    </div>
+    <div fxFlex="50" fxFlex.lt-md="100">
+        <app-manage-rates></app-manage-rates>
+    </div>
+  </div>
+  <div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

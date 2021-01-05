@@ -1,0 +1,122 @@
+<mat-toolbar class="mb-0" fxLayoutAlign="space-between center">
+    <div>Locations</div>
+    <div *ngIf="checkbox == false" fxLayout="row" fxLayoutAlign="end center">
+        <button mat-raised-button color="accent" (click)="newLocation()">
+            <mat-icon>add</mat-icon> Location
+        </button>
+    </div>
+</mat-toolbar>
+<div class="related-locations-table pt-20">
+    <mat-table #table matSort (matSortChange)="sortChange($event)" [dataSource]="dataSource" fusePerfectScrollbar>
+        <ng-container cdkColumnDef="checkbox">
+            <mat-header-cell class="w-40" *cdkHeaderCellDef></mat-header-cell>
+            <mat-cell class="w-40" *cdkCellDef="let location">
+                <mat-checkbox [ngModel]="selectedRow === location.id" (ngModelChange)="onSelectedChange(location)"
+                    (click)="$event.stopPropagation()">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container cdkColumnDef="companyName">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>company Name</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                {{location.companyName}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="locationName">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Location Name</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                {{location.locationName}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="deliverycontact">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Delivery Contact</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                {{location.deliveryContact}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="phoneOffice">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Phone</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                {{location.phoneOffice}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="billing">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Billing</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                <p class="company text-truncate">
+                    {{ location.billingAddressStreet }}
+                    {{ location.billingAddressStreet1 }}
+                    {{ location.billingAddressCity }}
+                    {{ location.billingAddressCountry }}
+                    {{ location.billingAddressState }}
+                    {{ location.billingAddressPostalcode }}
+                </p>
+            </mat-cell>
+        </ng-container>
+        <ng-container cdkColumnDef="shipping">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Shipping</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                {{ formattedShippingAddress(location) }}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="locationType">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Location Type</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let location">
+                {{location.locationType}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="buttons">
+            <mat-header-cell class="w-40" *cdkHeaderCellDef></mat-header-cell>
+            <mat-cell class="w-40" *cdkCellDef="let location">
+                <div fxFlex="row" fxLayoutAlign="end center">
+                    <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <mat-menu #moreMenu="matMenu">
+                        <button mat-menu-item aria-label="remove" (click)="deleteLocation(location)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Remove</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let location; columns: displayColumns;" class="location-row" matRipple
+            (click)="onSelectedChange(location)" [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+    <div class="h-64 text-center p-20" *ngIf="dataSource.empty">
+        You don't have locations linked to this account.
+    </div>
+    <mat-paginator #paginator [length]="locationsCount" (page)="paginate($event)" [pageSize]="10"
+        [pageSizeOptions]="[10, 20, 50, 100]" [showFirstLastButtons]="true">
+    </mat-paginator>
+
+    <div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

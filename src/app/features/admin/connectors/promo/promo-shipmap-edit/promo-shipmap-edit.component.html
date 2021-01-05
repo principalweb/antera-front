@@ -1,0 +1,33 @@
+<div class="px-32">
+  <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">Manage Ship Methods</span>
+  </div>
+  <form [formGroup]="credsForm" (submit)="save()">
+      <div class="px-16">
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Carrier" formControlName="carrier" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Service" formControlName="service" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Label" formControlName="label" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+          <button type="submit" class="ml-96" mat-raised-button color="accent">SAVE</button>
+        </div>
+      </div>
+  </form>
+</div>

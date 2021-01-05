@@ -1,0 +1,84 @@
+<div class="dialog-content-wrapper" fxLayout="column">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+            {{dialogTitle}}
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRef.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="center">
+        <div fxFlex fxLayout="column" class="artist-form">
+            <div mat-dialog-content class="m-0" fusePerfectScrollbar>
+              <form [formGroup]="artistForm" id="artist-assign" class="mat-white-bg mat-elevation-z2 p-24 m-12" fxLayout="column">
+                <div class="section" *ngIf="artist==='both'">
+                  <div class = "row">
+                      <mat-form-field>
+                          <input type="hidden" formControlName="assignedId" />
+                          <input type="text" matInput
+                                 placeholder="Assigned To"
+                                 formControlName="assignee"
+                                 [matAutocomplete]="autoAssignee"/>
+                          <mat-autocomplete #autoAssignee="matAutocomplete"
+                                            [displayWith]="displayName"
+                                            (optionSelected)="selectAssignee($event)">
+                              <mat-option [value]="assignee"
+                                          *ngFor="let assignee of filteredAssignees | async">
+                                  {{ assignee.name }}
+                              </mat-option>
+                          </mat-autocomplete>
+                      </mat-form-field>
+                  </div>
+                  <div class = "row">
+                      <mat-form-field>
+                          <input matInput type="number"
+                                 formControlName="estimated"
+                                 placeholder="Estimated Time"
+                                 step="0.01">
+                      </mat-form-field>
+                  </div>
+                </div>
+                <div class="section" *ngIf="artist==='artist'">
+                    <mat-form-field>
+                        <input type="hidden" formControlName="assignedId" />
+                        <input type="text" matInput
+                               placeholder="Assigned To"
+                               formControlName="assignee"
+                               [matAutocomplete]="autoAssignee"/>
+                        <mat-autocomplete #autoAssignee="matAutocomplete"
+                                          [displayWith]="displayName"
+                                          (optionSelected)="selectAssignee($event)">
+                            <mat-option [value]="assignee"
+                                        *ngFor="let assignee of filteredAssignees | async">
+                                {{ assignee.name }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="section" *ngIf="artist==='estimed'">
+                    <mat-form-field>
+                        <input matInput type="number"
+                               formControlName="estimated"
+                               placeholder="Estimated Time">
+                    </mat-form-field>
+                </div>
+              </form>
+              <div mat-dialog-actions class="m-0 px-24" fxLayout="row" fxLayoutAlign="space-between center">
+                  <button
+                          mat-raised-button
+                          class="save-button mat-accent"
+                          (click)=updateArtwork()
+                          aria-label="SAVE">
+                      SAVE
+                  </button>
+              </div>
+           </div> 
+        </div>
+    </div> <!--center-->
+</div>

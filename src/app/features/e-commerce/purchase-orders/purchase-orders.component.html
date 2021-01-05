@@ -1,0 +1,156 @@
+<div id="puchase-orders" class="page-layout carded fullwidth inner-scroll list-page">
+<!-- TOP BACKGROUND -->
+<div class="top-bg mat-accent-bg"></div>
+<!-- / TOP BACKGROUND -->
+<div class="center">
+<div class="header white-fg h-80" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <!-- APP TITLE -->
+    <div class="logo my-12 m-sm-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Purchase Orders</span>
+    </div>
+    <!-- / APP TITLE -->
+    </div>
+
+    <!-- CONTENT CARD -->
+    <div fusePerfectScrollbar class="content-card mat-white-bg">
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="newPurchaseOrder()">
+                <mat-icon>add</mat-icon> Create Purchase Order
+            </button>
+            <mat-slide-toggle [checked]="hidden == ''" class="ml-16" fxHide fxShow.gt-md (change)="showHidden($event)">
+                Include Hidden
+            </mat-slide-toggle>
+        </div>
+        <!-- TOOLBAR -->
+        <!-- TABLE START -->
+        <div class="orders-table" [formGroup]="filterForm">
+            <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+                <ng-container cdkColumnDef="checkbox">
+                    <mat-header-cell class="w-60" *cdkHeaderCellDef>
+                        <mat-checkbox (change)="toggleAll()" [checked]="selectedAll" [indeterminate]="selectedAny">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell class="w-60" *cdkCellDef="let purchaseOrder" (click)="$event.stopPropagation()">
+                        <mat-checkbox [checked]="checkboxes[purchaseOrder.id]"
+                            (change)="onSelectedChange(purchaseOrder.id, $event)">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- NUMBER COLUMN START -->
+                <ng-container cdkColumnDef="number">
+                    <mat-header-cell fxLayout="column" fxLayoutAlign="start" fx class="header-cell" *cdkHeaderCellDef>
+                        <span>Purchase Order #</span>
+                        <input class="form-control" formControlName="number" placeholder="" (keyup.enter)="fetchList()">
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let purchaseOrder">
+                        <p class="text-truncate">{{purchaseOrder.number}}</p>
+                    </mat-cell>
+                </ng-container>
+                <!-- NUMBER COLUMN END -->
+
+                <!-- LABEL COLUMN START -->
+                <ng-container cdkColumnDef="label">
+                    <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                        <span>Label</span>
+                        <input class="form-control" formControlName="label" placeholder="" (keyup.enter)="fetchList()">
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let purchaseOrder" fxHide fxShow.gt-xs [matTooltip]="purchaseOrder.label"
+                        [matTooltipPosition]="'above'">
+                        <p class="text-truncate">{{purchaseOrder.label | ellipsis: 15}}</p>
+                    </mat-cell>
+                </ng-container>
+                <!-- LABEL COLUMN END -->
+
+                <!-- VENDOR COLUMN START -->
+                <ng-container cdkColumnDef="vendor">
+                    <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                        <span>Vendor</span>
+                        <input class="form-control" formControlName="vendor" placeholder="" (keyup.enter)="fetchList()">
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let purchaseOrder" fxHide fxShow.gt-xs [matTooltip]="purchaseOrder.vendor"
+                        [matTooltipPosition]="'above'">
+                        <a (click)=$event.stopPropagation() routerLink="/accounts/{{purchaseOrder.vendorId}}"><p class="text-truncate">{{purchaseOrder.vendor | ellipsis: 12}}</p></a>
+                    </mat-cell>
+                </ng-container>
+                <!-- VENDOR COLUMN END -->
+
+                <!-- STATUS COLUMN START -->
+                <ng-container cdkColumnDef="status">
+                    <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-md *cdkHeaderCellDef>
+                        <span class="w-60">Status</span>
+                        <mat-select disableRipple class="form-control"
+                        (selectionChange)="statusChange($event)"
+                            >
+                            <mat-option *ngFor="let type of orderService.statuses" [value]="type.name">
+                                {{type.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let purchaseOrder" fxHide fxShow.gt-md>
+                        <p class="status text-truncate h6 p-4" [ngClass]="colors[purchaseOrder.status]">
+                            {{purchaseOrder.status}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+                <!-- STATUS COLUMN END -->
+
+                <!-- TOTAL AMOUNT COLUMN START -->
+                <ng-container cdkColumnDef="totalAmount">
+                    <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                        <span>Total Amount</span>
+                        
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let purchaseOrder" fxHide fxShow.gt-xs [matTooltip]="purchaseOrder.salesAmount.toFixed(2)"
+                        [matTooltipPosition]="'above'">
+                        <p class="text-truncate">${{purchaseOrder.salesAmount.toFixed(2)}}</p>
+                    </mat-cell>
+                </ng-container>
+                <!-- TOTAL AMOUNT COLUMN END -->
+
+                <!-- CREATION DATE COLUMN START -->
+                <ng-container cdkColumnDef="date">
+                    <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                        <span>Created</span>
+                
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let purchaseOrder" fxHide fxShow.gt-xs [matTooltip]="purchaseOrder.created">
+                        <p class="text-truncate">{{ purchaseOrder.created | date }}</p>
+                    </mat-cell>
+                </ng-container>
+                <!-- CREATION DATE COLUMN END -->
+
+                 <!-- HIDDEN COLUMN -->
+                <ng-container cdkColumnDef="hidden">
+                    <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                        <span>Visible</span>
+                
+                    </mat-header-cell>
+                    <mat-cell (click)="$event.stopPropagation()" *cdkCellDef="let purchaseOrder" fxHide fxShow.gt-xs>
+                        <mat-icon (click)="makeHidden(purchaseOrder, $event)" class="mat-18" color="accent">{{ purchaseOrder.hidden == 0 ? 'visibility' : 'visibility_off'}}</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- /HIDDEN COLUMN -->
+
+                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        
+                <mat-row class="order" (click)="navigateToPurchaseOrder(purchaseOrder.id)" matRipple *cdkRowDef="let purchaseOrder; columns: displayedColumns;"
+                    [ngClass]="[checkboxes[purchaseOrder.id] ? 'highlight': '']">
+                </mat-row>
+            </mat-table>
+
+            <mat-paginator #paginator [length]="orderService.totalCount" [pageIndex]="0" [pageSize]="50" (page)="paginate($event)"
+                [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+            </mat-paginator>
+        </div>
+        <!-- TABLE END -->
+    </div>
+    <!-- CONTENT CARD -->
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+</div>

@@ -1,0 +1,90 @@
+<div [ngClass]="'h-4'" [ngStyle]="{'background-color':dueColor}" *ngIf="dueColor"></div>
+<div class="list-card-details"
+     [ngClass]="{'red-500-fg': isOverdue}">
+
+    <div fxLayout="row" fxLayoutAlign="space-between center"
+         [ngClass]="{'red-500-fg': isOverdue}">
+         <mat-checkbox 
+            class="card-checkbox"
+            *ngIf="card.statusName === 'Pending'"
+            checked=""
+            (click)="$event.stopPropagation()"
+            (change)="onSelect(card)"
+            >
+        </mat-checkbox>
+        <span class="list-card-name">{{ card.identity }}</span>
+        <span class="ml-8 mr-4"><a aria-label="pin" (click)="onPin($event)"><mat-icon *ngIf="card.pinned">star</mat-icon><mat-icon *ngIf="!card.pinned">star_border</mat-icon></a></span>
+    </div>
+
+    <div *ngIf="card.dueDate"
+         class="list-card-badges"
+         fxLayout="row" fxLayoutAlign="space-between center">
+
+        <!-- CARD DUE -->
+        <span class="badge due-date"
+              [ngStyle]="{'background-color': dueColor}"
+              *ngIf="card.dueDate" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="s-16">access_time</mat-icon>
+            <span>{{card.dueDate | date:'mediumDate'}}</span>
+        </span>
+        <div *ngIf="!condensed">
+                <img mat-card-image [src]="card.thumbnail"/>
+        </div>
+    </div>
+
+    <div class="list-card-members"
+         fxLayout="row">
+
+        <div class="list-card-member">
+            <span matTooltip="Assignee">{{ card.assignee }}</span>
+        </div>
+
+    </div>
+
+    <div class="mb-8 condensed" fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-checkbox 
+            class="card-checkbox"
+            *ngIf="card.statusName === 'Pending'"
+            checked=""
+            (click)="$event.stopPropagation()"
+            (change)="onSelect(card)"
+            >
+        </mat-checkbox>
+        <span [matTooltip]="ttCustomer">{{ card.customerName }}</span>
+
+        <div fxLayout="row" fxlayoutAlign="end center">
+            <!--span *ngIf="condensed" class="mr-8" [matTooltip]="ttOrderNo" (click)="$event.stopPropagation()"><span><a class="accent-900-fg" *ngIf="card.relatedOrders[0]?.orderId" (click)="openRelatedOrderDetailDialog(card.relatedOrders[0].orderId)">{{ card.relatedOrders[0]?.orderNum }}</a></span></span-->
+            <span class="accent-800-fg">{{ fx2Str(card.estimated) }}</span>
+        </div>
+
+        <span *ngIf="condensed" class="ml-8 mr-4"><a aria-label="pin" (click)="onPin($event)"><mat-icon *ngIf="card.pinned">star</mat-icon><mat-icon *ngIf="!card.pinned">star_border</mat-icon></a></span>
+    </div>
+    <div class="mb-8 condensed" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="condensed && card.relatedOrders[0]?.orderId">
+            <span class="mr-8" [matTooltip]="ttOrderNo" (click)="$event.stopPropagation()"><span>Order # <a class="accent-900-fg"  (click)="openRelatedOrderDetailDialog(card.relatedOrders[0].orderId)">{{ card.relatedOrders[0]?.orderNum }}</a></span></span>
+    </div>
+
+    <div class="mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+        <span matTooltip="Deco Type">{{ card.designTypeName }}</span>
+        <span matTooltip="Artwork #">{{ card.designNo }}</span>
+    </div>
+    <div class="mb-8 condensed" fxLayout="row" fxLayoutAlign="space-between center">
+        <span>Priority: {{card.priority}}</span>
+    </div>
+
+    <div class="mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+        <span [matTooltip]="ttOrderNo">
+            <span *ngFor="let order of card.relatedOrders" (click)="$event.stopPropagation()">
+                <a mat-button class="accent-900-fg" (click)="openRelatedOrderDetailDialog(order.orderId)">{{ order.orderNum }}</a>
+            </span>
+        </span>
+    </div>
+
+
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <span matTooltip="Description">{{ card.notes | maxChars: 60 }}</span>
+    </div>
+
+    <!--div *ngIf="card.orderIdentity && card.orderIdentity != ''" fxLayout="row" fxLayoutAlign="space-between center">
+        <span matTooltip="Order Identity">{{ card.orderIdentity | maxChars: 60 }}</span>
+    </div-->
+</div>

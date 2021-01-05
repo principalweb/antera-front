@@ -1,0 +1,59 @@
+<mat-table fxFlex #table matSort
+        [formGroup]="filterForm"
+        [dataSource]="dataSource"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->    
+    <ng-container cdkColumnDef="reportName">
+        <mat-header-cell class="pr-8 pr-100 header-cell" *cdkHeaderCellDef>
+            <span>Report Name</span>
+            <input formControlName="reportName" matInput class="form-control" placeholder="">
+        </mat-header-cell>
+        <mat-cell class="pr-8 pr-100" *cdkCellDef="let report">
+            <p class="text-truncate">
+                {{report.reportName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="description">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span>Description</span>
+            <input formControlName="description" matInput class="form-control" placeholder="">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let report">
+            <p class="company text-truncate">
+                {{ report.description }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="department">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span>Department</span>
+            <mat-select formControlName="department" class="form-control">
+                <mat-option [value]="">All</mat-option>        
+                <mat-option [value]="department" *ngFor="let department of departments">
+                    {{ department | titlecase }}
+                </mat-option>
+            </mat-select>
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let report">
+            <p class="company text-truncate">
+                {{ departmentToString(report.department) }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let report; columns: displayedColumns;"
+            class="report"
+            (click)="viewReport(report)"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+<mat-paginator fxFlex="none" 
+            [pageSize]="50"                            
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true" #paginator>
+</mat-paginator>

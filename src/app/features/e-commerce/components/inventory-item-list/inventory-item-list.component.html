@@ -1,0 +1,103 @@
+<mat-table fxFlex #table [dataSource]="dataSource" matSort
+           [formGroup]="filterForm"
+           (matSortChange)="sortChange($event)"
+           [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="sku">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Sku</span>
+          <input class="form-control" formControlName="sku" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.sku">{{ item.sku }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="size">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Size</span>
+          <input class="form-control" formControlName="size" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.size">{{item.size}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="color">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Color</span>
+          <input class="form-control" formControlName="color" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.color">{{item.color}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="quantity">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Qty on Hand</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.quantity }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="reserved">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Reserved</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.reserved }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="min">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Min</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <input class="form-control" [formControl]="af.get(item.binId+'_'+item.sku+'min')" placeholder="" (keyup)="calculateChange(item.binId, item.sku,'min')">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="max">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Max</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <input class="form-control" [formControl]="af.get(item.binId+'_'+item.sku+'max')" placeholder="" (keyup)="calculateChange(item.binId, item.sku,'max')">        
+      </mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="save">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef>
+          <span>
+            Save
+          </span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm class="button">
+        <mat-icon aria-hidden="false" aria-label="Save adjustment" (click)="adjustSave(item)" title="Save inventory adjustment" color="accent">save</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedClumns"></mat-header-row>
+    <mat-row *cdkRowDef="let item; columns: displayedClumns;"
+             class="inventory-item"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+               [length]="dataSource.total"
+               [pageIndex]="dataSource.index"
+               [pageSize]="50"
+               [pageSizeOptions]="[10, 20, 50, 100]"
+               (page)="paginate($event)"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

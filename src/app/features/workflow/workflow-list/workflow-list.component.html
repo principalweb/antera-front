@@ -1,0 +1,154 @@
+<mat-table fxFlex #table matSort
+        [dataSource]="dataSource"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->
+    
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.length"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow">
+            <mat-checkbox [(ngModel)]="checkboxes[workflow.id]"
+                          (ngModelChange)="onSelectedChange(workflow.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="orderNumber">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterWorkflows()">
+            <span mat-sort-header>Order #</span>
+            <input class="form-control" [formControl]="orderNumber" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow">
+            <p class="text-truncate">
+                {{ workflow.orderNumber }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="identity">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterWorkflows()">
+            <span mat-sort-header>Identity</span>
+            <input class="form-control" [formControl]="identity" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow">
+            <p class="text-truncate">
+                {{ workflow.identity }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="account">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterProjects()">
+            <span mat-sort-header>Account</span>
+            <input class="form-control" [formControl]="account" placeholder="">
+        </mat-header-cell>
+        <mat-cell mat *cdkCellDef="let workflow" fxHide fxShow.gt-xs>
+            <p matTooltip="{{workflow.account}}" class="text-truncate">
+                {{ workflow.account }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendor">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterProjects()">
+            <span mat-sort-header>Vendor</span>
+            <input class="form-control" [formControl]="vendor" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow" fxHide fxShow.gt-xs>
+            <p [matTooltip]="workflow.vendor" class="text-truncate">
+                {{ workflow.vendor }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="amount">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterProjects()">
+            <span mat-sort-header>Amount</span>
+            <input class="form-control" [formControl]="amount" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow" fxHide fxShow.gt-sm >
+            <p class="text-truncate">
+                {{ workflow.amount }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="salesRep">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterProjects()">
+            <span mat-sort-header>Assigned To</span>
+            <input class="form-control" [formControl]="salesRep" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow" fxHide fxShow.gt-md>
+            <p class="text-truncate">
+                {{ workflow.salesRep }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="csr">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xl *cdkHeaderCellDef (keyup.enter)="filterProjects()">
+            <span mat-sort-header>CSR</span>
+            <input class="form-control" [formControl]="csr" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow" fxHide fxShow.gt-xl>
+            <p class="text-truncate">
+                {{ workflow.csr }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="qbSync">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef mat-sort-header>QB Sync</mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow" fxHide fxShow.gt-lg>
+            <mat-slide-toggle
+                [ngModel]="workflow.qbSync"
+                (click)="toggleEnable(workflow, $event)"
+            ></mat-slide-toggle>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let workflow" fxFlex="none" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <!-- <button mat-menu-item aria-label="clone">
+                        <mat-icon>content_copy</mat-icon>
+                        <span>Clone</span>
+                    </button> -->
+                    <button mat-menu-item aria-label="remove" (click)="deleteWorkflow(workflow)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let workflow; columns: displayedColumns;"
+            class="workflow"
+            (click)="editWorkflow(workflow)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[workflow.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>

@@ -1,0 +1,126 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm">
+
+  <!-- Checkbox Column -->
+  <ng-container cdkColumnDef="checkbox">
+    <mat-header-cell *cdkHeaderCellDef class="w-60">
+        <mat-checkbox (change)="toggleAll($event)"
+                    [checked]="selection.checkedAll | async"
+                    [indeterminate]="selection.checkedAny | async">
+        </mat-checkbox>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let row"  class="w-60">
+        <mat-checkbox [checked]="checkboxes[row.id]"
+                      (change)="onSelectedChange(row.id)"
+                      (click)="$event.stopPropagation()">
+        </mat-checkbox>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="name">
+      <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+          <span mat-sort-header>Name</span>
+          <input class="form-control" formControlName="name" (keyup.enter)="filterUom()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" matTooltip="{{row.name}}">
+          <p class="text text-truncate fong-weight-600">
+              {{row.name}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="type">
+      <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+          <span mat-sort-header>Type</span>
+          <input class="form-control" formControlName="type" (keyup.enter)="filterUom()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" matTooltip="{{row.type}}">
+          <p class="text text-truncate fong-weight-600">
+              {{row.type}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="abbreviation">
+      <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+          <span mat-sort-header>Abbreviation</span>
+          <input class="form-control" formControlName="abbreviation" (keyup.enter)="filterUom()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" matTooltip="{{row.abbreviation}}">
+          <p class="text text-truncate fong-weight-600">
+              {{row.abbreviation}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="conversionRatio">
+      <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+          <span mat-sort-header>Conversion Ratio</span>
+          <input class="form-control" formControlName="conversionRatio" (keyup.enter)="filterUom()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" matTooltip="{{row.conversionRatio}}">
+          <p class="text text-truncate fong-weight-600">
+              {{row.conversionRatio}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container cdkColumnDef="uomGroupId">
+      <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+          <span mat-sort-header>Uom Group</span>
+          <!--input class="form-control" formControlName="uomGroupId" (keyup.enter)="filterUom()"-->
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" matTooltip="{{row.uomGroupId}}">
+          <p class="text text-truncate fong-weight-600">
+              {{getUomGroup(row.uomGroupId)}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+
+
+  <ng-container cdkColumnDef="status">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+          <span mat-sort-header>Status</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row">
+        <button mat-icon-button *ngIf="row.status" (click)="updateStatus(row, $event)">
+            <mat-icon class="status-icon green-500-bg white-fg s-24">check_box</mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="!row.status" (click)="updateStatus(row, $event)">
+            <mat-icon class="status-icon orange-500-fg s-32">check_box_outline_blank</mat-icon>
+        </button>
+      </mat-cell>
+  </ng-container>
+
+
+  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+  <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+          class="uom-row" matRipple
+          (click)="editUom(row.id)"
+          [@animate]="{value:'*',params:{y:'100%'}}">
+  </mat-row>
+</mat-table>
+
+<div class="h-64 text-center p-20" *ngIf="dataSource.total == 0">
+  You don't have uom in this module.
+</div>
+
+<mat-paginator #paginator
+            [length]="dataSource.total"
+            (page)="paginate($event)"
+            [pageIndex]="0"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

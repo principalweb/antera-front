@@ -1,0 +1,76 @@
+@import "src/@fuse/scss/fuse";
+
+fuse-webstore-list {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .mat-table {
+        box-shadow: none;
+        padding-top: 64px;
+        position: static;
+        overflow-y: auto;
+
+        .mat-header-row {
+            background: white;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+
+        .mat-column-checkbox {
+            flex: 0 1 64px;
+
+            .mat-checkbox-ripple {
+                display: none !important; //fix for broken rendering
+            }
+        }
+
+        .mat-column-logo {
+            flex: 0 1 40px;
+        }
+
+        .mat-column-buttons {
+            flex: 0 1 80px;
+        }
+
+        .mat-column-clientName {
+
+            mat-chip-list{
+                padding: 4px 0px 4px!important;
+                .mat-chip {
+                    font-size: 12px;
+                }
+
+                .mat-chip:not(.mat-basic-chip) {
+                    padding: 4px 10px !important;
+                }
+            }
+        }
+
+        .mat-row {
+            position: relative;
+            cursor: pointer;
+                        z-index: 0;
+
+            .mat-cell {
+                min-width: 0;
+
+                &.mat-column-detail-button {
+                    flex: 0 1 auto;
+                    padding: 0 24px 0 0;
+                    @include media-breakpoint('gt-md') {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+    
+    .mat-paginator {
+        flex: none;
+    }
+}

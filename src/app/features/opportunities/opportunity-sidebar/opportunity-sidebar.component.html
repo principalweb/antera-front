@@ -1,0 +1,111 @@
+<div class="sidenav-content p-20" fusePerfectScrollbar>
+    <div class="fuse-card auto-width mb-32" [ngClass.gt-sm]="'mb-0 mr-32'">
+
+        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+            <div class="pr-16">
+                <div class="h3 secondary-text">Opportunities</div>
+            </div>
+        </div>
+
+        <div class="h-80 w-100-p">
+            <canvas baseChart
+                    [datasets]="opportunities"
+                    [labels]="['opportunities']"
+                    [colors]="colors"
+                    [options]="options"
+                    [chartType]="'horizontalBar'">
+            </canvas>
+        </div>
+
+    </div>
+    <div class="fuse-card auto-width mb-32" [ngClass.gt-sm]="'mb-0 mr-32'">
+
+        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+            <div class="pr-16">
+                <div class="h3 secondary-text">Sales</div>
+            </div>
+        </div>
+
+        <div class="h-160 w-100-p">
+            <canvas baseChart
+                    [datasets]="sales"
+                    [labels]="['Month', 'YTD', 'Last Year']"
+                    [colors]="colors"
+                    [options]="options"
+                    [chartType]="'horizontalBar'">
+            </canvas>
+        </div>
+
+    </div>
+
+    <div class="fuse-card auto-width mb-32">
+        <div class="p-16 pb-0" fxLayout="row wrap" fxLayoutAlign="start end">
+            <div class="pr-16">
+                <div class="h3 secondary-text">Sales</div>
+            </div>
+        </div>
+
+        <div class="h-160">
+            <ngx-charts-pie-chart
+                *fuseIfOnDom
+                [scheme]="scheme"
+                [results]="credits"
+                [doughnut]="true">
+            </ngx-charts-pie-chart>
+        </div>
+    
+        <div class="p-16" fxLayout="row" fxLayoutAlign="center center">
+            <div class="px-16" fxLayout="column" fxLayoutAlign="start center"
+                 *ngFor="let credit of credits">
+                <div class="h4 secondary-text">{{credit.name}}</div>
+                <div class="h2 font-weight-300 py-8">{{credit.value}}%</div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="fuse-card mb-16 py-8 text-center" fxLayout="row">
+            <div fxFlex="33">
+                <div class="figure">4</div>
+                <div class="label secondary-text">Leads</div>
+            </div>
+            <div fxFlex>
+                <div class="figure">9</div>
+                <div class="label secondary-text">Quotes</div>
+            </div>
+            <div class="right-border-none" fxFlex>
+                <div class="figure">2</div>
+                <div class="label secondary-text">Orders</div>
+            </div>
+        </div>
+        <div class="fuse-card mb-16 py-8 text-center" fxLayout="row">
+            <div fxFlex="33">
+                <div class="figure">27</div>
+                <div class="label secondary-text">Tasks</div>
+            </div>
+            <div fxFlex>
+                <div class="figure">14</div>
+                <div class="label secondary-text">Calls</div>
+            </div>
+            <div class="right-border-none" fxFlex>
+                <div class="figure">6</div>
+                <div class="label secondary-text">Ranks</div>
+            </div>
+        </div>
+        <div class="fuse-card mb-16 py-8 text-center" fxLayout="row">
+            <div fxFlex="33">
+                <div class="figure">10</div>
+                <div class="label secondary-text">Subsidiaries</div>
+            </div>
+            <div fxFlex>
+                <div class="figure">2</div>
+                <div class="label secondary-text">Marketing</div>
+            </div>
+            <div class="right-border-none" fxFlex>
+                <div class="figure">5</div>
+                <div class="label secondary-text">Locations</div>
+            </div>
+        </div>
+    </div>
+
+</div>

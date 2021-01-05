@@ -1,0 +1,187 @@
+<mat-table #table matSort
+           [dataSource]="dataSource"
+           [@animateStagger]="{value:'50'}"
+           [formGroup]="filterForm"
+           (matSortChange)="sort($event)">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity">
+            <mat-checkbox [checked]="checkboxes[opportunity.id]"
+                          (change)="onSelectedChange(opportunity.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Name</span>
+            <input class="form-control" formControlName="name" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity">
+            <p class="text-truncate">{{opportunity.name}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Account Name Column -->
+    <ng-container cdkColumnDef="accountName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Account Name</span>
+            <input class="form-control" formControlName="accountName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-xs>
+            <a (click)=$event.stopPropagation() routerLink="/accounts/{{opportunity.accountId}}"><p class="text-truncate">{{opportunity.accountName}}</p></a>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Contact Name Column -->
+    <ng-container cdkColumnDef="contactName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Contact Name</span>
+            <input class="form-control" formControlName="contactName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-xs>
+            <a (click)=$event.stopPropagation() routerLink="/contacts/{{opportunity.contactId}}"><p class="text-truncate">{{opportunity.contactName}}</p></a>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Lead Source Column -->
+    <ng-container cdkColumnDef="leadSource">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Lead Source</span>
+            <input class="form-control" formControlName="leadSource" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-sm>
+            <p class="text-truncate">{{opportunity.leadSource}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Type Column -->
+    <ng-container cdkColumnDef="type">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Type</span>
+            <input class="form-control" formControlName="opportunityType" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-sm>
+            <p class="text-truncate">{{opportunity.opportunityType}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Sales Stage Column -->
+    <ng-container cdkColumnDef="salesStage">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Sales Stage</span>
+            <input class="form-control" formControlName="salesStage" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-md>
+            <p class="text-truncate">{{opportunity.salesStageName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Amount Column -->
+    <ng-container cdkColumnDef="amount">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Amount</span>
+            <input class="form-control" formControlName="amount" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-md>
+            <p class="text-truncate">{{opportunity.amount}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Sales Rep Column -->
+    <ng-container cdkColumnDef="salesRep">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Sales Rep</span>
+            <input class="form-control" formControlName="salesRep" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-lg>
+            <p class="text-truncate">{{opportunity.salesRep}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Close Date Column -->
+    <ng-container cdkColumnDef="dateClosed">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Close</span>
+            <input class="form-control" formControlName="dateClosed" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-lg>
+            <p class="text-truncate">{{opportunity.dateClosed}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- User Column -->
+    <ng-container cdkColumnDef="user" >
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xl *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>User</span>
+            <input class="form-control" formControlName="user" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-xl>
+            <p class="text-truncate">{{opportunity.user}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Date Created Column -->
+    <ng-container cdkColumnDef="dateCreated" >
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef (keyup.enter)="filterOpportunities()">
+            <span mat-sort-header>Date Created</span>
+            <input class="form-control" formControlName="dateCreated" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity" fxHide fxShow.gt-lg>
+            <p class="text-truncate">{{opportunity.dateCreated}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- More Buttons Column -->
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let opportunity">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteOpportunity(opportunity)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let opportunity; columns: displayedColumns;"
+             class="contact"
+             (click)="editOpportunity(opportunity)"
+             [ngClass]="{'mat-light-blue-50-bg':checkboxes[opportunity.id]}"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+                [length]="dataSource.total"
+                [pageSize]="50"
+                [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                [showFirstLastButtons]="true"
+                (page)="paginate($event)">
+</mat-paginator>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

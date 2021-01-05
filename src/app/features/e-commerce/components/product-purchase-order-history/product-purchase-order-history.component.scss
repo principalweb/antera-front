@@ -1,0 +1,51 @@
+app-product-purchase-order-history {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column !important;
+    position: relative;
+    min-height: 0;
+
+    .mat-table {
+        box-shadow: none;
+        margin-top: 64px;
+        position: static;
+        overflow-y: auto;  
+        width: 100% !important;
+
+        .mat-header-row {
+            background: white;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+
+        .mat-row {
+            position: relative;
+            cursor: pointer;
+                        z-index: 0;
+
+            .mat-cell {
+                min-width: 0;
+            }
+        }
+    }
+
+    .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
+        opacity: 0;
+    }
+    
+    .mat-sort-header-pointer-left.ng-trigger.ng-trigger-leftPointer{
+        transform: rotate(-45deg);
+    }
+    
+    .mat-sort-header-pointer-right.ng-trigger.ng-trigger-rightPointer{
+        transform: rotate(45deg);
+    }
+
+    .inventory-item {
+        position: relative;
+    }
+
+}

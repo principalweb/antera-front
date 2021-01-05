@@ -1,0 +1,42 @@
+<div [ngClass]="'h-4'" [ngStyle]="{'background-color':dueColor}" *ngIf="dueColor"></div>
+<div class="list-card-details">
+    <div class="list-card-name condensed"
+        fxLayout="column"
+        fxLayoutAlign="space-between center">
+        <div fxLayout="row"
+            fxLayoutAlign="space-between-center">
+             <mat-checkbox *ngIf="!card.batchMaster"
+                (click)="$event.stopPropagation()"
+                (change)="onSelect($event)"
+                checked=""
+                >
+            </mat-checkbox>
+            <span class="ml-8 mr-4">{{(card.batchMaster ? 'Batch Job #' + card.id + ' - ' : '') + card.customerName}}
+                <br />Orders: {{'[' + orders + ']'}}
+                <br />Priority: {{card.priorityName}}
+                <br />Due: {{card.due != '0000-00-00' ? (card.due | date:'mediumDate') : 'N/A'}}
+            </span>
+
+
+            <span class="accent-800-fg">{{ fx2Str(card.hours ) }}</span>
+            <span class="ml-8 mr-4"><a aria-label="pin" (click)="$event.stopPropagation(); onPin()"><mat-icon *ngIf="card.pinned">star</mat-icon><mat-icon *ngIf="!card.pinned">star_border</mat-icon></a></span>
+        </div>
+        <div fxLayout="row">
+            <img src="{{image}}" style="max-height: 40px"/>
+        </div>
+    </div>
+
+    <div *ngIf="card.due"
+         class="list-card-badges"
+         fxLayout="row" fxLayoutAlign="start center">
+        <!-- CARD DUE -->
+        <span class="badge due-date"
+              [ngStyle]="{'background-color': dueColor}"
+              *ngIf="card.due" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="s-16">access_time</mat-icon>
+            <span>{{card.due != '0000-00-00' ? (card.due | date:'mediumDate') : 'N/A'}}</span>
+        </span>
+    </div>
+    <div>{{card.name}}</div>
+    <div>{{card.variationName}}</div>
+</div>

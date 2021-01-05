@@ -1,0 +1,50 @@
+<div class="p-16">
+  <div fxLayout="row">
+    <span class="mat-title">Amazon S3 Settings</span>
+  </div>
+
+  <form *ngIf="settled" [formGroup]="configForm">
+    <div fxLayout="row">
+      <div class="w-480">
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">Amazon S3 Bucket</span>
+
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="s3bucket">
+		  </mat-form-field>
+		</div>
+
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">Amazon S3 Directory (Default Blank)</span>
+
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="s3Directory">
+		  </mat-form-field>
+		</div>
+
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">Amazon S3 Key</span>
+
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="s3Key">
+		  </mat-form-field>
+		</div>
+
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">Amazon S3 Secret</span>
+
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="s3Secret">
+		  </mat-form-field>
+		</div>
+
+      </div>
+    </div>
+    <div class="mt-16 ml-16">
+      <button mat-raised-button color="accent" (click)="save()">Save</button>
+    </div>
+  </form>
+</div>
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,19 @@
+:host ::ng-deep .ck-editor__editable_inline {
+    min-height: 550px !important;
+    
+}
+.left{
+min-width: 400px;
+height:550px;
+}
+
+.right{
+min-width: 500px;
+height:550px;
+}
+
+    .ck-editor-box{
+        min-height: 550px !important;
+        height: 550px !important;
+        overflow-y: scroll;
+    }

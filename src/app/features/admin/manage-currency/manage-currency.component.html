@@ -1,0 +1,12 @@
+<div class="manage-currency">
+  <h3 class="mat-subheading">Manage Currency</h3>
+
+  <app-currency-row
+    mode="new"
+  ></app-currency-row>
+  <app-currency-row
+    mode="edit"
+    [data]="currency"
+    *ngFor="let currency of currencies"
+  ></app-currency-row>
+</div>

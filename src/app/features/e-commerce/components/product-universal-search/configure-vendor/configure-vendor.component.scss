@@ -1,0 +1,33 @@
+@import "src/@fuse/scss/fuse";
+
+
+.vendor-selector {
+  width: 100%;
+  //max-width: 600px;
+}
+.matDivClass {
+  min-height: 85px;
+  height:auto;
+}
+.nocheckbox * .mat-pseudo-checkbox {
+  display: none;
+}
+.withcheckbox * .mat-pseudo-checkbox {
+  display: block !important;
+}
+.matlistClass{
+  height: auto;
+}
+
+ul {
+  list-style-type: none;
+  margin-top: 4px;
+}
+
+.vendor-list *, autoheight {
+  height: auto !important;
+  min-height:15px;
+}
+.autoheight * .mat-pseudo-checkbox {
+  display: block !important;
+}

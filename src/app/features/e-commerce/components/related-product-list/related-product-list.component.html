@@ -1,0 +1,77 @@
+<mat-table fxFlex #table
+    [dataSource]="dataSource">
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendorName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Supplier</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.vendorName}}">{{data.vendorName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="productId">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Item #</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.productId}}">{{data.productId}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="productName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Name</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.productName}}">{{data.productName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="type">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Type</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data; let i = index" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.type}}">{{data.type}}</p>
+          <mat-select fxFlex="none" *ngIf="product.RelatedProductArray.RelatedProduct[i]"
+                class="w-100-p"
+                [(ngModel)]="product.RelatedProductArray.RelatedProduct[i].type"
+                >
+            <mat-option [value]="ptype.id" *ngFor="let ptype of productTypes">
+              {{ ptype.name }}
+            </mat-option>
+          </mat-select>
+        </mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="action">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span> </span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data;let i = index" fxHide fxShow.gt-sm>
+            <p>
+                <mat-icon (click)="removeRow(i)" title="Remove Product">delete</mat-icon>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+            class="category-row">
+    </mat-row>
+</mat-table>

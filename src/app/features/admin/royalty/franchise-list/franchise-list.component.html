@@ -1,0 +1,136 @@
+<mat-table class="franchise-table"
+            #table [dataSource]="dataSource"
+            matSort (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm"
+            fxFlex>
+
+    <!-- Checkbox Column -->
+    <!--ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container-->       
+
+    <!-- Franchise Name Column -->
+    <ng-container cdkColumnDef="franchiseName">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input class="form-control" formControlName="franchiseName" (keyup.enter)="filterFranchise()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{row.franchiseName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Franchise Number Column -->
+    <ng-container cdkColumnDef="franchiseNumber">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Number</span>
+            <input class="form-control" formControlName="franchiseNumber" (keyup.enter)="filterFranchise()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">{{row.franchiseNumber}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- URL Column -->
+    <ng-container cdkColumnDef="url">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>URL</span>
+            <input class="form-control" formControlName="url" (keyup.enter)="filterFranchise()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.url}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Generate Report Column -->
+    <ng-container cdkColumnDef="generate">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Report</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs (click)="$event.stopPropagation()">
+            <button mat-raised-button color="accent" [matMenuTriggerFor]="rangePicker" class="mr-8">
+                Reports
+                <mat-icon>calendar_today</mat-icon>
+            </button>
+            <mat-menu #rangePicker="matMenu">
+                <button  mat-menu-item (click)="generateReport(row)">Current</button>
+                <mat-divider></mat-divider>
+                <div *ngIf="hasLiveDate(row.liveDate)">
+                <ng-container *ngFor="let item of getListofMonthsFromLiveDate(row.liveDate)">
+                    <button mat-menu-item  (click)="generatePreviousReport(row,item)">{{ item }}</button>
+                    <mat-divider></mat-divider>
+                </ng-container>
+                </div>
+            </mat-menu>
+
+          <!--button mat-raised-button color="accent"
+                  class="text-capitalize mr-8"
+                  fxHide fxShow.gt-md
+                  (click)="generateReport(row)">
+              <mat-icon>call_to_action</mat-icon>Generate Report
+          </button-->
+        </mat-cell>
+    </ng-container>
+
+
+    <!-- More Buttons Column -->
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteFranchise(row)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Disable</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="franchise"
+        (click)="editFranchise(row)"
+        matRipple
+        [matTooltip]="tooltip(row)"
+        [matTooltipClass]="'franchise-row-tooltip'"
+        [matTooltipPosition]="'above'"
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

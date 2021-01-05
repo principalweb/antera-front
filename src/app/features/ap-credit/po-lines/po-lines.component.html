@@ -1,0 +1,162 @@
+<div class="dialog-content-wrapper" fusePerfectScrollbar>
+  <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+          <div>Select PO Lines for credit</div>
+          <button mat-button class="mat-icon-button"
+                  (click)="dialogRef.close()"
+                  aria-label="Close dialog">
+              <mat-icon>close</mat-icon>
+          </button>
+      </mat-toolbar-row>
+  </mat-toolbar>
+<div class="px-32" fxLayout="column">
+  <div class="px-16">
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput placeholder="PO#" [matAutocomplete]="auto" [formControl]='searchPo'>
+          <mat-error *ngIf="searchPo.hasError('incorrect')">
+            Please select a valid PO
+          </mat-error>
+        </mat-form-field>
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="poDisplay.bind(this)">
+          <mat-option *ngIf="poLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
+          <ng-container *ngIf="!poLoading">
+            <mat-option *ngFor="let po of filteredPos" [value]="po">
+              <span>{{ po.orderNumber }}</span>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </div>
+      <button type="button" class="ml-96" mat-raised-button color="accent" (click)="addToCredit()">Add to Credit</button>
+    </div>
+  </div>
+  <div>
+  <mat-table fxFlex #table
+      [dataSource]="dataSource">
+
+      <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="image">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Preview</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <img *ngIf="data.image"
+                  [ngClass]="'product-image-wide'"
+                  [alt]="data.name"
+                  [src]="data.image"/>
+              <img *ngIf="!data.image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="details">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Item</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="text-truncate" matTooltip="{{data.name}} {{data.color}} {{data.size}}">{{data.name}} {{data.color}} {{data.size}}</p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="type">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Service</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p *ngIf="data.type==='deco'">Decoration</p>
+              <p *ngIf="data.type==='product'">Product</p>
+              <p *ngIf="data.type==='addon'||data.type==='deco-addon'">Additional Charge</p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="name">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Name</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="text-truncate" matTooltip="{{data.name}}">{{data.name}}</p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="color">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Color</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.color}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="size">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Size</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.size}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="quantity">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Quantity</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email">
+                {{ data.quantity }}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="price">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Cost</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email">
+                {{ data.price | number: '1.2-2' }}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="total">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span>Total</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate" *ngIf="data.id==''">
+                {{ data.quantity * data.price | number: '1.2-2' }}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+              class="category-row"
+              matRipple>
+      </mat-row>
+  </mat-table>
+  </div>
+  <div class="loading"
+  [@animate]="{value:'*',params:{opacity:1}}"
+  *ngIf="loadLines">
+  <mat-spinner></mat-spinner>
+  </div>
+</div>

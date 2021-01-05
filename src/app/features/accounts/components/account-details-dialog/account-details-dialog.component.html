@@ -1,0 +1,49 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                <img [src]="account.logo" class="account-logo"
+                     [alt]="account.name" *ngIf="account.logo"/>
+                {{dialogTitle}}
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRef.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+            
+        <!-- commented out by Benzur on 5.18.18   
+
+        <mat-toolbar-row class="toolbar-bottom py-8 py-sm-16"
+                fxLayout="column" fxLayoutAlign="center center"
+                *ngIf="action === 'edit'">
+            
+            <div class="contact-name">{{account.name}}</div>
+
+        </mat-toolbar-row>
+        -->
+    </mat-toolbar>
+
+    <div class="center">
+
+        <app-account-form
+            [account]="account"
+            [action]="action"
+            [dropdowns]="dropdowns"
+            (onSave)="saveAccount($event)"
+        ></app-account-form>
+
+                
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="loading">
+            <mat-spinner></mat-spinner>
+        </div>
+
+    </div>
+
+</div>
+    

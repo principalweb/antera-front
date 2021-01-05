@@ -1,0 +1,29 @@
+.contacts-select-dialog .mat-dialog-container {
+    width: 80vw;
+    padding: 0;
+
+    .contact-row {
+        position: relative;
+
+        .mat-checkbox-ripple {
+            display: none;
+        }
+    }
+}
+
+.contacts-list-table {
+    max-height: 50vh;
+    display: block;
+    overflow-y: scroll;
+}
+
+.close-contacts-modal .mat-icon {
+    height: 34px;
+    width: 34px;
+    font-size: 30px !important;
+    line-height: 34px;
+}
+
+.contact-list-search {
+    margin-right: 24px !important;
+}

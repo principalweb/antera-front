@@ -1,0 +1,28 @@
+<div fxLayout="column" fxFlex>
+  <div class="p-16" fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="start center">
+
+      <mat-button-toggle-group (change)="switchModule($event)">
+        <mat-button-toggle value="Orders" [checked]="true">Orders</mat-button-toggle>
+        <mat-button-toggle value="Products">Products</mat-button-toggle>
+        <mat-button-toggle value="Contacts" >Contacts</mat-button-toggle>
+        <mat-button-toggle value="Accounts" >Accounts</mat-button-toggle>
+        <mat-button-toggle value="Leads" >Leads</mat-button-toggle>
+        <mat-button-toggle value="Opportunities" >Opportunities</mat-button-toggle>
+        <mat-button-toggle value="Artwork" >Artwork</mat-button-toggle>
+        <mat-button-toggle value="Projects" >Projects</mat-button-toggle>
+        <mat-button-toggle value="Documents" >Documents</mat-button-toggle>
+        <mat-button-toggle value="Portal" >Portal</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <button mat-raised-button color="accent"
+          class="text-capitalize ml-16"
+          (click)="clearFilters()"
+          fxHide fxShow.gt-md>
+        <mat-icon>layers_clear</mat-icon> Clear Filters
+      </button>
+
+    </div>
+  </div>
+  <app-module-fields-list fxLayout="column"></app-module-fields-list>
+</div>

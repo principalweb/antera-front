@@ -1,0 +1,114 @@
+<div class="mat-white-bg mat-elevation-z2 w-300 m-8"
+     [formGroup]="form"
+     fxLayout="column" *ngIf="form">
+  <div class="grey-300-bg" fxLayout fxLayoutAlign="space-between center">
+    <div class="mat-title m-0">
+      <span *ngIf="index > 100000">Variation {{ index + 1 }}</span>
+	<mat-form-field  *ngIf="visibleField('variationTitle', fields)" class="ml-8" fxflex>
+	  <input matInput [placeholder]="edit ? fieldLabel('variationTitle', fields) : ''" formControlName="design_variation_title" [readonly]="!edit">
+	</mat-form-field>
+    </div>
+    <div class="mat-title-right m-0">
+    <mat-checkbox [(checked)]="selected"
+                  (change)="change($event)"
+                  *ngIf="selectable && !edit"
+    ></mat-checkbox>
+
+    <button mat-icon-button (click)="onSave()" *ngIf="source == 'artwork' && edit"><mat-icon>save</mat-icon></button>
+    <!--button mat-icon-button (click)="onExit()" *ngIf="source == 'artwork' && edit"><mat-icon>clear</mat-icon></button-->
+    <button mat-icon-button (click)="onClose()" *ngIf="edit"><mat-icon>delete</mat-icon></button>
+                   <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();" *ngIf="source == 'artwork' && !edit">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #moreMenu="matMenu">
+                        <button mat-menu-item aria-label="edit" (click)="editVariation()">
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit</span>
+                        </button>
+                    </mat-menu>
+  </div>
+  </div>
+  <div class="px-12" fxFlex="row" fxLayoutAlign="center center">
+    <div class="artwork-image" [class.edit]="edit" >
+      <div class="h-140" fxLayout="column" fxLayoutAlign="center center"
+           *ngIf="!form.value.itemImage && edit">
+        <mat-icon class="font-size-100 secondary-text h-100 w-100">file_upload</mat-icon>
+        <input type="file" id="uploadAwsVariationFile" (change)="fileuploadForAws($event)" hidden #uploadAwsVariationFile>
+        <button mat-stroked-button color="accent" (click)="uploadAwsVariationFile.click()">Choose File</button>
+      </div>
+
+      <div class="h-140" fxLayout="column" fxLayoutAlign="center center"
+           *ngIf="!form.value.itemImage && !edit">
+        Image not found
+      </div>
+
+      <img class="item-image"
+           [src]="form.value.itemImageThumbnail"
+           alt="Variation Image"
+           [default]= "'assets/images/ecommerce/product-image-placeholder.png'"
+           *ngIf="form.value.itemImage"/>
+      <div class="remove-button"
+           fxLayout="row" fxLayoutAlign="center center"
+           *ngIf="form.value.itemImage && edit">
+        <button mat-raised-button color="warn"
+                (click)="removeVariationImage()">
+          <mat-icon>delete</mat-icon> Remove
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="px-8 text-center" fxLayout="column" fxLayoutAlign="start stretch" *ngIf="form.value.itemImageThumbnail"><h6 title="{{ GetVariationFilename(form.value.itemImageThumbnail) }}"><i class="variation-image-title text-truncate">{{ GetVariationFilename(form.value.itemImageThumbnail) }}</i></h6></div>
+  <div class="px-12 " fxLayout="column" fxLayoutAlign="start stretch" *ngIf="source == 'order' || edit">
+    <mat-form-field *ngIf="visibleField('variationProductCategory', fields)">
+      <ng-container checkPermissionAction [pAction]="'artwork_product_category'">
+        <textarea matInput placeholder="{{fieldLabel('variationProductCategory', fields)}}" formControlName="design_variation_product" [readonly]="!edit"></textarea>
+      </ng-container>
+    </mat-form-field>
+    <mat-form-field *ngIf="visibleField('variationProductColor', fields)">
+      <textarea matInput placeholder="{{fieldLabel('variationProductColor', fields)}}" formControlName="design_variation_color" [readonly]="!edit"></textarea>
+    </mat-form-field>
+    <mat-form-field  *ngIf="visibleField('variationNotes', fields)" class="w-100-p">
+      <textarea matInput
+                placeholder="{{fieldLabel('variationNotes', fields)}}"
+                formControlName="design_note"
+                [readonly]="!edit"></textarea>
+    </mat-form-field>
+  </div>
+  <ng-container checkPermissionAction [pAction]="'artwork_variation'"  *ngIf="source == 'order' || edit">
+      <div class="px-12" formArrayName="design_color_thread_pms">
+        <div class="mat-subheading2 p-8 mb-8 grey-200-bg" fxLayout="row">
+          <div class="w-32"></div>
+          <div class="ml-8" *ngIf="visibleField('variationColor', fields)" fxFlex>{{fieldLabel('variationColor', fields)}}</div>
+          <div class="ml-8" *ngIf="visibleField('variationThread', fields)" fxFlex>{{fieldLabel('variationThread', fields)}}</div>
+          <div class="ml-8" *ngIf="visibleField('variationThreadDescription', fields)" fxFlex>{{fieldLabel('variationThreadDescription', fields)}}</div>
+          <div class="w-40" *ngIf="edit"></div>
+        </div>
+        <div *ngFor="let ctForm of design_color_thread_pms.controls; let i=index">
+          <div fxLayout="row" [formGroup]="ctForm">
+            <div class="w-32 vcenter text-center">
+              {{ i + 1 }}
+              <input type="hidden" formControlName="No"/>
+            </div>
+            <mat-form-field  *ngIf="visibleField('variationColor', fields)" class="ml-8" fxflex>
+              <input matInput formControlName="Color" [readonly]="!edit">
+            </mat-form-field>
+            <mat-form-field  *ngIf="visibleField('variationThread', fields)" class="ml-8" fxflex>
+              <input matInput formControlName="ThreadPMS" [readonly]="!edit">
+            </mat-form-field>
+            <mat-form-field  *ngIf="visibleField('variationThreadDescription', fields)" class="ml-8" fxflex>
+              <input matInput formControlName="Description" [readonly]="!edit">
+            </mat-form-field>
+            <button class="mt-8" mat-icon-button (click)="deleteColorThreadPMS(i)" *ngIf="edit">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="px-8 mb-20 ml-32" *ngIf="edit">
+          <button mat-button color="accent" (click)="addColor()">
+            <mat-icon class="accent-500-fg">add</mat-icon> Add Details
+          </button>
+        </div>
+      </div>
+  </ng-container>
+</div>

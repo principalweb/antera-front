@@ -1,0 +1,104 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0 toolbar-margin">
+        <mat-toolbar-row class="toolbar-row" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <mat-dialog-content class="m-0 p-0" class="royality-franchise-form">
+
+        <form name="franchiseForm" [formGroup]="franchiseForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+                    <div class="tab-content p-24" fxLayout="column">
+
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12">account_circle</mat-icon>
+                            <mat-form-field fxFlex class="mr-12">
+                                <input matInput
+                                       name="franchiseName"
+                                       formControlName="franchiseName"
+                                       placeholder="Franchise Name"
+                                       required>
+                            </mat-form-field>
+
+                            <mat-icon class="mr-12 mt-12">account_circle</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                       name="franchiseNumber"
+                                       formControlName="franchiseNumber"
+                                       placeholder="Franchise Number"
+                                       required>
+                            </mat-form-field>
+                        </div>
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12">star</mat-icon>
+                            <mat-form-field fxFlex class="mr-12">
+                                <input matInput
+                                       name="url"
+                                       formControlName="url"
+                                       placeholder="URL">
+                            </mat-form-field>
+                            <mat-icon class="mr-12 mt-12">person</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input type="hidden" formControlName="capId"/>
+                                <mat-select
+                                       formControlName="capCode"
+                                       placeholder="Royalty Code"
+                                       (selectionChange)="selectCap($event)"
+                                       required>
+                                    <mat-option [value]="cap.capCode"
+                                                *ngFor="let cap of filteredCaps">
+                                        {{ cap.capCode }} 
+                                    </mat-option>
+                                 </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12">star</mat-icon>
+                            <mat-form-field fxFlex class="mr-12">
+                            <input matInput
+                                name="techFee"
+                                formControlName="techFee"
+                                placeholder="Tech Fee"
+                                required>
+                            </mat-form-field>
+                            <mat-icon class="mr-12 mt-12">star</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput name="liveDate" formControlName="liveDate" [matDatepicker]="liveDatePicker" placeholder="Live Date">
+                                <mat-datepicker-toggle matSuffix [for]="liveDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #liveDatePicker></mat-datepicker>
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+        </form>
+
+    </mat-dialog-content>
+    <!-- / CONTENT -->
+
+    <mat-dialog-actions class="m-0 p-16 ml-10" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+        
+    </mat-dialog-actions>
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="p-16">
+  <div fxLayout="row">
+    <span class="mat-title">Portal Settings</span>
+  </div>
+
+  <form *ngIf="settled" [formGroup]="configForm">
+    <div fxLayout="row">
+      <div class="w-480">
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Enable Portal Invitation</div>
+          <mat-checkbox formControlName="enablePortalInvitation"></mat-checkbox>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <span class="mw-240 mr-16">Quote URL Valid Upto (Days)</span>
+          <mat-form-field class="mr-16" fxFlex>
+            <input matInput formControlName="quoteLinkValidity">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="mt-16 ml-16">
+      <button mat-raised-button color="accent" (click)="save()">Save</button>
+    </div>
+  </form>
+</div>
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

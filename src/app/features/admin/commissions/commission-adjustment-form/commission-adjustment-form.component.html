@@ -1,0 +1,80 @@
+<div class="dialog-content-wrapper" fxFlex>
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+
+    <div fxLayout="column" fxFlex>
+        <form [formGroup]="form" class="p-16" fusePerfectScrollbar>
+            <div class="px-16 w-100-p" fxLayout="row">
+                <mat-form-field fxFlex class="mr-40">
+                    <mat-select formControlName="adjustmentType" placeholder="Adjustment Type">
+                        <mat-option *ngFor="let type of adjustment_type_list" [value]="type.value">{{ type.label | capitalizeFirst }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <input type="hidden" formControlName="salesRepId"/>
+                    <input type="text"
+                           formControlName="salesRep"
+                           minlength="3"
+                           matInput
+                           [matAutocomplete]="autoAssigned"
+                           placeholder="Sales Rep"
+                           >
+                    <mat-autocomplete #autoAssigned="matAutocomplete"
+                                      [displayWith]="displayName"
+                                      (optionSelected)="selectAssignee($event)"
+                                      >
+                        <mat-option *ngFor="let salesRep of filteredUsers" [value]="salesRep">
+                            {{ salesRep.name | capitalizeFirst }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    
+                     <!--  <mat-icon>close</mat-icon>
+                    </button> -->
+                   
+                </mat-form-field>
+            </div>
+            <div class="px-16 w-100-p" fxLayout="row">
+                <mat-form-field fxFlex class="mr-40">
+                    <input matInput name="adjustmentValue" formControlName="adjustmentValue" placeholder="Adjustment Value">
+                </mat-form-field>
+                <mat-form-field fxFlex>
+                    <input matInput formControlName="applicationDate" [matDatepicker]="pickerApplicationDate"
+                        placeholder="Application Date">
+                     <mat-datepicker-toggle matSuffix [for]="pickerApplicationDate">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #pickerApplicationDate></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="px-16 w-100-p" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput name="reason" formControlName="reason" placeholder="Reason">
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'" mat-raised-button (click)="create()" class="save-button mat-accent"
+            aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'" mat-raised-button (click)="update()" class="save-button mat-accent"
+            aria-label="SAVE">SAVE
+        </button>
+
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

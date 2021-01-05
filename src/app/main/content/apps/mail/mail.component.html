@@ -1,0 +1,88 @@
+<div id="mail" class="page-layout carded left-sidebar" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <div *ngIf='!haveCredentials' fxLayout="column" fxLayoutAlign="center center" fxFlex>
+        <button mat-raised-button color="accent" (click)="addMailCredentials()">Login</button>
+    </div>
+
+    <ng-container *ngIf='haveCredentials'>
+
+        <!-- SIDENAV -->
+         <!-- SIDENAV -->
+        <fuse-sidebar class="sidebar" name="mail" position="left" lockedOpen="gt-md">
+            <fuse-mail-main-sidenav [mailCredentialsList]="mailCredentialsList" (getInbox)="getInbox($event)" (removeCredentials)="removeCredentials()"></fuse-mail-main-sidenav>
+        </fuse-sidebar>
+        <!-- / SIDENAV -->
+
+        <!-- CENTER -->
+        <div class="center">
+            <!-- CONTENT HEADER -->
+            <div class="header" fxLayout="row" fxLayoutAlign="start center">
+
+                <div class="search-wrapper" fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+                    <button mat-button class="mat-icon-button sidenav-toggle"
+                            (click)="toggleSidebar('mail')"
+                            fxHide.gt-md aria-label="Toggle Sidenav">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+
+                    <div class="search fuse-white" (keyup.enter)="searchMailsByKeyword()" flex fxLayout="row" fxLayoutAlign="start center">
+                        <button mat-icon-button class="fuse-search-bar-expander" aria-label="Expand Search Bar" (click)="searchMailsByKeyword()">
+                            <mat-icon class="s-24">search</mat-icon>
+                        </button>
+                        <input [formControl]="searchInput" [(ngModel)]="searchText" [placeholder]="'MAIL.SEARCH_PLACEHOLDER' | translate" fxFlex>
+                        <mat-spinner *ngIf="isSearching" color="accent" diameter="20"></mat-spinner>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- / CONTENT HEADER -->
+
+            <!-- CONTENT CARD -->
+            <div class="content-card fuse-white-bg" [ngClass]="{'current-mail-selected':currentMail}">
+                <!-- CONTENT TOOLBAR -->
+                <div class="toolbar">
+
+                    <div class="mail-selection" fxFlex="row" fxLayoutAlign="space-between center">
+                        <button mat-icon-button (click)="refreshMails(1)">
+                            <mat-icon>replay</mat-icon>
+                        </button>
+                        <span *ngIf="defaultEmail !='' && defaultEmailFolder !=''">{{defaultEmail}} - {{defaultEmailFolder}}</span>
+                        <button mat-raised-button class="mat-accent mr-8" (click)="addMailCredentials()">SMTP/IMAP Config</button>
+                    </div>
+
+                </div>
+                <!-- / CONTENT TOOLBAR -->
+
+
+                <!-- CONTENT -->
+
+                <div class="content" fxLayout="row">
+
+                    <fuse-mail-list fxFlex> </fuse-mail-list>
+                    <fuse-mail-details fxFlex></fuse-mail-details>
+
+                </div>
+
+                <!-- / CONTENT -->
+            </div>
+            <!-- / CONTENT CARD -->
+
+        </div>
+        <!-- / CENTER -->
+
+
+    </ng-container>
+
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

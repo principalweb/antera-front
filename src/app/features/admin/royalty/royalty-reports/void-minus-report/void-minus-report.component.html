@@ -1,0 +1,35 @@
+<div class="toolbar">
+    <div class="mail-selection" fxFlex="row">
+        <div fxFlex="row" fxLayoutAlign="start center">
+            <a class="link text-capitalize mr-8 mat-raised-button mat-accent" routerLink="/admin/royalty">Go back</a>
+        </div>
+    </div>
+</div>
+<div class="adjusted-report tab-content p-24" fusePerfectScrollbar>
+  <div id="adjusted-report-table" class="compact page-layout blank" fxLayout="row" fusePerfectScrollbar>
+      <div class="adjusted-report-container">
+          <div class="card">
+              <div class="content">
+                  <span class="text-capitalize" *ngIf="report.data?.length === 0">No Data Found.</span>
+                  <table class="simple adjusted-report-table" *ngIf="report.data.length > 0">
+                      <thead>
+                          <tr *ngIf="report.data?.length === 0">
+                              <th *ngFor="let key of report.data[0] | keys">{{ key.key }}</th>
+                          </tr>
+                      </thead>
+
+                      <tbody>
+                          <ng-container *ngFor="let data of report.data; let i=index">
+                              <tr>
+                                  <td *ngFor="let obj of data | keys">
+                                      {{ data[obj.key] }}
+                                  </td>
+                              </tr>
+                          </ng-container>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,118 @@
+<mat-table fxFlex #table
+    [dataSource]="dataSource"
+    [formGroup]="kitForm">
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="image">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Preview</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <img *ngIf="data.image"  
+                [ngClass]="'product-image-wide'"
+                [alt]="data.productName"
+                [src]="data.image"
+                [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            <img *ngIf="!data.image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="productId">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Item #</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.productId}}" *ngIf="data.setting">{{data.productId}}</p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="productName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Name</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.productName}}" *ngIf="data.setting">{{data.productName}}</p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="color">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Color</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data; let i = index" fxHide fxShow.gt-sm>
+                <mat-select [formControlName]="'color_'+i" (selectionChange)="setValue(data, i)" *ngIf="data.productType=='1'" class="w-100-p">
+                    <mat-option [value]="color.color"
+                                *ngFor="let color of colorSize[data.pId].color">
+                        {{ color.color }}
+                    </mat-option>
+                </mat-select>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="size">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Size</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data; let i = index" fxHide fxShow.gt-sm>
+                <mat-select [formControlName]="'size_'+i" (selectionChange)="setValue(data, i)" *ngIf="data.productType=='1'" class="w-100-p">
+                    <mat-option [value]="size.size"
+                                *ngFor="let size of colorSize[data.pId].size">
+                        {{ size.size }}
+                    </mat-option>
+                </mat-select>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="quantity">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Quantity</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data;let i = index" fxHide fxShow.gt-sm>
+            <p class="text-truncate">
+                <input class="form-control" [formControlName]="'quantity_'+i" (keyup)="setValue(data, i)">
+            </p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="hide">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Hide</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data;let i = index" fxHide fxShow.gt-sm>
+            <p class="text-truncate">
+                <mat-slide-toggle (click)="updateHide($event, data, i)" [checked]="data.hide==1" *ngIf="data.setting"></mat-slide-toggle>
+            </p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="action">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span> </span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data;let i = index" fxHide fxShow.gt-sm>
+            <p>
+                <mat-icon (click)="removeRow(data)" *ngIf="data.productType=='1'" title="Remove Variation">delete</mat-icon>
+                <mat-icon (click)="addRow(data)" *ngIf="data.productType=='1' && data.setting" title="Add Variation">add</mat-icon>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+            class="category-row">
+    </mat-row>
+</mat-table>

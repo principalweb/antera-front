@@ -1,0 +1,50 @@
+.override > popover-content > div.popover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99 !important;
+  display: none;
+  max-width: 600px;
+  min-width: 400px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-break: auto;
+  line-height: 1.42857143;
+  text-align: left;
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  white-space: normal;
+  word-break: normal;
+  word-spacing: normal;
+  word-wrap: normal;
+  font-size: 14px;
+  background-color: #ffffff;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.search-popover{
+  &-content{
+    padding: 15px;
+    .button {
+        height: 41px;
+        background-color: #058ec0;
+        color: white;
+        cursor: pointer;
+    }
+  }
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}

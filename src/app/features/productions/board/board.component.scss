@@ -1,0 +1,26 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+    display: block;
+    flex: 1;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    .board-content {
+        height: 100%;
+        display: block;
+
+        .list-sortable-placeholder {
+            background: rgba(0, 0, 0, 0.06);
+            margin-right: 24px;
+        }
+
+        .new-list-wrapper {
+            width: 344px;
+            min-width: 344px;
+            max-width: 344px;
+            padding-right: 24px;
+        }
+
+    }
+}

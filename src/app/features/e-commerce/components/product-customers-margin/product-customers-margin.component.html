@@ -1,0 +1,33 @@
+<div  class="tab-content p-24" [formGroup]="form" fusePerfectScrollbar>
+  <button mat-raised-button color="accent" (click)="addRow()"><mat-icon>add</mat-icon> Add</button>
+  <div formArrayName="customerMarginArray">
+  <div *ngFor="let item of customerMarginArray.controls; let i = index">
+    <div [formGroupName]="i">
+      <div class="px-16 two-columns">
+         <mat-form-field *ngIf="customerType != 'New'">
+            <input type="hidden" formControlName="accountId"/>
+            <input type="text" id="account_input" matInput
+                placeholder="Customer"
+                [matAutocomplete]="autoAccount"
+                formControlName="accountName">
+            <mat-autocomplete #autoAccount="matAutocomplete"
+                                (optionSelected)="selectAccount($event,i)">
+                <mat-option
+                    *ngFor="let acc of filteredAccounts | async"
+                    [value]="acc"
+                    >{{ acc.name }}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+         <mat-form-field>
+            <input matInput
+              type="number"
+              name="margin"
+              formControlName="margin"
+              placeholder="Margin">
+          </mat-form-field>          
+      </div>
+      <button mat-raised-button color="accent" class="remove-btn" (click)="removeRow(i)"><mat-icon>remove</mat-icon></button>
+    </div>
+  </div>
+</div>
+</div>

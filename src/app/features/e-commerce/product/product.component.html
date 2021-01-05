@@ -1,0 +1,59 @@
+<div id="product" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button *ngIf="!isSource" class="mr-0 mr-sm-16" mat-icon-button routerLink="/e-commerce/products">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <button *ngIf="isSource" class="mr-0 mr-sm-16" mat-icon-button routerLink="/e-commerce/sources">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    <img *ngIf="product.MediaContent[0]" [src]="product.MediaContent[0].url">
+                    <img *ngIf="!product.MediaContent[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start start"
+                     *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        {{product.productName}}&nbsp;<span>{{!isSource ? 'Product Detail' : 'Source Detail'}}</span>
+                    </div>
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        {{!isSource ? 'New Product' : 'New Source'}}&nbsp;<span>{{!isSource ? '' : 'Source Detail'}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <div class="content" fxLayout="column" fxFlex>
+
+                <app-product-form></app-product-form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>

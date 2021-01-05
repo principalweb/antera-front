@@ -1,0 +1,211 @@
+<mat-table class="deco-fees-table"
+            #table [dataSource]="dataSource"
+            matSort (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>       
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input class="form-control" formControlName="name" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{row.name}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Vendor Name Column -->
+    <ng-container cdkColumnDef="vendorName">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Vendor</span>
+            <input class="form-control" formControlName="vendorName" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">{{row.vendorName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Description By Column -->
+    <!-- <ng-container cdkColumnDef="description">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Description</span>
+            <input class="form-control" formControlName="description" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.description}}</p>
+        </mat-cell>
+    </ng-container> -->
+
+    <!-- Decorator Type Column -->
+    <ng-container cdkColumnDef="decoratorType">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Type</span>
+            <input class="form-control" formControlName="decoratorType" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="text text-truncate">{{row.decoratorType}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Decoration Count From Column -->
+    <ng-container cdkColumnDef="stitchesStart">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Count From</span>
+            <input class="form-control" formControlName="stitchesStart" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{row.stitchesStart}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Decoration Count Upto Column -->
+    <ng-container cdkColumnDef="stitchesUpto">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Count To</span>
+            <input class="form-control" formControlName="stitchesUpto" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{ row.stitchesUpto }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Decorator Sub Type Column -->
+    <ng-container cdkColumnDef="decorationDetail">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Value</span>
+            <input class="form-control" formControlName="decorationDetail" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{row.decorationDetail}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Quantity Start Column -->
+    <ng-container cdkColumnDef="qunatityStart">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Qty Start</span>
+            <input class="form-control" formControlName="qunatityStart" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+            <p class="text text-truncate">{{row.qunatityStart}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Quantity Upto Column -->
+    <ng-container cdkColumnDef="quantityUpto">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Qty Up To</span>
+            <input class="form-control" formControlName="quantityUpto" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.quantityUpto}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Cost Column -->
+    <ng-container cdkColumnDef="price">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Cost</span>
+            <input class="form-control" formControlName="price" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.price}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container cdkColumnDef="salePrice">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Price</span>
+            <input class="form-control" formControlName="salePrice" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.salePrice}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- SetupCharge Cost Column -->
+    <ng-container cdkColumnDef="setupCharge">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>SU Cost</span>
+            <input class="form-control" formControlName="setupCharge" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.setupCharge}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- SetupCharge Price Column -->
+    <ng-container cdkColumnDef="setupChargeSalePrice">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>SU Price</span>
+            <input class="form-control" formControlName="setupChargeSalePrice" (keyup.enter)="filterDecoCharges()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.setupChargeSalePrice}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- More Buttons Column -->
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteDecoCharge(row)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="decoCharge"
+        (click)="editDecoCharge(row)"
+        matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

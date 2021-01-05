@@ -1,0 +1,62 @@
+@import "src/@fuse/scss/fuse";
+
+app-aws-file-manager {
+    flex: 1;
+    height: 100%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    .aws-file-table-container {
+        position: relative;
+        
+    }
+    .mat-table {
+        box-shadow: none;
+        margin-top: 70px;
+        position: static;
+        overflow-y: scroll;
+        width: 100%;
+        height: calc(100vh - 325px);
+        // min-height:500px;
+        .mat-header-row {
+            background: white;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+        .header-cell-icon{
+            flex: 0 1 64px;
+        }
+        .mat-column-checkbox {
+            flex: 0 1 64px;
+
+            .mat-checkbox-ripple {
+                display: none !important; //fix for broken rendering
+            }
+        }
+
+        .mat-column-buttons {
+            flex: 0 1 80px;
+        }
+
+        .mat-row {
+            position: relative;
+            cursor: pointer;
+                        z-index: 0;
+
+            .mat-cell {
+                min-width: 0;
+
+                &.mat-column-detail-button {
+                    flex: 0 1 auto;
+                    padding: 0 24px 0 0;
+                    @include media-breakpoint('gt-md') {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,57 @@
+<mat-table fxFlex #table matSort
+    [dataSource]="dataSource">
+
+    <ng-container cdkColumnDef="notes">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span >Notes</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.notes}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="amount">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span >Total Credit</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+              {{ data.amount }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="creditApplied">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Applied</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+              <span *ngIf="data.creditAvailable && data.creditApplied===0" (click)="data.creditApplied=data.balance;calculateTotal()" class="apply-credit">Apply Credit</span>
+              <span *ngIf="data.creditAvailable && data.creditApplied!==0" (click)="data.creditApplied=0;calculateTotal()" class="credit-applied">Credit Applied ${{data.creditApplied | number }}</span>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="available">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Credit Available</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate" *ngIf="data.creditAvailable">
+                {{data.amount - data.creditApplied | number}}
+            </p>
+            <p class="email text-truncate" *ngIf="!data.creditAvailable">
+                {{data.balance | number}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+            class="category-row"
+            matRipple>
+    </mat-row>
+</mat-table>

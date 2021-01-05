@@ -1,0 +1,62 @@
+<div mat-dialog-content>
+  <mat-tab-group [selectedIndex]="tabIndex">
+    <ng-container *ngFor="let location of product?.SupplierLocationArray?.Location">
+      <mat-tab [label]="location.locationName">
+
+
+        <mat-accordion>
+
+          <mat-expansion-panel *ngFor="let deco of location?.DecorationArray?.Decoration; let index = index" [expanded]="index == decorationIndex">
+            <mat-expansion-panel-header>
+              {{ deco.decorationName }}
+              {{ deco.decorationGeometry }}
+              {{ deco.decorationHeight | number:'1.0-3' }} x {{ deco.decorationWidth | number:'1.0-3' }}
+              {{ deco.decorationUom }}
+            </mat-expansion-panel-header>
+
+            <table class="simple decoration-charge" *ngIf="locationQuantities">
+              <thead>
+                <tr>
+                  <th class="col--charge">Charge</th>
+                  <th>&nbsp;</th>
+                  <!-- <th>{{ charge.ChargePriceArray.ChargePrice[0]?.xUom }}</th> -->
+                  <ng-container *ngFor="let qty of locationQuantities[location.locationId][deco.decorationId]">
+                    <th>{{ qty }}</th>
+                  </ng-container>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let charge of deco?.ChargeArray?.Charge">
+                  <td class="col col--charge">
+                    {{ charge.chargeName }}
+                    {{ charge.charge}}
+                  </td>
+                  <td class="col col--price-label">
+                    <div>Price</div>
+                    <div>Repeat Price</div>
+                  </td>
+                  <ng-container *ngFor="let qty of locationQuantities[location.locationId][deco.decorationId]">
+                    <td class="col col--qty">
+                      <ng-container
+                        *ngIf="getChargePrice(location.locationId, deco.decorationId, charge.chargeId, qty) as chargePrice">
+                        <div> {{ chargePrice.price }} </div>
+                        <div> {{ chargePrice.repeatPrice }} </div>
+                      </ng-container>
+                    </td>
+                  </ng-container>
+                  <td class="col">&nbsp;</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </mat-expansion-panel>
+
+        </mat-accordion>
+
+     
+
+      </mat-tab>
+    </ng-container>
+  </mat-tab-group>
+</div>

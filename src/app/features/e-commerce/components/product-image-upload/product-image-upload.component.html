@@ -1,0 +1,24 @@
+<div fxLayout="column">
+  <h2 mat-dialog-title class="pb-0">Add New Image</h2>
+  <div class="dialog-content p-16" fxLayout="column">
+    <div class="upload-image p-16" fxLayout="row" fxLayoutAlign="start center">
+        <input type="file" id="fileInput" (change)="onFileChange($event)" #fileInput>
+        <mat-icon>desktop_windows</mat-icon>
+        <div class="ml-32">
+            <div class="text-bold h1 mb-0">Upload from Computer</div>
+            <div class="text-bold h5 secondary-text">Upload a new image from your computer</div>
+        </div>
+    </div>
+    <div class="select-image p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onSelectImageFromCloudSelected()">
+        <mat-icon>cloud_queue</mat-icon>
+        <div class="ml-32">
+            <div class="text-bold h1 mb-0">Share from Cloud</div>
+            <div class="text-bold h5 secondary-text">Select images from the Cloud</div>
+        </div>
+    </div>
+  </div>
+  <div class="mt-24" fxLayout="row" fxLayoutAlign="end start">
+    <button mat-button color="accent" matDialogClose>CANCEL</button>
+  </div>
+</div>
+

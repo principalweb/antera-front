@@ -1,0 +1,134 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>Product Deco Form</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner>
+    </div>
+
+    <mat-tab-group>
+      <mat-tab label="Decorations">
+
+        <mat-dialog-content class="p-12 m-0">
+          <form [formGroup]="dataForm" (submit)="save()" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+              <div fxLayout="row" fxLayout.xs="column">
+                  <div fxLayout="column" fxFlex class="mr-20">
+                      <div class="mx-400 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+                          <mat-slide-toggle formControlName="supplierDeco" (change)="setLocation()">Supplier Decorated</mat-slide-toggle>
+                      </div>
+                      <div class="form-group">
+                          <mat-form-field>
+                            <mat-select placeholder="Decoration Location" formControlName="location" required (selectionChange)="setDecoration()">
+                                <mat-option *ngFor="let location of locations" [value]="location.locationId">
+                                  {{location.locationName}}
+                                </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="form-group" required *ngIf="showSupplierDeco">
+                          <mat-form-field>
+                            <mat-select placeholder="Supplier Decoration" formControlName="supplierDecoId">
+                                <mat-option *ngFor="let sd of supplierDecorations" [value]="sd.id">
+                                  {{sd.name}}
+                                </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="form-group">
+                          <mat-form-field>
+                            <mat-select placeholder="Customer" formControlName="customerId" required>
+                                <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                                  {{customer.name}}
+                                </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="form-group">
+                          <mat-form-field>
+                            <mat-select placeholder="Store" formControlName="store" (selectionChange)="setColors()">
+                                <mat-option *ngFor="let store of stores" [value]="store.storeId">
+                                  {{store.store}}
+                                </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="form-group">
+                          <mat-form-field>
+                            <mat-select placeholder="Design" formControlName="designId" required (selectionChange)="getDesignVariations()">
+                                <mat-option *ngFor="let design of getCustomerDesigns()" [value]="design.id">
+                                  <div fxLayout="row" fxLayoutAlign="center, center" class="mat-option-div">
+                                      <div fxLayout="row" fxLayoutAlign="center, center" class="mat-option-img-div">
+                                          <img [src]="design.featureImage"/>
+                                      </div>
+                                      <div>{{design.model}} - {{design.name}}</div>
+                                  </div>
+                                </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                      <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+                          <mat-slide-toggle formControlName="autoAttach">Automatically add this decoration if this product is added<br /> to an order for this customer</mat-slide-toggle>
+                      </div>
+                      <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center" *ngIf="false">
+                          <mat-slide-toggle formControlName="rollPrice">Include in Product</mat-slide-toggle>
+                      </div>
+                      <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+                          <mat-slide-toggle formControlName="show">Show separately will identify the decoration description<br /> separately from the product on web store. If more<br /> than one decoration is added to a product they<br /> automatically be shown separately.</mat-slide-toggle>
+                      </div>
+                      <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+                          <mat-slide-toggle formControlName="preDecorated">If pre-decorated only the product PO will be generated<br /> from web store orders</mat-slide-toggle>
+                      </div>
+                  </div>
+                  <div fxLayout="column" fxFlex class="mr-20" formGroupName="mapping" *ngIf="showVariation && dataForm.value.designId != ''">
+                    <div class="mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+                      <span class="mat-title mb-0">Variation - Color Mapping</span>
+                    </div>
+                      <div class="form-group" *ngFor="let color of productColors; let i = index;">
+                          <mat-form-field>
+                            <div fxLayout="row" fxLayoutAlign="center, start" class="variation-preview">
+                                <img [src]="variationDetails[dataForm.value.mapping['color_'+i]].image"/>
+                            </div>
+                            <mat-select [placeholder]="color" [formControlName]="'color_'+i" required [title]="variationDetails[dataForm.value.mapping['color_'+i]].title">
+                                <mat-option *ngFor="let variation of variations;let vi = index;" [value]="variation.design_variation_unique_id" [title]="'Variation' + (vi+1) + ', ' + variation.design_variation_color + ', ' + variation.design_variation_location">
+                                  <div fxLayout="row" fxLayoutAlign="center, center" class="mat-option-div">
+                                      <div fxLayout="row" fxLayoutAlign="center, center" class="mat-option-img-div">
+                                          <img [src]="variation.itemImageThumbnail[0]"/>
+                                      </div>
+                                      <div>Variation {{vi+1}}, {{variation.design_variation_color}}, {{variation.design_variation_location}}</div>
+                                  </div>
+                                </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                      </div>
+                  </div>
+              </div>
+          </form>
+          <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+              <button mat-raised-button
+                      (click)="save()"
+                      class="save-button mat-accent"
+                      aria-label="Save"
+                      matTooltip="Save">
+                  SAVE
+              </button>
+          </div>
+        </mat-dialog-content>
+      </mat-tab>
+      <mat-tab label="Additional Charges" *ngIf="formData.id">
+        <ng-template matTabContent>
+          <product-deco-charges [productDecoId]="formData.id"></product-deco-charges>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+
+
+</div>

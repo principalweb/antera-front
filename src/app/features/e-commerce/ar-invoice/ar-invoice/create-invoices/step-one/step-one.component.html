@@ -1,0 +1,93 @@
+<div class="toolbar more-close" fxLayout="row" fxLayoutAlign="start center">
+  <button [disabled]="!pendingService.phaseOneComplete" mat-raised-button matStepperNext color="accent">
+    Next <mat-icon>navigate_next</mat-icon></button>
+    <!-- <mat-slide-toggle [checked]="itemService.shouldShowInventory" class="ml-16" fxHide fxShow.gt-md
+      (change)="itemService.showInventoryProduct($event)">
+      Include Booked Orders
+    </mat-slide-toggle> -->
+</div>
+<form [formGroup]="filterForm">
+  <div class="new-sticky-table">
+    <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+      <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell class="w-60" *cdkHeaderCellDef>
+          <mat-checkbox (change)="toggleAll()" [checked]="pendingService.pendingSelectAll">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell class="w-60" *cdkCellDef="let invoice" (click)="$event.stopPropagation()">
+          <mat-checkbox [checked]="pendingService.pendingInvoiceCheckboxes[invoice.id]"
+            (change)="selectInvoice($event, invoice)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- NUMBER COLUMN START -->
+      <ng-container cdkColumnDef="number">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Order Number</span>
+          <input class="form-control" formControlName="number" placeholder="" >
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.number"
+          [matTooltipPosition]="'above'">
+          <a *ngIf="invoice.salesOrders.length" (click)="$event.stopPropagation()" routerLink="/e-commerce/orders/{{invoice.salesOrders[0].salesOrderNumber}}"><p class="text-truncate">{{invoice.number | ellipsis: 15}}</p></a>
+          <p *ngIf="!invoice.salesOrders.length" class="text-truncate">{{invoice.number | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- NUMBER COLUMN END -->
+    
+      <!-- LABEL COLUMN START -->
+      <ng-container cdkColumnDef="label">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Identity</span>
+          <input class="form-control" formControlName="label" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.label" [matTooltipPosition]="'above'">
+          <p class="text-truncate mr-8">{{invoice.label | ellipsis: 35}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- LABEL COLUMN END -->
+    
+      <!-- CUSTOMER COLUMN START -->
+      <ng-container cdkColumnDef="customer">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Customer</span>
+          <input class="form-control" formControlName="customer" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.customer"
+          [matTooltipPosition]="'above'">
+          <a (click)=$event.stopPropagation() routerLink="/accounts/{{invoice.customerId}}">
+            <p class="text-truncate">{{invoice.customer | ellipsis: 15}}</p>
+          </a>
+        </mat-cell>
+      </ng-container>
+      <!-- CUSTOMER COLUMN END -->
+    
+      <!-- Amount -->
+      <ng-container cdkColumnDef="salesAmount">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Amount</span>
+    
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.salesAmount.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })" [matTooltipPosition]="'above'">
+          <p class="text-truncate">${{invoice.salesAmount.toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                      })}}</p>
+        </mat-cell>
+      </ng-container>
+    
+    
+      <!-- / Amount -->
+    
+      <mat-header-row *cdkHeaderRowDef="displayedColumns;  sticky: true"></mat-header-row>
+      <mat-row (click)="chooseInvoice(invoice)" [ngStyle]="{'cursor': 'pointer'}" class="row"
+        *cdkRowDef="let invoice; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+  <mat-paginator #paginator [length]="pendingService.totalCount" [pageIndex]="0" [pageSize]="100" (page)="paginate($event)"
+    [pageSizeOptions]="[5, 10, 20, 50, 100]" [showFirstLastButtons]="true">
+  </mat-paginator>
+</form>

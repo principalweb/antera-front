@@ -1,0 +1,257 @@
+<div id="home-dashboard" class="content">
+
+  <mat-tab-group dynamicHeight>
+
+      <mat-tab label="Home">
+          
+          <div class="widget-group grey-100-bg p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                  [@animateStagger]="{value:'50'}">
+
+              <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                  <!-- Front -->
+                  <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                      <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                          fxLayoutAlign="end center">
+                           
+                      </div>
+
+                      <div class="pt-8 pb-8 clickable"
+                           fxLayout="column" fxLayoutAlign="center center"
+                           >
+                          <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                              <span (click)="goto('/artworks','today')">{{widgetArtData.artworksummary.todayDue}}</span>
+                          </div>
+                          <div class="h3 secondary-text font-weight-500">
+                              Order Due
+                          </div>
+                          <div class="h3 secondary-text font-weight-200">
+                              Today
+                          </div>
+                      </div>
+
+                      <div class="p-16 grey-50-bg border-top"
+                           fxLayout="row" fxLayoutAlign="start center"
+                           (click)="goto('/artworks','all')">
+                          <div class="mat-caption text-truncate">
+                              All Orders:
+                          </div>
+                          <div class="mat-caption ml-8">
+                              {{widgetArtData.artworksummary.total}}
+                          </div>
+                      </div>
+                  </div>
+                  <!-- / Front -->
+
+                  <!-- Back -->
+                  <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                      <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                              aria-label="Flip widget">
+                          <mat-icon class="s-16">close</mat-icon>
+                      </button>
+
+                      <div>
+                          <!-- {{widgetArtData.activities.detail}} -->
+                      </div>
+                  </div>
+                  <!-- / Back -->
+
+              </fuse-widget>
+              <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                <!-- Front -->
+                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                    <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                        fxLayoutAlign="end center">
+                         
+                    </div>
+
+                    <div class="pt-8 pb-8 clickable"
+                         fxLayout="column" fxLayoutAlign="center center"
+                         >
+                        <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                            <span (click)="goto('/artworks','tomorrow')">{{widgetArtData.artworksummary.tomorrowDue}}</span>
+                        </div>
+                        <div class="h3 secondary-text font-weight-500">
+                            Order Due
+                        </div>
+                        <div class="h3 secondary-text font-weight-200">
+                            Tomorrow
+                        </div>
+                    </div>
+
+                    <div class="p-16 grey-50-bg border-top"
+                         fxLayout="row" fxLayoutAlign="start center"
+                         (click)="goto('/artworks','all')">
+                        <div class="mat-caption text-truncate">
+                            All Orders:
+                        </div>
+                        <div class="mat-caption ml-8">
+                            {{widgetArtData.artworksummary.total}}
+                        </div>
+                    </div>
+                </div>
+                <!-- / Front -->
+
+                <!-- Back -->
+                <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                            aria-label="Flip widget">
+                        <mat-icon class="s-16">close</mat-icon>
+                    </button>
+
+                    <div>
+                        <!-- {{widgetArtData.activities.detail}} -->
+                    </div>
+                </div>
+                <!-- / Back -->
+
+            </fuse-widget>
+            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+              <!-- Front -->
+              <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                  <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                      fxLayoutAlign="end center">
+                       
+                  </div>
+
+                  <div class="pt-8 pb-8 clickable"
+                       fxLayout="column" fxLayoutAlign="center center"
+                       >
+                      <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                          <span (click)="goto('/artworks','thisweek')">{{widgetArtData.artworksummary.weekDue}}</span>
+                      </div>
+                      <div class="h3 secondary-text font-weight-500">
+                          Order Due
+                      </div>
+                      <div class="h3 secondary-text font-weight-200">
+                          This week
+                      </div>
+                  </div>
+
+                  <div class="p-16 grey-50-bg border-top"
+                       fxLayout="row" fxLayoutAlign="start center"
+                       (click)="goto('/artworks','all')">
+                      <div class="mat-caption text-truncate">
+                          All Orders:
+                      </div>
+                      <div class="mat-caption ml-8">
+                          {{widgetArtData.artworksummary.total}}
+                      </div>
+                  </div>
+              </div>
+              <!-- / Front -->
+
+              <!-- Back -->
+              <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                  <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                          aria-label="Flip widget">
+                      <mat-icon class="s-16">close</mat-icon>
+                  </button>
+
+                  <div>
+                      <!-- {{widgetArtData.activities.detail}} -->
+                  </div>
+              </div>
+              <!-- / Back -->
+
+          </fuse-widget>
+            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+              <!-- Front -->
+              <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                  <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                      fxLayoutAlign="end center">
+                       
+                  </div>
+
+                  <div class="pt-8 pb-8 clickable"
+                       fxLayout="column" fxLayoutAlign="center center"
+                       >
+                      <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                          <span (click)="goto('/artworks','nextweek')">{{widgetArtData.artworksummary.nextweekDue}}</span>
+                      </div>
+                      <div class="h3 secondary-text font-weight-500">
+                          Order Due
+                      </div>
+                      <div class="h3 secondary-text font-weight-200">
+                          Next week
+                      </div>
+                  </div>
+
+                  <div class="p-16 grey-50-bg border-top"
+                       fxLayout="row" fxLayoutAlign="start center"
+                       (click)="goto('/artworks','all')">
+                      <div class="mat-caption text-truncate">
+                          All Orders:
+                      </div>
+                      <div class="mat-caption ml-8">
+                          {{widgetArtData.artworksummary.total}}
+                      </div>
+                  </div>
+              </div>
+              <!-- / Front -->
+
+              <!-- Back -->
+              <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                  <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                          aria-label="Flip widget">
+                      <mat-icon class="s-16">close</mat-icon>
+                  </button>
+
+                  <div>
+                      <!-- {{widgetArtData.activities.detail}} -->
+                  </div>
+              </div>
+              <!-- / Back -->
+
+          </fuse-widget>
+        <!-- WIDGET art1 -->
+        <fuse-widget class="widget widget5" [@animate]="{value:'*',params:{y:'100%'}}" fxFlex="66.66">
+
+            <!-- Front -->
+            <div class="fuse-widget-front mat-white-bg mat-elevation-z2" fxLayout="column">
+
+                <div class="px-16 border-bottom" fxLayout="row"
+                        fxLayoutAlign="space-between center">
+
+                    <div fxFlex class="py-16 h3">{{widgetArtData.artworkwidget.title}}</div>
+
+                    <div fxFlex="0 1 auto" class="py-16 date-range" fxLayout="row">
+                        <button mat-button class="px-16"
+                                *ngFor="let range of widgetArtData.artworkwidget.ranges | keys"
+                                (click)="widgetart1.currentRange = range.key"
+                                [disabled]="widgetart1.currentRange == range.key">
+                            {{range.value}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="h-420 my-16" fxLayout="row" fxFlex="100" fxFlex.gt-sm="50" #widgetart1cont>                           
+                    <ngx-charts-bar-vertical-stacked
+                        *fuseIfOnDom
+                        [scheme]="widgetart1.scheme"
+                        [results]="this.widgetArtData.artworkwidget.mainChart[this.widgetart1.currentRange]"
+                        [gradient]="widgetart1.gradient"
+                        [xAxis]="widgetart1.xAxis"
+                        [yAxis]="widgetart1.yAxis"
+                        [legend]="widgetart1.legend"
+                        [showXAxisLabel]="widgetart1.showXAxisLabel"
+                        [showYAxisLabel]="widgetart1.showYAxisLabel"
+                        [xAxisLabel]="widgetart1.xAxisLabel"
+                        [yAxisLabel]="widgetart1.yAxisLabel"
+                        [view]="[widgetart1cont.offsetWidth, widgetart1cont.offsetHeight]"
+                        (select)="widgetart1.onSelect($event)">
+                    </ngx-charts-bar-vertical-stacked>
+                </div>
+            </div>
+        </fuse-widget>
+        <!-- / WIDGET 5 -->
+          </div>
+          <!-- / WIDGET GROUP -->
+
+      </mat-tab>
+   </mat-tab-group>
+
+</div>

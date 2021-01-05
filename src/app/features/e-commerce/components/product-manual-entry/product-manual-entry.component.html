@@ -1,0 +1,11 @@
+<div class="dialog-content" fxLayout="column">
+  <app-product-form fxFlex></app-product-form>
+
+  <div class="px-24 pb-16" fxFlex="none"
+       fxLayout="row" fxLayoutAlign="end center">
+    <button mat-button color="accent" matDialogClose>CANCEL</button>
+    <button mat-button color="accent"
+            (click)="addToProduct()"
+            >ADD PRODUCT</button>
+  </div>
+</div>

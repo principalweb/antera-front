@@ -1,0 +1,50 @@
+<div id="contact-details" class="page-layout simple left-sidenav inner-sidenav">
+
+  <!-- HEADER -->
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <!-- APP TITLE -->
+    <div fxLayout="row" fxLayoutAlign="start center">
+
+      <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16">person</mat-icon>
+        <div class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          <a routerLink="/contacts">Contact</a>&nbsp;>&nbsp;
+          <span>{{ contact.firstName }} {{ contact.lastName }}</span>
+        </div>
+      </div>
+
+    </div>
+    <!-- / APP TITLE -->
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Overview">
+      <contact-overview-tab
+        [contact]="contact"
+        (edit)="updateContact($event)">
+      </contact-overview-tab>
+    </mat-tab>
+
+    <mat-tab label="Activities">
+      <div class="products tab-content" fusePerfectScrollbar>
+          <app-contact-activity-list 
+            [contact]="contact">
+          </app-contact-activity-list>      
+      </div>
+    </mat-tab>
+
+    <mat-tab *ngIf="contactsService.onRelatedAccountsChanged.value.length" label="Customer Portal">
+      <div class="customer-portal-tab" style="width:100%">
+        <customer-portal-settings></customer-portal-settings>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

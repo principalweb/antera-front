@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ product?.productName }}</h1>
+<div mat-dialog-content>
+
+  <div fxLayout="row">
+    <div>
+      <div class="product-image mr-8 mr-sm-16">
+        <img *ngIf="product.MediaContent[0]" [src]="product.MediaContent[0].url">
+        <img *ngIf="!product.MediaContent[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+      </div>
+    </div>
+
+    <div>
+      <p>{{ product.description }}</p>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="navigateTo()">
+    <mat-icon>link</mat-icon> View Product
+  </button>
+</div>

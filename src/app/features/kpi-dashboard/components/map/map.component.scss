@@ -1,0 +1,7 @@
+#map {
+  width: 400px;
+  height: 220px;
+  .amcharts-chart-div a, .amcharts-chart-div svg desc{
+    display: none !important;
+  }
+}

@@ -1,0 +1,128 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm">
+    <!-- Checkbox Column -->
+    <!--ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.length"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let report">
+            <mat-checkbox [(ngModel)]="checkboxes[report.id]"
+                          (ngModelChange)="onSelectedChange(report.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container-->
+
+      <ng-container cdkColumnDef="reportName">
+          <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+              <span mat-sort-header>Report</span>
+              <input class="form-control" formControlName="reportName" (keyup.enter)="filterReports()">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let report" matTooltip="{{report.reportName}}">
+              <p class="text text-truncate fong-weight-600">
+                  {{report.reportName}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="reportLabel">
+          <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+              <span mat-sort-header>Name</span>
+              <input class="form-control" formControlName="reportLabel" (keyup.enter)="filterReports()">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let report" (click)="editLabel(report, $event)" matTooltip="Click here to edit Label">
+              <p class="text text-truncate fong-weight-600">
+                  {{report.reportLabel}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="description">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Description</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let report" (click)="editDescription(report, $event)" matTooltip="Click here to edit Description">
+            <p class="text text-truncate fong-weight-600">
+                {{report.description | titlecase}}
+            </p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="department">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Department</span>
+              <input class="form-control" formControlName="department" (keyup.enter)="filterReports()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let report" (click)="editDepartment(report, $event)" matTooltip="Click here to  edit Department">
+            <!--ng-container *ngFor="let dept of  ConvertToJSON(report.department)"-->
+            <ng-container *ngFor="let dept of report.department">
+                <p class="text text-truncate fong-weight-600" style="padding-right: 5px;">
+                    {{ dept  | titlecase }}
+                </p>
+            </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="enabled">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+              <span mat-sort-header>Enable</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let report">
+            <button mat-icon-button *ngIf="report.enabled == '1'" (click)="updateEnabled(report, $event)">
+                <mat-icon class="active-icon green-500-bg white-fg s-24">check_box</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="report.enabled == '0'" (click)="updateEnabled(report, $event)">
+                <mat-icon class="active-icon orange-500-fg s-32">check_box_outline_blank</mat-icon>
+            </button>
+          </mat-cell>
+      </ng-container>
+
+
+    <!-- Buttons Column -->
+    <!-- <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let report">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button (click)="$event.stopPropagation();filterReport(report)" aria-label="Edit report">
+                    <mat-icon>mode_edit</mat-icon>
+                </button>
+
+                <button mat-icon-button (click)="$event.stopPropagation();filterReport(report)" aria-label="Filter report">
+                    <mat-icon>build</mat-icon>
+                </button>
+            </div>
+
+        </mat-cell>
+    </ng-container> -->
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let report; columns: displayedColumns;"
+            class="report" matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<div class="h-64 text-center p-20" *ngIf="dataSource.total == 0">
+  No Reports Available.
+</div>
+
+<!--mat-paginator #paginator
+            [length]="dataSource.total"
+            (page)="paginate($event)"
+            [pageIndex]="0"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator-->
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,151 @@
+<mat-table fxFlex #table matSort
+        [dataSource]="dataSource"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->
+    
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.length"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case">
+            <mat-checkbox [(ngModel)]="checkboxes[case.id]"
+                          (ngModelChange)="onSelectedChange(case.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="number">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Num.</span>
+            <input class="form-control" [formControl]="number" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case">
+            <p class="company text-truncate">
+                {{ case.number }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="subject">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Subject</span>
+            <input class="form-control" [formControl]="subject" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case">
+            <p class="company text-truncate">
+                {{ case.subject }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="accountName">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Account Name</span>
+            <input class="form-control" [formControl]="accountName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case" fxHide fxShow.gt-xs>
+            <p class="company text-truncate">
+                {{ case.accountName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="priority">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Priority</span>
+            <input class="form-control" [formControl]="priority" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case" fxHide fxShow.gt-sm>
+            <p class="company text-truncate">
+                {{ case.priority }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Status</span>
+            <input class="form-control" [formControl]="status" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case" fxHide fxShow.gt-sm>
+            <p class="company text-truncate">
+                {{ case.status }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="salesRep">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Assigned To</span>
+            <input class="form-control" [formControl]="salesRep" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let case" fxHide fxShow.gt-md>
+            <p class="company text-truncate">
+                {{ case.salesRep }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef (keyup.enter)="filterCases()">
+            <span mat-sort-header>Date Created</span>
+            <input class="form-control" [formControl]="dateCreated" placeholder="">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let case" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{ case.dateCreated | date }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let case" fxFlex="none" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <!-- <button mat-menu-item aria-label="clone">
+                        <mat-icon>content_copy</mat-icon>
+                        <span>Clone</span>
+                    </button> -->
+                    <button mat-menu-item aria-label="remove" (click)="deleteCase(case)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let case; columns: displayedColumns;"
+            class="case"
+            (click)="editCase(case)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[case.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>

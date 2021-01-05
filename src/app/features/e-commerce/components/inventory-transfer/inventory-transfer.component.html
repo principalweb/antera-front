@@ -1,0 +1,179 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>Transfer Inventory</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialog.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner> 
+    </div>
+
+    <mat-dialog-content class="p-24 m-0">
+
+        <mat-table #table matSort
+                   [dataSource]="dataSource"
+                   [@animateStagger]="{value:'50'}">
+            
+            <ng-container cdkColumnDef="group">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Line #</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.group}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+            
+            <ng-container cdkColumnDef="itemNo">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Product #</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.itemNo}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="sku">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>SKU</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.sku}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="originSite">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Source Site</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.originSite}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="originBin">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Source Bin</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.originBin}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="orignBinQuantity">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Available Qty</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.orignBinQuantity}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="color">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Color</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs [title]="po.color">
+                    <p class="email text-truncate">
+                        {{po.color}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="size">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>Size</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs [title]="po.size">
+                    <p class="email text-truncate">
+                        {{po.size}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="site">
+                <mat-header-cell *cdkHeaderCellDef class="site"
+                                 fxHide fxShow.gt-xs>Site</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs class="site">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="po.site" [compareWith]="compareFob">
+                            <mat-option [value]="site"
+                                        *ngFor="let site of sites">
+                                {{ site.fobCity }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="bin">
+                <mat-header-cell *cdkHeaderCellDef class="bin"
+                                 fxHide fxShow.gt-xs>Bin</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs class="bin">
+                    <mat-form-field>
+                        <mat-select [(ngModel)]="po.bin" [compareWith]="compareBin">
+                            <mat-option [value]="bin"
+                                        *ngFor="let bin of po.site.bins|originBin:po.originBinId">{{ bin.bin }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="qtyInput">
+                <mat-header-cell *cdkHeaderCellDef class="qtyInput"
+                                 fxHide fxShow.gt-xs>Transfer</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs class="qtyInput">
+                    <mat-form-field>
+                        <input type="number" matInput [(ngModel)]="po.quantity" min="0" [max]="po.orignBinQuantity" />
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="poQuantity">
+                <mat-header-cell *cdkHeaderCellDef
+                                 fxHide fxShow.gt-xs>PO Qty</mat-header-cell>
+                <mat-cell *cdkCellDef="let po" fxHide fxShow.gt-xs>
+                    <p class="email text-truncate">
+                        {{po.poQuantity}}
+                    </p>
+                </mat-cell>
+            </ng-container>
+            
+            <ng-container cdkColumnDef="buttons">
+                <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+                <mat-cell *cdkCellDef="let po">
+                    <div fxFlex="row" fxLayoutAlign="end center">
+                        <button mat-raised-button color="accent" [disabled]="loading" aria-label="More"
+                                (click)="transfer(po);">
+                           Transfer 
+                        </button>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *cdkRowDef="let po; columns: displayedColumns;"
+                    class="product"
+                    matRipple
+                    [@animate]="{value:'*',params:{y:'100%'}}">
+            </mat-row>
+        </mat-table>
+        <div fxLayout="row" fxLayoutAlign="end center" class="mt-20 mr-16">
+            <button mat-raised-button color="accent" (click)="transferAll();" [disabled]="loading">
+                <span *ngIf="this.accountType!='distributorSale'">Transfer All</span>
+                <span *ngIf="this.accountType=='distributorSale'">Transfer & Invoice</span>
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

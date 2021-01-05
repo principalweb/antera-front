@@ -1,0 +1,145 @@
+<div [formGroup]="form" class="item__addon">
+  <div class="item__addon__header" fxLayout="row" fxLayoutAlign="start start" fxFlexAlign="start center">
+
+    <div class="col col--checkbox" *ngIf="selection && config?.edit">
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(addon) : null"
+        [checked]="selection.isSelected(addon)">
+      </mat-checkbox>
+    </div>
+
+    <div class="col col--icon">
+      <mat-icon>add_box</mat-icon>
+    </div>
+
+    <!-- Should contain header level details for the line item -->
+    <div class="col col--description">
+      <div>{{ addon.name}}</div>
+      <div>{{ addon.description }}</div>
+
+
+    </div>
+
+    <!-- These columns can be dynamic but should remain short -->
+    <ng-container *ngIf="config?.edit; else readOnly">
+      <div class="tighter-margin" fxLayout="column" fxLayoutAlign="start center"
+        *ngIf="!config?.hideCost && !adminFeeEnabled">
+        <p>GP</p>
+        {{ calculateMargin(addon.price, addon.cost) | roundString: 2 }}%
+      </div>
+
+      <div class="tighter-margin" fxLayout="column" fxLayoutAlign="start center"
+        *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails">
+        <p>GP</p>
+        {{ calculateMargin(addon.price, calculateAdminFeeCost(addon.price, addon.cost, orderDetails.adminFeeRate)) | roundString: 2 }}%
+      </div>
+
+      <div class="col col--qty">
+        <div fxLayout="column">
+          <mat-form-field appearance="outline">
+            <!-- <mat-label>Quantity</mat-label> -->
+            <input matInput type="number" step="any" min="0" formControlName="quantity">
+          </mat-form-field>
+
+          <mat-form-field *ngIf="currencyEnabled && !vendorCurrencyMatches() && !config?.hideCost" class="mt-8"
+            appearance="outline">
+            <mat-label>Rate</mat-label>
+            <input matInput type="number" disabled step="any" [value]="costExchangeRate | async | roundString: 4"
+              autocomplete="off">
+          </mat-form-field>
+
+          <!-- <mat-checkbox formControlName="matchOrderQty"><span class="text-sm">Match quantity</span></mat-checkbox> -->
+        </div>
+      </div>
+      <div class="vendor-currency-pair" *ngIf="!config?.hideCost">
+        <div *ngIf="currencyEnabled" fxLayout="column">
+          <p>{{ baseCurrency }}</p>
+          <p *ngIf="!vendorCurrencyMatches()">{{ vendorCurrencyCode }}</p>
+        </div>
+      </div>
+      <div class="col col--cost" *ngIf="!config?.hideCost">
+        <div fxLayout="column">
+          <mat-form-field appearance="outline">
+            <!-- <mat-label>Cost</mat-label> -->
+            <input matInput type="number" step="any" min="0" formControlName="cost">
+          </mat-form-field>
+
+          <mat-form-field *ngIf="currencyEnabled && !vendorCurrencyMatches()" class="mt-8" appearance="outline">
+            <input formControlName="costConverted" matInput type="number" step="any" disabled [value]="displayCostConverted()" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col col--cost" *ngIf="!config?.hideCost && adminFeeEnabled">
+        <mat-form-field appearance="outline">
+          <!-- <mat-label>Cost</mat-label> -->
+          <input [value]="orderDetails.adminFeeRate | roundString: 2" matInput type="number" step="any" min="0" formControlName="adminFeeCost">
+        </mat-form-field>
+      </div>
+      <div class="col col--cost" *ngIf="!config?.hideCost && adminFeeEnabled">
+        <div fxLayout="column">
+          <mat-form-field *ngIf="orderDetails" appearance="outline">
+            <!-- <mat-label>Cost</mat-label> -->
+            <input [value]="calculateAdminFeeCost(addon.price, addon.cost, orderDetails.adminFeeRate)" matInput type="number" step="any" min="0"
+              formControlName="totalCostIncludingAdminFee">
+          </mat-form-field>
+
+          <mat-form-field class="mt-8" *ngIf="currencyEnabled && !customerCurrencyMatches() && !config?.hideCost" appearance="outline">
+            <mat-label>Rate</mat-label>
+            <input matInput type="number" disabled step="any" [value]="customerExchangeRate | async | roundString: 4"
+              autocomplete="off">
+          </mat-form-field>
+          
+        </div>
+      </div>
+      <div class="vendor-currency-pair" *ngIf="!config?.hideCost && currencyEnabled">
+        <div fxLayout="column" fxLayoutAlign="start">
+          <p>{{ baseCurrency }}</p>
+          <p *ngIf="!customerCurrencyMatches()">{{ customerCurrencyCode }}</p>
+        </div>
+      </div>
+      <div class="col col--price">
+        <mat-form-field appearance="outline">
+          <!-- <mat-label>Price</mat-label> -->
+          <input matInput type="number" step="any" min="0" formControlName="price">
+        </mat-form-field>
+        <mat-form-field *ngIf="!config?.hideCost && currencyEnabled && !customerCurrencyMatches()" class="mt-8" appearance="outline">
+          <input formControlName="priceConverted" matInput type="number" step="any" [value]="displayPriceConverted()" autocomplete="off">
+        </mat-form-field>
+      </div>
+    </ng-container>
+
+    <ng-template #readOnly>
+      <div class="col col--qty">
+        {{ addon.quantity }}
+      </div>
+      <div class="col col--cost">
+        {{ addon.cost | currency:'USD':'symbol':'1.2-15' }}
+      </div>
+      <div class="col col--price">
+        {{ addon.price | currency:'USD':'symbol':'1.2-15' }}
+      </div>
+    </ng-template>
+
+    <div class="col col--total">
+      <ng-container *ngIf="!rollToProduct">
+        {{ addon.totalPrice | currency:'USD':'symbol':'1.2-15' }}
+      </ng-container>
+      <ng-container *ngIf="rollToProduct">
+        Included
+      </ng-container>
+
+    </div>
+
+    <div class="col col--menu" *ngIf="config?.edit">
+
+      <mat-menu #itemMenu="matMenu">
+        <button mat-menu-item (click)="editCharge()">Edit</button>
+        <!-- <button mat-menu-item>Copy</button> -->
+        <button mat-menu-item (click)="deleteCharge()">Delete</button>
+      </mat-menu>
+
+      <div>
+        <mat-icon [matMenuTriggerFor]="itemMenu">more_vert</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,196 @@
+<div id="contacts" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex="1 0 auto"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">group</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Teams</span>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <div class="content-card mat-white-bg">
+
+            <div class="toolbar">
+                <div class="mail-selection" fxFlex="row">
+                    <div fxFlex="row" fxLayoutAlign="start center">
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8">
+                            <mat-icon>add</mat-icon> Add
+                        </button>
+
+                        <button mat-raised-button color="warn"
+                                class="text-capitalize">
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+                    </div>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button mat-button class="text-capitalize" [matMenuTriggerFor]="selectMenu">
+                        More Actions
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #selectMenu="matMenu">
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="emailSelected()">Email
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="massUpdateSelected()">Mass Update
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="mergeSelected()">Merge
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Add To Target List
+                        </button>
+                        <!-- <button mat-menu-item class="text-capitalize"
+                                (click)="generateLetterSelected()">Form Letter
+                        </button> -->
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Change Log
+                        </button>
+                    </mat-menu>
+
+                </div>
+            </div>
+
+            <mat-table #table [dataSource]="dataSource" matSort
+                       fxFlex fusePerfectScrollbar>
+                <ng-container cdkColumnDef="checkbox">
+                    <mat-header-cell class="w-40" *cdkHeaderCellDef>
+                        <mat-checkbox (change)="toggleAll($event)"
+                                    [checked]="selectedCount === dataSource.data.length"
+                                    [indeterminate]="selectedCount > 0 && selectedCount < dataSource.data.length">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell class="w-40" *cdkCellDef="let contact">
+                        <mat-checkbox [(ngModel)]="checkboxes[contact.id]" (ngModelChange)="onSelectedChange(contact.id)"
+                                      (click)="$event.stopPropagation()">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Avatar Column -->
+                <ng-container cdkColumnDef="avatar">
+                    <mat-header-cell fxFlex="64px" *cdkHeaderCellDef></mat-header-cell>
+                    <mat-cell fxFlex="64px" *cdkCellDef="let contact">
+                        <img class="avatar" *ngIf="contact.avatar" [alt]="contact.name"
+                                [src]="contact.avatar"/>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container cdkColumnDef="name">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                    <mat-cell *cdkCellDef="let contact">
+                        <p class="text-truncate font-weight-600">{{contact.name}}
+                            {{contact.lastName}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container cdkColumnDef="position">
+                    <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-sm mat-sort-header>Position
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+                        <p class="position text-truncate">
+                            {{contact.position}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Office Column -->
+                <ng-container cdkColumnDef="office">
+                    <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-md mat-sort-header>Office
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+                        <p class="office text-truncate">
+                            {{contact.office}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container cdkColumnDef="email">
+                    <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-sm mat-sort-header>Email
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-sm>
+                        <p class="email text-truncate">
+                            {{contact.email}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container cdkColumnDef="phone">
+                    <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-md mat-sort-header>Phone
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+                        <p class="phone text-truncate">
+                            {{contact.phone}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="actions">
+                    <mat-header-cell *cdkHeaderCellDef fxHide fxShow.gt-md>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let contact" fxHide fxShow.gt-md>
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-icon-button aria-label="mail"
+                                    (click)="$event.stopPropagation();">
+                                <mat-icon style="color: rgb(244, 67, 54);">mail</mat-icon>
+                            </button>
+
+                            <button mat-icon-button aria-label="chat"
+                                    (click)="$event.stopPropagation();"
+                                    style="margin-right: 20px;">
+                                <mat-icon style="color: rgb(9, 210, 97);">chat</mat-icon>
+                            </button>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row
+                    *cdkHeaderRowDef="displayColumns"></mat-header-row>
+                <mat-row *cdkRowDef="let contact; columns: displayColumns">
+                </mat-row>
+            </mat-table>
+            <mat-paginator #paginator
+                [length]="members.length"
+                [pageSize]="10"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+            </mat-paginator>
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+
+
+
+
+
+
+
+<!-- WIDGET GROUP -->
+
+<!-- / WIDGET GROUP -->

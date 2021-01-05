@@ -1,0 +1,113 @@
+<div id="case" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">folder_shared</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Cases</span>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <mat-sidenav-container class="content-card">
+            <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                         fuseMatSidenavHelper="account-sidenav">
+                <mat-list class="p-0">
+                    <mat-list-item class="mat-accent-bg" matRipple
+                                   (click)="newCase()">
+                        <mat-icon>add</mat-icon>
+                        <span class="ml-8">Case</span>
+                    </mat-list-item>
+                    <!-- <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>content_copy</mat-icon>
+                        <span class="ml-8">Clone</span>
+                    </mat-list-item> -->
+                    <mat-list-item class="mat-warn-bg" matRipple
+                                   (click)="deleteSelectedCases()">
+                        <mat-icon>delete</mat-icon>
+                        <span class="ml-8">Delete</span>
+                    </mat-list-item>
+                </mat-list>
+            </mat-sidenav>
+
+            <div class="toolbar">
+                <div fxFlex="row">
+                    <div fxFlex="row" fxLayoutAlign="start center">
+                        <button mat-icon-button fxHide.gt-md
+                                fuseMatSidenavToggler="account-sidenav">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="newCase()">
+                            <mat-icon>add</mat-icon> Case
+                        </button>
+
+                        <!-- <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>content_copy</mat-icon> Clone
+                        </button> -->
+
+                        <button mat-raised-button color="warn"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="deleteSelectedCases()">
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+                    </div>
+
+                    <div class="toolbar-separator"></div>
+
+                    <button mat-button class="text-capitalize more-actions"
+                            [matMenuTriggerFor]="selectMenu">
+                        More Actions
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #selectMenu="matMenu">
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="emailSelected()">Email
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="massUpdateSelected()">Mass Update
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="mergeSelected()">Merge
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Add To Target List
+                        </button>
+                        <!-- <button mat-menu-item class="text-capitalize"
+                                (click)="generateLetterSelected()">Form Letter
+                        </button> -->
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Change Log
+                        </button>
+                    </mat-menu>
+
+                </div>
+            </div>
+
+            <fuse-cases-list></fuse-cases-list>
+
+        </mat-sidenav-container>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

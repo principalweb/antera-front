@@ -1,0 +1,22 @@
+<div (click)="toggleForm()" class="list-header-name"
+     fxLayout="row" fxLayoutAlign="start center"
+     *ngIf="!formActive"
+>
+    <div fxFlex class="pl-16">{{ status.label }}</div>
+
+    <div fxFlex="none" class="total accent-fg">{{ total }}</div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onFormSubmit()"
+      fxLayout="row" class="pl-16 w-100-p"
+      *ngIf="formActive">
+
+    <input fxFlex formControlName="name" #nameInput placeholder="Write a list Name">
+
+    <button mat-icon-button fxFlex="none">
+        <mat-icon>check</mat-icon>
+    </button>
+    <button (click)="closeForm()" mat-icon-button fxFlex="none" type="button">
+        <mat-icon>close</mat-icon>
+    </button>
+</form>

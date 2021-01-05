@@ -1,0 +1,183 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+
+            <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div fxLayout="column" class="details-form">
+
+        <div mat-dialog-content class="m-0">
+
+            <form name="form" [formGroup]="reportFilterForm" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+
+                <div fxLayout="row" fxLayout.xs="column">
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" placeholder="Customer" aria-label="Customer"
+                                formControlName="customerName" [matAutocomplete]="auto1">
+                            <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectCustomers($event)">
+                                <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer">
+                                    {{ customer.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" placeholder="Vendor" aria-label="Vendor"
+                                formControlName="vendorName" [matAutocomplete]="auto2">
+                            <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selectVendors($event)">
+                                <mat-option *ngFor="let vendor of filteredVendors | async" [value]="vendor">
+                                    {{ vendor.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayout.xs="column">
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" placeholder="Order Status" aria-label="Order Status"
+                                formControlName="orderStatus" [matAutocomplete]="auto3">
+                            <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selectOrderStatus($event)">
+                                <mat-option *ngFor="let orderStatus of filteredOrderStatus | async"
+                                    [value]="orderStatus">
+                                    {{ orderStatus.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" placeholder="Contacts" aria-label="Contacts"
+                                formControlName="contactsName" [matAutocomplete]="auto5">
+                            <mat-autocomplete #auto5="matAutocomplete" (optionSelected)="selectContacts($event)">
+                                <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact">
+                                    {{ contact.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayout.xs="column">
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput type="text" placeholder="Payment Status" aria-label="Payment Status"
+                                formControlName="paidStatus" [matAutocomplete]="auto4">
+                            <mat-autocomplete #auto4="matAutocomplete">
+                                <mat-option *ngFor="let paidStatus of filteredPaidStatus | async" [value]="paidStatus">
+                                    {{ paidStatus }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input type="hidden" formControlName="representiveId" required />
+                            <input matInput type="text" placeholder="Representive" aria-label="Vendor"
+                                formControlName="representive" [matAutocomplete]="auto6">
+                            <mat-autocomplete #auto6="matAutocomplete" (optionSelected)="selectSalesRep($event)">
+                                <mat-option *ngFor="let representive of filteredRepresentives | async"
+                                    [value]="representive">
+                                    {{ representive.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayout.xs="column">
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput formControlName="fromDate" [matDatepicker]="fromDatePicker"
+                                placeholder="From Date">
+                            <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #fromDatePicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                        <mat-form-field fxFlex>
+                            <input matInput formControlName="toDate" [matDatepicker]="toDatePicker"
+                                placeholder="To Date">
+                            <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #toDatePicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <ng-container *ngIf="report.value == 'billedOrderProjectName' || report.value == 'openOrderProjectName'">
+                    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
+                        <mat-form-field class="w-100-p">
+                            <mat-label>Project Name</mat-label>
+                            <input matInput
+                                    name="projectName"
+                                    formControlName="projectName"
+                                    placeholder="Project Name">
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="report.value == 'inventorysizecolumnskus'">
+
+                    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
+                        <mat-form-field class="w-100-p">
+                            <mat-label>Category</mat-label>
+                            <input type="text" autocomplete="off" formControlName="categoryName" matInput
+                                [matAutocomplete]="autoCategory" #productCategory>
+                            <span matSuffix *ngIf="reportFilterForm.get('category')?.value">
+                                <button mat-icon-button (click)="clearCategoryFilter()">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </span>
+                            <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="selectCategory($event)"
+                                md-clear-button="true">
+                                <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+                                    {{ category.category }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-100-p">
+                            <mat-label>Product</mat-label>
+                            <input type="text" formControlName="productName" autocomplete="off" matInput
+                                [matAutocomplete]="autoProduct" #vendorName>
+                            <span matSuffix *ngIf="reportFilterForm.get('product')?.value">
+                                <button mat-icon-button (click)="clearProductFilter()">
+                                    <mat-icon>clear</mat-icon>
+                                </button>
+                            </span>
+                            <mat-autocomplete #autoProduct="matAutocomplete" (optionSelected)="selectProduct($event)"
+                                md-clear-button="true">
+                                <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+                                    {{ product.productName }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                    </div>
+                </ng-container>
+            </form>
+        </div>
+
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="start center">
+
+            <button mat-raised-button (click)="apply(reportFilterForm)" class="apply-button mat-accent mr-8"
+                aria-label="Apply" matTooltip="APPLY">
+                Apply
+            </button>
+
+            <button mat-raised-button (click)="dialogRef.close()" class="apply-button mat-accent" aria-label="Cancel"
+                matTooltip="APPLY">
+                Cancel
+            </button>
+
+        </div>
+    </div>
+
+</div>

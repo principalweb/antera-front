@@ -1,0 +1,58 @@
+<div id="inventory" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">list</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Inventory</span>
+            </div>
+            <!-- / APP TITLE -->
+            <div class="inventory-total">
+                <div fxLayout="column" fxHide.xs>
+                    <div class="total">
+                        <span class="reserved">
+                            Stock Value: {{inventoryValue.stockValue | currency:'USD':'symbol'}} | Reserved Value: {{inventoryValue.reservedValue | currency:'USD':'symbol' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <div class="content-card mat-white-bg">
+
+            <div class="toolbar">
+                <div class="mail-selection" fxFlex="row">
+                    <div fxFlex="row" fxLayoutAlign="start center">
+                        Click on the Inventory lines to view details
+                    </div>
+                </div>
+            </div>
+
+            <app-inventory-list></app-inventory-list>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

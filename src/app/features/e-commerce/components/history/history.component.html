@@ -1,0 +1,53 @@
+<div id='order-history' class="p-32">
+  <mat-table #table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+             [@animateStagger]="{value:'50'}">
+
+      <ng-container cdkColumnDef="name">
+        <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *cdkCellDef="let item" matTooltip="{{item.name}}">
+          <p class="text-truncate">{{ item.name }}</p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="description">
+        <mat-header-cell *cdkHeaderCellDef mat-sort-header>Description</mat-header-cell>
+        <mat-cell *cdkCellDef="let item" matTooltip="{{item.description}}">
+          <p class="text-truncate">{{ item.description }}</p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="username">
+        <mat-header-cell *cdkHeaderCellDef>User Name</mat-header-cell>
+        <mat-cell *cdkCellDef="let item" matTooltip="{{item.userName}}">
+          <p class="text-truncate">{{ item.userName }}</p>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="tts">
+        <mat-header-cell *cdkHeaderCellDef>Date</mat-header-cell>
+        <mat-cell *cdkCellDef="let item" matTooltip="{{item.tts}}">
+          <p class="text-truncate">{{ item.tts  | date:'medium' }}</p>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *cdkRowDef="let item; columns: displayedColumns;"
+               class="activity-item"
+               matRipple
+               [@animate]="{value:'*',params:{y:'100%'}}">
+      </mat-row>
+  </mat-table>
+  <div class="p-24 text-center" *ngIf="dataSource.data.length===0">
+    There are no history
+  </div>
+  <mat-paginator #paginator
+                 [pageSize]="50"
+                 [pageSizeOptions]="[10, 20, 50, 100]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

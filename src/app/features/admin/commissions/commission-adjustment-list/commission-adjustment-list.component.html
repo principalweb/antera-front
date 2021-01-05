@@ -1,0 +1,89 @@
+<mat-table fxFlex #table matSort
+            [dataSource]="dataSource"
+            (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+   <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [disableRipple]="true"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          [disableRipple]="true"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>       
+
+    <!-- Location Name Column -->
+    <ng-container cdkColumnDef="adjustmentType">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Type</span>
+            <input class="form-control" formControlName="adjustmentType" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="text text-truncate">{{row.adjustmentType}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container cdkColumnDef="adjustmentValue">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Value</span>
+            <input class="form-control" formControlName="adjustmentValue" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{ row.adjustmentValue }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="salesRep">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Sales Rep</span>
+            <input class="form-control" formControlName="salesRep" (keyup.enter)="filterCommissions()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{ row.salesRep }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="reason">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Reason</span>
+           <!--  <input class="form-control" formControlName="modifiedByName" (keyup.enter)="filterCommissions()"> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+            <p class="text text-truncate">{{row.reason}}</p>
+        </mat-cell>
+    </ng-container>
+    
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="dropdown"
+        (click)="edit(row.id)"
+        matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

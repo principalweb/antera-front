@@ -1,0 +1,82 @@
+<!-- SIDENAV HEADER -->
+<div fxLayout="column" fxLayoutAlign="space-between start"
+     class="header p-24 pb-4" ngClass.gt-md="fuse-white--fg">
+
+    <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">description</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Documents</span>
+    </div>
+
+    <div class="document select-document" fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <mat-form-field>
+            <mat-label>Selected Document</mat-label>
+            <mat-select
+                        [ngModel]="selectedDocument"
+                        (selectionChange)="changeDocument($event)"
+                        >
+                <mat-option *ngFor="let document of documents" [value]="document">
+                    {{document}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+<!-- / SIDENAV HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<div class="content fuse-white" *fuseIfOnDom [@animate]="{value:'*',params:{y:'50px'}}">
+
+    <div fxFlex fxLayout="column" fxLayoutAlign="start left">
+
+        <!-- <div class="my-16 h-40" fxFlex fxLayout="row" fxLayoutAlign="start center">
+            <button mat-raised-button class="text-capitalize invoice-action" [matMenuTriggerFor]="selectMenu">
+                    {{selectedDocument}}
+                    <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #selectMenu="matMenu">
+                <button mat-menu-item class="text-capitalize"
+                        (click)="invoiceSelected()">Invoice
+                </button>
+                <button mat-menu-item class="text-capitalize"
+                        (click)="orderConfirmSelected()">Order Confirmation
+                </button>
+                <button mat-menu-item class="text-capitalize"
+                        (click)="purchaseOrderSelected()">Purchase Order
+                </button>
+                <button mat-menu-item class="text-capitalize"
+                        (click)="quoteSelected()">Quote
+                </button>
+            </mat-menu>
+
+        </div> -->
+
+        <div class="nav-subheader p-8">Turn On/Off</div>
+
+        <div class="menu-list">
+            <div class="menu" *ngFor="let option of docOptions">
+                <div fxLayout="row" class="p-8">
+                    <div fxFlex="70%"><span>{{option.name}}</span></div>
+                    <div fxFlex="15%"><mat-slide-toggle (change)="sliderToggled(option, $event)" [(ngModel)]="option.value"></mat-slide-toggle></div>
+					<div fxFlex="15%">
+					    <button mat-button
+						    *ngIf="isDefaultAllowed(option.name)"
+						    (click)="addDefaultOption(option.name)">
+						    <mat-icon>notes</mat-icon>
+				        </button>
+				    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="center">
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="loading || docOptions.length == 0">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+<!-- / SIDENAV CONTENT -->
+

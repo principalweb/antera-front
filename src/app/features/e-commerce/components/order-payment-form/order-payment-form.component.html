@@ -1,0 +1,113 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row>
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button dialog-close"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+
+    <mat-sidenav-container class="content-card">
+
+        <mat-dialog-content class="p-24 m-0">
+
+            <form *ngIf="paymentType == 'Cash_Check'" [formGroup]="cashCheckPaymentForm">
+                <div fxLayout="column">
+                    <input type="hidden" formControlName="oId" required/>
+                    <mat-form-field class="w-100-p">
+                        <input matInput formControlName="paymentDate" [matDatepicker]="picker" placeholder="Payment Date" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100-p">
+                        <mat-select formControlName="paymentMethod"
+                                    placeholder="Payment Method">
+                            <mat-option  [value]="pMethod.value" *ngFor="let pMethod of pMethodList">
+                                {{ pMethod.label }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100-p">
+                        <input matInput type="number" placeholder="Payment Amount" formControlName="paymentAmount">
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100-p">
+                        <input matInput type="text" placeholder="Reference Number" formControlName="referenceNumber">
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100-p">
+                        <textarea matInput placeholder="Memo" formControlName="memo" rows="2"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100-p">
+                        <textarea matInput placeholder="Notes" formControlName="notes" rows="2"></textarea>
+                    </mat-form-field>
+                </div>
+            </form>
+
+            <form *ngIf="paymentType == 'Credit_Card'" [formGroup]="creditCardPaymentForm">
+                <div fxLayout="column">
+                    <label id="example-radio-group-label">Please Confirm Payment Amount.</label>
+                    <!--div fxLayout="row">
+                       <button mat-button (click)="fullPay()" color="primary">Pay In Full</button>
+                       <button mat-button  color="accent">Partial</button>
+                    </div-->
+                   <input type="hidden" formControlName="oId" required/>
+                    <mat-form-field class="w-100-p">
+                        <input matInput type="number" placeholder="Payment Amount" formControlName="paymentAmount">
+                    </mat-form-field>
+
+                    <mat-form-field class="w-100-p">
+                        <textarea matInput placeholder="Notes" formControlName="notes" rows="2"></textarea>
+                    </mat-form-field>
+                    <!--button mat-button (click)="partial()" color="accent">Confirm Partial Amount</button-->
+                </div>
+            </form>
+
+
+            <form *ngIf="paymentType == 'Credit_Memo'" [formGroup]="applyCreditPaymentForm">
+                <div fxLayout="column">
+                    <input type="hidden" formControlName="oId" required/>
+                    <mat-form-field class="w-100-p">
+                        <input matInput formControlName="paymentDate" [matDatepicker]="picker" placeholder="Payment Date" required>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="w-100-p">
+                        <input matInput type="number" placeholder="Amount Due" formControlName="paymentAmount" readonly>
+                    </mat-form-field>
+                    <div class="w-100-p">
+                        <label>Available Credit : </label><span class="accent-text">{{ creditAmount | currency:'USD':'symbol'}}</span> 
+                    </div><br>
+                    <mat-form-field class="w-100-p">
+                        <input matInput type="number" placeholder="How much would you like to apply?" formControlName="creditAmount">
+                    </mat-form-field>
+                </div>
+            </form>
+
+        </mat-dialog-content>
+
+        <mat-dialog-actions class="m-0 p-16 pb-36" fxLayout="row" fxLayoutAlign="space-between center">
+            <button
+                    mat-raised-button
+                    (click)="update()"
+                    [disabled]="paymentValid"
+                    class="save-button mat-accent"
+                    aria-label="SAVE">
+                {{(paymentType == 'Credit_Memo' || paymentType == 'Cash_Check') ? 'Save' : 'Process'}}
+            </button>
+        </mat-dialog-actions>
+
+    </mat-sidenav-container>
+
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

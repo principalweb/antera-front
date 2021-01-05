@@ -1,0 +1,81 @@
+$icon-size: 16px;
+
+#project-details{
+
+    .header {
+        max-height: 80px;
+        height: 80px;
+        min-height: 80px;
+    
+        .logo-text h1 {
+            margin-top: 7px;
+        }
+
+        .logo img {
+            width: 60px;
+            height: 50px;
+            margin-right: 16px;
+            object-fit: contain;
+        }
+
+        .rank {
+            text-align: center;
+        
+            .rank-number {
+                min-width: 60px;
+                height: 60px;
+                padding: 0 10px;
+                line-height: 51px;
+                text-align: center;
+                border-radius: 500px;
+                border: 4px solid white;
+                font-size: 32px;
+            }
+        }
+
+        .logo-text {
+            a {
+                text-decoration: none;
+                color: white;
+            }
+        
+            .mat-icon {
+                width: $icon-size;
+                height: $icon-size;
+                line-height: $icon-size;
+                min-width: $icon-size;
+                min-height: $icon-size;
+                font-size: $icon-size;
+            }
+        
+            .mat-icon-button {
+                transform: translate(-8px, -3px);
+                width: 32px;
+                height: 32px;
+                min-height: 32px;
+                margin-left: 16px;
+                line-height: 32px;
+            }
+        }
+        
+    }
+    .mat-tab-group,
+    .mat-tab-body-wrapper,
+    .tab-content {
+        flex: 1 1 auto;
+        max-width: 100%;
+    }
+
+    .tab-content {
+        flex: 1 1 auto;
+        &.products {
+            display: flex;
+        }
+    }
+
+    .mat-tab-body-content {
+        display: flex;
+    }  
+
+} 
+

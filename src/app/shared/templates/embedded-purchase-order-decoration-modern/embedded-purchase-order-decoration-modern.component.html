@@ -1,0 +1,11 @@
+<div  id="bharat" >
+  <antera-purchase-order-modern
+    [po]="orderDetails"
+    [docOptions]="docOptions"
+    [lineItems]="productData"
+    [logoUrl]="logoUrl"
+    [docLabels]="docLabels"
+    *ngIf="logoUrl"
+  ></antera-purchase-order-modern>
+</div>
+<!--<div class="embedded-document" id="bharat" [ngStyle]="hidden ? {'visibility':'hidden'} :{'visibility':'visible'}">-->

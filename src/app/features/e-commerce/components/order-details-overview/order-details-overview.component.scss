@@ -1,0 +1,74 @@
+@import 'src/@fuse/scss/fuse.scss';
+
+.some-space {
+    margin-right: 5px;
+}
+
+#order-details-overview {
+    $icon-size: 16px;
+    overflow-x: hidden;
+
+    .details-three-column {
+        > div {
+            width: 33.33%;
+            padding:10px;
+        }
+    }
+    .BasicInfoLeft{
+        width: 75%;
+    }
+
+    .BasicInfoRight{
+        width: 25%;
+        background-color:#EEEEEE;
+        border-radius: 10px;
+        margin-top: -50px;
+        min-height: 100px;
+    }
+    
+    .mat-raised-button .mat-icon {
+        color: white;
+    }
+
+    .mat-icon-button {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        margin-top: -4px;
+
+        .mat-icon {
+            width: $icon-size;
+            height: $icon-size;
+            line-height: $icon-size;
+            min-width: $icon-size;
+            min-height: $icon-size;
+            font-size: $icon-size;
+        }
+    }
+
+    .pre {
+        line-height: 1.6;
+        white-space: pre-wrap;
+   }
+
+    .order-info {
+        display: block !important;
+        flex: 1;
+    }
+
+    .mat-card {
+        position: relative;
+    }
+
+    .accent-text {
+        color: black;
+    }
+
+    .wd-25-mat-field {
+        width: 25%;
+    }
+
+    .wd-66-mat-field {
+        width: 66%;
+    }
+}

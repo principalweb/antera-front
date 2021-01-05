@@ -1,0 +1,191 @@
+<div class="ml-16" fxLayout="column" fxLayoutAlign="start center">
+  <p *ngIf="pendingService.quantityInvoicedError" class="crimson mt-0 mb-0 more-bold-step">Quantity invoiced must be a
+    real number and less than the amount ordered.</p>
+  <p *ngIf="pendingService.priceInputError" class="crimson mt-0 mb-0 more-bold-step">Price must be a real number</p>
+</div>
+
+<div class="toolbar no-bottom-border more-close" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxLayout="row">
+    <button class="mr-8 half-height" mat-raised-button matStepperPrevious color="accent">
+      <mat-icon>navigate_before</mat-icon> Back
+    </button>
+    <button [disabled]="!pendingService.phaseTwoComplete" class="half-height" mat-raised-button matStepperNext
+      color="accent">
+      Next <mat-icon>navigate_next</mat-icon></button>
+  </div>
+  <p class="mat-h1 mr-16 mb-0 font-weight-800 cener-total">
+    Estimated Total: ${{ pendingService.totalPrice | roundString: 2 }}
+  </p>
+</div>
+
+<form [formGroup]="filterForm">
+
+  <div class="new-sticky-table">
+    <mat-table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+    
+      <!-- CHECKBOX COLUMN -->
+    
+      <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell class="w-60" *cdkHeaderCellDef>
+          <mat-checkbox (change)="toggleAll($event)" [checked]="pendingService.lineItemSelectAll">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell class="w-60" *cdkCellDef="let lineItem" (click)="$event.stopPropagation()">
+          <mat-checkbox [checked]="pendingService.lineItemCheckboxes[lineItem.id]"
+            (change)="selectLineItem($event, lineItem)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / CHECKBOX COLUMN -->
+    
+      <!-- INVOICE NUMBER COLUMN -->
+      <ng-container cdkColumnDef="invoiceNumber">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Order Number</span>
+          <input class="form-control" formControlName="invoiceNo" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let lineItem" fxHide fxShow.gt-xs
+          [matTooltip]="lineItem.invoiceNo">
+          <!-- <input class="form-control" formControlName="invoiceNo" placeholder=""> -->
+          <a (click)="$event.stopPropagation()" routerLink="/e-commerce/orders/{{lineItem.refSalesOrderId}}">
+            <p class="text-truncate">{{lineItem.invoiceNo | ellipsis: 15}}</p>
+          </a>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / INVOICE NUMBER COLUMN -->
+
+      <!-- CUSTOMER COLUMN START -->
+      <ng-container cdkColumnDef="customer">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Customer</span>
+          <input class="form-control" formControlName="customer" placeholder="">
+        </mat-header-cell>
+        <mat-cell (click)="$event.stopPropagation()" *cdkCellDef="let lineItem" fxHide fxShow.gt-xs [matTooltip]="lineItem.name">
+          <a routerLink="/accounts/{{lineItem.customerId}}">
+            <p class="text-truncate mr-16">{{lineItem.customerName | ellipsis: 15}}</p>
+          </a>
+        </mat-cell>
+      </ng-container>
+      <!-- / CUSTOMER COLUMN END -->
+    
+      <!-- ITEM NUMBER COLUMN START -->
+      <ng-container cdkColumnDef="itemNo">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Item</span>
+          <!-- <input class="form-control" formControlName="name" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let lineItem" fxHide fxShow.gt-xs [matTooltip]="lineItem.itemNo">
+          <p class="text-truncate mr-16">{{lineItem.itemNo | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- ITEM NUMBER COLUMN END -->
+    
+      <!-- PRODUCT NAME COLUMN START -->
+      <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Name</span>
+          <!-- <input class="form-control" formControlName="name" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let lineItem" fxHide fxShow.gt-xs [matTooltip]="lineItem.productName">
+          <p *ngIf="lineItem.productName" class="text-truncate mr-16">{{lineItem.productName | ellipsis: 15}}</p>
+          <p class="text-truncate mr-16" *ngIf="lineItem.type.toLowerCase() === 'charge'.toLowerCase()">{{ lineItem.description || lineItem.type }}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- PRODUCT NAME COLUMN END -->
+    
+      <!-- COLOR COLUMN START -->
+      <ng-container cdkColumnDef="color">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Color</span>
+          <!-- <input class="form-control" formControlName="name" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let lineItem" fxHide fxShow.gt-xs [matTooltip]="lineItem.color">
+          <p class="text-truncate mr-16">{{lineItem.color | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- COLOR COLUMN END -->
+    
+      <!-- SIZE COLUMN START -->
+      <ng-container cdkColumnDef="size">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Size</span>
+          <!-- <input class="form-control" formControlName="name" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let lineItem" fxHide fxShow.gt-xs [matTooltip]="lineItem.size">
+          <p class="text-truncate mr-16">{{lineItem.size | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- SIZE COLUMN END -->
+    
+      
+      <!-- Order Quantity Column -->
+      <ng-container cdkColumnDef="orderedQuantity">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Ordered Quantity</span>
+        </mat-header-cell>
+        <mat-cell class="cell-right" *cdkCellDef="let lineItem" fxHide fxShow.gt-xs
+          [matTooltip]="lineItem.orderedQuantity">
+          <!-- <input class="form-control" value={{lineItem.orderQuantity}} placeholder=""> -->
+          <p class="text-truncate">{{lineItem.orderedQuantity | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- / Order Quantity Column -->
+
+      <!-- Invoice Quantity Column -->
+
+      <ng-container cdkColumnDef="invoiceQuantity">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Invoice Quantity</span>
+        </mat-header-cell>
+        <mat-cell (click)="$event.stopPropagation()" *cdkCellDef="let lineItem" fxHide fxShow.gt-xs>
+          <!-- <input class="form-control" value={{lineItem.quantityOrdered}} placeholder=""> -->
+            <!-- <p class="text-truncate">{{lineItem.invoiceQuantity | ellipsis: 15}}</p> -->
+            <amount-input-container [lineItem]="lineItem"></amount-input-container>
+        </mat-cell>
+      </ng-container>
+
+      <!-- / Invoice Quantity Column -->
+    
+      <!-- Unit Price -->
+      <ng-container cdkColumnDef="unitPrice">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Unit Price</span>
+        </mat-header-cell>
+        <mat-cell (click)="$event.stopPropagation()" class="cell-right" *cdkCellDef="let lineItem" fxHide fxShow.gt-xs>
+          <!-- <p class="text-truncate">${{lineItem.unitPrice.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+            })}}</p> -->
+          <price-input-container [lineItem]="lineItem"></price-input-container>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / Unit Price -->
+    
+      <!-- Total Price -->
+      <ng-container cdkColumnDef="totalPrice">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Total Price</span>
+        </mat-header-cell>
+        <mat-cell class="cell-right" *cdkCellDef="let lineItem" fxHide fxShow.gt-xs>
+          <p class="text-truncate">${{lineItem.extendedPrice.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+            })}}</p>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / Total Price -->
+    
+    
+      <mat-header-row *cdkHeaderRowDef="expandedColumns; sticky: true"></mat-header-row>
+      <mat-row (click)="chooseLineItem(lineItem)" [ngStyle]="{'cursor': 'pointer'}" class="row"
+        *cdkRowDef="let lineItem; columns: expandedColumns;"></mat-row>
+    </mat-table>
+  </div>
+    <mat-paginator #paginator (page)="paginate($event)" [length]="pendingService.totalLineItemCount" [pageIndex]="0" [pageSize]="50"
+      [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+    </mat-paginator>
+</form>

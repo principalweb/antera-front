@@ -1,0 +1,36 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>What type of tag to create?</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+   
+    <mat-dialog-content class="p-24 m-0">
+        <form [formGroup]="dataForm" class="p-16 pb-0" fxLayout="column">
+            <div class="form-group">
+                <mat-form-field>
+                    <mat-select formControlName="tagType" (selectionChange)="selectType($event)"
+                    placeholder="Select Tag Type"
+                    >
+                        <mat-option value="Module Tag">Module Tag</mat-option>
+                        <mat-option value="Antera Web Store">Antera Web Store</mat-option>
+                        <mat-option value="Third-Party Web Store">Third-Party Web Store</mat-option>
+                        <mat-option value="Third-Party integration">Third-Party integration</mat-option>
+                        <mat-option value="Portal Customer">Portal Customer</mat-option>
+                        <mat-option value="Antera New Web Stores">Antera New Web Stores</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </form>
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        </div>
+    </mat-dialog-content>
+
+</div>

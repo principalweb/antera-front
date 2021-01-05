@@ -1,0 +1,49 @@
+<mat-card>
+    <mat-card-content>
+
+      <h1>Import Contacts</h1>
+        <form name="importContactsForm" [formGroup]="importContactsForm">
+            <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px" class="mt-10">
+                    <button mat-stroked-button color="accent" (click)="downloadTemplate()">Template</button>
+                    <input hidden type="file" id="importContactsFile" (change)="onFileChange($event,'Contacts')" #importContactsFile>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px" class="mb-10">
+                    Download Contacts Import Template 
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+                    <button mat-stroked-button color="accent" (click)="importContactsFile.click()">Choose File</button>
+                    <button mat-raised-button color="accent" [disabled]="loading" (click)="uploadCSV('Contacts')">Upload</button>
+                    <input type="hidden" formControlName="importCloudFile"/>
+                    <input type="hidden" formControlName="importId"/>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+                    <span>{{currentFile}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+                    Allowed file extension in .csv. You can select only one file.
+                </div>
+               
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px" *ngIf="isImportDone">
+                    Total Records : {{totalRecords}}
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px" *ngIf="isImportDone">
+                    Processed Records : {{processedRecords}}
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px" *ngIf="isImportDone">
+                    Error Records : {{errorRecords}}
+                </div>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="12px" *ngIf="importErrorDetails.length > 0" class="er-msg">
+                <div class="err-import-msg-div"><strong>Following errors occurred during import, please fix them</strong></div>
+                <div *ngFor="let err of importErrorDetails; let i = index" class="err-import-msg">{{i+1}}. {{err.msg}}</div>
+            </div>
+        </form>
+
+    </mat-card-content>
+</mat-card>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+ </div>

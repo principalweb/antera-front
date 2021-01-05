@@ -1,0 +1,33 @@
+@import "src/@fuse/scss/fuse";
+
+.add-file-popup{
+
+  mat-dialog-container{
+
+    position: relative;
+    padding: 0;
+    max-height: 300px;
+
+    mat-dialog-content{
+      margin: 0;
+      padding: 24px;
+    }
+
+    mat-dialog-actions{
+      display: block !important;
+      border-top: 2px solid #ddd;
+      button{
+        float: right;
+        margin-right: 15px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  width: 450px;
+
+  @include media-breakpoint('lt-sm'){
+    width: 100%;
+  };
+
+}

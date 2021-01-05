@@ -1,0 +1,86 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-dialog-content class="p-24 m-0">
+
+        <form name="form" [formGroup]="projectForm"
+              fxLayout="column" fusePerfectScrollbar>
+
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <input name="name" formControlName="name" placeholder="Name" matInput required>
+                    </mat-form-field>
+                </div>
+                <div class="mb-24" fxFlex></div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="estimatedStartDate" [matDatepicker]="estimatedStartDate" placeholder="Start Date">
+                        <mat-datepicker-toggle matSuffix [for]="estimatedStartDate"></mat-datepicker-toggle>
+                        <mat-datepicker #estimatedStartDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="estimatedEndDate" [matDatepicker]="estimatedEndDate" placeholder="End Date">
+                        <mat-datepicker-toggle matSuffix [for]="estimatedEndDate"></mat-datepicker-toggle>
+                        <mat-datepicker #estimatedEndDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <mat-select formControlName="status" placeholder="Status">
+                            <mat-option [value]="st" *ngFor="let st of status">{{ st }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <mat-select formControlName="priority" placeholder="Priority">
+                            <mat-option [value]="priority" *ngFor="let priority of priorities">{{ priority }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxFlex="none">
+                <mat-icon class="mr-12 mt-12"></mat-icon>
+                <mat-form-field fxFlex>
+                    <textarea name="description" formControlName="description" placeholder="General Info" matInput type="text" max-rows="4"></textarea>
+                </mat-form-field>
+            </div>
+        </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="m-0 p-16"
+        fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button mat-raised-button
+                (click)="save(projectForm)"
+                class="save-button mat-accent"
+                aria-label="Save"
+                matTooltip="Save">
+            SAVE
+        </button>
+
+    </mat-dialog-actions>
+
+</div>

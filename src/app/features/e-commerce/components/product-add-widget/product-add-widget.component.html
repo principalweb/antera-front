@@ -1,0 +1,69 @@
+<div class="widget-container px-24 pt-12" fxLayout="row" fxLayoutAlign="start center">
+  <div class="mat-title m-0" fxFlex="none">
+    Add a Product:
+  </div>
+  <div class="w-300 px-20 mt-20" fxFlex="none">
+    <mat-form-field fxFlexFill>
+      <input matInput placeholder="Product Item #"
+             [value]="searchInput.value"
+             [formControl]="searchInput"
+             [matAutocomplete]="auto"/>
+      <button class="collapse-btn" mat-icon-button
+              (click)="clear()"
+              *ngIf="searchInput.value">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="selectProduct($event)">
+        <mat-option *ngFor="let p of products" [value]="p"
+                    class="product-auto-complete-item"
+                    fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="space-between start">
+            <span>{{ p.productId }}</span>
+            <span>{{ p.vendorName }}</span>
+          </div>
+          <div class="product-name">{{ p.productName }}</div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div fxFlex="none" class="mt-ltmd-20">
+      <ng-container *checkPermission="[orderService.order.id, 'Order']; requiredPermission 'allowEdit'">
+        <button mat-raised-button color="accent" class="ml-8" (click)="addProduct()">Add to {{ context == 'quote' ? 'Quote' : 'Order' }}</button>
+        <button mat-raised-button color="accent" class="ml-8"
+                (click)="showProductsView()">
+          <mat-icon>search</mat-icon> Find Products
+        </button>
+        <ng-container *checkPermission="[orderService.order.id, 'Order']; requiredPermission 'allowDelete'">
+            <button mat-raised-button color="warn" class="ml-8"
+                    (click)="delete()">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+        </ng-container>
+        <button *ngIf="taxJar" mat-raised-button color="accent" class="ml-8" 
+                (click)="calculateTax()">
+          <mat-icon>attach_money</mat-icon>Tax
+        </button>
+        <button *ngIf="shipStation" mat-raised-button color="accent" class="ml-8" 
+                (click)="createOrderToShipStation()">
+          <mat-icon>local_shipping</mat-icon>Ship Station
+        </button>
+      </ng-container>
+  </div>
+  <div fxFlex></div>
+  <div fxFlex="none">
+    <mat-slide-toggle
+      [(ngModel)]="showDecoration"
+      labelPosition="before"
+      (change)="toggleDecoration($event)">
+      Show Decoration
+    </mat-slide-toggle>
+  </div>
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

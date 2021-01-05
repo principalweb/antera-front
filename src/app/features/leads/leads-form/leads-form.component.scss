@@ -1,0 +1,24 @@
+@import 'src/@fuse/scss/fuse.scss';
+
+.dialog-content-wrapper {
+    .input-full-width {
+       width:100%;
+    }
+    .input-half-width {
+       width:50%;
+    }
+}
+    .input-half-width {
+       width:50%;
+    }
+
+.mat-dialog-actions {
+	margin-bottom: 10px !important;
+  	&[align='right'] {
+    	justify-content: right !important;
+  	}
+
+  	&[align='center'] {
+    	justify-content: center !important;
+  	}
+}

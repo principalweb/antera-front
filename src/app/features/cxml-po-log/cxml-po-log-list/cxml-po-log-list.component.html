@@ -1,0 +1,97 @@
+<div class='list'>
+  <mat-table fxFlex #table matSort
+      [dataSource]="dataSource"
+      [formGroup]="filterForm"
+      (matSortChange)="sortChange($event)">
+
+      <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="poNo">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>PO No</span>
+              <input class="form-control" formControlName="poNo" placeholder="">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.poNo}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="errors">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Error</span>
+              <input class="form-control" formControlName="errors" placeholder="">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate" [title]='data.errors'>
+                  {{data.errors}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="createdDate">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Posted Date</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.createdDate | date:'short'}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="status">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+            <span mat-sort-header>Status</span>
+            <mat-select
+                disableRipple
+                class="form-control"
+                formControlName="processed"
+                (selectionChange)="loadData()">
+                <mat-option [value]="s.id" *ngFor="let s of statusList">
+                    {{ s.value }}
+                </mat-option>
+            </mat-select >
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                <span *ngIf="data.processed">Processed</span>
+                <span *ngIf="!data.processed">
+                  <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="process(data.id)">
+                    Process
+                  </button>
+                </span>
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+              class="category-row"
+              matRipple>
+      </mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+              [length]="payload.meta.totalCount"
+              [pageIndex]="0"
+              [pageSize]="50"
+              (page)="paginate($event)"
+              [pageSizeOptions]="[10, 20, 50, 100]"
+              [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

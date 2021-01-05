@@ -1,0 +1,288 @@
+<mat-table fxFlex #table
+    [dataSource]="dataSource"
+    [formGroup]="formGroup">
+
+    <ng-container cdkColumnDef="image">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Preview</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <img *ngIf="data.image"
+                [ngClass]="'product-image-wide'"
+                [alt]="data.name"
+                [src]="data.image"
+                [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            <img *ngIf="!data.image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="details">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Item</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.name}} {{data.color}} {{data.size}}">{{data.name}} {{data.color}} {{data.size}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="poNo">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>PO</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm (click)="viewPoInfo(data.orderId)">
+            <p class="text-truncate" matTooltip="{{data.poNo}}">{{data.poNo}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="type">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Service</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p *ngIf="data.type==='deco'">Decoration</p>
+            <p *ngIf="data.type==='product'">Product</p>
+            <p *ngIf="data.type==='addon'||data.type==='deco-addon'">Additional Charge</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Name</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="text-truncate" matTooltip="{{data.name}}">{{data.name}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="color">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Color</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.color}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="size">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Size</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.size}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="quantity">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Quantity</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+                <input class="form-control" *ngIf="data.id!=''" [formControlName]="'qty_'+data.id" placeholder="" (keyup)="calculateTotal()">
+                <input class="form-control" *ngIf="data.id==''" [formControlName]="'qty_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId" placeholder="" (keyup)="calculateTotal()">
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="price">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Unit Cost</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+                <input class="form-control" *ngIf="data.id!=''" [formControlName]="'price_'+data.id" placeholder="" (keyup)="unitPriceChanged(data.id)">
+                <input class="form-control" *ngIf="data.id==''" [formControlName]="'price_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId" placeholder="" (keyup)="unitPriceChanged(data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId)">
+                <!--span *ngIf="toCurrency"><br />({{fromCurrency}})</span-->  
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="toCurrencyPrice">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Unit Cost</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+                <input class="form-control" *ngIf="data.id!=''" [formControlName]="'to_price_'+data.id" placeholder="" (keyup)="unitPriceToCurrencyChanged(data.id)">
+                <input class="form-control" *ngIf="data.id==''" [formControlName]="'to_price_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId" placeholder="" (keyup)="unitPriceToCurrencyChanged(data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId)">
+                <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="total">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Total</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate" *ngIf="data.id!=''">
+                {{fx2StrCopy(formGroup.controls['price_'+data.id].value * formGroup.controls['qty_'+data.id].value) | number: '1.2-2'}}
+                <!--span *ngIf="toCurrency"><br />({{fromCurrency}})</span-->
+            </p>
+            <p class="email text-truncate" *ngIf="data.id==''">
+              {{
+                  formatNumber(
+                    formatNumber(
+                      formGroup.controls['price_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                    )
+                    * formGroup.controls['qty_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                  ) | number: '1.2-2'
+              }}
+              <!--span *ngIf="toCurrency"><br />({{fromCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="toCurrencyTotal">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Total</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate" *ngIf="data.id!=''">
+                {{fx2StrCopy(formGroup.controls['to_price_'+data.id].value * formGroup.controls['qty_'+data.id].value) | number: '1.2-2'}}
+                <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+            <p class="email text-truncate" *ngIf="data.id==''">
+              {{
+                  formatNumber(
+                    formatNumber(
+                      formGroup.controls['to_price_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                    )
+                    * formGroup.controls['qty_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                  ) | number: '1.2-2'
+              }}
+              <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="creditAvail">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Credit Available</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+              {{ data.creditAvailable | number: '1.2-2'}}
+              <!--span *ngIf="toCurrency"><br />({{fromCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="toCurrencyCreditAvail">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Credit Available</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+              {{ data.creditAvailable * exchangeRate | number: '1.2-2'}}
+              <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="creditApplied">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Credit Applied</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+              <input class="form-control" *ngIf="data.id!=''" [formControlName]="'credit_'+data.id" placeholder="" (keyup)="creditAppliedChanged(data.id)" (blur)="creditAppliedChanged(data.id)">
+              <input class="form-control" *ngIf="data.id==''" [formControlName]="'credit_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId" placeholder="" (keyup)="creditAppliedChanged(data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId)" (blur)="creditAppliedChanged(data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId)">
+              <!--span *ngIf="toCurrency"><br />({{fromCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="toCurrencyCreditApplied">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Credit Applied</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email">
+              <input class="form-control" *ngIf="data.id!=''" [formControlName]="'to_credit_'+data.id" placeholder="" (keyup)="creditAppliedToCurrencyChanged(data.id)" (blur)="creditAppliedToCurrencyChanged(data.id)">
+              <input class="form-control" *ngIf="data.id==''" [formControlName]="'to_credit_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId" placeholder="" (keyup)="creditAppliedToCurrencyChanged(data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId)" (blur)="creditAppliedToCurrencyChanged(data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId)">
+              <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="lineAmount">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Line Total</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate" *ngIf="data.id!=''">
+                {{formatNumber((toNumber(formGroup.controls['price_'+data.id].value) * toNumber(formGroup.controls['qty_'+data.id].value)) - toNumber(formGroup.controls['credit_'+data.id].value)) | number: '1.2-2'}}
+                <!--pan *ngIf="toCurrency"><br />({{fromCurrency}})</span-->
+            </p>
+            <p class="email text-truncate" *ngIf="data.id==''">
+              {{
+                  formatNumber(
+                    (
+                      formatNumber(
+                        formGroup.controls['price_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                      )
+                      * formGroup.controls['qty_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                    )
+                    - toNumber(formGroup.controls['credit_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value)
+                  ) | number: '1.2-2'
+              }}
+              <!--span *ngIf="toCurrency"><br />({{fromCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="toCurrencyLineAmount">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Line Total</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate" *ngIf="data.id!=''">
+                {{formatNumber((toNumber(formGroup.controls['to_price_'+data.id].value) * toNumber(formGroup.controls['qty_'+data.id].value)) - toNumber(formGroup.controls['to_credit_'+data.id].value)) | number: '1.2-2'}}
+                <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+            <p class="email text-truncate" *ngIf="data.id==''">
+              {{
+                  formatNumber(
+                    (
+                      formatNumber(
+                        formGroup.controls['to_price_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                      )
+                      * formGroup.controls['qty_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value
+                    )
+                    - toNumber(formGroup.controls['to_credit_'+data.type+'_'+data.productId+'_'+data.lineId+'_'+data.recordId].value)
+                  ) | number: '1.2-2'
+              }}
+              <!--span *ngIf="toCurrency"><br />({{toCurrency}})</span-->
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Actions</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data; let index = index;" fxHide fxShow.gt-sm>
+            <button mat-button class="mat-icon-button"
+                    (click)="removeLines(index)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+            class="category-row"
+            matRipple>
+    </mat-row>
+</mat-table>
+
+<div class="loading"
+[@animate]="{value:'*',params:{opacity:1}}"
+*ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>

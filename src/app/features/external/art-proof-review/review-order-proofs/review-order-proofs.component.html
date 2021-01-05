@@ -1,0 +1,47 @@
+<ng-container *ngIf="selectedProof as proof">
+  <mat-toolbar>
+    <mat-paginator [length]="proofs.length" [pageSize]="1" (page)="handlePageEvent($event)">
+    </mat-paginator>
+    <div fxFlex></div>
+    <div>
+      <div class="proof-transition-actions">
+        <button mat-raised-button class="proof-transition green" (click)="transitionProof(proof, 4)">
+          Approve
+        </button>
+        <button mat-raised-button class="proof-transition orange" (click)="transitionProof(proof, 3)" *ngIf="proof.source_type == 'order'">
+          Approve (with changes)
+        </button>
+        <button mat-raised-button class="proof-transition red" (click)="transitionProof(proof, 2)">
+          Decline
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+  <div fxFlex>
+    <document-pdf fxFlex [definition]="documentDefinition" *ngIf="documentDefinition"></document-pdf>
+  </div>
+  <ng-template #formTemplate>
+    <div fxLayout="column" [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" type="text" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Notes</mat-label>
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
+          formControlName="notes"></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="accent" (click)="doTransition(proof)">
+        Save
+      </button>
+      <button mat-button color="warn" (click)="cancelTransition()">Cancel</button>
+    </div>
+  </ng-template>
+
+</ng-container>
+
+<div class="loading" style="flex-direction: column" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

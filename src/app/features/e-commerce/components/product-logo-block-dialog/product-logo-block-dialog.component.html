@@ -1,0 +1,111 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">Logo Block</span>
+
+      <div>
+        <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar-row>
+
+  </mat-toolbar>
+
+  <div class="dialog-content-scrollable" fusePerfectScrollbar>
+    <div fxLayout="column" fxLayout.gt-xs="row" class="w-100-p">
+
+      <div class="logo__preview">
+        <div id="logo__editor" #editor>
+          <img [src]="product?.MediaContent[imageIndex]?.url" [height] (load)="getImageDimensions($event)" />
+          <!--img [src]="resizedImageUrl" [height] (load)="getImageDimensions($event)" /-->
+          <svg id="logo__editor__overlay" #editorOverlay></svg>
+        </div>
+        <!--
+
+        <div fxLayout="row">
+          <mat-form-field fxFlex>
+            <input matInput type="text" placeholder="X" formControlName="x">
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <input matInput type="text" placeholder="Y" formControlName="y">
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <input matInput type="text" placeholder="Height" formControlName="height">
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <input matInput type="text" placeholder="Width" formControlName="width">
+          </mat-form-field>
+        </div>
+        -->
+
+        <div class="stepper">
+          <button type="button" mat-icon-button (click)="previous()">
+            <mat-icon>arrow_left</mat-icon>
+          </button>
+          <button type="button" mat-icon-button (click)="next()">
+            <mat-icon>arrow_right</mat-icon>
+          </button>
+        </div>
+
+        <div class="text-center mat-title">
+          {{ product?.MediaContent[imageIndex]?.color }}
+        </div>
+
+      </div>
+      <div fxFlex class="logo__details">
+        <mat-toolbar>
+          <div>Blocks</div>
+          <button type="button" mat-mini-fab color="accent" class="text-white" (click)="addBlock()" class="logo__fab">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-toolbar>
+
+        <mat-list>
+          <ng-container *ngIf="selectedImageUrl && logoBlockMap[selectedImageUrl] as block">
+            <mat-list-item [class.active]="primarySelected">
+              <div mat-line>
+                <mat-form-field floatLabel="never">
+                  <mat-select [value]="block.location" placeholder="Select Location"
+                    (selectionChange)="updateLocation($event, i)">
+                    <mat-option [value]="null">Select Location</mat-option>
+                    <mat-option *ngFor="let location of designLocations" [value]="location">
+                      {{ location }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <mat-icon (click)="removeBlock(i)">delete</mat-icon>
+            </mat-list-item>
+            <ng-container *ngFor="let extra of block.extra_logo; let i=index">
+              <mat-list-item [class.active]="!primarySelected && selectedBlockIndex == i">
+                <div mat-line>
+                  <mat-form-field floatLabel="never">
+                    <mat-select [value]="extra.location" placeholder="Select Location"
+                      (selectionChange)="updateLocation($event, i, true)">
+                      <mat-option [value]="null">Select Location</mat-option>
+                      <mat-option *ngFor="let location of designLocations" [value]="location">
+                        {{ location }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <mat-icon (click)="removeBlock(i, true)">delete</mat-icon>
+              </mat-list-item>
+            </ng-container>
+          </ng-container>
+        </mat-list>
+
+      </div>
+    </div>
+  </div>
+  <div class="p-8 actions" fxLayout="row">
+    <div fxFlex>
+      <button mat-raised-button type="button" color="accent" (click)="applyToAll()">Apply to All</button>
+    </div>
+    <div>
+      <button class="mr-8" mat-raised-button type="button" (click)="dialogRef.close()">Cancel</button>
+      <button mat-raised-button type="button" color="accent" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>

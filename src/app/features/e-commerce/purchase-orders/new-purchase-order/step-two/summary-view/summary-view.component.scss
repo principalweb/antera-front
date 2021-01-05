@@ -1,0 +1,42 @@
+.custom-width-100 {
+    flex: 0 0 100px !important;
+}
+
+.custom-width-400 {
+    flex: 0 0 400px !important;
+}
+
+.width-300 {
+    width: 300px !important;
+    input[type=text] {
+   width: 300px !important;
+}
+}
+
+.new-form-control {
+    background-color: #e2e2e2;
+      margin-top: 5px !important;
+      height: 20px !important;
+      border-radius: 2px;
+      color: #4f4f4f;
+      padding-left: 2px;
+      padding-right: 2px;
+      margin-right: 10px;
+      margin-left: 0px;
+      width: 95%;
+      //width: 90% !important;
+      //max-width: 150px;
+      text-align: left;
+}
+
+.align-right {
+   display: flex;
+   justify-content: center;
+}
+
+.sticky-table {
+    max-height: 465px;
+    overflow-y: scroll;
+}
+
+

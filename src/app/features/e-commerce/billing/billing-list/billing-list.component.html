@@ -1,0 +1,172 @@
+                <mat-table #table [dataSource]="dataBilling"
+                        [@animateStagger]="{value:'50'}"
+                        [formGroup]="filterForm"
+                        matSort
+                        (matSortChange)="sort($event)">
+
+                    <ng-container cdkColumnDef="checkbox">
+                        <mat-header-cell class="w-60" *cdkHeaderCellDef>
+                            <mat-checkbox
+                                (change)="toggleAll($event)"
+                                [checked]="selection.checkedAll | async"
+                                [indeterminate]="selection.checkedAny | async">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell class="w-60" *cdkCellDef="let order"
+                                  (click)="$event.stopPropagation()">
+                            <mat-checkbox
+                                [checked]="checkboxes[order.id]"
+                                (change)="onSelectedChange(order.id, $event)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Order Number Column -->
+                    <ng-container cdkColumnDef="orderNo">
+                        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Order #</span>
+                            <input class="form-control"
+                                   formControlName="orderNo"
+                                   placeholder=""
+                                   (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order">
+                            <p class="text-truncate">{{order.orderNo}}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Identity Column -->
+                    <ng-container cdkColumnDef="orderIdentity">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Identity</span>
+                            <input class="form-control"
+                                   formControlName="orderIdentity"
+                                   placeholder=""
+                                   (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-xs>
+                            <p class="text-truncate">{{order.orderIdentity}}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Contact Column -->
+                    <ng-container cdkColumnDef="contactName">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Contact</span>
+                            <input class="form-control"
+                                   formControlName="contactName"
+                                   placeholder=""
+                                   (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-xs>
+                            <p class="text-truncate">
+                                {{order.contactName}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Contact Column -->
+                    <ng-container cdkColumnDef="salesPerson">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Sales Rep</span>
+                            <input class="form-control"
+                                   formControlName="salesPerson"
+                                   placeholder=""
+                                   (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm>
+                            <p class="text-truncate">
+                                {{order.salesPerson}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Account Column -->
+                    <ng-container cdkColumnDef="accountName">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Account</span>
+                            <input class="form-control"
+                                   formControlName="accountName"
+                                   placeholder=""
+                                   (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm>
+                            <p class="total-price text-truncate">
+                                {{order.accountName}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Type Column -->
+                    <ng-container cdkColumnDef="orderType">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Type</span>
+                            <mat-select
+                                multiple disableRipple
+                                class="form-control"
+                                [(ngModel)]="selectedOrderTypes"
+                                [ngModelOptions]="{standalone: true}"
+                                (ngModelChange)="filterByOrderTypes()">
+                                <mat-option *ngFor="let type of orderTypeList" [value]="type.label">
+                                    {{type.label}}
+                                </mat-option>
+                            </mat-select >
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-xs>
+                            <p class="text-truncate">
+                                {{order.orderType | capitalizeFirst}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- stage Column -->
+                    <ng-container cdkColumnDef="billingStage">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Stage</span>
+                            <input class="form-control"
+                                   formControlName="billingStage"
+                                   placeholder="">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm>
+                            <p class="total-price text-truncate">
+                                {{order.billingStage}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Date Column -->
+                    <ng-container cdkColumnDef="orderDate">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterBilling()">
+                            <span mat-sort-header>Date</span>
+                            <input class="form-control"
+                                   formControlName="orderDate"
+                                   placeholder=""
+                                   (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-md>
+                            <p class="text-truncate">
+                                {{order.orderDate | date}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+                    <mat-row class="order" matRipple
+                            *cdkRowDef="let order; columns: displayedColumns;"
+                            [routerLink]="'/e-commerce/billing/'+order.id">
+                    </mat-row>
+                </mat-table>
+
+            <mat-paginator #paginator
+                           [length]="dataBilling.total"
+                           [pageIndex]="0"
+                           [pageSize]="50"
+                           (page)="paginate($event)"
+                           [pageSizeOptions]="[10, 20, 50, 100]"
+                           [showFirstLastButtons]="true">
+            </mat-paginator>
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

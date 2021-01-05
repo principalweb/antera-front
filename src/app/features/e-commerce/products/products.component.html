@@ -1,0 +1,193 @@
+<div id="products" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{!productsService.productSource ? 'Products' : 'Source'}}</span>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <mat-sidenav-container class="content-card mat-white-bg mat-product-list">
+            <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                         fuseMatSidenavHelper="products-sidenav">
+              <mat-list class="p-0">
+                <mat-list-item *ngIf="!productsService.productSource" class="accent" [routerLink]="'/e-commerce/products/new'" matRipple>
+                  <mat-icon>add</mat-icon>
+                  <span class="ml-8">Product</span>
+                </mat-list-item>
+                <mat-list-item class="accent" matRipple (click)="cloneSelectedProducts()">
+                  <mat-icon>file_copy</mat-icon>
+                  <span class="ml-8">Clone</span>
+                </mat-list-item>
+                <mat-list-item *ngIf="productsService.productSource" class="accent" [routerLink]="'/e-commerce/sources/new'" matRipple>
+                  <mat-icon>add</mat-icon>
+                  <span class="ml-8">Source</span>
+                </mat-list-item>
+                <mat-list-item class="accent" matRipple
+                               (click)="tagProductsToStores()">
+                  <mat-icon>store</mat-icon>
+                  <span class="ml-8">Tag Products</span>
+                </mat-list-item>
+                <mat-list-item class="accent" matRipple
+                               (click)="massUpdate()">
+                  <mat-icon>group_work</mat-icon>
+                  <span class="ml-8">Mass Update</span>
+                </mat-list-item>
+                <mat-list-item class="accent" matRipple
+                               (click)="pushProductsToStores()">
+                  <mat-icon>launch</mat-icon>
+                  <span class="ml-8">Push to Stores</span>
+                </mat-list-item>
+                <mat-list-item class="accent" matRipple
+                               (click)="deleteSelectedProducts()">
+                  <mat-icon>layers_clear</mat-icon>
+                  <span class="ml-8">Clear Filters</span>
+                </mat-list-item>
+                <mat-list-item *ngIf="productsService.isDeleted" class="warn" matRipple
+                               (click)="recoverSelectedProducts()">
+                  <mat-icon>undo</mat-icon> 
+                  <span class="ml-8">Enable Product(s)</span>
+                </mat-list-item>
+                <mat-list-item *ngIf="!productsService.isDeleted" class="warn" matRipple
+                               (click)="deleteSelectedProducts()">
+                  <mat-icon>desktop_access_disabled</mat-icon>
+                  <span class="ml-8">Disable Product(s)</span>
+                </mat-list-item>
+              </mat-list>
+            </mat-sidenav>
+
+            <div class="toolbar">
+                <div fxFlex="row">
+                  <div fxFlex="row" fxLayoutAlign="start center">
+                    <button mat-icon-button fxHide.gt-lg
+                            fuseMatSidenavToggler="products-sidenav">
+                      <mat-icon>menu</mat-icon>
+                    </button>
+
+                    <button *ngIf="!productsService.productSource" mat-raised-button color="accent"
+                            class="text-capitalize mr-8"
+                            [routerLink]="'/e-commerce/products/new'"
+                            fxHide fxShow.gt-sm>
+                      <mat-icon>add</mat-icon> Product
+                    </button>
+
+                    <button mat-raised-button color="accent"
+                            class="text-capitalize mr-8" (click)="cloneSelectedProducts()"
+                            fxHide fxShow.gt-sm>
+                      <mat-icon>file_copy</mat-icon> Clone
+                    </button>
+
+                    <button *ngIf="productsService.productSource" mat-raised-button color="accent"
+                            class="text-capitalize mr-8"
+                            [routerLink]="'/e-commerce/sources/new'"
+                            fxHide fxShow.gt-sm>
+                      <mat-icon>add</mat-icon> Source
+                    </button>
+
+                    <button mat-raised-button color="accent"
+                            class="text-capitalize mr-8"
+                            (click)="openAdvanceSearchDialog()"
+                            fxHide fxShow.gt-md>
+                      <mat-icon>search</mat-icon>
+                      Advanced Search
+                    </button>
+
+                    <button mat-raised-button color="accent"
+                            class="text-capitalize mr-8"
+                            (click)="clearFilters()"
+                            fxHide fxShow.gt-sm>
+                      <mat-icon>layers_clear</mat-icon> Clear Filters
+                    </button>
+
+
+                    <button *ngIf="productsService.isDeleted" mat-raised-button color="warn"
+                            class="text-capitalize mr-8"
+                            fxHide fxShow.gt-md
+                            (click)="recoverSelectedProducts()">
+                      <mat-icon>undo</mat-icon> Enable Product(s)
+                    </button>
+
+                    <mat-checkbox class="ml-16 mt-4"
+                                  [(ngModel)]="productsService.preferredVendor"
+                                  (ngModelChange)="changeEQPorPreferredVendor()">
+                      Preferred
+                    </mat-checkbox>
+
+                    <mat-checkbox class="ml-16 mt-4"
+                                  [(ngModel)]="productsService.eqpVendor"
+                                  (ngModelChange)="changeEQPorPreferredVendor()">
+                      EQP
+                    </mat-checkbox>
+
+                    <button mat-button [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item 
+                            (click)="pushProductsToStores()"
+                            fxShow.gt-lg>
+                        <mat-icon>launch</mat-icon> Push to Stores
+                      </button>
+                      <button *ngIf="!productsService.isDeleted" mat-menu-item
+                            fxShow.gt-md
+                            (click)="deleteSelectedProducts()">
+                        <mat-icon>desktop_access_disabled</mat-icon>
+                      Disable Product(s)
+                      </button>
+                      <button mat-menu-item
+                            (click)="massUpdate()"
+                            fxShow.gt-lg>
+                        <mat-icon>group_work</mat-icon> Mass Update
+                      </button>
+                      <button mat-menu-item *ngIf="!productsService.isDeleted" (click)="showProducts(true)">
+                        <mat-icon>menu</mat-icon>Show Inactive
+                      </button>
+                      <button mat-menu-item *ngIf="productsService.isDeleted" (click)="showProducts(false)">
+                        <mat-icon>menu</mat-icon>Show Active
+                      </button>
+                      <button mat-menu-item 
+                            (click)="tagProductsToStores()"
+                            fxShow.gt-lg>
+                        <mat-icon>store</mat-icon> Tag Products
+                      </button>
+
+                    </mat-menu>
+                  </div>
+                    <mat-button-toggle-group class="search-button-toggle-group" fxFlex="none"
+                        [value]="viewMode" (change)="changeView($event)">
+                        <mat-button-toggle value="product-list" matTooltip="Product List View">
+                            <mat-icon>view_list</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="product-images" matTooltip="Product Images View">
+                            <mat-icon>featured_video</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <div class="content">
+                <app-product-list fxLayout="column" *ngIf="viewMode == 'product-list'"></app-product-list>
+                <app-product-images fxLayout="column" *ngIf="viewMode == 'product-images'"></app-product-images>
+            </div>
+
+
+        </mat-sidenav-container>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

@@ -1,0 +1,21 @@
+@import "src/@fuse/scss/fuse";
+
+#opportunities {
+
+    .header {
+        .search-input-wrapper button {
+            @include media-breakpoint('xs') {
+                margin-left: 0px;
+            }
+        }
+    }
+
+    .toolbar {
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+}
+.hide-checkbox .mat-pseudo-checkbox {
+    display: none;
+}

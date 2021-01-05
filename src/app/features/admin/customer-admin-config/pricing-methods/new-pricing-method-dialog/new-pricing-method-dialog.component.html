@@ -1,0 +1,49 @@
+<div >
+  <h2 mat-dialog-title>Add New Pricing Level</h2>
+  <mat-dialog-content class="mat-typography add-pricing-margin-container">
+    <form [formGroup]="pricingLevelForm">
+      <mat-form-field>
+        <input
+          placeholder="Pricing Level Name"
+          matInput
+          formControlName="pricingLevel"
+        />
+        <mat-error *ngIf="pricingLevelForm.get('pricingLevel').invalid">
+          PricingLevel is required
+        </mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <mat-label>Pricing Type</mat-label>
+        <mat-select
+          class="form-control"
+          formControlName="pricingLevelType"
+          type="text"
+        >
+          <mat-option value="1">Margin On Cost </mat-option>
+          <mat-option value="2">Margin On Cost Range</mat-option>
+          <mat-option value="3">Percentage On Retail </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br />
+      &nbsp;&nbsp;&nbsp;
+    </form>
+    <mat-dialog-actions align="start">
+      <mat-card-actions>
+        <button
+          [mat-dialog-close]="newPricing"
+          cdkFocusInitial
+          mat-raised-button
+          [disabled]="disableAddPricingMethods"
+          (click)="addPricingLevelMethod()"
+          color="primary"
+        >
+          Add
+        </button>
+        &nbsp;&nbsp;
+        <button mat-button mat-dialog-close>Cancel</button>
+      </mat-card-actions>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</div>

@@ -1,0 +1,190 @@
+<div class="mat-white-bg p-24 pt-12"
+     [ngClass]="{'mat-elevation-z2': !embedded}"
+     fxFlex fxLayout="column"
+     [formGroup]="form">
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input type="hidden" formControlName="orderId"/>
+            <input type="text" matInput
+                    placeholder="Order #"
+                    [matAutocomplete]="autoOrderNum"
+                    formControlName="orderNum">
+            <mat-autocomplete #autoOrderNum="matAutocomplete"
+                              [displayWith]="displayName"
+                              (optionSelected)="selectOrder($event)">
+                <mat-option *ngFor="let order of filteredOrders | async" [value]="order">
+                    {{ order.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+            <input matInput
+                   placeholder="Identity"
+                   formControlName="identity"
+                   readonly/>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input type="hidden" formControlName="customerId"/>
+            <input type="text" matInput
+                   placeholder="Customer"
+                   [matAutocomplete]="autoCustomer"
+                   formControlName="customerName"
+                   readonly>
+            <mat-autocomplete #autoCustomer="matAutocomplete"
+                              [displayWith]="displayName"
+                              (optionSelected)="selectCustomer($event)">
+                <mat-option *ngFor="let c of filteredCustomers | async" [value]="c">
+                    {{ c.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+            <input type="hidden" formControlName="assignedId"/>
+            <input type="text" matInput
+                   placeholder="Assigned To"
+                   formControlName="assignee"
+                   [matAutocomplete]="autoAssignee"/>
+            <mat-autocomplete #autoAssignee="matAutocomplete"
+                              [displayWith]="displayName"
+                              (optionSelected)="selectAssignee($event)">
+                <mat-option *ngFor="let assignee of filteredAssignees | async"
+                            [value]="assignee">
+                    {{ assignee.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input matInput
+                   [matDatepicker]="dueDate"
+                   (focus)="dueDate.open()"
+                   placeholder="Due Date"
+                   formControlName="dueDate"
+            />
+            <mat-datepicker-toggle matSuffix [for]="dueDate"></mat-datepicker-toggle>
+            <mat-datepicker #dueDate></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+            <input matInput
+                   [matDatepicker]="createdDate"
+                   placeholder="Created Date"
+                   formControlName="createdDate"
+                   readonly
+            />
+            <mat-datepicker #createdDate></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input type="hidden" formControlName="designTypeId"/>
+            <input type="text" matInput
+                   [value]="displayName(form.value.designTypeName)"
+                   formControlName="designTypeName"
+                   placeholder="Artwork Type"
+                   [matAutocomplete]="autoDtype"
+                   required/>
+            <mat-autocomplete #autoDtype="matAutocomplete"
+                              [displayWith]="displayName"
+                              (optionSelected)="selectDesignType($event)">
+                <mat-option *ngFor="let type of filteredDesignTypes | async" [value]="type">
+                    {{ type.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field fxFlex>
+            <input matInput
+                   placeholder="Artwork #"
+                   value="Auto Generated"
+                   readonly
+            />
+        </mat-form-field>
+
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input type="hidden" formControlName="statusId"/>
+            <input type="text" matInput
+                   placeholder="Status"
+                   [matAutocomplete]="status"
+                   formControlName="statusName"
+            />
+            <mat-autocomplete #status="matAutocomplete"
+                              [displayWith]="displayName"
+                              (optionSelected)="selectStatus($event)">
+                <mat-option [value]="st" *ngFor="let st of statusList | async">
+                    {{ st.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+            <mat-select aria-placeholder="Priority" formControlName="priority">
+                <mat-option value="priority.value"
+                            *ngFor="let priority of priorities"
+                            >{{ priority.value }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input matInput
+                   placeholder="Category"
+                   formControlName="category"
+            />
+        </mat-form-field>
+        <mat-form-field fxFlex>
+            <input matInput
+                   placeholder="Color"
+                   formControlName="color"
+            />
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex="50">
+            <input matInput type="number"
+                   placeholder="Estimated Time(Hours)"
+                   formControlName="estimated"
+                   step="0.01"
+            />
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field fxFlex>
+            <textarea matInput
+                      placeholder="Note"
+                      formControlName="notes"
+            ></textarea>
+        </mat-form-field>
+
+    </div>
+
+    <div class="actions">
+        <button mat-raised-button color="accent"
+                >Create</button>
+
+        <button mat-raised-button color="warn"
+                class="ml-8"
+                >Cancel</button>
+    </div>
+    <!--<div fxLayout="row">
+        <mat-form-field fxFlex>
+            <input type="hidden" formControlName="orderId"/>
+            <input type="text" matInput
+                    [value]="displayName(form.value.orderNum)"
+                    placeholder="Orders this design has been used for"
+                    [matAutocomplete]="autoOrderNum"
+                    formControlName="orderNum">
+            <mat-autocomplete #autoOrderNum="matAutocomplete"
+                              [displayWith]="displayName"
+                              (optionSelected)="selectOrder($event)">
+                <mat-option *ngFor="let order of filteredOrders | async" [value]="order">
+                    {{ order.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      -->
+</div>

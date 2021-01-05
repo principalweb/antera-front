@@ -1,0 +1,168 @@
+<div fxLayout="column" fxLayoutAlign="start stretch" class="documents-wrapper">
+    <mat-toolbar>
+        <div fxFlex> <mat-slide-toggle *ngIf="selectedDocument === 'Purchase Order' || selectedDocument === 'Decoration PO' || selectedDocument === 'Invoice' || selectedDocument === 'Proforma Invoice' || selectedDocument === 'Order' || selectedDocument === 'Packing List' || selectedDocument === 'Order Confirmation' || selectedDocument === 'Quote'" (change)="sliderDocGridViewToggled($event)" [(ngModel)]="docGridView">Grid View</mat-slide-toggle>
+        <!--mat-slide-toggle *ngIf="(selectedDocument === 'Invoice' || selectedDocument === 'Proforma Invoice' || selectedDocument === 'Order' || selectedDocument === 'Order Confirmation' || selectedDocument === 'Quote') && docGridView == true" (change)="sliderDocGridViewGroupByVariationToggled($event)" [(ngModel)]="docGridViewGroupByVariation">Group By Variation</mat-slide-toggle-->
+        </div>
+
+        <mat-form-field class="mr-16" appearance="outline" *ngIf="selectedDocument === 'Proforma Invoice'">
+            <mat-label>Set Date for Proforma Invoice</mat-label>
+            <input matInput (focus)="picker.open()" [(ngModel)]="proformaDate" (dateChange)="proformaDateChange($event)"
+                [matDatepicker]="picker">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <ng-container *ngIf="!hideEmailButton && !documentLoading">
+            <mat-slide-toggle class="mr-8" *ngIf="selectedDocument === 'Quote'" (change)="sliderHideQuoteTotalToggled($event)" [(ngModel)]="hideQuoteTotal">Hide Total </mat-slide-toggle>
+      <button *ngIf="orderDetails && orderDetails.orderSource && orderDetails.orderSource == 'cxml'
+                    && (selectedDocument === 'Invoice' || selectedDocument === 'Proforma Invoice')
+                    && cxmlInvoiceEnabled" class="mr-8"
+                mat-raised-button (click)="sendCxmlInvoice()">
+        CXML
+            </button>
+            <button *ngIf="selectedDocument !== 'Purchase Order' && selectedDocument !== 'Decoration PO'" class="mr-8"
+                mat-raised-button (click)="sendEmail('customer')" [ngClass]="[isDocSent() ? 'green-500-bg' : '']">
+                <mat-icon>email</mat-icon>
+                E-mail
+            </button>
+            <button
+                *ngIf="(selectedDocument === 'Purchase Order' || selectedDocument === 'Decoration PO') && !psEnabled"
+                class="mr-8" mat-raised-button (click)="sendEmail('vendor')" [ngClass]="[isDocSent() ? 'green-500-bg' : '']">
+                <mat-icon>email</mat-icon>
+                E-mail Purchase Order
+            </button>
+            <!--button mat-icon-button matTooltip="Email Sent" *ngIf="isDocSent()">
+                <mat-icon class="active-icon green-500-bg white-fg s-24">check</mat-icon>
+            </button-->
+            <button *ngIf="(selectedDocument === 'Purchase Order' || selectedDocument === 'Decoration PO') && psEnabled"
+                class="mr-8" mat-raised-button (click)="pushPsEntity()">
+                <mat-icon>send</mat-icon>
+                Submit Purchase Order
+            </button>
+        </ng-container>
+        <ng-container *ngIf="!documentLoading">
+            <button mat-raised-button (click)="uploadToCloud()" class="mr-8 download-button mat-accent" aria-label="UPLOAD TO CLOUD">
+                    <mat-icon>cloud_upload</mat-icon>
+                    Upload to cloud
+                </button>
+            <button mat-raised-button (click)="downloadPDF()" class="mr-8 download-button mat-accent" aria-label="SAVE">
+                <mat-icon>archive</mat-icon>
+                Download PDF
+            </button>
+
+            <button mat-raised-button (click)="printPDF()" class="mr-8 download-button mat-accent" aria-label="SAVE">
+                <mat-icon>print</mat-icon>
+                Print PDF
+            </button>
+            <button mat-raised-button (click)="editSimpleQuote()" class="mr-8 download-button mat-accent" aria-label="SAVE" *ngIf="selectedDocument === 'Simple Quote'">
+                <mat-icon>edit</mat-icon>
+                Edit Simple Quote
+            </button>
+            <button mat-raised-button (click)="editBoxLabelQty()" class="mr-8 download-button mat-accent" aria-label="SAVE" *ngIf="selectedDocument === 'Work Order' && getBoxLabelDoc === true">
+                <mat-icon>edit</mat-icon>
+                Edit Box Label Quantity
+            </button>
+            <button mat-raised-button (click)="editPackingListQty()" class="mr-8 download-button mat-accent" aria-label="SAVE" *ngIf="selectedDocument === 'Packing List'">
+                <mat-icon>edit</mat-icon>
+                Edit Packing List Quantity
+            </button>
+        </ng-container>
+    </mat-toolbar>
+    <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutFill class="documents-wrapper-content">
+        <div class="document-list" fusePerfectScrollbar>
+
+            <mat-list role="doc-list" class="doc-list doc-list--customer">
+                <h3 matSubheader>Customer</h3>
+                <mat-list-item class="clickable" role="listitem" *ngFor="let doc of documentList"
+                    (click)="onDocumentSelected(doc, true)">
+                    <mat-icon mat-list-icon>note</mat-icon>
+                    <h4 mat-line>{{doc}}</h4>
+                </mat-list-item>
+
+                <ng-container *ngIf="showPackigListByVendor">
+                    <mat-list-item class="clickable" role="listitem"
+                        (click)="onPackingListSelected('All', true)" *ngIf="packingListGroupByVendorsCnt > 1">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <h4 mat-line>Packing List All Vendors</h4>
+                    </mat-list-item>
+                    <mat-list-item class="clickable" role="listitem" *ngFor="let doc of packingListGroupByVendors | keys"
+                        (click)="onPackingListSelected(doc.key, true)">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <h4 mat-line>Packing List {{doc.key}}</h4>
+                    </mat-list-item>
+                </ng-container>
+
+                <ng-container *ngIf="showPoConfirmation">
+                    <mat-list-item class="clickable" role="listitem" (click)="onDocumentSelected('GC PO Confirmation', true)">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <h4 mat-line>Purchase Order Confirmation</h4>
+                    </mat-list-item>
+                </ng-container>
+
+            </mat-list>
+
+            <mat-list role="doc-list" class="pt-0 doc-list doc-list--vendor" *ngIf="showWorkOrderDocs">
+                <h3 matSubheader>Vendor</h3>
+                <mat-list-item class="clickable" role="listitem" *ngFor="let doc of workDataGroupByVendorsAndDesignsSorted | keys">
+                    <mat-icon mat-list-icon>note</mat-icon>
+                    <h4 mat-line (click)="onWorkOrderSelected('temp', doc.key)">Work Order {{doc.key}}</h4>
+                    <mat-icon (click)="onWorkOrderSelected('temp', doc.key, true)" matTooltip="Box labels" class="box_label_button">label</mat-icon>
+                </mat-list-item>
+
+                <!--ng-container *ngIf="totalUniqueDecoTypes > 0">
+                    <mat-list-item class="clickable" role="listitem"
+                        (click)="onWorkOrderSelected('temp')">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <h4 mat-line>Work Order</h4>
+                    </mat-list-item>
+                </ng-container-->
+
+                <ng-container *ngIf="showPODocs">
+                    <mat-list-item class="clickable" role="listitem" *ngFor="let doc of lineItemGroupByVendors | keys"
+                        (click)="onPODocumentSelected(doc.key)">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <h4 mat-line>PO {{doc.key}}</h4>
+                    </mat-list-item>
+                </ng-container>
+
+
+                <ng-container *ngIf="showDecoDocs">
+                    <mat-list-item class="clickable" role="listitem"
+                        *ngFor="let doc of decoDataGroupByDecoVendors | keys"
+                        (click)="onPODecorationVendorSelected(doc.key)">
+                        <mat-icon mat-list-icon>note</mat-icon>
+                        <h4 mat-line>PO {{doc.key}}</h4>
+                    </mat-list-item>
+                </ng-container>
+            </mat-list>
+
+            <mat-list role="doc-list" class="doc-list doc-list--internal">
+                <h3 matSubheader>Internal</h3>
+                <mat-list-item class="clickable" role="listitem" *ngFor="let doc of internalDocuments"
+                    (click)="onDocumentSelected(doc, true)">
+                    <mat-icon mat-list-icon>note</mat-icon>
+                    <h4 mat-line>{{doc}}</h4>
+                </mat-list-item>
+            </mat-list>
+        </div>
+
+        <div id="document" fxFlex>
+            <ng-container *ngIf="orderDetails && docOptions && sysConfig">
+                <document-pdf #documentRenderer *ngIf="documentDefinition" [definition]="documentDefinition" [filename]="filename" (autoUploadToCloud)="autoUploadToCloud($event)">
+                </document-pdf>
+
+                <antera-gc-po-confirmation *ngIf="selectedDocument == 'GC PO Confirmation'" [order]="orderDetails"
+                    [docOptions]="docOptions" [docDefaultOptions]="docDefaultOptions" [lineItems]="productData"
+                    [logoUrl]="logoUrl" [docLabels]="docLabels" [paymentList]="paymentList" [isAdmin]="isAdmin"
+                    [docSettings]="docSettings" [creditTerms]="creditTerms" [sysConfig]="sysConfig" [fields]="fields"
+                    fusePerfectScrollbar fxFlex>
+                </antera-gc-po-confirmation>
+            </ng-container>
+        </div>
+    </div>
+
+</div>
+<!-- <activity-sidenav></activity-sidenav> -->
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,43 @@
+<div class="p-16">
+  <div fxLayout="row">
+    <span class="mat-title">Dropbox Settings</span>
+  </div>
+
+  <form *ngIf="settled" [formGroup]="configForm">
+    <div fxLayout="row">
+      <div class="w-480">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <span class="mw-240 mr-16">Enable Dropbox</span>
+          <mat-checkbox formControlName="enableDropbox"></mat-checkbox>
+        </div>
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">API Key</span>
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="dropboxApiKey">
+		  </mat-form-field>
+		</div>
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">Secret</span>
+
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="dropboxSecret">
+		  </mat-form-field>
+		</div>
+
+		<div fxLayout="row" fxLayoutAlign="space-between center">
+		  <span class="mw-240 mr-16">Token</span>
+
+		  <mat-form-field class="mr-16" fxFlex>
+			<input matInput formControlName="dropboxToken">
+		  </mat-form-field>
+		</div>
+      </div>
+    </div>
+    <div class="mt-16 ml-16">
+      <button mat-raised-button color="accent" (click)="save()">Save</button>
+    </div>
+  </form>
+</div>
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,49 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es2015",
+    "paths": {
+      "@fuse": [
+        "@fuse/"
+      ],
+      "rxjs/*": [
+        "../node_modules/rxjs/*"
+      ],
+      "@angular/*": [
+        "../node_modules/@angular/*"
+      ],
+      "core-js/es6/reflect": [
+        "../node_modules/core-js/proposals/reflect-metadata"
+      ],
+      "core-js/es7/reflect": [
+        "../node_modules/core-js/proposals/reflect-metadata"
+      ],
+      "core-js/es7/array": [
+        "../node_modules/core-js/proposals/array-last"
+      ]
+    },
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "module": "es2020"
+  },
+  "angularCompilerOptions": {
+    "types": [ "node" ],
+    "preserveWhitespaces": false
+  }
+}

@@ -1,0 +1,44 @@
+<div class="dialog-content-wrapper">
+    <mat-sidenav-container class="container">
+      <mat-sidenav mode="side" opened>
+        <mat-card>
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon matListIcon>people</mat-icon>
+              </ng-template>
+              <mat-list class="users">
+                <mat-list-item *ngFor="let user of users">
+                  <mat-icon matListIcon>person</mat-icon>
+                  <p>{{user}}</p>
+                </mat-list-item>
+              </mat-list>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card>
+      </mat-sidenav>
+        <div class="mat-typography conversation-header">
+          <h2>
+            <mat-icon>forum</mat-icon>
+            {{header}}</h2>
+          <p>
+            <mat-icon>account_circle</mat-icon>
+            Editors: {{users.length}}</p>
+        </div>
+        <mat-divider></mat-divider>
+      <section>
+        <mat-list id="messageContainer" dense class="conversation-history mat-typography">
+            <mat-list-item *ngFor="let message of messages">
+                <span [innerHtml]="isSystemMessage(message)"></span>
+            </mat-list-item>
+        </mat-list>
+      </section>
+        <div class="conversation-input">
+          <mat-divider></mat-divider>
+          <mat-form-field class="chat-input">
+            <input matInput (keydown.enter)="send()" placeholder="Start chatting..." name="chatBox" [(ngModel)]="chatBox">
+            <button mat-icon-button matSuffix (click)="send()"><mat-icon>send</mat-icon></button>
+          </mat-form-field>
+        </div>
+    </mat-sidenav-container>
+</div>

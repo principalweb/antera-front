@@ -1,0 +1,121 @@
+<div id="receivings" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">get_app</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Receive Inventory</span>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <div class="content-card mat-white-bg">
+
+            <div class="toolbar">
+                <div class="mail-selection" fxFlex="row">
+                    <div fxFlex="row" fxLayoutAlign="space-between center">
+
+                        Click on the PO line to Receive Inventory
+                        <!-- commented out for temporary removal by Benzur on 4.17.18
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                (click)="newReceiving()">
+                            Receive Selected
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8">
+                            Quote/Order
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8">
+                            Add to QB
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8">
+                            Generate Letter
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8">
+                            Find Duplicates
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                (click)="deleteSelectedReceivings()">
+                            Delete Receivings
+                        </button>
+
+                        -->
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                (click)="switchReceived()"
+                                *ngIf="received == 0">
+                            View Received
+                        </button>
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                (click)="switchReceived()"
+                                *ngIf="received == 1">
+                            View Receivables
+                        </button>
+                    </div>
+
+                    <!-- commented out for temporary removal by Benzur on 4.17.18
+
+                    <div class="toolbar-separator"></div>
+
+                    <button mat-button class="text-capitalize" [matMenuTriggerFor]="selectMenu">
+                        More Actions
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </button>
+                    <mat-menu #selectMenu="matMenu">
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="emailSelected()">Email
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="massUpdateSelected()">Mass Update
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="mergeSelected()">Merge
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Add To Target List
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="generateLetterSelected()">Generate Letter
+                        </button>
+                        <button mat-menu-item class="text-capitalize"
+                                (click)="addToTargetListSelected()">Change Log
+                        </button>
+                    </mat-menu>
+
+                    -->
+
+                </div>
+            </div>
+
+            <fuse-receivings-receiving-list></fuse-receivings-receiving-list>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

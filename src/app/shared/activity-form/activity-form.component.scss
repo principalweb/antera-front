@@ -1,0 +1,176 @@
+@import "src/@fuse/scss/fuse";
+
+.activity-form-dialog {
+    width: 100%;
+
+  .customer-view-notes {
+    // width: 370px;
+    // height: 358px;
+    max-width: 400px;
+    border: 1px solid #eeeeee;
+    position: relative;
+
+    @include media-breakpoint("lt-sm") {
+      width: 100% !important;
+    }
+
+    .upload-button,
+    .remove-button {
+      width: 100%;
+      height: 100%;
+    }
+
+    .remove-button {
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .uploaded-image {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      max-height: 240px;
+      margin: 0 auto;
+
+      img {
+        max-width: 100%;
+      }
+    }
+    .feature-image-title {
+      font-size: 14px;
+      width: 90%;
+      text-align: center;
+    }
+    .feature-image {
+      position: relative;
+      max-width: 300px;
+      max-height: 300px;
+      width: 100%;
+    }
+    .remove-notes-Image{
+      cursor: pointer;
+    }
+  }
+
+  .customer-view {
+    // width: 370px;
+    // height: 358px;
+    max-width: 250px;
+    border: 1px solid #eeeeee;
+    position: relative;
+
+    @include media-breakpoint("lt-sm") {
+      width: 100% !important;
+    }
+
+    .upload-button,
+    .remove-button {
+      width: 100%;
+      height: 100%;
+    }
+
+    .remove-button {
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .uploaded-image {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      max-height: 240px;
+      margin: 0 auto;
+
+      img {
+        max-width: 100%;
+      }
+    }
+    .feature-image-title {
+      font-size: 14px;
+      width: 90%;
+      text-align: center;
+    }
+    .feature-image {
+      position: relative;
+      max-width: 300px;
+      max-height: 300px;
+      width: 100%;
+    }
+
+    &:hover {
+      .remove-button {
+        transition: 0.3s opacity;
+        opacity: 1;
+      }
+
+      .uploaded-image {
+        transition: 0.3s opacity;
+        opacity: 0.2;
+      }
+    }
+  }
+
+    .mat-dialog-container {
+        padding: 0;
+        overflow: hidden;
+
+        .mat-toolbar {
+            min-height: initial;
+            flex: none;
+        }
+
+        .toolbar-bottom {
+            height: auto;
+        }
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mat-toolbar-row {
+        position: relative;
+    }
+
+    .dialog-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+    }
+
+    .bg-white {
+        background: white;
+    }
+
+    .mail-attachments {
+        padding: 24px 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+        .title {
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .attachment {
+
+            .preview {
+                width: 100px;
+                margin: 0 16px 8px 0;
+            }
+
+            .link {
+                margin-bottom: 2px;
+            }
+
+            .size {
+                font-size: 11px;
+            }
+            
+            cursor: pointer;
+        }
+    }
+}

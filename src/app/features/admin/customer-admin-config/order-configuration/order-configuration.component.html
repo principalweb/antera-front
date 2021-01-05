@@ -1,0 +1,194 @@
+<div class="p-16">
+  <div fxLayout="row">
+    <span class="mat-title">Order System Configuration</span>
+  </div>
+
+  <form *ngIf="settled" [formGroup]="configForm">
+    <div fxLayout="row">
+      <div class="w-480">
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Roll additional Vendor charges into product</div>
+          <mat-checkbox formControlName="rollAddonChargesToProduct"></mat-checkbox>
+        </div>
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Roll decorations fees into product</div>
+          <mat-checkbox formControlName="rollDecoChargesToProduct"></mat-checkbox>
+        </div>
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Roll decoration additional charges into product</div>
+          <mat-checkbox formControlName="rollDecoAddonChargesToProduct"></mat-checkbox>
+        </div>
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Charge sales tax</div>
+          <mat-checkbox formControlName="chargeSalesTax"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Show TaxJar Tax Breakup</div>
+          <mat-checkbox formControlName="showTaxJarTaxBreakup"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Enable Credit Limit Check For Account</div>
+          <mat-checkbox formControlName="enableCreditLimitCheck"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Show Packing List By Vendor</div>
+          <mat-checkbox formControlName="showPackigListByVendor"></mat-checkbox>
+        </div>
+
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Charge GST on PO</div>
+          <mat-checkbox formControlName="chargeGstTaxOnPo"></mat-checkbox>
+        </div>
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Pay commissions</div>
+          <mat-checkbox formControlName="payCommission"></mat-checkbox>
+        </div>
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Hide completely from customer</div>
+          <mat-checkbox formControlName="hideLine"></mat-checkbox>
+        </div>
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Require vouching completion before invoicing</div>
+          <mat-checkbox formControlName="vouchingRequired"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Show 'Supplier Decorated' decoration on Vouching </div>
+          <mat-checkbox formControlName="vouchingShowSupplierDecorated"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Set vouching to complete automatically on workflow items</div>
+          <mat-checkbox formControlName="workflowAutoVouch"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row" *ngIf="inventoryEnabled">
+          <div>Require inventory receipt completion before invoicing</div>
+          <mat-checkbox formControlName="invReceiptRequired"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Enable Admin Fee</div>
+          <mat-checkbox formControlName="enableAdminFee"></mat-checkbox>
+        </div>
+
+        <div class="p-16 space-between" fxLayout="row">
+          <div>Enable Default Grid View (Docs)</div>
+          <mat-checkbox formControlName="enableDefaultGridView"></mat-checkbox>
+        </div>
+
+
+        <div class="px-16 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+          <div>Alternate Ship To</div>
+          <mat-form-field class="w-180">
+            <input type="hidden" formControlName="alternateShipToAccountId" />
+            <input type="text" formControlName="alternateShipToAccount" matInput placeholder="Account Name"
+              [matAutocomplete]="autoAccountAssigned">
+            <mat-autocomplete #autoAccountAssigned="matAutocomplete" [displayWith]="displayName"
+              (optionSelected)="selectAccount($event)">
+              <mat-option *ngFor="let account of filteredAccounts" [value]="account">
+                {{ account.name | capitalizeFirst }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="px-16 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+          <div>GST # For Invoice</div>
+	        <mat-form-field fxFlex class="w-180">
+	          <input matInput formControlName="gstNumberForInvoice">
+	        </mat-form-field>
+        </div>
+
+        <div class="px-16 space-between" fxLayout="row" fxLayoutAlign="space-between center">
+          <div>ABN # For Invoice</div>
+	        <mat-form-field fxFlex class="w-180">
+	          <input matInput formControlName="abnNumberForInvoice">
+	        </mat-form-field>
+        </div>
+
+
+      </div>
+
+      <div fxFlex class="pl-32">
+        <h3>Price / Cost Auto-Update Settings</h3>
+        <div>
+          Product
+          <div class="caption">
+            Configure automatic pricing settings for line items
+          </div>
+          <div class="ml-16 mt-16">
+            <mat-form-field class="w-100-p">
+              <mat-label>Cost</mat-label>
+              <mat-select formControlName="defaultProductCostStrategy">
+                <mat-option value="MANUAL">Do not automatically update cost</mat-option>
+                <mat-option value="PRICE_BREAK">Automatically update cost based on volume pricing</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100-p">
+              <mat-label>Sale Price</mat-label>
+              <mat-select formControlName="defaultProductPriceStrategy">
+                <mat-option value="MANUAL">Do not automatically update pricing</mat-option>
+                <mat-option value="PRICE_BREAK">Automatically update pricing based on volume pricing</mat-option>
+                <mat-option value="MARGIN">Automatically update pricing based on profit margin</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          Decorations
+          <div class="caption">
+            Configure automatic pricing settings for decorations
+          </div>
+          <div class="ml-16 mt-16">
+            <mat-form-field class="w-100-p">
+              <mat-label>Cost</mat-label>
+              <mat-select formControlName="defaultDecorationCostStrategy">
+                <mat-option value="MANUAL">Do not automatically update cost</mat-option>
+                <mat-option value="PRICE_BREAK">Automatically update cost based on decoration fees</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-100-p">
+              <mat-label>Customer Pricing</mat-label>
+              <mat-select formControlName="defaultDecorationPriceStrategy">
+                <mat-option value="MANUAL">Do not automatically update pricing</mat-option>
+                <mat-option value="PRICE_BREAK">Automatically update pricing based on decoration fee price breaks</mat-option>
+                <mat-option value="MARGIN">Automatically update customer pricing based on profit margin</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          Work Order
+          <div class="caption">
+            Configure work order document generation
+          </div>
+          <div class="ml-16 mt-16">
+
+            <mat-form-field class="w-100-p">
+              <mat-label>Generate work order by</mat-label>
+              <mat-select formControlName="generateWorkOrderBy">
+                <mat-option value="location">By Location</mat-option>
+                <mat-option value="variation">By Variation</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="mt-16 ml-16">
+      <button mat-raised-button color="accent" (click)="save()">Save</button>
+    </div>
+  </form>
+</div>
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

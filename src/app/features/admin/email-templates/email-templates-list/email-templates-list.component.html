@@ -1,0 +1,102 @@
+<mat-table class="deco-fees-table"
+            #table [dataSource]="dataSource"
+            matSort (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>       
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input class="form-control" formControlName="name" (keyup.enter)="filterEmailTemplates()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate font-weight-600">{{row.name}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Description By Column -->
+    <ng-container cdkColumnDef="description">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Description</span>
+            <input class="form-control" formControlName="description" (keyup.enter)="filterEmailTemplates()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="text-truncate">{{row.description}}</p>
+        </mat-cell>
+    </ng-container>
+
+
+    <!-- Quantity Start Column -->
+    <ng-container cdkColumnDef="dateEntered">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Created</span>
+            <input class="form-control" formControlName="dateEntered" (keyup.enter)="filteremailTemplates()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+            <p class="text text-truncate">{{row.dateEntered}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- More Buttons Column -->
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteEmailTemplate(row)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="emailTemplate"
+        (click)="editTemplate(row)"
+        matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

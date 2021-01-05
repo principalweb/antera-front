@@ -1,0 +1,57 @@
+@import "src/@fuse/scss/fuse";
+
+app-account-form {
+    width: 100%;
+    height: 100%;
+
+    .account-form {
+        width: 100%;
+        height: 100%;
+
+        form {
+            position: relative;
+            height: 100%;
+        }
+    
+        .mat-tab-group {
+            height: 100%;
+            padding-top: 49px;
+    
+            .mat-tab-header {
+                background: white;
+                position: absolute;
+                z-index: 10;
+                width: 100%;
+                top: 0;
+            }
+    
+            .mat-tab-body-wrapper {
+                overflow-y: auto;
+                flex: 1;
+            }
+
+            .upload-image {
+
+                position: relative;
+                cursor: pointer;
+                
+                #fileInput {
+                    opacity: 0;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    cursor: pointer;
+                    width: 100%;
+                }
+
+                .logoImage {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+
+        }
+    }
+}

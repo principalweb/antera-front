@@ -1,0 +1,96 @@
+<div class="actions-button-row">
+  <button
+    class="actions-button-row"
+    (click)="newPricingMethod()"
+    color="primary"
+    mat-raised-button
+  >
+    Add Pricing Method
+  </button>
+  <button
+    class="actions-button-row"
+    (click)="addMethodRanges()"
+    color="primary"
+    mat-raised-button
+  >
+    <mat-icon>edit</mat-icon> Range Breaks
+  </button>
+  <button
+    class="actions-button-row"
+    (click)="addQtyBreaks()"
+    color="primary"
+    mat-raised-button
+  >
+    <mat-icon>edit</mat-icon> Qty Breaks
+  </button>
+</div>
+<div>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <ng-container
+      [matColumnDef]="column"
+      *ngFor="let column of displayedColumns"
+    >
+      <th
+        mat-header-cell
+        mat-sort-header
+        *matHeaderCellDef
+        style="min-width: 180px"
+      >
+        <span [ngSwitch]="column">
+          <p *ngSwitchCase="'0'"></p>
+          <p *ngSwitchCase="'quantityRange'">Quantity Range</p>
+          <p *ngSwitchCase="'percentage'"> Margin </p>
+          <p *ngSwitchDefault>
+            {{ column | titlecase }}
+          </p>
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <span *ngIf="column.toLowerCase() === 'operator'; else plainColumn">
+          <span [ngSwitch]="element[column]">
+            <p *ngSwitchCase="operators.less.value">
+              <mat-icon>{{ operators.less.icon }}</mat-icon>
+            </p>
+            <p *ngSwitchCase="operators.greater.value">
+              <mat-icon>{{ operators.greater.icon }}</mat-icon>
+            </p>
+            <p *ngSwitchCase="operators.equal.value">
+              <mat-icon>{{ operators.equal.icon }}</mat-icon>
+            </p>
+            <p *ngSwitchDefault></p>
+          </span>
+        </span>
+        <span *ngIf="column === ' ' ">
+          <button mat-icon-button color="primary" (click)="editRow(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button *ngIf=" element.id !== '1'" mat-icon-button color="warn" (click)="deleteRow(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </span>
+        <ng-template #plainColumn>
+          <span *ngIf="element[column] === '0'"></span>
+          <span *ngIf="element[column] !== '0'">
+            {{ element[column] }}
+          </span>
+        </ng-template>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    #paginator
+    [length]="dataSource?.data.length"
+    [pageIndex]="0"
+    [pageSize]="50"
+    [pageSizeOptions]="[25, 50, 100, 250]"
+  >
+  </mat-paginator>
+</div>
+
+<div class="loading"
+     
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

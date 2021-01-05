@@ -1,0 +1,13 @@
+
+  <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-md (click)="addCredit()" *ngIf="action=='list' && false">
+    <mat-icon>add</mat-icon> Add
+  </button>
+  <vouching-credits-list
+    *ngIf="action=='list'"
+    [vouchingForm]='vouchingForm'
+    [vendorId]="vendorId"
+    [orderIds]="orderIds"
+    [allocationLogs]="allocationLogs"
+    (totalCredit)='updateTotalCredit($event)'
+  ></vouching-credits-list>
+  <ap-credit [vendorId]='vendorId' [forEntity]="'Vouching'" (dataSelected)="creditsSelected($event)" *ngIf="action=='add-credit'"></ap-credit>

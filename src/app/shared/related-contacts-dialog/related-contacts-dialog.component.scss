@@ -1,0 +1,12 @@
+.contacts-select-dialog .mat-dialog-container {
+    width: 80vw;
+    padding: 0;
+
+    .member-row {
+        position: relative;
+
+        .mat-checkbox-ripple {
+            display: none;
+        }
+    }
+}

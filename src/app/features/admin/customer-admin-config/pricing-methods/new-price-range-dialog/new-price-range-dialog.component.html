@@ -1,0 +1,79 @@
+<div class="add-pricing-break-container">
+  <h2 mat-dialog-title>Edit Pricing Range</h2>
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="pricingLevelForm" class="add-pricing-break-container">
+      <div
+        formArrayName="pricingLevels"
+        *ngFor="
+          let pricingLevel of pricingLevelForm.controls.pricingLevels?.value;
+          let i = index;
+          trackBy: trackByFn
+        "
+      >
+        <ng-container [formGroupName]="i">
+          <span [ngSwitch]="pricingLevel.type">
+            <div *ngSwitchCase="'2'" class="pricing-column">
+              <br />
+              <fieldset [disabled]="true">
+                <mat-form-field class="full-width-form">
+                  <input placeholder="Name" matInput formControlName="name" />
+                </mat-form-field>
+              </fieldset>
+              &nbsp;
+              <mat-form-field class="one-third-input">
+                <input
+                  (keyup.enter)="pushToList(pricingLevel, i)"
+                  autocomplete="off"
+                  autofill="false"
+                  placeholder="0"
+                  matInput
+                  formControlName="range"
+                />
+              </mat-form-field>
+
+              <button
+                (click)="pushToList(pricingLevel, i)"
+                mat-icon-button
+                color="primary"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+
+              <mat-chip-list
+                cdkDropList
+                cdkDropListOrientation="horizontal"
+                (cdkDropListDropped)="drop($event, pricingLevel.rangeSet)"
+              >
+                <mat-chip
+                  [removable]="true"
+                  (removed)="remove(priceBreak, pricingLevel.rangeSet, i)"
+                  cdkDrag
+                  *ngFor="let priceBreak of pricingLevel.rangeSet"
+                >
+                  {{ priceBreak }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-list>
+            </div>
+          </span>
+        </ng-container>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="start">
+    <mat-card-actions>
+      <button
+        [mat-dialog-close]="newPricing"
+        cdkFocusInitial
+        mat-raised-button
+        [disabled]="disableAddPricingMethods"
+        (click)="updatePricingLevelsRanges()"
+        color="primary"
+      >
+        Update
+      </button>
+      &nbsp;&nbsp;
+      <button mat-button mat-dialog-close>Cancel</button>
+    </mat-card-actions>
+  </mat-dialog-actions>
+</div>

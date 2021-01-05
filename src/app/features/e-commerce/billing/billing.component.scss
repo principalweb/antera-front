@@ -1,0 +1,16 @@
+@import "src/@fuse/scss/fuse";
+
+#billing {
+
+    .header {
+        .search-input-wrapper button {
+            @include media-breakpoint('xs') {
+                margin-left: 0px;
+            }
+        }
+    }
+
+}
+.hide-checkbox .mat-pseudo-checkbox {
+    display: none;
+}

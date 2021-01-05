@@ -1,0 +1,48 @@
+app-lineitem-image-upload-dialog {
+  .mat-dialog-content {
+    display: flex;
+    position: relative;
+
+    .lineitem-image {
+      min-width: 150px;
+      min-height: 150px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      max-width: 400px;
+      max-height: 400px;
+      object-fit: contain;
+    }
+
+    .actions {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+
+      adf-upload-button {
+        opacity: 0;
+        transition: .5s opacity;
+
+        .mat-primary {
+          background-color: #058ec0;
+          color: white !important;
+        }
+
+        .mat-icon {
+          color: white !important;
+        }
+      }
+
+      &:hover {
+        adf-upload-button {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

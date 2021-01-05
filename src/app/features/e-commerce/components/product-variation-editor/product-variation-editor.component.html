@@ -1,0 +1,208 @@
+<div class="product-pricing" fxFlex>
+  <div fxLayout="row" class="px-16">
+    <h3>Product Attributes</h3>
+    <button data-role="saveProductAttributesButton" *ngIf="editAttributes" mat-icon-button (click)="saveAttributes()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button data-role="editProductAttributesButton" mat-icon-button (click)="editAttributes = !editAttributes">
+      <mat-icon *ngIf="!editAttributes">edit</mat-icon>
+      <mat-icon *ngIf="editAttributes">close</mat-icon>
+    </button>
+  </div>
+  <div class="px-16 product-attributes" *ngIf="editAttributes">
+    <form [formGroup]="attributeForm" *ngIf="attributeForm">
+      <div>
+        <mat-slide-toggle formControlName="showSize">Show Size</mat-slide-toggle>
+        <mat-form-field class="w-100-p">
+          <mat-chip-list #sizeList>
+            <mat-chip *ngFor="let size of attributeForm.get('sizes').controls; let index = index" [selectable]="true"
+              [value]="size" [removable]="true" (removed)="removeSizeAttribute($event, index)">
+              {{ size.value?.value }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input #sizeInput placeholder="Add Size" [matChipInputFor]="sizeList" (matChipInputTokenEnd)="addSizeAttribute($event)" />
+          </mat-chip-list>
+
+        </mat-form-field>
+      </div>
+      <mat-slide-toggle formControlName="showColor">Show Color</mat-slide-toggle>
+      <mat-form-field class="w-100-p">
+        <mat-chip-list #colorList>
+          <mat-chip *ngFor="let color of attributeForm.get('colors').controls; let index = index" [selectable]="true"
+            [removable]="true" [value]="color" (removed)="removeColorAttribute($event, index)">
+            {{ color.value?.value }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input matInput #colorInput placeholder="Add Color" [matChipInputFor]="colorList" (matChipInputTokenEnd)="addColorAttribute($event)" />
+        </mat-chip-list>
+
+      </mat-form-field>
+
+      <div>
+        <h3>Price Breaks</h3>
+        <mat-form-field class="w-100-p">
+          <mat-chip-list #quantityList>
+            <mat-chip *ngFor="let quantity of attributeForm.get('quantities').controls; let index = index" [value]="quantity"
+              [selectable]="true" [removable]="true" (removed)="removeQuantityAttribute($event, index)">
+              {{ quantity.value?.value }}
+
+              <!-- <div class="input-wrapper" (keydown)="onMatChipKeyPress($event)" (keypress)="onMatChipKeyPress($event)" (click)="$event.stopImmediatePropagation()">
+                <input [formControl]="quantity.get('value')"
+                  (click)="$event.preventDefault()"
+                  placeholder="Quantity">
+              </div> -->
+
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input matInput #quanityInput placeholder="Quantities" [matChipInputFor]="quantityList" (matChipInputTokenEnd)="addQuantityAttribute($event)" />
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <mat-slide-toggle formControlName="orderMinPricebreak">Do not allow less than minimum pricebreak qty on order</mat-slide-toggle>
+
+    </form>
+  </div>
+  <div class="px-16 product-attributes" *ngIf="!editAttributes">
+    <div>
+      <h4>Sizes<span *ngIf="!product.showSize"> - Hidden</span></h4>
+      <ng-container *ngFor="let prGroup of priceTable; let last = last">
+        <span>{{ prGroup.size }}</span>
+        {{ last ? '' : ',' }}
+      </ng-container>
+    </div>
+
+
+    <div>
+      <h4>Colors<span *ngIf="!product.showColor"> - Hidden</span></h4>
+      <ng-container *ngFor="let color of colors; let last = last">
+        <span>{{ color }}</span>
+        {{ last ? '' : ',' }}
+      </ng-container>
+    </div>
+
+    <div>
+      <h4>Quantities</h4>
+      <ng-container *ngFor="let quantity of quantities; let last = last">
+        <span>{{ quantity }}</span>
+        {{ last ? '' : ',' }}
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="variations-wrapper">
+    <div class="variations-filter" fxLayout="row">
+      <form [formGroup]="filterForm" fxFlex>
+        <mat-form-field fxFlex>
+          <input type="text" matInput placeholder="SKU" formControlName="sku">
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-select multiple formControlName="sizes" placeholder="All Sizes">
+            <mat-option *ngFor="let size of sizes" [value]="size">
+              {{ size }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-select multiple formControlName="colors" placeholder="All Colors">
+            <mat-option *ngFor="let color of colors" [value]="color">
+              {{ color }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+    <div fxLayout="row" class="p-8" fxLayoutAlign="space-between center">
+      <div>
+        <mat-form-field *ngIf="currencyDisp">
+          <mat-select placeholder="Currency" [(value)]="product.currencyCode">
+            <mat-option *ngFor="let currency of currencyList" [value]="currency.code">{{currency.symbol}} {{currency.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <div class="mr-8" *ngIf="selection.hasValue()">
+          With {{ selection.selected.length }} selected
+        </div>
+        <button type="button" mat-raised-button color="accent" *ngIf="selection.hasValue()" (click)="updateSelectedSkus()" class="mr-20">Update Pricing</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="selection.hasValue()" (click)="activateSkus()" class="mr-20">Activate</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="selection.hasValue()" (click)="deactivateSkus()" class="mr-20">Deactivate</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="!showInactive" (click)="showInactive = true;filterSkus();" class="mr-20">Show Inactive</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="showInactive" (click)="showInactive = false;filterSkus()" class="mr-20">Hide Inactive</button>
+      </div>
+    </div>
+    <div class="variations-header" fxLayout="row">
+      <div class="col-selection" fxLayout="row" fxFlexAlign="center">
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </div>
+      <div fxFlex>Product Variation</div>
+      <ng-container *ngFor="let quantity of quantities">
+        <div class="col-quantity">{{quantity}}</div>
+      </ng-container>
+    </div>
+    <ng-container *ngFor="let part of filteredSkus">
+      <div class="variation w-100-p" (click)="updateSku(part)">
+        <div fxLayout="row">
+
+          <div class="col-selection" fxLayout="row" fxFlexAlign="center">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(part) : null"
+              [checked]="selection.isSelected(part)">
+            </mat-checkbox>
+          </div>
+
+          <div fxLayout="row" fxFlex class="variation-description" fxFlexAlign="center">
+            <div>
+              <div *ngIf="part.active">{{ part.sku }}</div>
+              <div *ngIf="!part.active"><del>{{ part.sku }}</del></div>
+            </div>
+            <div>
+              <div>
+                <div class="swatch" [style.background]="part.ColorArray.Color.hex"></div>
+
+                {{ part.ColorArray.Color.colorName }}
+              </div>
+            </div>
+            <div>
+              {{ part.ApparelSize.labelSize }}
+            </div>
+          </div>
+          <div class="variation-detail-labels">
+            <div>
+              Price:
+            </div>
+            <div>
+              Margin:
+            </div>
+            <div>
+              Cost:
+            </div>
+            <div>
+              Profit:
+            </div>
+          </div>
+          <ng-container *ngFor="let quantity of quantities">
+            <div class="col-quantity">
+              <ng-container *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                  <div>
+                    {{ priceBreak.salePrice | currency:'USD':'symbol':decimalConfig }}
+                  </div>
+                  <div>
+                    {{ priceBreak.margin / 100 | percent }}
+                  </div>
+                  <div>
+                    {{ priceBreak.price | currency }}
+                  </div>
+                  <div>
+                    {{ priceBreak.unitProfit | currency }}
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<mat-table fxFlex #table [dataSource]="dataSource" matSort
+           [formGroup]="filterForm"
+           (matSortChange)="sortChange($event)"
+           [@animateStagger]="{value:'50'}">
+
+  <ng-container cdkColumnDef="orderNumber">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Sales Order No</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.orderNumber"><a [routerLink]="['/e-commerce/orders', item.orderId]">{{ item.orderNumber }}</a></p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="orderDate">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Order Date</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.orderDate | date }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="status">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Status</span>
+     </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.orderStatus">{{ item.orderStatus}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="accountName">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Account Name</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.accountName }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="quantity">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Order QTY</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.orderQuantity">{{item.orderQuantity}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="reservedQty">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Reserved QTY</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.reservedQuantity">{{item.reservedQuantity}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="backorderQty">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Backorder QTY</span>
+   </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.backOrderQuantity }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="shipDate">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+      <span mat-sort-header>Ship Date</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.shipDate }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *cdkHeaderRowDef="getDisplayedClumns()"></mat-header-row>
+  <mat-row *cdkRowDef="let item; columns: getDisplayedClumns();"
+           class="inventory-item"
+           (click)="openDetialsDialog(item)"
+           matRipple
+           [@animate]="{value:'*',params:{y:'100%'}}">
+  </mat-row>
+</mat-table>
+<div class="p-24 text-center" *ngIf="dataSource.total===0">
+  No Data Found
+</div>
+<mat-paginator #paginator
+               [length]="dataSource.total"
+               [pageIndex]="dataSource.index"
+               [pageSize]="50"
+               [pageSizeOptions]="[10, 20, 50, 100]"
+               (page)="paginate($event)"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

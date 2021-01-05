@@ -1,0 +1,67 @@
+<mat-card>
+    <mat-card-content>
+
+      <h1>Module Lists</h1>
+      <mat-table class="purge-module-table"
+                #table [dataSource]="dataSource"
+                matSort (matSortChange)="sort($event)"
+                [@animateStagger]="{value:'50'}" *ngIf="dataSource.data.length > 0">
+
+        <!-- Checkbox Column -->
+        <ng-container cdkColumnDef="checkbox">
+            <mat-header-cell *cdkHeaderCellDef>
+                <mat-checkbox (change)="toggleAll($event)"
+                            [checked]="selection.checkedAll | async"
+                            [indeterminate]="selection.checkedAny | async">
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let row">
+                <mat-checkbox [checked]="checkboxes[row.id]"
+                              (change)="onSelectedChange(row.id)"
+                              (click)="$event.stopPropagation()">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container cdkColumnDef="position">
+            <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>No.</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let row">
+                <p class="text-truncate fong-weight-600">{{row.position}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container cdkColumnDef="name">
+            <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Name</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let row">
+                <p class="text-truncate fong-weight-600">{{row.name}}</p>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+<br />
+<br />
+
+<button mat-raised-button color="accent" [disabled]="loading" (click)="initPurge()"  *ngIf="dataSource.data.length > 0">Purge Records</button>
+
+
+<div class="p-24 text-center" *ngIf="dataSource.data.length === 0">
+    There are currently no line items
+</div>
+
+
+    </mat-card-content>
+</mat-card>
+
+            <div class="text-left p-24 ng-tns-c41-18 ng-star-inserted">
+                <i>Note: Purge records will permanently remove all records for a chosen module and these cannot be recovered after delete</i>
+            </div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+ </div>

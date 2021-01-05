@@ -1,0 +1,32 @@
+<div class="toolbar">
+    <div class="mail-selection" fxFlex="row">
+        <div fxFlex="row" fxLayoutAlign="start center">
+            <a class="link text-capitalize mr-8 mat-raised-button mat-accent" routerLink="/admin/royalty">Go back</a>
+            <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="downloadSummary()">
+                Download Report
+            </button>
+        </div>
+    </div>
+</div>
+<div class="summary-report tab-content p-24" fusePerfectScrollbar>
+    <div id="summary-report-table" class="compact page-layout blank" fusePerfectScrollbar>
+        <div class="summary-report-container">
+            <div class="card">
+                <div class="content">
+                    <span class="text-capitalize" *ngIf="summary.data?.length === 0">No Data Found.</span>
+                    <table class="summary">
+                        <tr *ngFor="let key of summary.data[0] | keys">
+                            <th class="badge">{{key.key}}</th>
+                            <td>{{key.value}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

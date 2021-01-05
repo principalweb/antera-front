@@ -1,0 +1,26 @@
+.grn-spin {
+    color: #43a047 !important;
+    cursor: pointer !important;
+}
+
+.spinningMore {
+    animation: mySpin 3s infinite;
+}
+
+@keyframes mySpin {
+    0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.exchange-rate-line-height {
+  line-height: 2em;
+  margin-bottom: 2em;
+  max-height: calc(70vh - 100px);
+  overflow-y: scroll;
+}

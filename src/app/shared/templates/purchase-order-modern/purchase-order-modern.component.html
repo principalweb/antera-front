@@ -1,0 +1,440 @@
+<div id="po-modern" class="modern page-layout blank" fxLayout="row" fusePerfectScrollbar>
+
+    <div class="po-container">
+
+        <!-- Purchase Order -->
+        <div class="card-purchase-order">
+
+            <!-- HEADER -->
+
+            <div id="header" class="header-purchase-order" fxLayout="row" fxLayoutAlign="start start">
+
+                <div class="ids" fxLayout="column">
+
+                    <div fxLayout="row" class="seller" fxLayoutAlign="center start">
+                        <img *ngIf="logoUrl == ''" class="logo" [src]="'assets/images/logos/karma.png'">
+                        <img *ngIf="logoUrl != ''" class="logo" [src]="logoUrl"
+                            [default]="'assets/images/logos/karma.png'">
+                    </div>
+
+                    <div fxLayout="row" class="client mt-24" fxLayoutAlign="start start">
+                        <div class="label" fxLayout="row" fxLayoutAlign="end center">
+                            <div class="w-80">Vendor:</div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="detail">
+                            <div class="title">{{lineItems[0].lineItem.vendorName}}</div>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row" class="client mt-24" fxLayoutAlign="start start">
+                        <div class="label" fxLayout="row" fxLayoutAlign="end center">
+                            <div class="w-80">Ship To:</div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="detail">
+                            <div class="title">{{lineItems[0].poShippingBillingDetails.shippingCompanyName}}</div>
+                            <div class="title">{{lineItems[0].poShippingBillingDetails.shippingCustomerName}}</div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingStreet}}
+                            </div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingStreet2}}
+                            </div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingCity}}
+                                {{lineItems[0].poShippingBillingDetails.shippingState}}
+                                {{lineItems[0].poShippingBillingDetails.shipPostalcode}}
+                            </div>
+                            <div class="address"
+                                *ngIf="docOptions[21] && docOptions[21].value && lineItems[0].poShippingBillingDetails.shippingCompanyName !=''">
+                                {{lineItems[0].poShippingBillingDetails.shipCountry}}</div>
+                            <div class="address"
+                                *ngIf="docOptions[22] && docOptions[22].value && lineItems[0].poShippingBillingDetails.shippingPhone !=''">
+                                {{lineItems[0].poShippingBillingDetails.shippingPhone}}</div>
+                        </div>
+
+
+                        <!--div class="detail">
+                            <div class="title">{{lineItems[0].poShippingBillingDetails.shippingCustomerName}}</div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingStreet}}
+                            </div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingState}} {{lineItems[0].poShippingBillingDetails.shippingCity}} {{lineItems[0].poShippingBillingDetails.shippingPostalCode}}
+                            </div>
+                            <div *ngIf="lineItems[0].poShippingBillingDetails.shippingPhone" class="phone">
+                                <span>Phone:</span>
+                                {{lineItems[0].poShippingBillingDetails.shippingPhone}}
+                            </div>
+                            <div *ngIf="lineItems[0].poShippingBillingDetails.shippingEmail" class="email">
+                                <span>Email:</span>
+                                {{lineItems[0].poShippingBillingDetails.shippingEmail}}
+                            </div>
+                            <div class="contact-name">{{po.contactName}}</div>
+                        </div-->
+
+                        <!-- <div class="detail" *ngIf="vendorAccountDetails">
+                            <div class="title">{{vendorAccountDetails.accountName}}</div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingStreet}}
+                            </div>
+                            <div class="address">
+                                {{lineItems[0].poShippingBillingDetails.shippingState}} {{lineItems[0].poShippingBillingDetails.shippingCity}} {{lineItems[0].poShippingBillingDetails.shippingPostalCode}}
+                            </div>
+                            <div class="phone">
+                                <span>Phone:</span>
+                                {{vendorAccountDetails.phone}}
+                            </div>
+                            <div class="email">
+                                <span>Email:</span>
+                                {{vendorAccountDetails.email}}
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start start">
+                    <div class="order-title">
+                        <span>{{docLabels.title}}</span>
+                    </div>
+
+                    <table class="summary ml-56">
+                        <tr>
+                            <td class="label">{{docLabels.title}}</td>
+                            <td class="value code-title">#{{po.orderNo}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[4].value && po.dueDate != '' && po.dueDate != '0000-00-00'">
+                            <td class="label">{{fieldLabel('dueDate', fields)}}</td>
+                            <td class="value">{{po.dueDate}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[0].value">
+                            <td class="label">{{fieldLabel('totalCost', fields)}}</td>
+                            <td class="value">
+                                {{getTotalCostPO() | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[1].value && po.orderDate != '' && po.orderDate != '0000-00-00'">
+                            <td class="label">{{fieldLabel('orderDate', fields)}}</td>
+                            <td class="value">{{po.orderDate}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[2].value && po.inHandDateBy != '' && po.inHandDateBy != '0000-00-00'">
+                            <td class="label">{{fieldLabel('inHandDateBy', fields)}}</td>
+                            <td class="value">{{po.inHandDateBy}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[3].value && po.shipVia !=''">
+                            <td class="label">{{fieldLabel('shipVia', fields)}}</td>
+                            <td class="value"><span [innerHtml]="po.shipVia"></span></td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[25] && docOptions[25].value  && po.shippingAccountNo !=''">
+                            <td class="label">{{fieldLabel('shippingAccountNo', fields)}}</td>
+                            <td class="value">{{po.shippingAccountNo}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[5].value && po.shipDate != '' && po.shipDate != '0000-00-00'">
+                            <td class="label">{{fieldLabel('shipDate', fields)}}</td>
+                            <td class="value">{{po.shipDate}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[6].value && po.customerPo != ''">
+                            <td class="label">{{fieldLabel('customerPo', fields)}}</td>
+                            <td class="value">#{{po.customerPo}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[7].value && po.creditTerms != ''">
+                            <td class="label">{{fieldLabel('creditTerms', fields)}}</td>
+                            <td class="value">{{ displayCreditTerm(po.creditTerms) }}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[8].value && po.salesPerson != ''">
+                            <td class="label">{{fieldLabel('salesPerson', fields)}}</td>
+                            <td class="value">{{po.salesPerson}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[9].value && po.salesPersonPhone != ''">
+                            <td class="label">{{fieldLabel('salesPersonPhone', fields)}}</td>
+                            <td class="value">{{po.salesPersonPhone}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[10].value && po.salesPersonEmail != ''">
+                            <td class="label">{{fieldLabel('salesPersonEmail', fields)}}</td>
+                            <td class="value">{{po.salesPersonEmail}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[11].value && po.csrName && po.csrName != ''">
+                            <td class="label">{{fieldLabel('csrName', fields)}}</td>
+                            <td class="value">{{po.csrName}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[12].value && po.csrPhone && po.csrPhone != ''">
+                            <td class="label">{{fieldLabel('csrPhone', fields)}}</td>
+                            <td class="value">{{po.csrPhone}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[13].value && po.csrEmail && po.csrEmail != ''">
+                            <td class="label">{{fieldLabel('csrEmail', fields)}}</td>
+                            <td class="value">{{po.csrEmail}}</td>
+                        </tr>
+                        <tr *ngIf="po.isRushOrder == 'Yes'">
+                            <td class="label"></td>
+                            <td class="value" style="color:#FF0000;">This is a RUSH Order</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+
+            <div class="content-purchase-order">
+                <table id="table" class="simple po-table">
+                    <thead>
+                        <tr>
+                            <th *ngIf="docOptions[15].value || docOptions[14].value">{{getLabelForFirstColumn()}}</th>
+                            <th *ngIf="docOptions[24] && docOptions[24].value" class="fixed-width-color">
+                                {{docLabels.color}}</th>
+                            <th>{{docLabels.itemName}}</th>
+                            <th *ngIf="docOptions[23] && docOptions[23].value">{{docLabels.size}}</th>
+                            <th class="fixed-width-price">{{docLabels.unitPrice}}</th>
+                            <th class="fixed-width-qty">{{docLabels.qty}}</th>
+                            <th class="fixed-width-total">{{docLabels.totalPrice}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let product of lineItems">
+                            <tr>
+                                <td *ngIf="docOptions[15].value || docOptions[14].value" class="first-line">
+                                    <div *ngIf="docOptions[15].value" class="image-item">
+                                        <img class="product-image"
+                                            [default]="'assets/images/ecommerce/product-image-placeholder.png'"
+                                            [src]="product.image | urlFix" />
+                                    </div>
+                                    <div *ngIf="docOptions[14].value" class="item-number">{{ product.productId }}</div>
+                                    <div *ngIf="docOptions[30]?.value" class="item-number">{{ product?.inhouseId }}
+                                    </div>
+                                </td>
+                                <td *ngIf="docOptions[24] && docOptions[24].value" class="first-line fixed-width-color">
+                                    <span *ngIf="product?.lineItem?.showAttribColor == '1'">
+                                        {{product.color}}
+                                    </span>
+                                </td>
+                                <td class="first-line"
+                                    [ngClass]="{'fixed-width-name-3': checkDocOptions() == 0, 'fixed-width-name-2': checkDocOptions() == 1, 'fixed-width-name-1': checkDocOptions() == 2}">
+                                    <div class="title">{{product.productName}}</div>
+                                </td>
+                                <td *ngIf="docOptions[23] && docOptions[23].value" class="first-line">
+                                    <span *ngIf="product?.lineItem?.showAttribSize == '1'">
+                                        {{product.multiple ? groupSizeQuantity(product) : product.size}}
+                                    </span>
+                                </td>
+                                <td *ngIf="docOptions[18].value" class="first-line fixed-width-price">
+                                    <span *ngIf="product.uomConversionRatio">
+                                        {{ product.cost * product.uomConversionRatio | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                                    </span>
+                                    <span *ngIf="!product.uomConversionRatio">
+                                        {{ product.cost | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto }}
+                                    </span>
+                                </td>
+                                <td *ngIf="!docOptions[18].value" class="first-line fixed-width-price">
+                                    {{ product.cost }}
+                                    <span *ngIf="product.uomConversionRatio">
+                                        {{ product.cost * product.uomConversionRatio }}
+                                    </span>
+                                    <span *ngIf="!product.uomConversionRatio">
+                                        {{ product.cost }}
+                                    </span>
+                                </td>
+                                <td class="first-line fixed-width-qty">
+                                    <ng-container *ngIf="product.uomAbbreviation; else withoutUOM">
+                                        {{product.unitQuantity | number:sysconfigOrderFormQtyDecimalUpto}}
+
+                                        <span *ngIf="docOptions[16].value">
+                                            {{product.uomAbbreviation || 'EA'}}
+                                            <span *ngIf="product.quantity !== product.unitQuantity">
+                                                ({{ product.quantity }})
+                                            </span>
+                                        </span>
+                                    </ng-container>
+                                    <ng-template #withoutUOM>
+                                        {{ product.quantity | number:sysconfigOrderFormQtyDecimalUpto }} <span
+                                            *ngIf="docOptions[16].value">EA</span>
+                                    </ng-template>
+                                </td>
+                                <td *ngIf="docOptions[18].value" class="first-line fixed-width-total">
+                                    {{(product.cost * product.quantity) | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                                </td>
+                                <td *ngIf="!docOptions[18].value" class="first-line fixed-width-total">
+                                    {{(product.cost * product.quantity) | removeDecimal}}
+                                </td>
+                            </tr>
+                            <tr *ngIf="docOptions[17].value">
+                                <td colspan="7" class="description">
+                                    <div class="product-description"
+                                        [innerHTML]="product?.lineItem?.vendorDescription | safeHtml ">
+                                    </div>
+                                    <div class="calculator-display"
+                                        *ngIf="product?.calculatorData && product?.calculatorData[0]">
+                                        {{ product.calculatorData[0]?.formatted }}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="product?.lineItem?.overrideInHandDate === '1'">
+                                <td colspan="7">In Hands Date: {{ product?.lineItem?.inhandDate }}</td>
+                            </tr>
+                            <ng-container>
+                                <tr *ngFor="let addonCharge of product.addonCharges; let i=index;">
+                                    <td colspan="7" class="noBorder">
+                                        <div class="mt-10" fxLayout="row" fxLayoutAlign="end center">
+                                            <span *ngIf="i==0" class="title-addon">
+                                                Additional Charges
+                                            </span>
+                                            <div *ngIf="!docOptions[20].value" class="image-space"></div>
+                                            <div *ngIf="docOptions[20].value" class="image"></div>
+                                            <span class="name">
+                                                {{addonCharge.name}}
+                                            </span>
+                                            <span class="price">
+                                                {{addonCharge.cost | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                                            </span>
+                                            <span class="quantity">
+                                                {{addonCharge.matchOrderQty == '1' ? product.matchOrderQty : addonCharge.quantity | number:sysconfigOrderFormQtyDecimalUpto}}
+                                            </span>
+                                            <span class="total">
+                                                {{(addonCharge.matchOrderQty == '1' ? (addonCharge.cost * product.matchOrderQty) : (addonCharge.cost * addonCharge.quantity)) | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngFor="let decoVendor of product.decoVendors; let i=index;">
+                                <tr *ngIf="decoVendor.vendorSupplierDecorated == '1'">
+                                    <td colspan="7" class="noBorder">
+                                        <div class="mt-10" fxLayout="row" fxLayoutAlign="end center">
+                                            <span *ngIf="i==0" class="title">
+                                                Decoration
+                                            </span>
+                                            <div *ngIf="!docOptions[20]?.value" class="image-space"></div>
+                                            <div *ngIf="docOptions[20]?.value" class="image">
+                                                <img class="decoration-image" [src]="decoVendor.image | urlFix"
+                                                    [default]="'assets/images/ecommerce/product-image-placeholder.png'" />
+                                            </div>
+                                            <span class="name">
+                                                {{decoVendor.decoTypeName}}
+                                            </span>
+                                            <span class="location">
+                                                {{decoVendor.decoLocation}}
+                                            </span>
+                                            <span *ngIf="product.lineItem.rollDecoChargesToProduct == 0" class="price">
+                                                {{decoVendor.cost | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                                            </span>
+                                            <span *ngIf="product.lineItem.rollDecoChargesToProduct == 1" class="price">
+                                            </span>
+                                            <span class="quantity">
+                                                {{decoVendor.quantity | number:sysconfigOrderFormQtyDecimalUpto}}
+                                            </span>
+                                            <span *ngIf="product.lineItem.rollDecoChargesToProduct == 0" class="total">
+                                                {{(decoVendor.cost * decoVendor.quantity) | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                                            </span>
+                                            <span *ngIf="product.lineItem.rollDecoChargesToProduct == 1" class="total">
+                                            </span>
+                                        </div>
+                                        <div *ngIf="decoVendor?.decoColors" class="deco-description">
+                                            {{decoVendor.decoColors}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+                <table id="table-footer" class="simple po-table-footer">
+                    <tbody>
+                        <tr class="subtotal"
+                            *ngIf="this.gstTaxDetailsOnPo?.gstTaxTotalOnPo && this.gstTaxDetailsOnPo?.gstTaxTotalOnPo > 0">
+                            <td>GST</td>
+                            <td>{{this.gstTaxDetailsOnPo?.gstTaxTotalOnPo | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}
+                            </td>
+                        </tr>
+                        <tr class="total">
+                            <td>{{docLabels.totalCost}}</td>
+                            <td>{{getTotalCostPO() | currency:'USD':'symbol':sysconfigOrderFormTotalDecimalUpto}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- FOOTER -->
+
+            <div id="footer" class="footer-purchase-order">
+                <ng-container *ngIf="vendorAccountDetails && vendorAccountDetails.vendorPoNotes != ''">
+                    <div class="note">Vendor PO Notes:</div>
+                    <div fxLayout="row" fxLayoutAlign="start start">
+                        <div class="small-note pre">{{vendorAccountDetails.vendorPoNotes}}</div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="hasPONotes()">
+                    <div class="note">PO Notes:</div>
+                    <div fxLayout="column" fxLayoutAlign="start start" *ngFor="let lineItem of po.lineItems">
+                        <div class="small-note pre mt-16"
+                            *ngIf="lineItem && lineItem.vendorPONote !='' && lineItem.vendorName == lineItems[0].lineItem.vendorName">
+                            {{lineItem.vendorPONote}}</div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="docOptions[29]?.value">
+                    <div *ngIf="docOptions[29]?.value" fxLayout="row" fxLayoutAlign="start start">
+                        <div class="footer-note pre">{{ displaydocDefaultOptions(docOptions[29]?.name)}}</div>
+                    </div>
+                </ng-container>
+            </div>
+            <!--
+
+            Use the following elements to add breaks to your pages. This will make sure that the section in between
+            these elements will be printed on a new page. The following two elements must be used before and after the
+            page content that you want to show as a new page. So, you have to wrap your content with them.
+
+            Elements:
+            ---------
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+            <!--
+
+            Example:
+            --------
+
+            Initial page content!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the second page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the third page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+        </div>
+        <!-- / po -->
+
+    </div>
+
+</div>

@@ -1,0 +1,682 @@
+<div class="sales-input tab-content p-24" fusePerfectScrollbar>
+    <div class="section pb-48 customer">
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16">assignment</mat-icon>
+            <div class="h2 secondary-text">SUMMARY</div>
+        </div>
+
+        <table class="simple customer">
+            <thead>
+                <tr>
+                    <th>Sales Partner</th>
+                    <th>Production Partner</th>
+                    <th>Client</th>
+                    <th>Item</th>
+                    <th>Terms</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="product-row"
+                    [routerLink]="'/e-commerce/orders/'+order.id">
+                    <td>
+                        {{order.salesPerson}}
+                    </td>
+                    <td>
+                        {{order.contactName}}
+                    </td>
+                    <td>
+                        {{order.accountName}}
+                    </td>
+                    <td>
+                        Backpack                    
+                    </td>
+                    <td>
+                        {{order.creditTerms}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <form [formGroup]="salesInputForm">
+        <div class="section pb-48 revenues">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">ENTER REVENUES</div>
+            </div>
+            
+            <!-- Temporarily disabled for slow typing issue -->
+            <table class="simple revenues">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>Item(A)</th>
+                        <th>Item(B)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr formArrayName="quantities">
+                        <td>
+                            Quantity
+                        </td>
+                        <td *ngFor="let quantity of quantities.controls; let i=index;">
+                            <input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                        </td>
+                    </tr>
+                    <tr formArrayName="unitPrices">
+                        <td>
+                            Unit Price                    
+                        </td>
+                        <td *ngFor="let price of unitPrices.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">TOTAL PRICE</span>
+                        </td>
+                        <td *ngFor="let quantity of quantities.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr formArrayName="toolings">
+                        <td class="pt-32">
+                            Tooling                   
+                        </td>
+                        <td class="pt-32" *ngFor="let tooling of toolings.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="setupColorMatches">
+                        <td>
+                            Setup/color Match                    
+                        </td>
+                        <td *ngFor="let colorMatch of setupColorMatches.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="thidPartyInspections">
+                        <td>
+                            Setup/color Match                    
+                        </td>
+                        <td *ngFor="let inspection of thidPartyInspections.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="surfaceLeadTests">
+                        <td>
+                            16 CFR 1303 Surface Lead test                   
+                        </td>
+                        <td *ngFor="let leadTest of surfaceLeadTests.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="addtionalTestings">
+                        <td>
+                            Addtional Testing                  
+                        </td>
+                        <td *ngFor="let addTest of addtionalTestings.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="optionalCharges">
+                        <td>
+                            Optional Charges                
+                        </td>
+                        <td *ngFor="let charge of optionalCharges.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="oceanFreights">
+                        <td class="pt-32">
+                            Ocean Freight                   
+                        </td>
+                        <td class="pt-32" *ngFor="let oceanFreight of oceanFreights.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="overseasAirFreights">
+                        <td>
+                            Overseas Air Freight                   
+                        </td>
+                        <td *ngFor="let overseasAirFreight of overseasAirFreights.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="unloadingDevanningPalletizins">
+                        <td>
+                            Unloading Devanning Palletizing                   
+                        </td>
+                        <td *ngFor="let palletzin of unloadingDevanningPalletizins.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="inlandFreights">
+                        <td class="pt-32">
+                            Inland Freight                   
+                        </td>
+                        <td class="pt-32" *ngFor="let inlandFreight of inlandFreights.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="fullfillments">
+                        <td>
+                            Fullfillment                   
+                        </td>
+                        <td *ngFor="let fullfillment of fullfillments.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="deliveryMgmtFees">
+                        <td>
+                            Delivery Mgmt Fee                   
+                        </td>
+                        <td *ngFor="let deliveryMgmtFee of deliveryMgmtFees.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">TOTAL REVENUE</span>
+                        </td>
+                        <td *ngFor="let quantity of quantities.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Gross Profit</span>
+                        </td>
+                        <td *ngFor="let quantity of quantities.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">DDP Margin</span>
+                        </td>
+                        <td *ngFor="let quantity of quantities.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">%100.00</span>                        
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="section pb-48 costs">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">ENTER COSTS</div>
+            </div>
+            
+            <!-- Temporarily disabled for slow typing issue -->
+            <table class="simple costs">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>Item(A)</th>
+                        <th>Item(B)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr formArrayName="unitCosts">
+                        <td>
+                            Unit Costs                    
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr formArrayName="costToolings">
+                        <td class="pt-32">
+                            Tooling                   
+                        </td>
+                        <td class="pt-32" *ngFor="let tooling of costToolings.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="costSetupColorMatches">
+                        <td>
+                            Setup/color Match                    
+                        </td>
+                        <td *ngFor="let colorMatch of costSetupColorMatches.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="greaterChinaInspection">
+                        <td>
+                            Inspection                    
+                        </td>
+                        <td *ngFor="let injection of greaterChinaInspection.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="testingCosts">
+                        <td>
+                            Testing Costs - Min $250                    
+                        </td>
+                        <td *ngFor="let testCost of testingCosts.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="costThidPartyInspections">
+                        <td>
+                            Third Party Inspection                   
+                        </td>
+                        <td *ngFor="let injection of costThidPartyInspections.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="blankLCCharges">
+                        <td>
+                            Bank/LC Charges                  
+                        </td>
+                        <td *ngFor="let charge of blankLCCharges.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="sampleCosts">
+                        <td>
+                            Sample Cost                   
+                        </td>
+                        <td *ngFor="let sampleCost of sampleCosts.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="miscellaneous">
+                        <td>
+                            Miscellaneous                   
+                        </td>
+                        <td *ngFor="let mis of miscellaneous.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="piecesPerCarton">
+                        <td>
+                            Pieces Per Carton                   
+                        </td>
+                        <td *ngFor="let carton of piecesPerCarton.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="sizesOfCartons">
+                        <td>
+                            Size Of Carton(CBM)                   
+                        </td>
+                        <td *ngFor="let carton of sizesOfCartons.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Total Cartons</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Total CBM of order</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr formArrayName="totalOceanCosts">
+                        <td class="pt-32">
+                            Total Ocean cost (Freight Tab)                   
+                        </td>
+                        <td class="pt-32" *ngFor="let oceanCost of totalOceanCosts.controls; let i=index">
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Unit Ocean Cost</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr formArrayName="grossWeightPerCarton">
+                        <td class="pt-32">
+                            Total Ocean cost (Freight Tab)                   
+                        </td>
+                        <td class="pt-32" *ngFor="let carton of grossWeightPerCarton.controls; let i=index">
+                          <div class="currency">
+                              <input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="airCostPerKG">
+                        <td>
+                            Air Cost per KG                  
+                        </td>
+                        <td *ngFor="let cost of airCostPerKG.controls; let i=index">
+                          <div class="currency">
+                              <input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Total Actual Weight</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Total DIM Weight</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Air Cost Actual Weight</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Air Cost DIM Weight</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pt-32">
+                          <span class="mat-body-2 text-truncate font-weight-600">Costs for Air Freight</span>
+                        </td>
+                        <td class="pt-32" *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Shipping Insurance</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                            
+                        </td>
+                    </tr>
+                    <tr formArrayName="dutyRate">
+                        <td class="pt-32">
+                            Duty Rate                 
+                        </td>
+                        <td class="pt-32" *ngFor="let rate of dutyRate.controls; let i=index">
+                          <div class="currency">
+                            %<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          <span class="mat-body-2 text-truncate font-weight-600">Total Duty</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr formArrayName="pricePerPalletDropDownList">
+                        <td>
+                            Price per Pallet Drop Down List                
+                        </td>
+                        <td *ngFor="let pallet of pricePerPalletDropDownList.controls; let i=index">
+                          <div class="currency">
+                            $<select class="form-control" type="number" [formControlName]="i" placeholder="0.00">
+                                <option *ngFor="let pallet of palletList" [value]="pallet">{{pallet}}</option>
+                            </select>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Palletizing Cost</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr formArrayName="brokerageUnits">
+                        <td class="pt-32">
+                            Brokerage Units                  
+                        </td>
+                        <td class="pt-32" *ngFor="let unit of brokerageUnits.controls; let i=index">
+                            <div class="currency">
+                                <input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                            </div>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Brokerage Unit</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr formArrayName="costFullfillments">
+                        <td class="pt-32">
+                            Fullfillment                  
+                        </td>
+                        <td class="pt-32" *ngFor="let fullfillment of costFullfillments.controls; let i=index">
+                            <div class="currency">
+                                <input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr formArrayName="lclInlandFreightPerCBM">
+                        <td>
+                            LCL Inland Freight Per CBM                  
+                        </td>
+                        <td *ngFor="let cbm of lclInlandFreightPerCBM.controls; let i=index">
+                            <div class="currency">
+                                <input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Inland Freight (contact logistics)</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr class="tooling-row" formArrayName="rebate">
+                        <td class="pt-32">
+                            Rebate                  
+                        </td>
+                        <td class="pt-32" *ngFor="let rebatee of rebate.controls; let i=index">
+                            <div class="currency">
+                                %<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Rebate</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr formArrayName="ccFinanceTax">
+                        <td class="pt-32">
+                            CC/Finance/Tax                  
+                        </td>
+                        <td class="pt-32" *ngFor="let finance of ccFinanceTax.controls; let i=index">
+                            <div class="currency">
+                                %<input class="form-control" type="number" placeholder="0" [formControlName]="i" pattern="[0-9]+([\.,][0-9]+)*" >
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total CC/Finance/Tax</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalCCFinanceTax(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Fiance/Rebate Charges</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pt-32">
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Costs</span>
+                        </td>
+                        <td class="pt-32" *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Unit Cost</span>
+                        </td>
+                        <td *ngFor="let cost of unitCosts.controls; let i = index">
+                            <!-- Temporarily disabled because of slow input-->
+                            <!-- <span class="mat-body-2 text-truncate font-weight-600">${{getTotalFianceRebateCharges(i) | number : '1.2-2'}}</span> -->
+                            <span class="mat-body-2 text-truncate font-weight-600">$10000.00</span>                        
+                        </td>
+                    </tr>                     
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+
+    <div class="section mb-48" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button
+                mat-raised-button
+                (click)="save()"
+                class="save-button mat-accent"
+                aria-label="SAVE">
+             SAVE
+            </button>
+
+        </div>
+    </div>
+</div>

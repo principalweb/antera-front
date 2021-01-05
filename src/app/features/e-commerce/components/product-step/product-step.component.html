@@ -1,0 +1,163 @@
+<div fxLayout="column" fxFlex>
+<h1>Products </h1>
+  <ng-container *ngIf="!loading">
+    <!-- Line Item List -->
+    <order-details-products-list
+      (onViewChanged)="showView($event)"
+      (showDetails)="showProductDetails($event)"
+      (attach)="showAttachDecorationDialog()"
+      (editDecoVariations)="showDecoVariationEdit($event)"
+      [sysConfig]="sysConfig"
+      *ngIf="view==='lineitems'">
+    </order-details-products-list>
+  </ng-container>
+
+  <!-- Show product-add screen: List view & Tile view -->
+  <ng-container *ngIf="view==='images' || view==='list'">
+    <div class="p-16 pb-8" fxLayout="row" fxLayoutAlign="space-between center">
+      <div>
+        <button mat-icon-button class="mr-16" (click)="showView('lineitems')">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-raised-button color="accent" class="ml-8" (click)="addToOrder()">
+          <mat-icon>playlist_add</mat-icon>
+          Add To {{ context == 'quote' ? 'Quote' : 'Order' }}
+        </button>
+        <button mat-raised-button color="accent" class="ml-8" (click)="newProduct()">
+          <mat-icon>add</mat-icon>
+          New Product
+        </button>
+        <button mat-raised-button color="accent" class="ml-8" (click)="clearFilters()">
+          <mat-icon>layers_clear</mat-icon>
+          Clear Filters
+        </button>
+        <button mat-raised-button color="accent" class="ml-8" (click)="openAdvanceSearchDialog()">
+          <mat-icon>search</mat-icon>
+          Advanced Search
+        </button>
+        <button mat-raised-button color="warn" class="ml-8" (click)="deleteSelectedProducts()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
+      </div>
+
+      <mat-button-toggle-group fxFlex="none"
+          [value]="view" (change)="changeView($event)">
+          <mat-button-toggle value="list" matTooltip="Products List">
+              <mat-icon>view_list</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="images" matTooltip="Product Images">
+              <mat-icon>featured_video</mat-icon>
+          </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <app-product-list [disableRow]="true" fxLayout="column" *ngIf="view==='list'"></app-product-list>
+    <app-product-images [disableItem]="true" fxLayout="column" *ngIf="view==='images'"></app-product-images>
+  </ng-container>
+
+  <!-- Show select design table -->
+  <ng-container *ngIf="view==='decoration-select' ||
+                       view==='decoration-select-edit'">
+    <div class="p-16 pb-8">
+      <button mat-icon-button (click)="showLineItemsAndDecorationList()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <button mat-raised-button
+              color="accent"
+              (click)="selectDecorationToLink()"
+              *ngIf="view === 'decoration-select'"
+              >Select Artwork</button>
+
+      <button mat-raised-button
+              color="accent"
+              (click)="selectDecorationToEdit()"
+              *ngIf="view === 'decoration-select-edit'"
+              >Modify Artwork as Copy</button>
+    </div>
+
+    <fuse-artworks-list
+      fxLayout="column"
+      [embedded]="true"
+      [multiselect]="view==='decoration-select'"
+      #artworksList>
+    </fuse-artworks-list>
+  </ng-container>
+
+  <!-- Show create design view -->
+  <ng-container *ngIf="view==='decoration-new'">
+    <div class="p-16 pb-0" fxFlex="none" fxLayout="row" fxLayoutAlign="start center">
+      <button mat-icon-button (click)="showLineItemsAndDecorationList()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span class="mat-title m-0">Create Artwork</span>
+    </div>
+
+    <app-artwork-details
+      [embedded]="true"
+      [embeddedData]="decoData"
+      (afterCreate)="toModifyDesign($event)">
+    </app-artwork-details>
+  </ng-container>
+
+  <!-- Show modify design view -->
+  <ng-container *ngIf="view==='decoration-edit'">
+    <div class="p-16 pb-8">
+      <button mat-icon-button (click)="showLineItemsAndDecorationList()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <button mat-raised-button
+            color="accent"
+            (click)="selectModifiedDesign()"
+            >Add to line item</button>
+    </div>
+
+    <app-artwork-details
+      class="h-100-p"
+      [embedded]="true"
+      [embeddedData]="decoData">
+    </app-artwork-details>
+  </ng-container>
+
+  <!-- Show Product details -->
+  <app-product-detail-form
+    [product]="selectedDetails"
+    [embedded]="true"
+    (save)="saveProductDetails($event)"
+    (cancel)="showView('lineitems')"
+    *ngIf="view==='product-details'"
+  ></app-product-detail-form>
+
+  <!-- Design Variations View -->
+  <ng-container *ngIf="view==='decoration-variations' || view==='decoration-variations-edit'">
+    <div class="p-16 pb-8">
+      <button mat-icon-button (click)="showLineItemsAndDecorationList()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <button mat-raised-button
+              color="accent"
+              (click)="linkVariationToLineItem()"
+              *ngIf="view==='decoration-variations'"
+      >Add to line item</button>
+
+      <button mat-raised-button
+              color="accent"
+              (click)="changeDesignVariation()"
+              *ngIf="view==='decoration-variations-edit'"
+      >Change</button>
+    </div>
+
+    <app-decoration-variation-select
+      [data]="data"
+      [color]="data.color"
+      [verror]="data.error"
+      [parentFolder]="artworkFolderId"
+      (onSelect)="selectVariation(i, $event)"
+      *ngFor="let data of designsToModify; let i = index"
+    ></app-decoration-variation-select>
+  </ng-container>
+
+</div>

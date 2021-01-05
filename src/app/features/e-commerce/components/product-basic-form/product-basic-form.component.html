@@ -1,0 +1,508 @@
+<div class="tab-content p-24" [formGroup]="form" fusePerfectScrollbar>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <div fxLayout="column"
+             fxFlex
+             class="mr-20">
+
+            <mat-form-field  *ngIf="visibleField('productName', fields)"  fxFlex class="mr-20">
+                <input matInput
+                       name="productName"
+                       formControlName="productName"
+                       placeholder="{{fieldLabel('productName', fields)}}"
+                       required
+                       >
+            	<app-error *ngIf="requiredField('productName',fields)" [group]="form" field="productName" label="{{fieldLabel('productName', fields)}}"></app-error>
+			</mat-form-field>
+            <mat-form-field  *ngIf="visibleField('taxJarObj', fields)" class="mt-20 ss" >
+                <input type="text" placeholder="{{fieldLabel('taxJarObj', fields)}}" matInput name="taxJarObj" formControlName="taxJarObj" [matAutocomplete]="taxAuto" [required]="requiredField('taxJarObj',fields)">
+                <mat-autocomplete #taxAuto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let category of taxJarCatList | async" [value]="category">
+                        {{category.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            	<app-error *ngIf="requiredField('taxJarObj',fields)" [group]="form" field="taxJarObj" label="{{fieldLabel('taxJarObj', fields)}}"></app-error>
+			</mat-form-field>
+
+            <mat-form-field  *ngIf="visibleField('poType', fields)"  class="w-100-p">
+                <mat-select formControlName="poType"
+                            placeholder="{{fieldLabel('poType', fields)}}" [required]="requiredField('poType',fields)">
+                    <mat-option  [value]="poType.name" *ngFor="let poType of poTypeList">
+                        {{ poType.name }}
+                    </mat-option>
+                </mat-select>
+            	<app-error *ngIf="requiredField('poType',fields)" [group]="form" field="poType" label="{{fieldLabel('poType', fields)}}"></app-error>
+			</mat-form-field>
+
+            <mat-form-field  *ngIf="visibleField('division', fields)"  class="w-100-p">
+                <mat-select formControlName="division"
+                            placeholder="{{fieldLabel('division', fields)}}" [required]="requiredField('division',fields)">
+                    <mat-option [value]="division.name" *ngFor="let division of divisionList">
+                        {{ division.name }}
+                    </mat-option>
+                </mat-select>
+            	<app-error *ngIf="requiredField('division',fields)" [group]="form" field="division" label="{{fieldLabel('division', fields)}}"></app-error>
+			</mat-form-field>
+
+
+        </div>
+
+        <div fxLayout="column"
+             fxFlex>
+
+            <!--mat-checkbox
+                class="mt-20 w-100-p"
+                formControlName="taxEnabled"
+                *ngIf="showTax"
+            >Tax</mat-checkbox-->
+            <mat-checkbox
+                class="w-100-p"
+                formControlName="hideOnOrder"
+                *ngIf="visibleField('hideOnOrder', fields)"
+            >{{fieldLabel('hideOnOrder', fields)}}</mat-checkbox>
+
+            <mat-form-field  class="w-100-p" *ngIf="productTypeList.length > 1 && visibleField('productType', fields)">
+                <mat-select fxFlex="none"
+                            class="w-100-p"
+                            formControlName="productType"
+                            placeholder="{{fieldLabel('productType', fields)}}" [required]="requiredField('productType',fields)">
+                    <mat-option [value]="productType.id" *ngFor="let productType of productTypeList">
+                        {{ productType.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-hint class="prd-type-hint">Changing type may wipeout any configuration saved for the product!</mat-hint>
+            	<app-error *ngIf="requiredField('productType',fields)" [group]="form" field="productType" label="{{fieldLabel('productType', fields)}}"></app-error>
+			</mat-form-field>
+
+            <mat-form-field  *ngIf="visibleField('source', fields)"  class="w-100-p mt-20 ff">
+                <mat-select fxFlex="none"
+                            class="w-100-p"
+                            formControlName="source"
+                            [(ngModel)]="product.source"
+                            placeholder="{{fieldLabel('source', fields)}}" required>
+                    <mat-option *ngFor="let s of sourceList" [value]="s.id">
+                        {{ s.name }}
+                    </mat-option>
+                </mat-select>
+            	<app-error *ngIf="requiredField('source',fields)" [group]="form" field="source" label="{{fieldLabel('source', fields)}}"></app-error>
+			</mat-form-field>
+
+            <mat-form-field  *ngIf="visibleField('assignedUserName', fields)"  class="w-100-p">
+                <input type="hidden" formControlName="assignedUserId"/>
+                <input type="text"
+                       formControlName="assignedUserName"
+                       minlength="3"
+                       matInput
+                       placeholder="{{fieldLabel('assignedUserName', fields)}}"
+                       [matAutocomplete]="autoAssigned" [required]="requiredField('assignedUserName',fields)">
+                <mat-autocomplete #autoAssigned="matAutocomplete"
+                                  [displayWith]="displayName"
+                                  (optionSelected)="selectAssignee($event)">
+                    <mat-option *ngFor="let salesRep of filteredUsers" [value]="salesRep">
+                        {{ salesRep.name | capitalizeFirst }}
+                    </mat-option>
+                </mat-autocomplete>
+
+            	<app-error *ngIf="requiredField('assignedUserName',fields)" [group]="form" field="assignedUserName" label="{{fieldLabel('assignedUserName', fields)}}"></app-error>
+            </mat-form-field>
+            
+            <div fxLayout="row"
+             fxFlex  *ngIf="visibleField('expirationDate', fields)">
+             <mat-checkbox
+                      class="mt-20 mr-20"
+                      (change)="onChangeCheckbox($event)"
+                      [checked]="showExpirationInput"
+                     >
+                      Expirable?</mat-checkbox>
+             <!-- <mat-form-field  class="w-100-p"> -->
+                 
+            <mat-form-field *ngIf="showExpirationInput"  class="w-100-p">
+                
+                <input matInput formControlName="expirationDate" [matDatepicker]="pickerExpirationDate"
+ 						placeholder="{{fieldLabel('expirationDate', fields)}}">
+  					<app-error *ngIf="requiredField('expirationDate',fields)" [group]="form" field="expirationDate" label="{{fieldLabel('expirationDate', fields)}}"></app-error>
+                <mat-datepicker-toggle matSuffix [for]="pickerExpirationDate">
+                </mat-datepicker-toggle>
+                <mat-datepicker #pickerExpirationDate></mat-datepicker>
+                <app-error *ngIf="requiredField('expirationDate',fields)" [group]="form" field="expirationDate" label="{{fieldLabel('expirationDate', fields)}}"></app-error>
+            </mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+
+        <mat-form-field  *ngIf="visibleField('anteraId', fields)"  fxFlex class="mr-20">
+            <input matInput
+                   name="id"
+                   formControlName="anteraID"
+                   placeholder="{{fieldLabel('anteraId', fields)}}"
+                   [required]="requiredField('anteraId',fields)"
+                   >
+        	<app-error *ngIf="requiredField('anteraId',fields)" [group]="form" field="anteraID" label="{{fieldLabel('anteraId', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('inhouseId', fields)"  fxFlex>
+            <input matInput
+                   name="inhouseId"
+                   formControlName="inhouseId"
+                   placeholder="{{fieldLabel('inhouseId', fields)}}"
+                   required
+                   >
+        	<app-error *ngIf="requiredField('inhouseId',fields)" [group]="form" field="inhouseId" label="{{fieldLabel('inhouseId', fields)}}"></app-error>
+			</mat-form-field>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+
+        <mat-form-field  *ngIf="visibleField('productId', fields)"  fxFlex class="mr-20">
+            <input matInput
+                   name="productId"
+                   formControlName="productId"
+                   placeholder="{{fieldLabel('productId', fields)}}"
+                   required
+                   >
+        	<app-error *ngIf="requiredField('productId',fields)" [group]="form" field="productId" label="{{fieldLabel('productId', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('itemCode', fields)"  fxFlex>
+            <input matInput
+                   name="itemCode"
+                   formControlName="itemCode"
+                   placeholder="{{fieldLabel('itemCode', fields)}}"
+                   required
+                   >
+        	<app-error *ngIf="requiredField('itemCode',fields)" [group]="form" field="itemCode" label="{{fieldLabel('itemCode', fields)}}"></app-error>
+			</mat-form-field>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+
+        <mat-form-field  *ngIf="visibleField('description', fields)"  fxFlex class="mr-20">
+            <textarea matInput
+                    name="description"
+                    formControlName="description"
+                    placeholder="{{fieldLabel('description', fields)}}"
+                    required
+                    rows="5">
+            </textarea>
+        	<app-error *ngIf="requiredField('description',fields)" [group]="form" field="description" label="{{fieldLabel('description', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('vendorName', fields)"  fxFlex>
+            <input type="hidden" formControlName="vendorId" required/>
+            <input matInput
+                   name="vendorName"
+                   formControlName="vendorName"
+                   placeholder="{{fieldLabel('vendorName', fields)}}"
+                   required
+                   [matAutocomplete]="autoVendor"
+                   required
+                   >
+            <mat-autocomplete #autoVendor="matAutocomplete"
+                            [displayWith]="displayName"
+                            (optionSelected)="selectVendor($event)">
+                <mat-option *ngFor="let vendor of filteredVendors" [value]="vendor">
+                    {{ vendor.name | capitalizeFirst }}
+                </mat-option>
+            </mat-autocomplete>
+        	<app-error *ngIf="requiredField('Supplier',fields)" [group]="form" field="Supplier" label="{{fieldLabel('Supplier', fields)}}"></app-error>
+			</mat-form-field>
+
+    </div>
+    <div fxLayout="row" fxLayout.xs="column">
+            <mat-form-field  *ngIf="visibleField('rank', fields)"  fxFlex class="mr-20">
+                <input matInput
+                       name="rank"
+                       formControlName="rank"
+                       placeholder="{{fieldLabel('rank', fields)}}"
+                       [required]="requiredField('rank',fields)"
+                       >
+            	<app-error *ngIf="requiredField('rank',fields)" [group]="form" field="rank" label="{{fieldLabel('rank', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+
+        <mat-form-field  *ngIf="visibleField('qbExpenseAccount', fields)"  fxFlex class="mr-20">
+            <mat-select formControlName="qbExpenseAccount"
+                        [(ngModel)]="product.qbExpenseAccount"
+                        placeholder="{{fieldLabel('qbExpenseAccount', fields)}}" [required]="requiredField('qbExpenseAccount',fields)">
+                <mat-option [value]="e.id" *ngFor="let e of expenseAccounts">
+                    {{ e.name }}
+                </mat-option>
+            </mat-select>
+        	<app-error *ngIf="requiredField('qbExpenseAccount',fields)" [group]="form" field="qbExpenseAccount" label="{{fieldLabel('qbExpenseAccount', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('qbIncomeAccount', fields)"  fxFlex>
+            <mat-select formControlName="qbIncomeAccount"
+                        [(ngModel)]="product.qbIncomeAccount"
+                        placeholder="{{fieldLabel('qbIncomeAccount', fields)}}" [required]="requiredField('qbIncomeAccount',fields)">
+                <mat-option [value]="i.id" *ngFor="let i of incomeAccounts">
+                    {{ i.name }}
+                </mat-option>
+            </mat-select>
+        	<app-error *ngIf="requiredField('qbIncomeAccount',fields)" [group]="form" field="qbIncomeAccount" label="{{fieldLabel('qbIncomeAccount', fields)}}"></app-error>
+			</mat-form-field>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('qbAssetAccount', fields)"  fxFlex class="mr-20">
+            <mat-select formControlName="qbAssetAccount"
+                        [(ngModel)]="product.qbAssetAccount"
+                        placeholder="{{fieldLabel('qbAssetAccount', fields)}}" [required]="requiredField('qbAssetAccount',fields)">
+                <mat-option [value]="ass.id" *ngFor="let ass of assetAccounts">
+                    {{ ass.name }}
+                </mat-option>
+            </mat-select>
+        	<app-error *ngIf="requiredField('qbAssetAccount',fields)" [group]="form" field="qbAssetAccount" label="{{fieldLabel('qbAssetAccount', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('SystemEventArray', fields)"  fxFlex="100%" fxFlex.gt-xs="50%">
+          <mat-select placeholder="{{fieldLabel('SystemEventArray', fields)}}" formControlName="SystemEventArray" [compareWith]="compareSystemEvent" multiple [required]="requiredField('SystemEventArray',fields)">
+              <mat-option *ngFor="let se of systemEvents" [value]="se">
+                {{se.name}}
+              </mat-option>
+          </mat-select>
+          <mat-hint>The product will be added to order which triggers the event!</mat-hint>
+        	<app-error *ngIf="requiredField('SystemEventArray',fields)" [group]="form" field="SystemEventArray" label="{{fieldLabel('SystemEventArray', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('calculatorType', fields)"  fxFlex class="mr-20">
+            <mat-select formControlName="calculatorType"
+                        [(ngModel)]="product.calculatorType"
+                        placeholder="{{fieldLabel('calculatorType', fields)}}" [required]="requiredField('calculatorType',fields)">
+                <mat-option [value]="t.id" *ngFor="let t of calculatorTypes">
+                    {{ t.name }}
+                </mat-option>
+            </mat-select>
+        	<app-error *ngIf="requiredField('calculatorType',fields)" [group]="form" field="calculatorType" label="{{fieldLabel('calculatorType', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <!--div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field   fxFlex>
+            <mat-chip-list matPrefix name="LocationArray" formControlName="LocationArray" #locationList>
+                <mat-chip
+                    *ngFor="let pLocation of product.LocationArray.Location"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="product.removeLocation(pLocation)">
+                    {{pLocation.locationName}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+
+            <input matInput
+                #locationInput
+                [placeholder]="requiredField('LocationArray',fields) ? fieldLabel('LocationArray', fields)+' *' : fieldLabel('LocationArray', fields)"
+                [matAutocomplete]="autoLocation"
+                [matChipInputFor]="locationList"
+            />
+            <mat-autocomplete #autoLocation="matAutocomplete" (optionSelected)="locationSelected($event)">
+                <mat-option *ngFor="let pLocation of filteredLocations | async" [value]="pLocation">
+                {{ pLocation.locationName }}
+                </mat-option>
+            </mat-autocomplete-->
+        	<!--app-error *ngIf="requiredField('LocationArray',fields)" [group]="form" field="LocationArray" label="{{fieldLabel('LocationArray', fields)}}"></app-error-->
+			<!--/mat-form-field>
+    </div-->
+
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('production', fields)"  fxFlex>
+            <input matInput
+                   formControlName="production"
+                   placeholder="{{fieldLabel('production', fields)}}"
+                   [required]="requiredField('production',fields)"
+                   >
+        	<app-error *ngIf="requiredField('production',fields)" [group]="form" field="production" label="{{fieldLabel('production', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLaylout="row" fxLayout.xs="column">
+        <mat-form-field   class="w-100-p" floatPlaceholder="never">
+            <mat-chip-list matPrefix name="ProductCategoryArray" formControlName="ProductCategoryArray" #categoryList>
+                <mat-chip
+                    *ngFor="let pCategory of product.ProductCategoryArray"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="product.removeCategory(pCategory)">
+                    {{pCategory.category}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+
+            <input matInput
+                #categoryInput
+                [placeholder]="requiredField('ProductCategoryArray',fields) ? fieldLabel('ProductCategoryArray', fields)+' *' : fieldLabel('ProductCategoryArray', fields)"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="categoryList"
+            />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="categorySelected($event)">
+                <mat-option *ngFor="let pCategory of filteredCategories | async" [value]="pCategory.category">
+                {{ pCategory.category }}
+                </mat-option>
+            </mat-autocomplete>
+        	<!--app-error *ngIf="requiredField('ProductCategoryArray',fields)" [group]="form" field="ProductCategoryArray" label="{{fieldLabel('ProductCategoryArray', fields)}}"></app-error-->
+			</mat-form-field>
+    </div>
+
+    <div class="mb-24" fxLayout="row" fxLayout.xs="column" *ngIf="false">
+        <mat-form-field  class="w-100-p" floatPlaceholder="never">
+            <mat-chip-list matPrefix name="StoreArray" formControlName="StoreArray" #storeList>
+                <mat-chip
+                    *ngFor="let store of product.StoreArray"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="product.removeStore(store)">
+                    {{store.store}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+            </mat-chip-list>
+
+            <input matInput
+                #storeInput
+                [placeholder]="requiredField('StoreArray',fields) ? fieldLabel('StoreArray', fields)+' *' : fieldLabel('StoreArray', fields)"
+                [matAutocomplete]="auto2"
+                [matChipInputFor]="storeList"
+                [required]="requiredField('StoreArray',fields)"
+            />
+            <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="storeSelected($event)">
+                <mat-option *ngFor="let store of filteredStores" [value]="store">
+                {{ store.store }}
+                </mat-option>
+            </mat-autocomplete>
+        	<app-error *ngIf="requiredField('StoreArray',fields)" [group]="form" field="StoreArray" label="{{fieldLabel('StoreArray', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  fxFlex class="mr-20" *ngIf="uomSetList?.length && visibleField('uomSetRef', fields)">
+            <mat-select formControlName="uomSetRef"
+                        [(ngModel)]="product.uomSetRef"
+                        placeholder="{{fieldLabel('uomSetRef', fields)}}" [required]="requiredField('uomSetRef',fields)">
+                <mat-option [value]="0">
+                </mat-option>
+                <mat-option [value]="uom.id" *ngFor="let uom of uomSetList">
+                    {{ uom.name }}
+                </mat-option>
+            </mat-select>
+        	<app-error *ngIf="requiredField('uomSetRef',fields)" [group]="form" field="uomSetRef" label="{{fieldLabel('uomSetRef', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('specialPrice', fields)"  fxFlex>
+            <input matInput
+                   type="number"
+                   formControlName="specialPrice"
+                   placeholder="{{fieldLabel('specialPrice', fields)}}"
+                   [required]="requiredField('specialPrice',fields)"
+                   >
+        	<app-error *ngIf="requiredField('specialPrice',fields)" [group]="form" field="specialPrice" label="{{fieldLabel('specialPrice', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('rebate', fields)"  fxFlex
+                        class="mr-20 w-100-p">
+            <input matInput
+                   type="number"
+                   formControlName="rebate"
+                   placeholder="{{fieldLabel('rebate', fields)}}"
+                   [required]="requiredField('rebate',fields)"
+                   >
+        	<app-error *ngIf="requiredField('rebate',fields)" [group]="form" field="rebate" label="{{fieldLabel('rebate', fields)}}"></app-error>
+			</mat-form-field>
+
+        <mat-form-field  *ngIf="visibleField('coop', fields)"  fxFlex
+                        class="w-100-p">
+            <input matInput
+                   type="number"
+                   formControlName="coop"
+                   placeholder="{{fieldLabel('coop', fields)}}"
+                   [required]="requiredField('coop',fields)"
+                   >
+        	<app-error *ngIf="requiredField('coop',fields)" [group]="form" field="coop" label="{{fieldLabel('coop', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('package', fields)"  fxFlex>
+            <input matInput
+                   formControlName="package"
+                   placeholder="{{fieldLabel('package', fields)}}"
+                   [required]="requiredField('package',fields)"
+                   >
+        	<app-error *ngIf="requiredField('package',fields)" [group]="form" field="package" label="{{fieldLabel('package', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('weight', fields)"  fxFlex>
+            <input matInput
+                formControlName="weight"
+                placeholder="{{fieldLabel('weight', fields)}}"
+                [required]="requiredField('weight',fields)"
+                >
+        	<app-error *ngIf="requiredField('weight',fields)" [group]="form" field="weight" label="{{fieldLabel('weight', fields)}}"></app-error>
+			</mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('tariffCode', fields)"  fxFlex class="mr-20 w-100-p">
+            <input matInput
+                formControlName="tariffCode"
+                placeholder="{{fieldLabel('tariffCode', fields)}}"
+                [required]="requiredField('tariffCode',fields)"
+                >
+        	<app-error *ngIf="requiredField('tariffCode',fields)" [group]="form" field="tariffCode" label="{{fieldLabel('tariffCode', fields)}}"></app-error>
+            </mat-form-field>
+        <mat-form-field  *ngIf="visibleField('msrp', fields)"  fxFlex class="w-100-p">
+            <input matInput
+                type="number"
+                formControlName="msrp"
+                placeholder="{{fieldLabel('msrp', fields)}}"
+                [required]="requiredField('msrp',fields)"
+                >
+            <app-error *ngIf="requiredField('msrp',fields)" [group]="form" field="msrp" label="{{fieldLabel('msrp', fields)}}"></app-error>
+        </mat-form-field>
+    </div>
+     <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('prodStatus', fields)"  fxFlex class="mr-20 w-100-p">
+            <mat-select formControlName="prodStatus"
+                placeholder="{{fieldLabel('prodStatus', fields)}}"
+                [required]="requiredField('prodStatus',fields)"
+                >
+                <mat-option [value]="status.value" *ngFor="let status of prodStatus">
+                    {{ status.label }}</mat-option>
+            </mat-select>
+        	<app-error *ngIf="requiredField('prodStatus',fields)" [group]="form" field="prodStatus" label="{{fieldLabel('prodStatus', fields)}}"></app-error>
+            </mat-form-field>
+        <mat-form-field  *ngIf="visibleField('prodKind', fields)"  fxFlex class="w-100-p">
+            <mat-select formControlName="prodKind"
+                placeholder="{{fieldLabel('prodKind', fields)}}"
+                [required]="requiredField('prodKind',fields)"
+                >
+                <mat-option [value]="kind.value" *ngFor="let kind of prodKind">
+                    {{ kind.label }}</mat-option>
+            </mat-select>
+            <app-error *ngIf="requiredField('prodKind',fields)" [group]="form" field="prodKind" label="{{fieldLabel('prodKind', fields)}}"></app-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row" fxLayout.xs="column">
+        <mat-form-field  *ngIf="visibleField('countryOrigin', fields)"  fxFlex="100%" fxFlex.gt-xs="50%">
+            <mat-select placeholder="{{fieldLabel('countryOrigin', fields)}}" formControlName="countryOrigin" [required]="requiredField('countryOrigin',fields)">
+                <mat-option *ngFor="let country of countryList" [value]="country.CountryName">
+                  {{country.CountryName}}
+                </mat-option>
+            </mat-select>
+              <app-error *ngIf="requiredField('countryOrigin',fields)" [group]="form" field="countryOrigin" label="{{fieldLabel('countryOrigin', fields)}}"></app-error>
+              </mat-form-field>
+    </div>
+
+</div>

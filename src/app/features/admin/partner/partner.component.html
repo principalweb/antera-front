@@ -1,0 +1,29 @@
+<div fxLayout="column" fxFlex>
+    <div class="p-16 py-8">
+        <div class="toolbar">
+            <div fxFlex="row" fxLayoutAlign="start center">
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8" (click)="createData()"
+                        fxHide fxShow.gt-md [disabled]="'true'">
+                    <mat-icon>add</mat-icon> Partner
+                </button>
+    
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8" (click)="clearFilters()"
+                        fxHide fxShow.gt-md>
+                    <mat-icon>layers_clear</mat-icon> Clear Filters
+                </button>
+    
+                <button mat-raised-button color="warn"
+                        class="text-capitalize mr-8" (click)="deleteSelectedData()"
+                        fxHide fxShow.gt-md>
+                    <mat-icon>delete</mat-icon> Delete
+                </button>
+    
+            </div>
+        </div>
+    </div>
+    <app-partner-list fxLayout="column"></app-partner-list>   
+</div>
+
+

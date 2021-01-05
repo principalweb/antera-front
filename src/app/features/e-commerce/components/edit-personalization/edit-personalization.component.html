@@ -1,0 +1,45 @@
+<form fxLayout="column" [formGroup]="form" (submit)="onClose(true)">
+  <div fxLayout fxLayoutAlign="space-between center" class="mat-accent-bg p-12" fxFlex="none">
+    <h1 class="mat-dialog-title" *ngIf="data.action == 'edit'">Edit Personalizations</h1>
+    <h1 class="mat-dialog-title" *ngIf="data.action == 'new'">Add Personalizations</h1>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-dialog-content fusePerfectScrollbar>
+    <div class="px-24">
+      <mat-form-field>
+        <input matInput type="number" placeholder="Line Number" formControlName="sequance" step="1" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Display Text" formControlName="displayText" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Notes" formControlName="notes" autocomplete="off" required />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Font" formControlName="font" autocomplete="off" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Color" formControlName="color" autocomplete="off" />
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Location" formControlName="location" autocomplete="off" required />
+      </mat-form-field>
+
+    </div>
+    <div class="px-24" fxLayout="row">
+
+    </div>
+
+    <div class="text-left ml-16">
+
+    </div>
+
+  </mat-dialog-content>
+
+  <div class="p-12" fxFlex="none" fxLayout="row" fxLayoutAlign="end center">
+    <button class="mr-8" mat-raised-button color="accent" type="submit">Save</button>
+    <button mat-raised-button color="accent" (click)="onClose()">Close</button>
+  </div>
+</form>

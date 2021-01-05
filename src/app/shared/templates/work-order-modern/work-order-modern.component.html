@@ -1,0 +1,390 @@
+<div id="work-order-modern" class="modern page-layout blank" fxLayout="row" fusePerfectScrollbar>
+
+    <div class="work-order-container">
+
+        <!-- Pick List -->
+        <div class="card-work-order">
+
+            <!-- HEADER -->
+            <div id="header" class="header-work-order" fxLayout="row" fxLayoutAlign="start start">
+
+                <div class="ids" fxLayout="column">
+
+                    <div fxLayout="row" class="seller" fxLayoutAlign="center start">
+                        <img class="logo" [src]="logoUrl">
+                    </div>
+
+                    <div fxLayout="row" class="client" fxLayoutAlign="start center">
+                        <div class="label" fxLayout="row" fxLayoutAlign="end center">
+                            <div>CLIENT</div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="detail">
+                            <div class="title">{{order.shippingCompanyName}}</div>
+                            <div class="title">{{order.shippingCustomerName}}</div>
+                            <div class="address">
+                                {{order.shippingStreet}}
+                            </div>
+                            <div class="address">
+                                {{order.shippingStreet2}}
+                            </div>
+                            <div class="address">
+                                {{order.shippingCity}} {{order.shippingState}} {{order.shipPostalcode}}
+                            </div>
+                            <div *ngIf="order.shippingEmail" class="email">
+                                {{order.shippingEmail}}
+                            </div>
+                            <div *ngIf="order.shipCountry" class="address">
+                                {{order.shipCountry}}
+                            </div>
+                            <div *ngIf="order.shippingPhone" class="address">
+                                {{order.shippingPhone}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start start">
+                    <div class="order-title">
+                        <span>Work Order</span>
+                    </div>
+                    <table class="summary ml-56">
+                        <tr>
+                            <td class="label">Order</td>
+                            <td class="value code-title">#{{order.orderNo}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[4].value && order.dueDate != '' && order.dueDate != '0000-00-00'">
+                            <td class="label">{{fieldLabel('dueDate', fields)}}</td>
+                            <td class="value">{{order.dueDate}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[1].value && order.orderDate != '' && order.orderDate != '0000-00-00'">
+                            <td class="label">{{fieldLabel('orderDate', fields)}}</td>
+                            <td class="value">{{order.orderDate}}</td>
+                        </tr>
+
+                        <tr
+                            *ngIf="docOptions[2].value && order.inHandDateBy != '' && order.inHandDateBy != '0000-00-00'">
+                            <td class="label">{{fieldLabel('inHandDateBy', fields)}}</td>
+                            <td class="value">{{order.inHandDateBy}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[3].value && order.shipVia !=''">
+                            <td class="label">{{fieldLabel('shipVia', fields)}}</td>
+                            <td class="value"><span [innerHtml]="order.shipVia"></span></td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[5].value && order.shipDate != '' && order.shipDate != '0000-00-00'">
+                            <td class="label">{{fieldLabel('shipDate', fields)}}</td>
+                            <td class="value">{{order.shipDate}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[6].value && order.customerPo != ''">
+                            <td class="label">{{fieldLabel('customerPo', fields)}}</td>
+                            <td class="value">#{{order.customerPo}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[8].value && order.salesPerson != ''">
+                            <td class="label">{{fieldLabel('salesPerson', fields)}}</td>
+                            <td class="value">{{order.salesPerson}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[9].value && order.salesPersonPhone != ''">
+                            <td class="label">{{fieldLabel('salesPersonPhone', fields)}}</td>
+                            <td class="value">{{order.salesPersonPhone}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[10].value && order.salesPersonEmail != ''">
+                            <td class="label">{{fieldLabel('salesPersonEmail', fields)}}</td>
+                            <td class="value">{{order.salesPersonEmail}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[11].value && order.csrName && order.csrName != ''">
+                            <td class="label">{{fieldLabel('csrName', fields)}}</td>
+                            <td class="value">{{order.csrName}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[12].value && order.csrPhone && order.csrPhone != ''">
+                            <td class="label">{{fieldLabel('csrPhone', fields)}}</td>
+                            <td class="value">{{order.csrPhone}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[13].value && order.csrEmail && order.csrEmail != ''">
+                            <td class="label">{{fieldLabel('csrEmail', fields)}}</td>
+                            <td class="value">{{order.csrEmail}}</td>
+                        </tr>
+
+                        <tr
+                            *ngIf="docOptions[26]?.value && order.alternateAccountNumber && order.alternateAccountNumber != ''">
+                            <td class="label">{{fieldLabel('alternateAccountNumber', accountFields)}}</td>
+                            <td class="value">{{order.alternateAccountNumber}}</td>
+                        </tr>
+
+                        <tr *ngIf="docOptions[27]?.value && order.attentionTo && order.attentionTo != ''">
+                            <td class="label">{{fieldLabel('attentionTo', fields)}}</td>
+                            <td class="value">{{order.attentionTo}}</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+
+            <div class="content-work-order">
+                <table id="table" class="simple work-order-table">
+                    <thead>
+                        <tr>
+                            <th>Item #</th>
+                            <th>{{docLabels.itemName || 'Name'}}</th>
+                            <th>{{docLabels.color}}</th>
+                            <th>{{docLabels.size}}</th>
+                            <th colspan="2">{{docLabels.qty}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let product of products">
+                            <tr>
+                                <td>
+                                    {{product.itemNo}}
+                                </td>
+                                <td>
+                                    {{product.productName}}
+                                </td>
+                                <td>
+                                    <span *ngIf="product?.lineItem?.showAttribColor == '1'">
+                                        {{product.color}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span *ngIf="product?.lineItem?.showAttribSize == '1'">
+                                        {{product.size}}
+                                    </span>
+                                </td>
+                                <td class="quantity-width">
+                                    {{product.quantity}}
+                                </td>
+                                <td class="quantity-width">
+                                    <input class="quantity-input" type="number" placeholder=""
+                                        pattern="[0-9]+([\.,][0-9]+)*">
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div id="table-work-order" fxLayout="row" fxLayoutAlign="space-between stretch" class="mt-48">
+                    <div style="width: 100%;" fxLayout="column" fxLayoutAlign="start stretch">
+                        <table class="mb-24 simple deco-short-info-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">DESIGN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Design #</td>
+                                    <td>Color</td>
+                                    <td>Location</td>
+                                </tr>
+                                <ng-container *ngFor="let decoVendor of decoVendors">
+                                    <tr>
+                                        <td>{{decoVendor.designNo}}</td>
+                                        <td>
+                                            <div *ngFor="let pms of decoVendor?.threadPms" class="text-left">
+                                                {{ pms.No }} {{ pms.Color }} {{ pms.ThreadPMS }} {{ pms.Description }}
+                                            </div>
+                                        </td>
+                                        <td>{{decoVendor.decoLocation}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        <table class="simple deco-info-table">
+                            <tr>
+                                <td rowspan="2" width="60%">
+                                    <div fxLayout="column" fxLayoutAlign="start start">
+                                        <span>Description</span>
+                                        <ng-container *ngFor="let decoVendor of decoVendors">
+                                            <div class="deco-description"
+                                                [innerHTML]="decoVendor.decoDescription | safeHtml ">
+                                            </div>
+                                            <br>
+                                        </ng-container>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div fxLayout="column">
+                                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                                            <span class="w-160 mr-8 deco-info-paragraph">STITCH COUNT</span>
+                                            <input class="data-input" type="number" placeholder="">
+                                        </div>
+                                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                                            <span class="w-160 mr-8 deco-info-paragraph"># OF SCREENS</span>
+                                            <input class="data-input" type="number" placeholder="">
+                                        </div>
+                                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                                            <span class="w-160 mr-8 deco-info-paragraph"># OF RE-SET CHARGES</span>
+                                            <input class="data-input" type="number" placeholder="">
+                                        </div>
+                                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                                            <span class="w-160 mr-8 deco-info-paragraph"># OF COLOR CHANGES</span>
+                                            <input class="data-input" type="number" placeholder="">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div fxLayout="column">
+                                        <div fxLayout="row" fxLayoutAlign="start start">
+                                            <mat-icon class="accent-text mr-8">check_box_outline_blank</mat-icon>
+                                            <div class="h5 padding">LOGGED ON SCHEDULE</div>
+                                        </div>
+                                        <div fxLayout="row" fxLayoutAlign="start start">
+                                            <mat-icon class="accent-text mr-8">check_box_outline_blank</mat-icon>
+                                            <div class="h5 padding mr-8">PROOF READ</div>
+                                            <input class="data-input" type="number" placeholder="">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div *ngIf="decoVendors && decoVendors.length <= 4 " class="ml-24 decoration-one-block"
+                        fxLayout="column" fxLayoutAlign="center center">
+                        <div *ngFor="let decoVendor of decoVendors; let i=index;" class="image">
+                            <img class="decoration-image" [src]="decoVendor.image | urlFix"
+                                [default]="'assets/images/ecommerce/product-image-placeholder.png'" />
+                            <div class="h5 w-150">{{decoVendor.decoLocation}}</div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="decoVendors && decoVendors.length > 4 " class="ml-24 decoration-two-blocks"
+                        fxLayout="column" fxLayoutAlign="center center">
+                        <div class="two-columns">
+                            <div *ngFor="let decoVendor of decoVendors; let i=index;" class="image">
+                                <img class="decoration-image" [src]="decoVendor.image | urlFix"
+                                    [default]="'assets/images/ecommerce/product-image-placeholder.png'" />
+                                <div class="h5">{{decoVendor.decoLocation}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="table-footer" class="simple work-order-table-footer mt-32 mb-48">
+                    <tr>
+                        <td rowspan="4">SHIP TO:</td>
+                        <td>TERMS</td>
+                        <td>REQ SHIP</td>
+                        <td>DROP DEAD</td>
+                    </tr>
+                    <tr>
+                        <td>SHIPPING METHOD:</td>
+                        <td>DATE:</td>
+                        <td>DATE:</td>
+                    </tr>
+                    <tr>
+                        <td>W/C NOTIFIED</td>
+                        <td rowspan="2">DATE COMPLETED:</td>
+                        <td rowspan="2">JOB RUN BY</td>
+                    </tr>
+                    <tr>
+                        <td>NAME:</td>
+                    </tr>
+                </table>
+
+                <div class="pb-16" fxLayout="row" fxLayoutAlign="start center"
+                    *ngIf="docOptions[28]?.value && shipInfoList.length > 0">
+                    <mat-icon class="m-0 mr-16">local_shipping</mat-icon>
+                    <div class="h2 secondary-text">Shipping Details</div>
+                </div>
+                <table id="table-summary-tracking" *ngIf="docOptions[28]?.value && shipInfoList.length > 0">
+                    <thead>
+                        <tr>
+                            <th class="tracking-code">Tracking Code</th>
+                            <th class="tracking-code">Shipping Method</th>
+                            <th class="tracking-code">Ship Date</th>
+                            <th class="tracking-code">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let shipping of shipInfoList; let i=index;">
+                            <tr>
+                                <td class="tracking-code" valign="top">
+                                    {{shipping.trackNumber}}
+                                </td>
+                                <td class="tracking-code" valign="top">
+                                    {{shipping.shippingMethod}}
+                                </td>
+                                <td class="tracking-code" valign="top">
+                                    {{ shipping.shipDate }}
+                                </td>
+                                <td class="tracking-code" valign="top">
+                                    {{ shipping.note }}
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <div id="footer" class="footer-work-order mt-24">
+                <div *ngIf="order.orderNote != ''" class="note mt-16">Notes:</div>
+                <div *ngIf="order.orderNote != ''" fxLayout="row" fxLayoutAlign="start start">
+                    <div class="small-note">{{order.orderNote}}</div>
+                </div>
+                <div *ngIf="docOptions[29]?.value" fxLayout="row" fxLayoutAlign="start start">
+                    <div class="footer-note pre">{{ displaydocDefaultOptions(docOptions[29]?.name)}}</div>
+                </div>
+            </div>
+
+            <!--
+
+            Use the following elements to add breaks to your pages. This will make sure that the section in between
+            these elements will be printed on a new page. The following two elements must be used before and after the
+            page content that you want to show as a new page. So, you have to wrap your content with them.
+
+            Elements:
+            ---------
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+            <!--
+
+            Example:
+            --------
+
+            Initial page content!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the second page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            This is the third page!
+
+            <div class="page-break-after"></div>
+            <div class="page-break-before"></div>
+
+            -->
+
+        </div>
+        <!-- / ORDER -->
+
+    </div>
+
+</div>
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

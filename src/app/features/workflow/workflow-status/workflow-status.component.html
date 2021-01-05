@@ -1,0 +1,150 @@
+<mat-table #table
+           matSort (matSortChange)="sortChange($event)"
+           [dataSource]="tableData"
+           [formGroup]="filterForm"
+           *ngIf="filterForm">
+    <!-- Checkbox Column -->
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox disableRipple
+                          (change)="selection.reset($event.checked)"
+                          [checked]="selection.checkedAll | async"
+                          [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox disableRipple
+                          [checked]="checkboxes[row.id]"
+                          (change)="selection.toggle(row.id)">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="orderNo">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header style="white-space: nowrap;">Order #</span>
+            <input class="form-control" formControlName="orderNo" (keyup.enter)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row"
+                    [matTooltip]="tooltip(row)"
+                    [matTooltipClass]="'workflow-orderIdentity-tooltip'">
+            <p class="text-truncate">
+                <a [routerLink]="['/e-commerce/orders', row.orderId]">{{ row.orderNo}}</a>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendor">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Vendor</span>
+            <input class="form-control" formControlName="vendor" (keyup.enter)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p matTooltip="{{row.vendor}}" class="text-truncate">
+                <a [routerLink]="['/accounts', row.vendorId]">{{ row.vendor }}</a>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="account">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Account</span>
+            <input class="form-control" formControlName="account" (keyup.enter)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p [tooltip]="getItemDetails(row.linenItems)" class="text-truncate">
+                <a [routerLink]="['/accounts', row.accountId]">{{ row.account }}</a>
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="shipDate">
+        <mat-header-cell class="header-cell shipdate" *cdkHeaderCellDef>
+            <span mat-sort-header style="white-space: nowrap;">Ship Date</span>
+            <input class="form-control"
+                   formControlName="shipDate"
+                   [matDatepicker]="shipDatePicker"
+                   (dateChange)="fetchList()"
+                   (keyup.enter)="fetchList()">
+            <mat-datepicker-toggle matSuffix [for]="shipDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #shipDatePicker></mat-datepicker>
+        </mat-header-cell>
+        <mat-cell class="shipdate" *cdkCellDef="let row">
+            <p class="text-truncate">
+                {{ row.shipDate | date:'MMM dd \'\'\'yy' }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="timeline">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>In-Hand Date</span>
+            <input class="form-control"
+                   formControlName="timeline"
+                   [matDatepicker]="inHandDatePicker"
+                   (dateChange)="fetchList()"
+                   (keyup.enter)="fetchList()">
+            <mat-datepicker-toggle matSuffix [for]="inHandDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #inHandDatePicker></mat-datepicker>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <div class="timeline-progress">
+                <div class="bar accent" [style.width]="row.timelineProgress + '%'"></div>
+                <div class="label">{{ row.timeline }}</div>
+            </div>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container [cdkColumnDef]="col.name" *ngFor="let col of columns">
+       <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>{{ col.label }}</span>
+            <mat-select
+                disableRipple
+                class="form-control"
+                [formControlName]="col.name"
+                (selectionChange)="fetchList()" >
+                <mat-option *ngFor="let ev of groupedEvents[col.id]" [value]="ev.id">
+                    {{ev.name}}
+                </mat-option>
+            </mat-select >
+        </mat-header-cell>
+
+        <mat-cell class="d-col" *cdkCellDef="let row; let i = index">
+            <workflow-process-popover
+                [value]="hasEvent(row, col)"
+                [column]="col.id"
+                [row]="row"
+                [events]="events">
+            </workflow-process-popover>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let workflow; columns: displayedColumns;"
+            class="workflow" [ngClass]="[checkboxes[workflow.id] ? 'highlight': '', mergeProcessedOrders[workflow.orderId] ? 'merge' : '']">
+    </mat-row>
+</mat-table>
+<mat-paginator #paginator fxFlex="none"
+            (page)="paginate($event)"
+            [length]="total"
+            [pageSizeOptions]="[15,25,50,100]"
+            [pageSize]="[100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="merge-loading"
+     *ngIf="mergeLoading">
+	<mat-progress-spinner [color]="mergePColor"
+                        [mode]="mergePMode"
+                        value="100"
+                        diameter="150"
+                        aria-label="Merge Progress">
+	</mat-progress-spinner>
+	<div style="position:relative; top: 0px; left: -150px;color:#FF0000;font-size:48px;font-wheight:bold;"><div style="width:150px;text-align:center;">{{mergeProgress}}%</div></div>
+</div>

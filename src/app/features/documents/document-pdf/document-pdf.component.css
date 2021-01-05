@@ -1,0 +1,15 @@
+:host {
+  width: 100%;
+  background: #525659;
+}
+:host iframe {
+  width: 100%;
+  height: 100%;
+}
+
+:host iframe #outerContainer #mainContainer div.toolbar {
+  display: none !important; /* hide PDF viewer toolbar */
+}
+:host iframe #outerContainer #mainContainer #viewerContainer {
+  top: 0 !important; /* move doc up into empty bar space */
+}

@@ -1,0 +1,263 @@
+<div id="opportunities" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">lightbulb_outline</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Opportunities</span>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+        <mat-sidenav-container class="content-card">
+            <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                         fuseMatSidenavHelper="account-sidenav">
+                <mat-list class="p-0">
+                    <mat-list-item class="mat-accent-bg" matRipple
+                                   (click)="newOpportunity()">
+                        <mat-icon>add</mat-icon>
+                        <span class="ml-8">Opportunity</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>assignment_ind</mat-icon>
+                        <span class="ml-8">Source</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>assignment</mat-icon>
+                        <span class="ml-8">Quote</span>
+                    </mat-list-item>
+                    <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>assignment_turned_in</mat-icon>
+                        <span class="ml-8">Order</span>
+                    </mat-list-item>
+                    <!-- <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>monetization_on</mat-icon>
+                        <span class="ml-8">QuickBooks</span>
+                    </mat-list-item> -->
+                    <!-- <mat-list-item class="mat-accent-bg" matRipple>
+                        <mat-icon>content_copy</mat-icon>
+                        <span class="ml-8">Find Duplicates</span>
+                    </mat-list-item> -->
+                    
+                    <mat-list-item class="mat-warn-bg" matRipple
+                                   (click)="deleteSelectedOpportunities()"
+                                   *checkPermission="['', 'Lead']; requiredPermission 'allowDelete'">
+                        <mat-icon>delete</mat-icon>
+                        <span class="ml-8">Delete</span>
+                    </mat-list-item>
+
+                    <mat-form-field *ngIf="view!=='list'"
+                                    class="mw-200 mt-8 ml-16"
+                                    floatPlaceholder="never">
+                        <mat-select 
+                                    [ngModel]="selectedDue"
+                                    (selectionChange)="changeDue($event)"
+                                    >
+                            <mat-option *ngFor="let due of ['Overdue','Due Tomorrow','Due in 7 Days','Show All']" [value]="due">
+                                {{due}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </mat-list>
+            </mat-sidenav>
+
+            <div class="toolbar">
+                <div fxFlex="row" fxLayoutAlign="start center">
+                    <div fxFlex="row" fxLayoutAlign="start center">
+                        <button mat-icon-button fxHide.gt-md
+                                fuseMatSidenavToggler="account-sidenav">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="newOpportunity()">
+                            <mat-icon>add</mat-icon> Opportunity
+                        </button>
+                        <!-- <ng-container>
+                            <ng-container checkPermissionAction [pAction]="'source'">
+                                
+                                <button mat-raised-button
+                                        color="accent" class="mr-8"
+                                        (click)="newSource()">
+                                <mat-icon>assignment_ind</mat-icon> Source
+                                </button>
+                            </ng-container>
+                        </ng-container> -->
+                        <div *ngIf="!show"><button mat-raised-button
+                                color="accent" class="mr-8"
+                                (click)="newSource()"
+                                [disabled]="selection.selectedCount === 0"
+                                *ngIf="selection.selectedCount < 2">
+                            <mat-icon>assignment_ind</mat-icon> Source
+                        </button></div>
+                        <!-- <button mat-raised-button
+                                color="accent" class="mr-8"
+                                (click)="newSource()"
+                                [disabled]="selection.selectedCount === 0"
+                                *ngIf="selection.selectedCount < 2">
+                            <mat-icon>assignment_ind</mat-icon> Source
+                        </button> -->
+                        <button mat-raised-button
+                                color="accent" class="mr-8"
+                                (click)="newOrder('quote')"
+                                [disabled]="selection.selectedCount === 0"
+                                *ngIf="selection.selectedCount < 2">
+                          <mat-icon>assignment</mat-icon> Quote
+                        </button>
+
+                        <button mat-raised-button
+                                color="accent" class="mr-8"
+                                (click)="newOrder('order')"
+                                [disabled]="selection.selectedCount === 0"
+                                *ngIf="selection.selectedCount < 2">
+                          <mat-icon>assignment_turned_in</mat-icon> Order
+                        </button>
+                        <button mat-raised-button
+                            color="accent" class="mr-8"
+                            (click)="openTagDialog()"
+                            [disabled]="selection.selectedCount === 0"
+                            >
+                            <mat-icon>tag</mat-icon> Add Tags
+                        </button>
+                        <button 
+                                *ngIf="view == 'list'"
+                                mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                (click)="clearFilters()"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>layers_clear</mat-icon> Clear Filters
+                        </button>
+
+                        <!-- <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>monetization_on</mat-icon> QuickBooks
+                        </button> -->
+
+                        <!-- <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>description</mat-icon> Form Letter
+                        </button> -->
+
+                        <!-- <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md>
+                            <mat-icon>content_copy</mat-icon> Find Duplicates
+                        </button> -->
+
+                        <button mat-raised-button color="warn"
+                        [disabled]="selection.selectedCount === 0"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="deleteSelectedOpportunities()"
+                                *checkPermission="['', 'Opportunity']; requiredPermission 'allowDelete'"
+                            >
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+
+                        <mat-form-field *ngIf="view!=='list'"
+                                        class="mw-200 mt-8 ml-16"
+                                        floatPlaceholder="never"
+                                        data-role="selectDueDateMenu">
+                            <mat-select 
+                                        [ngModel]="selectedDue"
+                                        (selectionChange)="changeDue($event)"
+                                        >
+                                <mat-option *ngFor="let due of ['Past Close Date','To be Closed in 7 Days','To be Closed in 30 days','Show All']" [value]="due">
+                                    {{due}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="mw-200 ml-16 mt-8"
+                                        floatLabel="never"
+                                        *ngIf="view!=='list'"
+                                        data-role="selectAssignedUserMenu">
+                            <mat-select placeholder="Assignees" multiple disableRipple
+                                        [(ngModel)]="selectedAssignees"
+                                        (ngModelChange)="changeAssignees()">
+                                <mat-option class="hide-checkbox" (click)="$event.preventDefault()" (keydown)="$event.stopPropagation()" disabled>
+                                    <mat-form-field floatLabel="never" fxFlex>
+                                        <input matInput autocomplete="off"
+                                               placeholder="Search Users"
+                                               [formControl]="assigneeSearch"/>
+                                    </mat-form-field>
+                                </mat-option>
+                                <mat-option *ngIf="isLoading" class="hide-checkbox">
+                                    <div fxLayout="row" fxLayoutAlign="center center">
+                                        <mat-spinner color="accent" diameter="20"></mat-spinner>
+                                    </div>
+                                </mat-option>
+                                <ng-container *ngFor="let assignee of assignees">
+                                    <mat-option [value]="assignee" *ngIf="assignee">
+                                        {{ assignee.name }}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <button *ngIf="view!=='list'"
+                                mat-icon-button
+                                class="ml-8 mt-4"
+                                (click)="clearAssigneeFilters()">
+                            <mat-icon color="accent">close</mat-icon>
+                        </button>
+
+                        <mat-checkbox
+                            *ngIf="view == 'list'"
+                            class="ml-16 mt-4"
+                            [(ngModel)]="viewMyItems"
+                            (ngModelChange)="changeShowMyItems($event)">
+                            View My Items
+                        </mat-checkbox>
+                    </div>
+                    
+                    <mat-button-toggle-group fxFlex="none"
+                        [value]="view" (change)="changeView($event)">
+                        <mat-button-toggle value="kanban-condensed" matTooltip="Kanban Condensed">
+                            <mat-icon>featured_play_list</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="kanban-expanded" matTooltip="Kanban Expanded">
+                            <mat-icon>featured_video</mat-icon>
+                        </mat-button-toggle>
+                        <mat-button-toggle value="list" matTooltip="List">
+                            <mat-icon>view_list</mat-icon>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+
+                </div>
+            </div>
+
+            <opportunities-opportunity-list (delete)="deleteOpportunities($event)" *ngIf="view==='list'"></opportunities-opportunity-list>
+            <opportunities-scrumboard-board [condensed]="true" *ngIf="view==='kanban-condensed'"></opportunities-scrumboard-board>
+            <opportunities-scrumboard-board *ngIf="view==='kanban-expanded'"></opportunities-scrumboard-board>
+
+        </mat-sidenav-container>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

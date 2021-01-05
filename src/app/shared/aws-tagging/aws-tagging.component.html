@@ -1,0 +1,78 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                Tags
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRefTagging.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+
+    </mat-toolbar>
+
+    <mat-dialog-content class="p-24 m-0">
+
+      <mat-table
+                #table [dataSource]="dataSource"
+                matSort (matSortChange)="sort($event)"
+                [@animateStagger]="{value:'50'}" *ngIf="dataSource.data.length > 0">
+
+        <!-- Checkbox Column -->
+        <ng-container cdkColumnDef="checkbox">
+            <mat-header-cell *cdkHeaderCellDef>
+                <mat-checkbox  class="mat-checkbox-ripple"
+                            (change)="toggleAll($event)"
+                            [checked]="selection.checkedAll | async"
+                            [indeterminate]="selection.checkedAny | async">
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let row">
+                <mat-checkbox [checked]="checkboxes[row.id]"
+                              (change)="onSelectedChange(row.id)"
+                              (click)="$event.stopPropagation()">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+
+        <!-- Name Column -->
+        <ng-container cdkColumnDef="name">
+            <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+                <span mat-sort-header>Name</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let row">
+                <p class="tag-text-truncate fong-weight-600 tag-text">{{row.name}}</p>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button
+                mat-raised-button
+                (click)="save()"
+                class="save-button mat-accent"
+                aria-label="Save">
+             Save
+            </button>
+        </div>
+
+    </mat-dialog-actions>
+
+    <div class="center">
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="loading">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+</div>

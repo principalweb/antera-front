@@ -1,0 +1,108 @@
+<div id="royalty" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto"
+                    fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">style</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Royalty</span>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT  -->
+             <mat-sidenav-container class="content-card">
+                  <mat-sidenav class="sidenav primary-bg" align="start" opened="true" mode="side"
+                      fuseMatSidenavHelper="contacts-sidenav">
+                      <mat-list class="p-0">
+                          <mat-list-item class="mat-accent-bg" matRipple
+                                         (click)="capList()">
+                              <mat-icon>add</mat-icon>
+                              <span class="ml-8">Royalty Program</span>
+                          </mat-list-item>
+                          <mat-list-item class="mat-accent-bg" matRipple
+                                         (click)="newFranchise()">
+                              <mat-icon>add</mat-icon>
+                              <span class="ml-8">Franchise</span>
+                          </mat-list-item>
+                          <mat-list-item class="mat-accent-bg" matRipple
+                                          (click)="clearFilters()">
+                              <mat-icon>layers_clear</mat-icon>
+                              <span class="ml-8">Clear Filters</span>
+                          </mat-list-item>
+                          <mat-list-item class="mat-accent-bg" matRipple
+                                         (click)="superSummaryReport()">
+                              <span class="ml-8">Super Summary</span>
+                          </mat-list-item>
+
+                      </mat-list>
+                  </mat-sidenav>
+
+                  <div class="toolbar">
+                      <div fxFlex="row">
+                          <div fxFlex="row" fxLayoutAlign="start center">
+                              <button mat-icon-button fxHide.gt-md
+                                      fuseMatSidenavToggler="contacts-sidenav">
+                                  <mat-icon>menu</mat-icon>
+                              </button>
+
+                              <button mat-raised-button color="accent"
+                                      class="text-capitalize mr-8"
+                                      fxHide fxShow.gt-md
+                                      (click)="capList()">
+                                  <mat-icon>add</mat-icon>Royalty Program 
+                              </button>
+
+
+                              <button mat-raised-button color="accent"
+                                      class="text-capitalize mr-8"
+                                      fxHide fxShow.gt-md
+                                      (click)="newFranchise()">
+                                  <mat-icon>add</mat-icon>Franchise
+                              </button>
+
+                              <button mat-raised-button color="accent"
+                                      class="text-capitalize mr-8"
+                                      fxHide fxShow.gt-md
+                                      (click)="superSummaryReport()">
+                                  <mat-icon>view_comfy</mat-icon>Super Summary
+                              </button>
+
+
+                              <button mat-raised-button color="accent"
+                                      class="text-capitalize mr-8"
+                                      (click)="clearFilters()"
+                                      fxHide fxShow.gt-md>
+                                  <mat-icon>layers_clear</mat-icon> Clear Filters
+                              </button>
+
+                          </div>
+
+                          <div class="toolbar-separator"></div>
+                      </div>
+                  </div>
+                  <app-franchise-list></app-franchise-list>
+              </mat-sidenav-container>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

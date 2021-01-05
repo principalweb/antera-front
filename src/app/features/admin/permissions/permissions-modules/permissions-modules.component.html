@@ -1,0 +1,29 @@
+<mat-table fxFlex [dataSource]="modules" [@animateStagger]="{value:'50'}">
+    <ng-container cdkColumnDef="name">
+
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span>Name (Click for module options)</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let entityType" (click)="editOption(entityType.id)">
+            <p class="company text-truncate">
+                {{ entityType.name == 'Order' ? 'Quote/Order' : entityType.name }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="enabled">
+
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span>Enabled</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let entityType" (click)="editOption(entityType.id)">
+            <mat-checkbox (change)="updateEnabled(entityType.id, $event)" [(ngModel)]="entityType.enabled">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="columns"></mat-header-row>
+    <mat-row *cdkRowDef="let entityType; columns: columns;" class="entity-type" matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>

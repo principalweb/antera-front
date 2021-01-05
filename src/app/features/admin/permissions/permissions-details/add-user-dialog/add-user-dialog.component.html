@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Select user (autocomplete)<h1>
+<div mat-dialog-content>
+    <form class="add-user">
+        <mat-form-field>
+            <input type="text" aria-label="user" matInput [formControl]="userCtrl" [matAutocomplete]="auto" [(ngModel)]="selectedUser">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+                    {{ user.name }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="cancelClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="selectedUser" cdkFocusInitial>Add</button>
+</div>

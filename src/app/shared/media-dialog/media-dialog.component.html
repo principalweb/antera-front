@@ -1,0 +1,39 @@
+<div class="dialog-content-wrapper" fxLayout="column">
+  <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">
+        Media Library
+      </span>
+
+      <button mat-icon-button
+              class="mat-icon-button"
+              (click)="dialogRef.close()"
+              aria-label="Close dialog">
+
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div fxFlex fxLayout="column">
+    <div class="img-container p-20"
+         fxFlex fusePerfectScrollbar>
+      <div class="img-wrapper"
+           (click)="toggleImage(img)"
+           *ngFor="let img of images">
+        <img [src]="img.url" alt=""/>
+        <mat-icon class="light-green-700-bg"
+                  *ngIf="isSelected(img)">check</mat-icon>
+      </div>
+    </div>
+
+    <div class="mt-16 p-20" fxFlex="none"
+         fxLayout="row" fxLayoutAlign="center center">
+      <button mat-raised-button
+              color="accent" class="mr-20"
+              (click)="select()">Select</button>
+      <button mat-raised-button color="accent">Upload</button>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,24 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="px-32">
+    <div class="mx-400 mt-20 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+        <span class="mat-title mb-0">QuickBooks Online</span>
+    </div>
+      <div class="px-16">
+        <form [formGroup]="credsForm">
+          <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+              <mat-slide-toggle formControlName="Enabled">Enabled</mat-slide-toggle>
+          </div>
+          <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+              <mat-slide-toggle formControlName="Live">Live</mat-slide-toggle>
+          </div>
+          <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+              <mat-slide-toggle formControlName="EnableGl">Enable GL Without Connection</mat-slide-toggle>
+          </div>
+        </form>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+          <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+        </div>
+      </div>
+</div>

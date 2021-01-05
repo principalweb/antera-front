@@ -1,0 +1,242 @@
+<div fxFlex fxLayout="column" class="product-detail-form">
+    <div mat-dialog-content class="m-0">
+        <form name="form" [formGroup]="productForm" fusePerfectScrollbar>
+            <mat-tab-group>
+                <mat-tab label="Basic Info">
+                    <div class="p-16 pb-0 two-columns">
+
+                        <mat-form-field>
+                            <input matInput placeholder="Name" formControlName="productName" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="division"
+                                        placeholder="Division">
+                                <mat-option [value]="division" *ngFor="let division of ['Division']">
+                                    {{ division }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="poType"
+                                        placeholder="Li Type">
+                                <mat-option  [value]="poType" *ngFor="let poType of leadSources">
+                                    {{ poType }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="productType"
+                                        placeholder="Type">
+                                <mat-option [value]="productType" *ngFor="let productType of ['Vendor Apparel','Promotional']">
+                                    {{ productType }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                name="source"
+                                formControlName="source"
+                                placeholder="Source"
+                                required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                   name="id"
+                                   formControlName="anteraID"
+                                   placeholder="Antera ID"
+                                   required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                   name="inhouseId"
+                                   formControlName="inhouseId"
+                                   placeholder="In-House ID"
+                                   required>
+                        </mat-form-field>
+
+                        <mat-form-field fxFlex>
+                            <input type="hidden" formControlName="vendorId"/>
+                            <input matInput
+                                   name="vendorName"
+                                   formControlName="vendorName"
+                                   placeholder="Supplier"
+                                   [matAutocomplete]="autoVendor"
+                                   >
+                            <mat-autocomplete #autoVendor="matAutocomplete"
+                                            [displayWith]="displayName"
+                                            (optionSelected)="selectVendor($event)">
+                                <mat-option *ngFor="let vendor of filteredVendors" [value]="vendor">
+                                    {{ vendor.name | capitalizeFirst }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <textarea matInput
+                                    name="description"
+                                    formControlName="description"
+                                    placeholder="Product Description"
+                                    rows="5">
+                            </textarea>
+                        </mat-form-field>
+
+                    </div>
+
+                </mat-tab>
+
+                <mat-tab label="Additional Info">
+                    <div class="two-columns p-16">
+
+                        <mat-form-field>
+                            <input matInput
+                                   name="productId"
+                                   formControlName="productId"
+                                   placeholder="Item #"
+                                   required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                   name="itemCode"
+                                   formControlName="itemCode"
+                                   placeholder="SPC/ASI"
+                                   required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-chip-list name="categories" formControlName="categories" #categoryList>
+                                <mat-chip
+                                    *ngFor="let category of product.ProductCategoryArray"
+                                    [selectable]="false"
+                                    [removable]="false">
+                                    {{category}}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                </mat-chip>
+                            </mat-chip-list>
+                            <input matInput
+                                #categoryInput
+                                placeholder="Categories..."
+                                [matChipInputFor]="categoryList"
+                                [matChipInputAddOnBlur]="true"
+                            />
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="expense"
+                                        placeholder="Expense">
+                                <mat-option *ngFor="let expense of ['Expense 1']">
+                                    {{ expense }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="income"
+                                        placeholder="Income">
+                                <mat-option *ngFor="let income of ['Income 1']">
+                                    {{ income }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="asset"
+                                        placeholder="Asset">
+                                <mat-option *ngFor="let asset of ['Asset 1']">
+                                    {{ assset }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                   formControlName="production"
+                                   placeholder="Production"
+                                   >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                    formControlName="imprintinfo"
+                                    placeholder="Imprint"
+                                    >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                          <input matInput
+                          formControlName="sequence"
+                          placeholder="Sequence"
+                          >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                  type="number"
+                                  formControlName="rebate"
+                                  placeholder="Rebate"
+                                  >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                  type="number"
+                                  formControlName="coop"
+                                  placeholder="Co-op"
+                                  >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-select formControlName="uomSet"
+                                        placeholder="UOM Set">
+                                <mat-option *ngFor="let uom of ['UOM 1']">
+                                    {{ uom }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                   type="number"
+                                   formControlName="specialPrice"
+                                   placeholder="Special Price"
+                                   >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                   formControlName="package"
+                                   placeholder="Package"
+                                   >
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput
+                                formControlName="weight"
+                                placeholder="Weight"
+                                >
+                        </mat-form-field>
+
+                        <!--mat-checkbox formControlName="taxEnabled" class="px-8">Tax</mat-checkbox-->
+                        <mat-checkbox formControlName="lot" class="pl-16">Lot</mat-checkbox>
+
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            <div class="p-16" *ngIf="embedded">
+                <button mat-raised-button color="accent" (click)="onSave()">
+                    Save
+                </button>
+                <button mat-raised-button color="warn" (click)="onCancel()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>

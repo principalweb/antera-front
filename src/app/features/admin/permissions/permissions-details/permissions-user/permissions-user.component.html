@@ -1,0 +1,48 @@
+<div id="users" fxFlex>
+    <mat-toolbar>
+        <button mat-raised-button color="accent"
+                class="text-capitalize mr-8"
+                (click)="addUser()">
+                <mat-icon color="accent">face</mat-icon>
+                Add User
+        </button>
+    </mat-toolbar>
+    <mat-table #table
+            [trackBy]="trackById"
+            [dataSource]="users"
+            [@animateStagger]="{value:'50'}">
+
+        <ng-container cdkColumnDef="name">
+            <mat-header-cell class="pr-8 header-cell"
+                             fxHide fxShow.gt-xs
+                             *cdkHeaderCellDef>
+                <span>Name</span>
+            </mat-header-cell>
+            <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                      *cdkCellDef="let user">
+                <p class="company text-truncate">
+                    <a [routerLink]="['/users/', user.id]">{{ user.name }}</a>
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="remove">
+            <mat-header-cell class="pr-8 header-cell"
+                             fxHide fxShow.gt-xs
+                             *cdkHeaderCellDef>
+                <span>Remove</span>
+            </mat-header-cell>
+            <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                      *cdkCellDef="let user">
+                <button mat-icon-button (click)="removeUser(user.name, user.id)"><mat-icon>delete</mat-icon></button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let user; columns: displayedColumns"
+                class="user"
+                matRipple
+                [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+</div>

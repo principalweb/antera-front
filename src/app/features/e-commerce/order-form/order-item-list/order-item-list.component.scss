@@ -1,0 +1,102 @@
+@import "../order";
+
+:host {
+  display:flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.item__list__header {
+  width: 100%;
+  display: flex;
+  padding: 0 20px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  z-index: 1;
+
+  @extend %orderColumns;
+
+  .col {
+    font-weight: bold;
+
+
+      &--description--group {
+        flex: 1;
+        display:flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        @media screen and (max-width: 800px) {
+          order: 2;
+        }
+
+    }
+  }
+}
+.item__list {
+  overflow: auto;
+  flex: 1;
+  background: #dddddd;
+}
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  background: #FFF;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Animate items as they're being sorted. */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.cdk-drop-list-dragging *:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.col--margin {
+  width: 140px;
+}
+.col--margin1 {
+  width: 85px;
+}
+
+.col-qty-currency {
+  width: 38px;
+}
+
+.spacer-ten {
+  width: 65px;
+}
+
+.spacer-twenty {
+  width: 35px;
+}
+
+.spacer-thirty {
+  width: 50px;
+}
+
+.new-col-total {
+  width: 50px;
+}
+
+.col-margin-3 {
+  width: 140px;
+}
+
+.center-text-order-item-list {
+  text-align: center !important;
+}
+
+
+

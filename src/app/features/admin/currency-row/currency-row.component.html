@@ -1,0 +1,51 @@
+<div class="mb-8" fxLayout="row" 
+      fxLayoutGap="8px"
+      fxLayoutAlign="start center"
+      *ngIf="mode === 'new' || editing">
+  <div fxFlex>
+    <mat-form-field>
+      <input matInput placeholder="Currency" [(ngModel)]="data.currency">
+    </mat-form-field>
+  </div>
+  <div fxFlex="25">
+    <mat-form-field>
+      <!-- <input matInput placeholder="Code" [(ngModel)]="data.code"> -->
+      <mat-select [(ngModel)]="data.code" placeholder="Code">
+        <mat-option [value]="code" *ngFor="let code of currencyService.currencyCodes | async">
+          {{code}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div fxFlex="20">
+    <mat-form-field>
+      <input matInput placeholder="Symbol" [(ngModel)]="data.symbol">
+    </mat-form-field>
+  </div>
+  <div class="w-88 mb-12" fxFlex="none">
+    <button mat-raised-button color="accent"
+            class="mb" (click)="addCurrency()"
+            [disabled]="currencyFormInValid()"
+            *ngIf="mode === 'new'">Add</button>
+
+    <button mat-raised-button color="accent"
+            (click)="save(data)"
+            *ngIf="mode !== 'new'">Save</button>
+  </div>
+</div>
+<div class="mb-8" fxLayout="row"
+     fxLayoutGap="8px"
+     fxLayoutAlign="start center"
+     *ngIf="!editing">
+  <div fxFlex>{{ data.currency }}</div>
+  <div fxFlex="25">{{ data.code }}</div>
+  <div fxFlex="20">{{ data.symbol }}</div>
+  <div class="w-88 mb-8" fxFlex="none">
+    <button mat-icon-button (click)="edit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="delete(data.id)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>

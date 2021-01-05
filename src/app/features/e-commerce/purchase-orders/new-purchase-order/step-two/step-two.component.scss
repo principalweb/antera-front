@@ -1,0 +1,21 @@
+.half-height {
+    height: 50% !important;
+}
+
+.no-bottom-border {
+    border-bottom: none !important;
+}
+
+.more-close {
+    margin-bottom: 1px !important;
+    margin-top: 1px !important;
+}
+
+
+
+.cell-right {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+}

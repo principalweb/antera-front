@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Modify Image</h1>
+<div mat-dialog-content fxLayout="row">
+  <div class="lineitem-image" fxFlex>
+    <img [src]="imageUrl" alt="Lineitem Image" *ngIf="imageUrl"/>
+  </div>
+
+  <div class="actions" fxLayout="column" fxLayoutAlign="center center">
+    <!--adf-upload-button tooltip="Upload new image"
+                      color="accent"
+                      [rootFolderId]="data.folderId"
+                      [multipleFiles]="false"
+                      [uploadFolders]="false"
+                      (success)="fileuploaded($event)">
+    </adf-upload-button-->
+    <input type="file" id="uploadAwsFile" (change)="onFileUploadEventForAws($event)" hidden #uploadAwsFile>
+    <button mat-stroked-button color="accent" (click)="uploadAwsFile.click()">Upload new image</button>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+  </div>
+</div>

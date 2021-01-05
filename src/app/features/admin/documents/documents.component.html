@@ -1,0 +1,72 @@
+<div id="documents" class="page-layout carded left-sidebar">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+
+    <!-- SIDENAV -->
+    <fuse-sidebar class="sidebar" name="documents" position="left" lockedOpen="gt-md">
+        <documents-main-sidenav [selectedDocument]="currentDocument" [docOptions]="docOptions"
+            (optionChanged)='optionChanged($event)' (documentChanged)='documentChanged($event)'>
+        </documents-main-sidenav>
+    </fuse-sidebar>
+    <!-- / SIDENAV -->
+
+    <!-- SIDENAV -->
+    <fuse-sidebar class="sidebar" name="templates" position="right">
+        <templates-main-sidenav (templateChanged)='templateChange($event)'></templates-main-sidenav>
+    </fuse-sidebar>
+    <!-- / SIDENAV -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT HEADER -->
+        <div class="header p-24">
+        </div>
+        <!-- / CONTENT HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+
+            <!-- CONTENT TOOLBAR -->
+            <div class="toolbar px-24 py-8">
+                <button mat-icon-button class="sidebar-toggle" fxHide.gt-md (click)="toggleSidebar('documents')">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <button mat-raised-button color="accent" (click)="uploadLogo()" class="text-capitalize mr-8">
+                    <mat-icon>file_upload</mat-icon> Update Logo
+                </button>
+                <button mat-raised-button color="accent" (click)="uploadAddonLogo()" class="text-capitalize mr-8">
+                    <mat-icon>file_upload</mat-icon> Update Alternate Report/Portal Logo
+                </button>
+                <button mat-raised-button color="accent" (click)="toggleSidebar('templates')" class="text-capitalize">
+                    <mat-icon>palette</mat-icon> Change Templates
+                </button>
+            </div>
+            <!-- / CONTENT TOOLBAR -->
+
+            <!-- CONTENT -->
+            <div class="content ">
+
+                <mat-card class="doc-container" *ngIf="sysConfig && docOptions.length > 0">
+                    <document-pdf #documentRenderer *ngIf="documentDefinition" [definition]="documentDefinition">
+                    </document-pdf>
+                </mat-card>
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+</div>
+
+    <div class="center">
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="docOptions.length == 0">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>

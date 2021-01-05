@@ -1,0 +1,39 @@
+<div class="cp-settings pt-16 px-24" fxLayout="column">
+  <h2 class="mat-h2">
+    Access
+  </h2>
+
+  <div class="mb-16" *ngFor="let relatedAccount of contactsService.onRelatedAccountsChanged | async" fxLayout="column">
+    <h3 *ngIf="contactsService.onRelatedAccountsChanged.value.length > 1" class="bolder">
+      {{ relatedAccount.accountName }}
+    </h3>
+    <mat-radio-group class="cp-access-radio-group" [value]="selectedAccess[relatedAccount.id]" (change)="handleChange($event, relatedAccount.id)">
+      <mat-radio-button [checked]="selectedAccess[relatedAccount.id].access == access.val.access && access.val.accountId === relatedAccount.id" [value]="access.val" *ngFor="let access of accessOptions[relatedAccount.id]">{{ access.label }}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <h2 class="mat-h2 mt-16">Permitted Statuses</h2>
+
+  <div class="mt-16 mb-16" *ngFor="let relatedAccount of contactsService.onRelatedAccountsChanged | async" fxLayout="column">
+    <h3 *ngIf="contactsService.onRelatedAccountsChanged.value.length > 1" class="bolder">
+      {{ relatedAccount.accountName }}
+    </h3>
+    <mat-select (selectionChange)="handleStatusChange($event, relatedAccount.id)" [value]="selectedStatuses[relatedAccount.id]" multiple placeholder="Permitted Statuses">
+      <mat-option
+      [value]="status.name"
+      *ngFor="let status of statuses">{{ status.name }}</mat-option>
+    </mat-select>
+	<div fxLayout="row" fxLayoutAlign="space-between center">
+	  <mat-checkbox [checked]="relatedAccount.displayWithOthers == '1'" (change)="handleDisplayWithOthersChange($event, relatedAccount.id)"></mat-checkbox>
+	  <span class="mw-240 ml-16">Display records with other Related Accounts</span>
+	</div>
+  </div>
+
+  <button (click)="saveSettings()" class="mt-16" mat-raised-button color="accent">
+    Save
+    <mat-icon>
+      save
+    </mat-icon>
+  </button>
+
+</div>

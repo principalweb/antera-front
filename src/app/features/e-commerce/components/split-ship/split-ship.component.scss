@@ -1,0 +1,25 @@
+.order-split-ship-popup .mat-dialog-container{
+
+  padding: 0;
+
+  .split-ship{
+
+    .border-bottom {
+      border-bottom: 2px solid #ddd;
+    }
+
+    .border-top {
+      border-top: 2px solid #ddd;
+    }
+
+    mat-dialog-actions{
+      display: block !important;
+      border-top: 2px solid #ddd;
+      button{
+        float: right;
+        margin-right: 15px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

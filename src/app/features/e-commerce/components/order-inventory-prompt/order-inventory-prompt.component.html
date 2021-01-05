@@ -1,0 +1,27 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+          <span class="title dialog-title">{{dialogTitle}}</span>
+          
+          <div>
+              <button mat-button class="mat-icon-button"
+                      (click)="dialogRef.close()"
+                      aria-label="Close dialog">
+                  <mat-icon>close</mat-icon>
+              </button>
+          </div>
+      </mat-toolbar-row>
+          
+  </mat-toolbar>
+
+  <div class="center">
+    <h3>This account has customer owned warehouses.</h3>
+    <p>Should the inventory be depleted or sent to the customer warehouse</p>
+
+    <button mat-raised-button (click)="toWarehouse()")>Warehouse</button> 
+    <button mat-raised-button (click)="toCustomer()">To Customer</button> 
+
+  </div>
+
+</div>
+  

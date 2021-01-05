@@ -1,0 +1,121 @@
+@import "src/@fuse/scss/fuse";
+
+
+.app-product-mass-update {
+    width: 100%;
+    .mat-dialog-container {
+        padding: 0;
+        overflow: hidden;
+
+        .mat-toolbar {
+            min-height: initial;
+            flex: none;
+        }
+
+        .toolbar-bottom {
+            height: auto;
+        }
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mat-dialog-content {
+        padding: 0;
+    }
+
+    .mat-select, .mat-form-field {
+        width: calc(70vw - 200px) !important;
+        max-width: calc(70vw - 200px) !important;
+    }
+
+    .mat-select-panel {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+
+    .check-box-item {
+        text-align: center;
+        width: 185px;
+        padding: 10px 20px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        margin: .3em .6em;
+    }
+
+    .ps {
+        scrollbar-color: rgb(50,142,192), grey !important;
+    }
+
+    .row-wrap {
+        margin-top: 25px !important;
+        max-height: 400px;
+        scrollbar-color: rgb(50,142,192), grey !important;
+        div {
+            ::-web-kit-scrollbar {
+            width: 12px !important;
+        }
+        ::-web-kit-scrollbar-thumb {
+            background-color: rgb(50,142,192) !important;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: grey !important;
+        }
+        }
+    }
+
+    // .empty-div {
+    //     height: 100px;
+    // }
+
+    // .fixed-here {
+    //     background-color: white;
+    // }
+
+
+
+    .product {
+        position: relative;
+    }
+
+    /*.mat-form-field {
+        width: 90%;
+    }*/
+
+    .loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .variation-preview {
+        min-width:50px;
+        min-height:50px;
+        max-width:50px;
+        max-height:50px;
+    }
+}
+
+.mat-option-div {
+    .mat-option-img-div {
+        min-width:50px;
+        width:50px;
+        height:50px;
+        margin-right:10px;
+        img {
+            max-width:50px;
+            max-height:50px;
+        }
+    }
+}

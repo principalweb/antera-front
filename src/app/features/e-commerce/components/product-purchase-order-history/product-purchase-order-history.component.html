@@ -1,0 +1,91 @@
+<mat-table fxFlex #table [dataSource]="dataSource" matSort
+           [formGroup]="filterForm"
+           [@animateStagger]="{value:'50'}">
+
+  <ng-container cdkColumnDef="poNumber">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>Purchase Order No</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.poNumber"><a [routerLink]="['/e-commerce/purchase_orders/purchase_orders/', item.poId]">{{ item.poNumber }}</a></p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="orderedQty">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>QTY Ordered</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.orderedQty }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="receivedQty">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>QTY Received</span>
+     </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.productName">{{ item.receivedQty}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="poDate">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>Date PO Issued</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.poDate | date }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="purchasersName">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>Purchasers Name</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.purchasersName">{{item.purchasersName}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="receivedDate">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>Received Date</span>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate" [title]="item.reservedQuantity">{{item.reservedQuantity}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="receiversName">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+      <span mat-sort-header>Receivers Name</span>
+   </mat-header-cell>
+    <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+      <p class="text-truncate">{{ item.backOrderQuantity }}</p>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *cdkHeaderRowDef="getDisplayedClumns()"></mat-header-row>
+  <mat-row *cdkRowDef="let item; columns: getDisplayedClumns();"
+           class="inventory-item"
+           matRipple
+           [@animate]="{value:'*',params:{y:'100%'}}">
+  </mat-row>
+</mat-table>
+<div class="p-24 text-center" *ngIf="dataSource.total===0">
+  No Data Found
+</div>
+<mat-paginator #paginator
+               [length]="dataSource.total"
+               [pageIndex]="dataSource.index"
+               [pageSize]="50"
+               [pageSizeOptions]="[10, 20, 50, 100]"
+               (page)="paginate($event)"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

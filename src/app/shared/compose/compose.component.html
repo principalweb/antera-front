@@ -1,0 +1,378 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+			<!--button
+					mat-raised-button
+					(click)="showContactsDialog()"
+					class="save-button mat-accent"
+					aria-label="Add Contacts">
+				Add Contacts
+			</button-->
+        </div>
+    </mat-toolbar>
+
+    <div mat-dialog-content class="m-0" fusePerfectScrollbar>
+
+        <form name="mailForm" [formGroup]="mailForm" class="mail-form" fxLayout="column" fxFlex>
+			<!--mat-form-field>
+				<input matInput name="from"
+						placeholder="From"
+						formControlName="from"
+						type="email" required>
+			</mat-form-field-->
+
+			<div fxLayout="row" fxLayout.xs="column" class="mt-16">
+				  <mat-form-field>
+					<input matInput name="subject"
+							placeholder="Subject"
+							formControlName="subject" required>
+				  </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column">
+                <div class="mb-4 mr-4" fxLayout="column" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" style="max-width: 1000px;">
+					<mat-form-field>
+						<mat-chip-list name="to" formControlName="to" #toList>
+							<mat-chip
+								*ngFor="let to of mail.to"
+								[selectable]="true"
+								[removable]="true"
+								(removed)="removeTo(to)">
+								{{to}}
+								<mat-icon matChipRemove>cancel</mat-icon>
+							</mat-chip>
+							<input
+								placeholder="To"
+								type="email"
+								[matChipInputFor]="toList"
+								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+								[matChipInputAddOnBlur]="true"
+								(matChipInputTokenEnd)="addTo($event)"
+							/>
+            </mat-chip-list>
+            <!--mat-hint class="sub" (click)="onCC()" style="margin-right: 10px;">CC</mat-hint>
+            <mat-hint class="sub" (click)= "onBCC()">BCC</mat-hint-->
+					</mat-form-field>
+					<button mat-button class="mat-icon-button" *ngIf="enableContacts"
+							(click)="showContactsDialog('To')"
+							aria-label="Close dialog">
+						<mat-icon>contacts</mat-icon>
+          </button>
+                </div>
+                <!--div fxLayout="column" style="width: 25px;height: 40px;"><p>  </p></div-->
+                <div fxlayout="column">
+                  <mat-form-field>
+                    <mat-chip>
+                    <mat-select formControlName="from" placeholder="From" (selectionChange)="selectmailCredentialsFrom($event)" required>
+
+                      <mat-option [value]="mail.email" *ngFor="let mail of mailCredentialsList" [disabled]="mail.credential.smtpUser == ''">
+                        {{ mail.email }}
+
+                        <span *ngIf="mail.credential.smtpUser == ''">(mail credentials not found)</span></mat-option>
+                  </mat-select>
+                  </mat-chip>
+                        </mat-form-field>
+                </div>
+             </div>
+			<div fxLayout="column">
+				<div fxLayout="row">
+					<button mat-button class="mat-icon-button mr-8 mat-accent"
+							(click)="onCC()"
+							aria-label="CC">
+						<mat-icon>contact_mail</mat-icon> CC
+					</button>
+					<button mat-button class="mat-icon-button  mr-8 mat-accent"
+							(click)="onBCC()"
+							aria-label="BCC">
+						<mat-icon>contact_mail</mat-icon> BCC
+					</button>
+				</div>
+			</div>
+            <div fxLayout="row" fxLayout.xs="column" *ngIf="CC">
+                <div class="mb-4" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+					<mat-form-field>
+						<mat-chip-list name="cc" formControlName="cc" #ccList>
+							<mat-chip
+								*ngFor="let cc of mail.cc"
+								[selectable]="true"
+								[removable]="true"
+								(removed)="removeCc(cc)">
+								{{cc}}
+								<mat-icon matChipRemove>cancel</mat-icon>
+							</mat-chip>
+							<input
+								placeholder="Cc"
+								type="email"
+								[matChipInputFor]="ccList"
+								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+								[matChipInputAddOnBlur]="true"
+								(matChipInputTokenEnd)="addCc($event)"
+							/>
+						</mat-chip-list>
+					</mat-form-field>
+					<button mat-button class="mat-icon-button" *ngIf="enableContacts"
+							(click)="showContactsDialog('Cc')"
+							aria-label="Close dialog">
+						<mat-icon>contacts</mat-icon>
+					</button>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" *ngIf="BCC">
+                <div class="mb-4" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+					<mat-form-field>
+						<mat-chip-list name="bcc" formControlName="bcc" #bccList>
+							<mat-chip
+								*ngFor="let bcc of mail.bcc"
+								[selectable]="true"
+								[removable]="true"
+								(removed)="removeBcc(bcc)">
+								{{bcc}}
+								<mat-icon matChipRemove>cancel</mat-icon>
+							</mat-chip>
+							<input
+								placeholder="Bcc"
+								type="email"
+								[matChipInputFor]="bccList"
+								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+								[matChipInputAddOnBlur]="true"
+								(matChipInputTokenEnd)="addBcc($event)"
+							/>
+						</mat-chip-list>
+					</mat-form-field>
+					<button mat-button class="mat-icon-button" *ngIf="enableContacts"
+							(click)="showContactsDialog('Bcc')"
+							aria-label="Close dialog">
+						<mat-icon>contacts</mat-icon>
+					</button>
+                </div>
+            </div>
+
+
+
+            <!--mat-form-field *ngIf="action !== 'Forward'">
+                <textarea matInput name="message"
+                            placeholder="Message"
+                            formControlName="body"
+                            rows="6" required>
+                </textarea>
+            </mat-form-field-->
+
+            <!--input *ngIf="action === 'Forward'"
+                   type="hidden"
+                   formControlName="body"
+                   required-->
+            <div class="ck-editor-box"><ckeditor #editor [editor]="Editor" formControlName="body"></ckeditor></div>
+            <!--div [innerHTML]="mail.body | safeHtml"></div-->
+
+            <div class="artwork-link-list" >
+                <ng-container *ngFor="let artwork of data.artworkResponses; let artworkIndex = index" >
+                    <div class="artwork" *ngIf="artwork?.results?.length > 0" fxLayout="row" fxLayoutAlign="space-between center">
+                        <div class="file" *ngFor="let file of artwork?.results; let fileIndex = index" >
+                            <img [src]="file.thumbnail" height="25" [alt]="file.name" class="thumbnail">{{ file.name }}
+                            <button mat-icon-button aria-label="Delete attachment" (click)="deleteArtworkLink(artworkIndex, fileIndex) ">
+                                <mat-icon class="s-16">close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div class="attachment-list">
+                <div class="attachment" *ngFor="let attachment of mail.attachments; let i=index;" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div>
+                        <span class="filename">{{attachment.filename}}</span>
+                    </div>
+
+                    <button mat-icon-button aria-label="Delete attachment" (click)="deleteAttachment(i)">
+                        <mat-icon class="s-16">close</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div mat-dialog-content class="m-0 browseCloud" fusePerfectScrollbar *ngIf="cloudFiles">
+
+
+		<mat-table fxFlex #table matSort
+				[dataSource]="dataSource"
+				[@animateStagger]="{value:'50'}" *ngIf="dataSource.data.length > 0">
+
+			<ng-container cdkColumnDef="icon">
+				<mat-header-cell class="header-cell header-cell-icon" *cdkHeaderCellDef>
+					<span mat-sort-header>
+                <span *ngIf="!isRootDir" mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="getLevelUpFolders()">
+                    <mat-icon>folder_open</mat-icon>
+                    {{currentFolder}} <mat-icon>arrow_upward</mat-icon>
+                </span>
+					</span>
+				</mat-header-cell>
+				<mat-cell *cdkCellDef="let row" class="header-cell-icon">
+					<p class="text-truncate" *ngIf="row.isImage">
+					   <img src="{{row.url}}" width="32" height="32" style="border:1px solid #666;padding:2px;">
+					</p>
+					<p class="text-truncate" *ngIf="!row.isImage">
+						<mat-icon style="font-size: 24px;">{{ row.icon }}</mat-icon>
+					</p>
+				</mat-cell>
+			</ng-container>
+
+			<ng-container cdkColumnDef="name">
+				<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+					<span mat-sort-header>Name</span>
+				</mat-header-cell>
+				<mat-cell *cdkCellDef="let row">
+					<p class="text-truncate">
+						{{ row.name }}
+					</p>
+				</mat-cell>
+			</ng-container>
+
+			<ng-container cdkColumnDef="author">
+				<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+					<span mat-sort-header>Author</span>
+				</mat-header-cell>
+				<mat-cell *cdkCellDef="let row">
+					<p class="text-truncate">
+						{{ row.author }}
+					</p>
+				</mat-cell>
+			</ng-container>
+
+			<ng-container cdkColumnDef="dateModified">
+				<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+					<span mat-sort-header>Date Modified</span>
+				</mat-header-cell>
+				<mat-cell *cdkCellDef="let row">
+					<p class="text-truncate">
+						{{ row.dateModified }}
+					</p>
+				</mat-cell>
+			</ng-container>
+
+			<ng-container cdkColumnDef="tags">
+				<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+					<span mat-sort-header>Tags</span>
+				</mat-header-cell>
+				<mat-cell *cdkCellDef="let row">
+					<p class="text-truncate" >
+						{{ row.metaData?.tags }}
+					</p>
+				</mat-cell>
+			</ng-container>
+
+			<ng-container cdkColumnDef="size">
+				<mat-header-cell class="header-cell" *cdkHeaderCellDef>
+					<span mat-sort-header>Size</span>
+				</mat-header-cell>
+				<mat-cell *cdkCellDef="let row">
+					<p class="text-truncate">
+						{{ row.size }}
+					</p>
+				</mat-cell>
+			</ng-container>
+
+
+			<ng-container cdkColumnDef="buttons">
+				<mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+				<mat-cell *cdkCellDef="let row" fxFlex="none" class="w-40">
+					<div fxFlex="row" fxLayoutAlign="end center">
+						<button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+								(click)="$event.stopPropagation();">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+
+						<mat-menu #moreMenu="matMenu">
+							<button mat-menu-item aria-label="Add/Edit Tags" (click)="attachToEmail(row)"  *ngIf="row.type == 'file'">
+								<mat-icon>edit</mat-icon>
+								<span>Attach to Email</span>
+							</button>
+							<!--button mat-menu-item aria-label="Add/Edit Tags" (click)="editTags(row)"  *ngIf="row.type == 'file'">
+								<mat-icon>edit</mat-icon>
+								<span>Tags</span>
+							</button>
+							<button mat-menu-item aria-label="Rename Folder" (click)="renameDir(row)"  *ngIf="restrictedRenaming.indexOf(row.name) == -1">
+								<mat-icon>edit</mat-icon>
+								<span>Rename</span>
+							</button>
+							<button mat-menu-item aria-label="remove" (click)="deleteCurrntFilesFolder(row)">
+								<mat-icon>delete</mat-icon>
+								<span>Remove</span>
+							</button-->
+						</mat-menu>
+					</div>
+
+				</mat-cell>
+			</ng-container>
+
+			<mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+			<mat-row *cdkRowDef="let row; columns: displayedColumns;"
+					(click)="getSubFolders(row.id, row.type, row.url)"
+					matRipple
+					[@animate]="{value:'*',params:{y:'100%'}}">
+			</mat-row>
+		</mat-table>
+
+		<!--mat-paginator #paginator
+					[length]="dataSource.data.length"
+					[pageSize]="50"
+					[pageSizeOptions]="[50, 100, 200]"
+					(page)="paginate($event)"
+					[showFirstLastButtons]="true">
+		</mat-paginator-->
+
+	<div class="loading"
+		[@animate]="{value:'*',params:{opacity:1}}"
+		*ngIf="loading">
+		<mat-spinner></mat-spinner>
+	</div>
+    </div>
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between  end center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button *ngIf="action === 'Send' || action === 'New'"
+                    mat-raised-button
+                    (click)="send()"
+                    class="save-button mat-accent"
+                    aria-label="Send">
+                SEND
+            </button>
+
+            <button *ngIf="action === 'Reply'"
+                    mat-raised-button
+                    (click)="send()"
+                    class="save-button mat-accent"
+                    aria-label="REPLY">
+                REPLY
+            </button>
+
+            <button *ngIf="action === 'Forward'"
+                    mat-raised-button
+                    (click)="send()"
+                    class="save-button mat-accent"
+                    aria-label="FORWARD">
+                FORWARD
+            </button>
+
+            <div class="ml-8 attach-file" matTooltip="Attach a Local file">
+                <input type="file" id="fileInput" (change)="onFileChange($event)" #fileInput>
+                <mat-icon>attach_file</mat-icon>
+            </div>
+            <div  matTooltip="Attach a Cloud file" *ngIf="accountId !== ''">
+                    <button class="ml-8 attach-file" mat-icon-button (click)="browseCloud()">
+                        <mat-icon>cloud</mat-icon>
+                    </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

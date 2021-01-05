@@ -1,0 +1,18 @@
+{
+  "extends": "../src/tsconfig.app.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "types": [
+      "node"
+    ]
+  },
+  "exclude": [
+    "../src/test.ts",
+    "../src/**/*.spec.ts",
+    "../projects/**/*.spec.ts"
+  ],
+  "include": [
+    "../src/**/*",
+    "../projects/**/*"
+  ]
+}

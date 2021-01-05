@@ -1,0 +1,61 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0 toolbar-margin">
+        <mat-toolbar-row class="toolbar-row" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <mat-dialog-content class="m-0 p-0">
+
+        <form name="paymentMethodForm" [formGroup]="paymentMethodForm" class="w-100-p" fxLayout="column" fxFlex>
+          <div class="tab-content p-24" fxLayout="column">
+            <div class="py-16" fxLayout="row">
+              
+              <mat-form-field fxFlex>
+                  <input matInput
+                      name="label"
+                      formControlName="label"
+                      placeholder="Label" required>
+               </mat-form-field>
+              
+            </div>
+            <div class="py-16" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <input matInput
+                        name="value"
+                        formControlName="value"
+                        placeholder="Value" required>
+                   </mat-form-field>
+              </div>
+              <div class="form-group">
+                <mat-slide-toggle formControlName="enable">Enabled</mat-slide-toggle>
+              </div>
+            </div>
+         </form>
+
+    </mat-dialog-content>
+    <!-- / CONTENT -->
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+        
+    </mat-dialog-actions>
+</div>
+

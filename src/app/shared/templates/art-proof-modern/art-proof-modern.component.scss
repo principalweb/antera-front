@@ -1,0 +1,293 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+  #art-proof-modern {
+    &.modern {
+      padding: 0;
+      overflow: auto;
+
+      .art-proof-container {
+        padding: 0px 8px;
+
+        .card-art-proof {
+          width: 808px;
+          min-width: 808x;
+          max-width: 808px;
+          padding: 12px 44px 0 44px;
+          overflow: hidden;
+          background: #ffffff;
+          @include mat-elevation(7);
+
+          .header-art-proof {
+            .col-ids {
+              margin-top: 0px;
+              line-height: 22px;
+              color: rgba(0, 0, 0, 0.54);
+              width: 316px !important;
+
+              .seller {
+                .logo {
+                  max-width: 316px !important;
+                  max-height: 180px !important;
+                }
+              }
+
+              .client {
+                margin-top: 12px;
+                .label {
+                  font-size: 24px;
+                  font-weight: 300;
+                }
+              }
+
+              .divider {
+                width: 1px;
+                margin: 0 24px;
+                background-color: rgba(0, 0, 0, 0.12);
+                height: 114px;
+              }
+
+              .detail {
+                color: rgba(0, 0, 0, 1);
+              }
+            }
+
+            .col-header {
+              vertical-align: top;
+              .order-title {
+                width: 100%;
+                font-size: 30px;
+                font-weight: 400;
+                color: rgba(0, 0, 0, 0.54);
+                text-align: center;
+                span {
+                  padding-left: 30px;
+                }
+              }
+            }
+
+            .summary {
+              font-size: 14px;
+              width: 380px !important;
+
+              .label {
+                color: rgba(0, 0, 0, 0.54);
+                text-align: right;
+                padding-right: 16px;
+              }
+
+              .value {
+                color: rgba(0, 0, 0, 1);
+              }
+
+              .code-title {
+                font-size: 30px;
+                font-weight: 400;
+              }
+
+              .code {
+                font-size: 25px;
+                font-weight: 300;
+
+                .label {
+                  font-size: 20px;
+                }
+
+                td {
+                  padding-bottom: 32px;
+                }
+              }
+            }
+          }
+
+          #container {
+            position: relative;
+          }
+
+          .content-art-proof {
+            .note {
+              width: 100%;
+              font-size: 20px;
+              font-weight: 400;
+              color: rgba(0, 0, 0, 0.78);
+              text-align: center;
+            }
+
+            caption {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .col-decorations {
+              width: 20%;
+              text-align: center;
+              vertical-align: middle;
+
+              .image {
+                text-align: center;
+                margin: 6px !important;
+  
+                .decoration-image {
+                  height: auto;
+                  width: auto;
+                  max-width: 60px;
+                  max-height: 60px;
+                  background-size: cover;
+                }
+              }
+            }
+            .col-info {
+              width: 30%;
+
+              .label {
+                // color: rgba(0, 0, 0, 0.54);
+                color: rgba(0, 0, 0, 1);
+                .value {
+                  color: rgba(0, 0, 0, 1);
+                  word-break: break-word;
+                }
+              }
+            }
+            .col-image {
+              width: 50%;
+              text-align: center;
+              vertical-align: middle;
+            }
+
+            .product-item {
+              width: auto;
+              max-width: 100%;
+              max-height: 300px;
+              object-fit: contain;
+            }
+
+            .buttons {
+              margin-top: 8px !important;
+              width: 100%;
+            }
+          }
+
+          .product-info {
+            font-size: 13px !important;
+            width: 200px !important;
+            position: absolute;
+            left: 520px;
+            top: 60px;
+            right: 0;
+            bottom: 0;
+            height: 330px;
+
+            .label {
+              // color: rgba(0, 0, 0, 0.54);
+              color: rgba(0, 0, 0, 1);
+              .value {
+                color: rgba(0, 0, 0, 1);
+                word-break: break-word;
+              }
+            }
+          }
+
+          .decoration-one-block {
+            width: 100px !important;
+            position: absolute;
+            left: 80px;
+            top: 50px;
+            right: 0;
+            bottom: 0;
+            height: 330px;
+
+            .image {
+              flex: 0 1 80px;
+              text-align: center;
+              margin: 6px !important;
+
+              .decoration-image {
+                height: auto;
+                width: auto;
+                max-width: 60px;
+                max-height: 60px;
+                background-size: cover;
+              }
+            }
+          }
+
+          .decoration-two-blocks {
+            width: 200px !important;
+            position: absolute;
+            left: 30px;
+            top: 50px;
+            right: 0;
+            bottom: 0;
+            height: 330px;
+
+            .two-columns {
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+
+              .image {
+                flex: none;
+                width: 50%;
+                padding-right: 8px;
+                padding-left: 8px;
+                text-align: center;
+
+                .decoration-image {
+                  height: auto;
+                  width: auto;
+                  max-width: 60px;
+                  max-height: 60px;
+                  background-size: cover;
+                }
+              }
+            }
+          }
+
+          .footer-art-proof {
+            font-size: 13px !important;
+            width: 100%;
+            color: rgba(0, 0, 0, 1);
+
+            .line {
+              height: 1px;
+              width: 100%;
+              background-color: rgba(0, 0, 0, 0.54);
+            }
+
+            hr {
+              display: block;
+              height: 1px;
+              border: 0;
+              border-top: 1px solid rgba(0, 0, 0, 0.54);
+              margin: 1em 0;
+              padding: 0;
+            }
+
+            .note {
+              text-align: center;
+            }
+
+            .padding {
+              margin-top: 2px !important;
+            }
+		.footer-note {
+		    font-size: 11px;
+		    font-weight: 500;
+		    color: rgba(0, 0, 0, 0.54);
+		    line-height: 18px;
+		    max-width: 100% !important;
+		    word-wrap: break-word !important;
+		    margin-bottom: 12px !important;
+		    border-top: 2px solid;
+		    border-top-color: lightgray;
+		}
+          }
+
+          .header-space {
+            padding-top: 48px !important;
+          }
+        }
+      }
+    }
+  }
+}

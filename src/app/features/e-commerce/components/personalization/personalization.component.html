@@ -1,0 +1,285 @@
+<h1 mat-dialog-title>Personalization</h1>
+<div mat-dialog-content>
+    <!--div fxLayout fxLayoutAlign="end">
+        <div fxFlex>
+                <button
+                mat-raised-button
+                color="accent"
+                (click)="addPersonalization()"
+                >
+                <mat-icon>add</mat-icon> Add
+                </button>
+            </div>
+    </div-->
+
+    <div fxLayout fxLayoutAlign="end">
+        <div fxFlex>
+
+        <form name="importPersonalizationsForm" [formGroup]="importPersonalizationsForm">
+            <div fxLayout="column" fxLayoutAlign="end stretch" fxLayoutGap="12px">
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="12px">
+                    <a mat-stroked-button  color="accent" href="/protected/content/get-personalizations-import-template" style="text-decoration: none;" [disabled]="deactivate">Template</a>
+                    <input hidden type="file" id="importPersonalizationsFile" (change)="onFileChange($event,'Personalizations')" #importPersonalizationsFile>
+                    <button mat-stroked-button color="accent" (click)="importPersonalizationsFile.click()">Choose File (.csv)</button>
+                    <button mat-raised-button color="accent" [disabled]="loading" (click)="uploadCSV('Personalizations')">Upload</button>
+                    <input type="hidden" formControlName="importCloudFile"/>
+                    <input type="hidden" formControlName="importId"/>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="12px">
+                    <span>{{currentFile}}</span>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="12px">
+
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="12px" *ngIf="isImportDone">
+                    Total Records : {{totalRecords}}
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="12px" *ngIf="isImportDone">
+                    Processed Records : {{processedRecords}}
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="12px" *ngIf="isImportDone">
+                    Error Records : {{errorRecords}}
+                </div>
+            </div>
+
+        </form>
+
+            </div>
+    </div>
+
+
+    <mat-table #addonTable [dataSource]="selectedPersonalizations" matSort fusePerfectScrollbar class="mat-elevation-z8" *ngIf="ps.list.length > 0">
+
+        <!-- Item Code Column -->
+        <ng-container cdkColumnDef="itemCode">
+            <mat-header-cell class="header-cell w-p-8" *cdkHeaderCellDef>
+                <span mat-sort-header>Item</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-8" *cdkCellDef="let element;let index = index">
+			    <editable>
+			    	<ng-template viewMode >
+			    		<!--span *ngIf="firstItemIndex(index, element.matrixQtyId)" >Item {{itemIndex(element.matrixQtyId)}}</span-->
+			    		<span *ngIf="firstItemIndex(index, element.matrixQtyId)" >Item {{element.matrixQtyNo}}</span>
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'itemCode')" readonly>
+                            <mat-error *ngIf="getControl(index, 'itemCode').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+        <!-- itemSize Column -->
+        <ng-container cdkColumnDef="itemSize">
+            <mat-header-cell class="header-cell w-p-8" *cdkHeaderCellDef>
+                <span mat-sort-header>Item Size</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-8" *cdkCellDef="let element;let index = index" >
+			    <editable>
+			    	<ng-template viewMode>
+			    		<span *ngIf="firstItemIndex(index, element.matrixQtyId)">{{element.itemSize}}&nbsp;</span>
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'itemSize')" readonly>
+                            <mat-error *ngIf="getControl(index, 'itemSize').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+        <!-- itemColor Column -->
+        <ng-container cdkColumnDef="itemColor">
+            <mat-header-cell class="header-cell w-p-8" *cdkHeaderCellDef>
+                <span mat-sort-header>Item Color</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-8" *cdkCellDef="let element;let index = index">
+			    <editable >
+			    	<ng-template viewMode>
+			    		<span *ngIf="firstItemIndex(index, element.matrixQtyId)" >{{element.itemColor}}&nbsp;</span>
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'itemColor')" readonly>
+                            <mat-error *ngIf="getControl(index, 'itemColor').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+
+        <!-- sequance Column -->
+        <ng-container cdkColumnDef="sequance">
+            <mat-header-cell class="header-cell w-p-5" *cdkHeaderCellDef>
+                <span mat-sort-header>Line</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-5" *cdkCellDef="let element;let index = index">
+			    <editable >
+			    	<ng-template viewMode>
+			    		{{element.sequance}}&nbsp;
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'sequance')">
+                            <mat-error *ngIf="getControl(index, 'sequance').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+        <!-- displayText Column -->
+        <ng-container cdkColumnDef="displayText">
+            <mat-header-cell class="header-cell w-p-12" *cdkHeaderCellDef>
+                <span mat-sort-header>Display Text</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-12" *cdkCellDef="let element;let index = index">
+			    <editable (update)="updateField(index, 'displayText')">
+			    	<ng-template viewMode>
+			    		{{element.displayText}}&nbsp;
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'displayText')">
+                            <mat-error *ngIf="getControl(index, 'displayText').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+        <!-- notes Column -->
+        <ng-container cdkColumnDef="notes">
+            <mat-header-cell class="header-cell w-p-12" *cdkHeaderCellDef>
+                <span mat-sort-header>notes</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-12" *cdkCellDef="let element;let index = index">
+			    <editable (update)="updateField(index, 'notes')">
+			    	<ng-template viewMode>
+			    		{{element.notes}}&nbsp;
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'notes')">
+                            <mat-error *ngIf="getControl(index, 'notes').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+
+        <!-- font Column -->
+        <ng-container cdkColumnDef="font">
+            <mat-header-cell class="header-cell w-p-12" *cdkHeaderCellDef>
+                <span mat-sort-header>font</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-12" *cdkCellDef="let element;let index = index">
+			    <editable (update)="updateField(index, 'font')">
+			    	<ng-template viewMode>
+			    		{{element.font}}&nbsp;
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<!--mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'font')">
+                            <mat-error *ngIf="getControl(index, 'font').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field-->
+                            <mat-form-field>
+                                <mat-select [formControl]="getControl(index, 'font')"
+                                    placeholder="select font">
+                                    <mat-option [value]="type" *ngFor="let type of fontTypes">{{ type }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+
+        <!-- color Column -->
+        <ng-container cdkColumnDef="color">
+            <mat-header-cell class="header-cell w-p-8" *cdkHeaderCellDef>
+                <span mat-sort-header>color</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-8" *cdkCellDef="let element;let index = index">
+			    <editable (update)="updateField(index, 'color')">
+			    	<ng-template viewMode >
+			    		{{element.color}}&nbsp;
+			    	</ng-template>
+			    	<ng-template editMode>
+			    		<!--mat-form-field class="spreadsheet-edit-full-width">
+			    			<input matInput [formControl]="getControl(index, 'color')">
+                            <mat-error *ngIf="getControl(index, 'color').hasError('required')">Field is <strong>required</strong></mat-error>
+                        </mat-form-field-->
+                            <mat-form-field>
+                                <mat-select [formControl]="getControl(index, 'color')"
+                                    placeholder="select color">
+                                    <mat-option [value]="type" *ngFor="let type of colorTypes">{{ type }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+
+        <!-- location Column -->
+        <ng-container cdkColumnDef="location">
+            <mat-header-cell class="header-cell w-p-12" *cdkHeaderCellDef>
+                <span mat-sort-header>location</span>
+            </mat-header-cell>
+            <mat-cell class="w-p-12" *cdkCellDef="let element;let index = index">
+			    <editable (update)="updateField(index, 'location')">
+			    	<ng-template viewMode>
+			    		{{element.location}}&nbsp;
+			    	</ng-template>
+			    	<ng-template editMode>
+                                <mat-select [formControl]="getControl(index, 'location')"
+                                    placeholder="select location">
+                                    <mat-option [value]="type.locationName" *ngFor="let type of locationTypes">{{ type.locationName }}
+                                    </mat-option>
+                                </mat-select>
+                    </ng-template>
+                </editable>
+            </mat-cell>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container cdkColumnDef="actions">
+            <mat-header-cell class="header-cell mat-cell-checkbox" *cdkHeaderCellDef fxShow fxHide.lt-md>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let element; let index = index;" (click)="$event.stopPropagation()">
+
+            <button mat-icon-button matTooltip="Add" *ngIf="firstItemIndex(index, element.matrixQtyId)"  (click)="addPersonalizations(element)">
+                <mat-icon class="active-icon green-500-fg s-32">add</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Remove" *ngIf="!firstItemIndex(index, element.matrixQtyId)" (click)="deletePersonalizations(index)">
+                <mat-icon class="active-icon red-500-fg s-32">delete</mat-icon>
+            </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayColumns"></mat-header-row>
+
+        <mat-row *cdkRowDef="let row; columns: displayColumns;"></mat-row>
+
+    </mat-table>
+
+
+
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="save()">Save</button>
+    <button mat-raised-button color="accent" mat-dialog-close>Close</button>
+</div>
+
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+	<mat-spinner></mat-spinner>
+</div>

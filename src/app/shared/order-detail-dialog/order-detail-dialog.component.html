@@ -1,0 +1,215 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>Order Details : {{ order?.orderNo}}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+                    <div fxLayout="row" *ngIf="showBasicOrderDetails && order?.orderIdentity !=''" class="p-8">
+                        <div fxFlex fxLayout="column">
+                            <div class="p-4"><strong>{{order?.orderType.toLowerCase() == 'quote' ? 'Quote' : 'Order'}} #:</strong> {{ order?.orderNo}}</div>
+                            <div class="p-4"><strong>{{fieldLabel('orderIdentity', fields)}}:</strong> {{ order?.orderIdentity }}</div>
+                            <div class="p-4"><strong>{{fieldLabel('contactName', fields)}}:</strong> {{ order?.contactName }}</div>
+                            <div class="p-4"><strong>{{fieldLabel('attentionTo', fields)}}:</strong> {{ order?.attentionTo }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column">
+                            <div class="p-4"><strong>{{fieldLabel('orderType', fields)}}:</strong> {{order?.orderType | capitalizeFirst}}</div>
+                            <div class="p-4"><strong>{{fieldLabel('orderDate', fields)}}:</strong> {{ order?.orderDate }}</div>
+                            <div class="p-4"><strong>{{fieldLabel('accountName', fields)}}:</strong> {{ order?.accountName }}</div>
+                            <div class="p-4"><strong>{{fieldLabel('salesPerson', fields)}}:</strong> {{ order?.salesPerson }}</div>
+                        </div>
+                    </div>
+
+
+                    <div fxLayout="row"  *ngIf="showBillingShippingDetails && order?.orderIdentity !=''" class="p-8">
+                    <div fxFlex fxLayout="column">
+                            <div fxLayout="row">
+                                <h3 class="mat-title mb-0 mr-8 accent-text font-weight-400">Billing Address</h3>
+                            </div>
+                            <div *ngIf="!editingAccountDetails" fxLayout="column">
+                                <div *ngIf="visibleField('billingCompanyName', fields)" >
+                                    <strong>{{fieldLabel('billingCompanyName', fields)}}:</strong>
+                                    <span>{{ order?.billingCompanyName }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('billingCustomerName', fields)" >
+                                    <strong>{{fieldLabel('billingCustomerName', fields)}}:</strong>
+                                    <span>{{ order?.billingCustomerName }}</span>
+                                </div>
+
+                                <div>
+                                    {{ order?.billingStreet }}
+                                </div>
+
+                                <div *ngIf="visibleField('billingStreet2', fields)" >
+                                    {{ order?.billingStreet2 }}
+                                </div>
+
+                                <div>
+                                    {{ order?.billingCity }}, {{ order?.billingState }}, {{ order?.billingPostalcode }}
+                                </div>
+
+                                <div>
+                                    {{ order?.billingCountry }}
+                                </div>
+
+                                <div>
+                                    {{ order?.billingPhone }}
+                                </div>
+                            </div>
+                    </div>
+
+                    <div fxFlex fxLayout="column">
+
+                            <div fxLayout="row">
+                                <h3 class="mat-title mb-0 mr-8 accent-text font-weight-400">Shipping Address</h3>
+                            </div>
+
+                            <div *ngIf="!editingAccountDetails" fxLayout="column">
+                                <div>
+                                    <strong>{{fieldLabel('shippingCompanyName', fields)}}:</strong>
+                                    <span>{{ order?.shippingCompanyName }}</span>
+                                </div>
+
+                                <div>
+                                    <strong>{{fieldLabel('shippingCustomerName', fields)}}:</strong>
+                                    <span>{{ order?.shippingCustomerName }}</span>
+                                </div>
+                                <div>
+                                    {{ order?.shippingStreet }}
+                                </div>
+
+                                <div *ngIf="visibleField('billingStreet2', fields)" >
+                                    {{ order?.shippingStreet2 }}
+                                </div>
+
+                                <div>
+                                    {{ order?.shippingCity }}, {{ order?.shippingState }}, {{ order?.shipPostalcode }}
+                                </div>
+
+                                <div>
+                                    {{ order?.shipCountry }}
+                                </div>
+
+                                <div>
+                                    {{ order?.shippingPhone }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+<ng-container *ngIf="dataSource.data.length > 0 && showProducts">
+
+    <mat-table class="products-table"
+                [dataSource]="dataSource"
+                fusePerfectScrollbar>
+
+        <ng-container cdkColumnDef="vendor">
+            <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>Vendor</mat-header-cell>
+            <mat-cell class="mw-80" *cdkCellDef="let product">
+                <p class="text-truncate">{{product.vendorName}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="id">
+            <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>Item #</mat-header-cell>
+            <mat-cell  fxHide fxShow.gt-xs *cdkCellDef="let product" >
+                <p class="text-truncate">{{product.productId}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="image">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>Image</mat-header-cell>
+            <mat-cell  *cdkCellDef="let product">
+                <img class="product-image"
+                    [alt]="product.productName"
+                    [src]="product.image | urlFix"/>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="color">
+                <mat-header-cell class="header-cell mw-60" *cdkHeaderCellDef>Color</mat-header-cell>
+                <mat-cell class="mw-60"
+                          *cdkCellDef="let product">
+                          <p class="text-truncate" [matTooltip]="product.color">{{ product.color }}</p>
+                </mat-cell>
+            </ng-container>
+
+        <ng-container cdkColumnDef="name">
+            <mat-header-cell class="header-cell mw-120" *cdkHeaderCellDef>Name</mat-header-cell>
+            <mat-cell class="mw-120" *cdkCellDef="let product">
+                <p class="text-truncate" [matTooltip]="product.productName">{{product.productName}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="size">
+            <mat-header-cell class="header-cell mw-60" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                Size
+            </mat-header-cell>
+            <mat-cell class="mw-60"
+                        fxHide fxShow.gt-sm
+                        [matTooltip]="sizeTooltip(product)"
+                        *cdkCellDef="let product">
+                <span class="p-16">
+                    {{ product.multiple ? 'Multiple' : product.size }}
+                </span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="quantity">
+            <mat-header-cell class="header-cell mw-60" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                Quantity
+            </mat-header-cell>
+            <mat-cell class="mw-60"
+                        fxHide fxShow.gt-sm
+                        matTooltip="Select"
+                        *cdkCellDef="let product">
+                <ng-container *ngIf="product.quantity > 0">
+                    <span class="mr-4">
+                        {{ product.unitQuantity }}
+                    </span>
+                    <span class="mr-4">
+                        {{ product.uomAbbreviation || 'EA'}}
+                    </span>
+                    <span *ngIf="product.unitQuantity !== product.quantity">
+                        ({{ product.quantity }})
+                    </span>
+                </ng-container>
+                <span class="p-16" *ngIf="product.quantity < 1">
+                    <mat-icon>shopping_cart</mat-icon>
+                </span>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *cdkRowDef="let product; columns: displayedColumns; let i = index"
+                class="product" matRipple>
+        </mat-row>
+
+    </mat-table>
+
+</ng-container>
+<div class="p-24 text-center" *ngIf="dataSource.data.length === 0">
+    loading line items
+</div>
+
+
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-raised-button color="accent"
+            (click)="dialogRef.close()"
+            >Close
+        </button>
+    </div>
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

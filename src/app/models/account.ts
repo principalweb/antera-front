@@ -1,0 +1,114 @@
+export class Account {
+    id: string = '';
+    accountName: string = '';
+    parentAccount: string = '';
+    rating: string = '';
+    partnerType: string = 'Customer';
+    timeZone: string = '';
+    industry: string = '';
+    accountExtension: string = '';
+    website: string = '';
+    shipAddress1: string = '';
+    shipAddress2: string = '';
+    shipCity: string = '';
+    shipState: string = '';
+    shipPostalcode: string = '';
+    shipCountry: string = '';
+    salesRepId: string = '';
+    salesRep: string = '';
+    phone: string = '';
+    additionalPhone: string = '';
+    fax: string = '';
+    leadSource: string = '';
+    priorSalesRep: string = '';
+    accountType: string = 'Active';
+    shippingAccountNo: string = '';
+    shippingAccountType: string = '';
+    billAddress1: string = '';
+    billAddress2: string = '';
+    billCity: string = '';
+    billState: string = '';
+    billPostalcode: string = '';
+    billCountry: string = '';
+    generalInfo: string = '';
+    creditTerms: string = '';
+    taxStatus: string = '';
+    taxExemptNo: string = '';
+    taxExempt: string = '';
+    vipDiscountsForOrders: string = '';
+    ytdSales: string = '';
+    lastYearSales: string = '';
+    highCreditLimit: number = 0;
+    defaultTaxRate: string = '';
+    gstTaxRateOnPo: string = '';
+    gstCountryTaxRateOnPo: string = '';
+    pstTaxRateOnPo: string = '';
+    hstTaxRateOnPo: string = '';
+    multiTaxRate: string = '';
+    accountCurrency: string = '';
+    webstoreUrl: string = '';
+    // dateCreated: string = '';
+    ranking: number = 0;
+    logo: string = '';
+    eqp: string = '0';
+    artContactName: string = '';
+    artContactEmail: string = '';
+    csRepName: string = '';
+    csRepEmail: string = '';
+    salesRepEmail: string = '';
+    sampleEmail: string = '';
+    csr: string = '';
+    csrId: string = '';
+    preferredVendor: string = '0';
+    customerOrderNote: string = '';
+    vendorPoNotes: string = '';
+    vendorProductNotes: string = '';
+    inhouseVendor: string = '0';
+    franchiseVendor: string = '0';
+    inhouseCustomer: string = '0';
+    alternateAccountNumber: string = '';
+    corporateIdentityId: string;
+    corporateIdentityName: string;
+    commissionGroupId: string;
+    commissionGroupName: string;
+    accountsGroup: string;
+    accountsServiceStatus: string;
+    taxExemptionReasonId: string = '19';
+    firstOrderDate: string = '';
+    brandAffiliation: string = '';
+    salesManagerId: string = '';
+    salesManagerName: string = '';
+    annualBudget: string = '';
+    importVendor: string = '0';
+    parentAccountId: string;
+    csrEmbroideryUserId: string;
+    csrEmbroideryUserName: string;
+    csrScreenprintUserId: string;
+    csrScreenprintUserName: string;
+    vendorPaymentTerms = [];
+    leadsChannel = [];
+    
+    doNotSendToShipStation: string = '0';
+    doNotIssuePo: string = '0';
+    required1099: string = '0';
+    customerPO: string = '0';
+    useStoreCostPrice: string = '1';
+    useStorePrice: string = '0';
+    useShipCost: string = '0';
+    useShipCostPriceMargin: string = '1';
+    bookingOrderNotSentShipStation: string = '0';
+
+    adminFeeRate: number;
+    adminFeeType: string;
+    defaultCurrency: string; // currency
+    popupNotes: string;
+    popupNotes_show_order: string ='0';
+    popupNotes_show_order_accview: string='0';
+    pricingMethods: string = '1';
+
+
+    constructor(account: Object = {}) {
+        Object.assign(this, account);
+    }
+}
+

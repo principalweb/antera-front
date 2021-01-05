@@ -1,0 +1,23 @@
+#inventory {
+    .header {
+        .subtitle {
+            margin: 6px 0 0 0;
+        }
+
+        .inventory-total {
+        .reserved {
+            direction: rtl;
+            font-size: 20px;
+        }
+        .total {
+            font-size: 28px;
+            span {
+                font-weight: 500;
+            }
+        }
+        }
+    }
+    .content {
+        overflow: hidden;
+    }
+}

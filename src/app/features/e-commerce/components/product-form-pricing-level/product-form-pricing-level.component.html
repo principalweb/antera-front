@@ -1,0 +1,171 @@
+<!-- <div
+  class="loading"
+  [@animate]="{ value: '*', params: { opacity: 1 } }"
+  *ngIf="loading"
+>
+  <mat-spinner></mat-spinner>
+</div>
+<mat-tab-group
+  [selectedIndex]="selected.value"
+  (selectedTabChange)="selectedTabChanged($event)"
+  (selectedIndexChange)="selected.setValue($event)"
+>
+  <mat-tab
+    [label]="productLevel.name"
+    *ngFor="let productLevel of pricingLevels; let index = index"
+  >
+
+
+    <ng-template matTabContent>
+      <mat-grid-list cols="3" [rowHeight]="minlistLenghtHeight">
+       
+        <mat-grid-tile *ngIf="enableFeature">
+          <h3  *ngIf="!showForm"> Add New Pricing Method </h3>
+          <br>
+          <button
+            matTooltip="Add Pricing Method"
+            class="new-pricing-button"
+            mat-button
+            (click)="toggleNewPricingForm()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <ng-container *ngIf="showForm">
+            <mat-form-field appearance="fill">
+              <mat-label>New Pricing Name</mat-label>
+              <input
+                matInput
+                placeholder="New Pricing Name"
+                [formControl]="pricingName"
+                required
+              />
+              <mat-error *ngIf="pricingName.invalid">{{
+                getErrorMessage()
+              }}</mat-error>
+            </mat-form-field>
+            <button
+              matTooltip="Save Pricing Method"
+              matSuffix
+              mat-icon-button
+              (click)="createNewPricingLevel()"
+            >
+              <mat-icon matSuffix>done</mat-icon>
+            </button>
+            <button
+              matTooltip="Cancel"
+              matSuffix
+              mat-icon-button
+              (click)="toggleNewPricingForm()"
+            >
+              <mat-icon matSuffix>close</mat-icon>
+            </button>
+          </ng-container>
+          <button
+            matTooltip="Delete Pricing Method"
+            *ngIf="index !== 0"
+            class="new-pricing-button"
+            mat-button
+            (click)="deletePricingLevel()"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        
+          <product-attributes-editor
+            [showPriceBreakOnly]="true"
+            [product]="product"
+            [priceTable]="priceTable"
+            (save)="savePriceBreakEditor($event)"
+          >
+          </product-attributes-editor>
+        
+        <mat-grid-tile *ngIf="enableFeature" >
+          <app-product-form-pricing-margin
+          [currentPricingId]="getCurrentPricingId()"
+          [pricingName]="pricingName"
+          (listLenght)=listLenght($event)></app-product-form-pricing-margin>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <div class="new-pricing-container">
+        <product-pricing-editor
+          *ngIf="index === currentIndex"
+          [product]="product"
+          [pricingLevel]="product['productPricing']"
+          (save)="saveVariationEditor($event)"
+        >
+        </product-pricing-editor>
+      </div>
+    </ng-template>
+
+
+  </mat-tab>
+</mat-tab-group> -->
+
+<!-- pricingLevels : {{pricingLevels | json }} -->
+
+<!-- <form [formGroup]="pricingMethodForm">
+    <mat-form-field formControlName="pricingMethodName" >
+      <mat-label>Favorite food</mat-label>
+      <mat-select  name="Pricing Level">
+        <mat-option *ngFor="let pricingLevel of pricingLevels" [value]="pricingLevel.id">
+          {{pricingLevel.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+</form> -->
+
+<!-- <form [formGroup]="pricingMethodForm">
+  
+  <label>
+    Last Name:
+    <input type="text" formControlName="lastName">
+  </label>
+</form> -->
+
+<h3>Choose a pricing level </h3>
+<form [formGroup]="pricingMethodForm" class="pricing-method-selector">
+  <mat-form-field>
+    <mat-select
+      (selectionChange)="selectionChange($event)"
+      formControlName="pricingMethodName"
+      id="pricingMethodName"
+    >
+      <mat-option
+        *ngFor="let pricingLevel of pricingLevels; let i = index"
+        [value]="pricingLevel.id"
+      >
+        {{ pricingLevel.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
+<div class="pricing-method-selector">
+  <button color="primary" (click)="resetValuesAndReload()" mat-raised-button>Recalculate Pricings</button>
+</div>
+<!-- product: {{product | json }} -->
+<div *ngIf="product">
+
+
+
+<product-attributes-editor
+  [showPriceBreakOnly]="true"
+  [product]="product"
+  [priceTable]="priceTable"
+  (save)="savePriceBreakEditor($event)"
+>
+</product-attributes-editor>
+<div class="new-pricing-container">
+  <product-pricing-editor
+    [product]="product"
+    [pricingLevel]="product['productPricing']"
+    (save)="saveVariationEditor($event)"
+  >
+  </product-pricing-editor>
+</div>
+</div>
+
+<div *ngIf="loading" class="loading" [@animate]="{value:'*',params:{opacity:1}}">
+  <mat-spinner></mat-spinner>
+</div>

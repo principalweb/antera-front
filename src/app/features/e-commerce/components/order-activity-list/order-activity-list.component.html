@@ -1,0 +1,43 @@
+<div fxLayout="column" fxFlex>
+    <ng-container>
+        <div class="pl-24 p-16">
+            <div fxFlex="row" fxLayoutAlign="start center">
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="newActivity()">
+                    <mat-icon>add</mat-icon> Activity
+                </button>
+
+                <button mat-raised-button color="accent"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="clearFilters()">
+                    <mat-icon>layers_clear</mat-icon> Clear Filters
+                </button>
+
+                <button mat-raised-button color="warn"
+                        class="text-capitalize mr-8"
+                        fxHide fxShow.gt-md
+                        (click)="deleteSelectedActivities()">
+                    <mat-icon>delete</mat-icon> Delete
+                </button>
+
+                <mat-slide-toggle
+                        fxHide fxShow.gt-md
+                        [(ngModel)]="activitiesService.showCompleted"
+                        (change)="showCompleted($event)">
+                    Include Completed
+                </mat-slide-toggle>
+
+                <mat-checkbox
+                    class="ml-16 mt-4"
+                    [(ngModel)]="activitiesService.viewMyItems"
+                    (ngModelChange)="changeShowMyItems($event)">
+                    View My Items
+                </mat-checkbox>
+            </div>
+        </div>
+        <app-activities-list [order]="cOrder" [isActivities]="true" fxLayout="column"></app-activities-list>
+    </ng-container>
+</div>

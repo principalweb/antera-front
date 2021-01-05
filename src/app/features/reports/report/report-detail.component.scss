@@ -1,0 +1,112 @@
+@import "src/@fuse/scss/fuse";
+
+#report {
+  .header {
+    .subtitle {
+      margin: 6px 0 0 0;
+    }
+  }
+  .report-container {
+      width: 100%;
+  }
+
+  .seller {
+    .logo {
+      max-width: 176px !important;
+      max-height: 100px !important;
+    }
+  }
+
+  .content {
+    display: block;
+
+    .card {
+      width: 100%;
+      overflow: hidden;
+      background: #ffffff;
+      @include mat-elevation(7);
+    }
+
+    table {
+      table-layout: normal;
+    }
+  }
+}
+
+#report-table {
+  width: 100%;
+  .seller {
+    .logo {
+      max-width: 176px !important;
+      max-height: 100px !important;
+    }
+  }
+}
+.report-table {
+  table-layout: normal;
+  margin-top: 32px;
+  font-size: 13px;
+
+  &.dense {
+    font-size: 10px;
+  }
+
+  thead {
+    tr {
+      th {
+        &:first-child {
+          padding-left: 8px;
+        }
+
+        &:last-child {
+          padding-right: 8px;
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        &:first-child {
+          padding-left: 8px;
+        }
+
+        &:last-child {
+          padding-right: 8px;
+        }
+      }
+    }
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .detail {
+    margin-top: 8px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.54);
+    max-width: 360px;
+  }
+}
+
+.simple.report-table-new thead{
+        position: -webkit-sticky;
+        position: sticky;
+        z-index: 400;
+        top: 0;
+        background-color: #fff;
+}
+.simple.report-table-new thead th{
+            position: -webkit-sticky;
+            position: sticky;
+            z-index: 400;
+            top: 0;
+            background-color: #fff;
+        }
+
+.report-div-table {
+  height: calc(100vh - 225px);
+  overflow: auto;
+}

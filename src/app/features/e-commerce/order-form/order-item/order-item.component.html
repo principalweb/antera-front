@@ -1,0 +1,191 @@
+<div [formGroup]="formGroup" class="order__item" [class.destroy]="item._destroy" (click)="clicked.emit(item)">
+  <ng-content select="[slot=drag-preview]">
+  </ng-content>
+  <div class="order__item__header" fxLayout="row" fxFlexAlign="start center" cdkDropList>
+
+    <div class="col col--draghandle" *ngIf="draggable && config?.edit" (mousedown)="expanded = false">
+      <ng-content select="[slot=drag-handle]">
+      </ng-content>
+    </div>
+    <div class="col col--checkbox" *ngIf="draggable && config?.edit">
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="isAnyRowSelected() && isAllSelected()"
+        [indeterminate]="isAnyRowSelected() && !isAllSelected()" [disabled]="item.matrixRows?.length === 0">
+      </mat-checkbox>
+    </div>
+
+    <div class="col col--expand" *ngIf="expandable" (click)="toggleExpand()">
+      <mat-icon>
+        {{ expanded ? 'arrow_drop_down' : 'arrow_right' }}
+      </mat-icon>
+    </div>
+
+
+    <div class="col col--image">
+      <!--img [src]="item.quoteCustomImage && item.quoteCustomImage[0]" [alt]="item.productName"
+        [default]="'assets/images/ecommerce/product-image-placeholder.png'"-->
+        <ng-container *ngIf="config?.edit">
+          <div class="item__preview item__preview--edit" (click)="changeImage()" matTooltip="Change image">
+            <img [src]="item.quoteCustomImage && item.quoteCustomImage[0]" [default]="'assets/images/ecommerce/product-image-placeholder.png'">
+          </div>
+        </ng-container>
+    </div>
+
+    <!-- Should contain header level details for the line item -->
+    <div class="col col--description">
+      <a [routerLink]="" (click)="previewProduct()" class="accent-fg w-100-p">{{ product?.productId }}</a>
+      <div class="item-description">
+        <div *ngIf="!config?.hideVendor"><a [routerLink]="['/accounts', item.vendorId]">{{item.vendorName}}</a></div>
+        <div (click)="editDescription()">
+          <span class="item-name">{{ item.productName }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="item.priceType && item.priceType !== 'Blank'">
+        <span>
+          Price Type Includes: {{ usedSupplierDecorations }}
+        </span>
+      </div>
+
+      <div class="summary summary-prd-icons">
+        <div *ngIf="item.matrixRows?.length > 0">{{ item.matrixRows?.length }} product variations</div>
+        <mat-icon [class.green-fg]="item.matrixRows?.length > 0"
+          [matTooltip]="item?.matrixRows?.length + ' product variations'" (click)="toggleView('variations')">
+          shopping_cart</mat-icon>
+        <mat-icon [ngClass]="decoIconClass" [matTooltip]="decoIconTooltip" (click)="toggleView('variations-expand')">
+          palette</mat-icon>
+        <mat-icon [class.green-fg]="item.addonCharges?.length > 0" matTooltip="Includes addon charges"
+          (click)="toggleView('addons')">add_to_photos</mat-icon>
+        <mat-icon [class.green-fg]="item.vendorPONote || order.orderNote || order.workOrderNote" (click)="openNotes()"
+          matTooltip="Notes">notes
+        </mat-icon>
+
+        <mat-icon (click)="openEditItem(item)">settings_applications</mat-icon>
+      </div>
+
+
+    </div>
+
+    <ng-container *ngIf="item.matrixRows?.length > 0">
+      <!-- These columns can be dynamic but should remain short -->
+      <div class="col col--qty">
+        {{ item.quantity }}
+        <!-- <ng-container *ngIf="product?.uomDetails?.length">
+          <mat-select formControlName="uomId" (selectionChange)="changeUom($event)">
+            <mat-option *ngFor="let uom of product.uomDetails" [value]="uom.id">{{ uom.name }}</mat-option>
+          </mat-select>
+        </ng-container> -->
+      </div>
+      <div class="col col--cost" *ngIf="!config?.hideCost">
+        <span *ngIf="item.matrixRows.length === 1; else mixedCost">
+          {{ item.cost | currency:'USD':'symbol':'1.2-15' }}
+        </span>
+        <ng-template #mixedCost>
+          <span>Mixed</span>
+        </ng-template>
+      </div>
+      <div class="col col--price" *ngIf="!config?.hideCost && adminFeeEnabled">
+     
+      </div>
+      <div class="col col--price" *ngIf="!config?.hideCost && adminFeeEnabled">
+      
+      </div>
+
+      <div class="col col--price">
+        <span *ngIf="item.matrixRows.length === 1; else mixedPrice">
+          {{ item.price | currency:'USD':'symbol':'1.2-15' }}
+        </span>
+        <ng-template #mixedPrice>
+          <span>Mixed</span>
+        </ng-template>
+      </div>
+      <div class="col col--total">
+        {{ item.totalPrice | currency:'USD':'symbol':'1.2-15' }}
+      </div>
+    </ng-container>
+
+    <div class="col col--menu" *ngIf="config?.edit && !item.isItemVouched">
+
+      <mat-menu #itemMenu="matMenu">
+        <button (click)="openEditItem(item)" mat-menu-item>
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button mat-menu-item (click)="duplicateItem()">
+          <mat-icon>file_copy</mat-icon> Duplicate Line
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="openNotes()">
+          <mat-icon>notes</mat-icon> Notes
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="deleteItem()" class="warn-fg">
+          <mat-icon>delete</mat-icon> Delete Line
+        </button>
+      </mat-menu>
+
+      <mat-icon #menuTrigger [matMenuTriggerFor]="itemMenu">more_vert</mat-icon>
+    </div>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  </div>
+
+  <div [hidden]="!expanded">
+    <div class="order__item__variations" *ngIf="actionView === 'variations' || actionView === 'variations-expand'">
+      <div fxLayout="row" fxLayoutAlign="start center" *ngIf="config?.edit" class="order__item__variations__toolbar">
+        <h3>Variations</h3>
+
+        <div class="order__item__actions">
+          <button type="button" mat-button (click)="addRow()">
+            <mat-icon>add</mat-icon> Add
+          </button>
+
+          <button type="button" mat-button (click)="openPriceDialog()" *ngIf="!config?.hideCost && !config?.hideVendor">
+            <mat-icon>grid_on</mat-icon> Bulk
+          </button>
+        </div>
+      </div>
+
+      <div class="matrix__rows">
+        <app-order-item-row [row]="row" [productInventory]="productInventory" [item]="item"
+          [adminFeeEnabled]="adminFeeEnabled" (actions)="handleRowActions($event, row)" [product]="product"
+          [config]="config" (rowChange)="handleRowChange($event, row)" [selection]="selection" [rowIndex]="mindex"
+          [productFob]="productFob" [localFob]="localFob" [decorations]="decorationsByRow[row.matrixUpdateId]"
+          *ngFor="let row of item.matrixRows; trackBy: trackByMatrix; let mindex = index">
+        </app-order-item-row>
+      </div>
+    </div>
+
+    <!-- <app-order-item-form [item]="item"></app-order-item-form> -->
+
+    <div class="order__item__addons" *ngIf="actionView === 'addons'">
+
+      <div fxLayout="row" fxLayoutAlign="start center" *ngIf="config?.edit" class="order__item__addons__toolbar">
+        <div>
+          <mat-checkbox (change)="$event ? masterToggle('addonCharge') : null"
+            [checked]="isAnyRowSelected('addonCharge') && isAllSelected('addonCharge')"
+            [indeterminate]="isAnyRowSelected('addonCharge') && !isAllSelected('addonCharge')"
+            [disabled]="item.addonCharges?.length === 0">
+          </mat-checkbox>
+        </div>
+
+        <h3 class="pl-8">Addon Charges</h3>
+
+        <div>
+          <button mat-button (click)="openChargesDialog()">
+            <mat-icon>edit</mat-icon> Manage
+          </button>
+        </div>
+
+        <div *ngIf="isAnyRowSelected('addonCharge')">
+          With selection:
+          <button mat-button (click)="copyCharges()">Copy</button>
+          <button mat-button color="warn" (click)="bulkDeleteCharges()">Delete</button>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let addon of item?.addonCharges">
+        <app-order-item-addon [addon]="addon" [config]="config" [item]="item" (addonChange)="handleAddonChange($event)"
+          (actions)="handleAddonActions($event)" [selection]="addonSelection"></app-order-item-addon>
+      </ng-container>
+    </div>
+  </div>
+</div>

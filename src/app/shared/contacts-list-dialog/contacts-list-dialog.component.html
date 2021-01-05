@@ -1,0 +1,112 @@
+<div class="dialog-content-wrapper">
+<mat-toolbar class="mb-0" fxLayoutAlign="space-between center">
+  <div>Contacts</div>
+</mat-toolbar>
+<mat-dialog-content class="p-24 m-0">
+ <div class="table-container pt-20">
+    <mat-table #table matSort
+               (matSortChange)="sortChange($event)"
+               [dataSource]="dataSource"
+               fusePerfectScrollbar>
+
+    <ng-container cdkColumnDef="checkbox">
+		<mat-header-cell class="w-80" *cdkHeaderCellDef>
+			<mat-checkbox (change)="toggleAll($event)"
+					[disableRipple]="true"
+					[checked]="selection.checkedAll | async"
+					[indeterminate]="selection.checkedAny | async">
+			</mat-checkbox>
+		</mat-header-cell>
+		<mat-cell class="w-80" *cdkCellDef="let member">
+			<mat-checkbox [(ngModel)]="checkboxes[member.id]"
+						  [disableRipple]="true"
+						  (ngModelChange)="changeSelected(member)"
+						  [ngModelOptions]="{standalone: true}"
+						  (click)="$event.stopPropagation()">
+			</mat-checkbox>
+		</mat-cell>
+
+    </ng-container>
+
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell
+            class="pr-8"
+            mat-sort-header
+            *cdkHeaderCellDef>Name</mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let member">
+            <p class="text-truncate font-weight-600">{{member.contactName }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="title">
+        <mat-header-cell
+            class="pr-8"
+            mat-sort-header
+            *cdkHeaderCellDef>Title</mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let member">
+            <p class="text-truncate font-weight-600">{{member.title }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="email">
+        <mat-header-cell
+            class="pr-8 email-col"
+            mat-sort-header
+            *cdkHeaderCellDef>Email</mat-header-cell>
+        <mat-cell class="pr-8 email-col" *cdkCellDef="let member">
+            <p class="text-truncate font-weight-600">{{member.email }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="phone">
+        <mat-header-cell
+            class="pr-8"
+            mat-sort-header
+            *cdkHeaderCellDef>Phone</mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let member">
+            <p class="text-truncate font-weight-600">{{member.phone }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="sales">
+        <mat-header-cell
+            class="pr-8"
+            fxHide.xs
+            mat-sort-header
+            *cdkHeaderCellDef>Sales Person</mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let member">
+            <p class="text-truncate font-weight-600">{{ member.salesRep }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let member; columns: displayColumns;"
+            class="member-row" matRipple
+            (click)="changeSelected(member)"
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+    </mat-table>
+
+    <div class="h-64 text-center p-20" *ngIf="dataSource.total === 0">
+        You don't have contacts linked to this account.
+    </div>
+
+    <mat-paginator #paginator
+                [length]="dataSource.total"
+                (page)="paginate($event)"
+                [pageSize]="10"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+    </mat-paginator>
+	<div class="loading"
+		[@animate]="{value:'*',params:{opacity:1}}"
+		*ngIf="dataSource.loading">
+		<mat-spinner></mat-spinner>
+	</div>
+ </div>
+</mat-dialog-content>
+  <div mat-dialog-actions class="m-0 px-24" fxLayout="row" fxLayoutAlign="space-between center">
+      <button mat-raised-button color="accent" (click)="insertSelectedUsers()" >Tag Selected User(s)  </button>
+      <button mat-raised-button color="accent" mat-dialog-close>Close</button>
+  </div>
+</div>

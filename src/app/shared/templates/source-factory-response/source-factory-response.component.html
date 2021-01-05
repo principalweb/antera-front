@@ -1,0 +1,265 @@
+<div id="inquiry__document" class="inquiry__document mat-elevation-z8" #documentRef>
+  <div fxLayout="row">
+    <table class="summary">
+      <tr class="summary__title">
+        <td class="label" colspan="2">
+          Inquiry
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+          Order Number / 订单号
+        </td>
+        <td class="value">#{{ source.id }}</td>
+      </tr>
+      <tr>
+        <td class="label">
+          Order Date / 订单日期:
+        </td>
+        <td>
+          {{ source.createdDate }}
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Production Contact / 联系人</td>
+        <td class="value">{{ source?.assignedSalesRep }}</td>
+      </tr>
+      <tr>
+        <td class="label">Email / 邮箱地址</td>
+        <td class="value">{{ source?.SalesRepEmail }}</td>
+      </tr>
+      <tr>
+        <td class="label">Phone / 电话</td>
+        <td class="value">{{ source?.SalesRepPhone }}</td>
+      </tr>
+    </table>
+    <div fxFlex></div>
+    <div>
+      <img [src]="logo?.url" class="logo" alt="Branding" *ngIf="logo?.url" />
+    </div>
+  </div>
+
+  <div class="product">
+    <div class="product__details">
+
+      <div class="section__header">Product Information / 产品信息</div>
+
+      <table class="details__table">
+        <tbody>
+          <tr>
+            <th>Item Name / 产品名称</th>
+            <td colspan="3">{{ submission.itemName }}</td>
+          </tr>
+          <tr>
+            <th colspan="4">Description / 描述</th>
+          </tr>
+          <tr>
+            <td colspan="4">
+              {{ submission.specifications }}
+            </td>
+          </tr>
+          <tr>
+            <th>Decoration Type / 装饰类型</th>
+            <td>
+              {{ source.decorationType }}
+            </td>
+            <th>Product Material / 产品材料</th>
+            <td>
+              {{ source.material }}
+            </td>
+          </tr>
+          <tr>
+            <th>Product Size / 产品尺寸</th>
+            <td colspan="3">
+              {{ source.size}}
+            </td>
+          </tr>
+          <tr>
+            <th>Testing Requirements / 测试要求</th>
+            <td colspan="3">
+              {{ source.testingRequirements }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="factory__quote">
+    <div class="section__header">Factory Quote / 工厂报价</div>
+
+    <table class="details__table">
+      <tbody>
+        <tr>
+          <th>Quote Valid Through / 报价有效时间</th>
+          <td colspan="3">{{ submission.quoteValidThrough | date }}</td>
+        </tr>
+        <tr>
+          <th>Item Name / 工厂的产品名称</th>
+          <td>
+            {{ submission.itemName }}
+          </td>
+          <th>Item Number / 工厂的产品编号</th>
+          <td>
+            {{ submission.itemNumber }}
+          </td>
+        </tr>
+        <tr>
+          <th>Factory Price / 工厂价格</th>
+          <td colspan="3">
+            <table class="pricing__table">
+              <thead>
+                <tr>
+                  <th>Quantity / 数量</th>
+                  <th>Price / 价格</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="submission.quantity1">
+                  <th>{{ submission.quantity1 }}</th>
+                  <td>{{ submission.pricePerQty1 }}</td>
+                </tr>
+                <tr *ngIf="submission.quantity2">
+                  <th>{{ submission.quantity2 }}</th>
+                  <td>{{ submission.pricePerQty2 }}</td>
+                </tr>
+                <tr *ngIf="submission.quantity3">
+                  <th>{{ submission.quantity3 }}</th>
+                  <td>{{ submission.pricePerQty3 }}</td>
+                </tr>
+                <tr *ngIf="submission.quantity4">
+                  <th>{{ submission.quantity4 }}</th>
+                  <td>{{ submission.pricePerQty4 }}</td>
+                </tr>
+                <tr *ngIf="submission.quantity5">
+                  <th>{{ submission.quantity5 }}</th>
+                  <td>{{ submission.pricePerQty5 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <th>FOB Port / FOB港口</th>
+          <td colspan="3">
+            {{ submission.fobChinaPort }}
+          </td>
+        </tr>
+        <tr>
+          <th>Payment Terms / 付款条件</th>
+          <td colspan="3">
+            <div class="pre">{{ submission.factoryTerms}}</div>
+          </td>
+        </tr>
+        <tr>
+          <th>Sample Lead Time / 打样时间</th>
+          <td>
+            {{ submission.sampleTime }}
+          </td>
+          <th>Sample Cost / 样品费</th>
+          <td>
+            {{ submission.sampleCost }}
+          </td>
+        </tr>
+        <tr>
+          <th>Tooling / Mold Time / 模具时间</th>
+          <td>
+            {{ submission.toolingTime }}
+          </td>
+          <th>Tooling / Mold Cost / 开模费</th>
+          <td>
+            {{ submission.toolingCharge }}
+          </td>
+        </tr>
+
+
+        <tr>
+          <th>Art Setup Charge / 制版费</th>
+          <td colspan="3">
+            {{ submission.artCharge }}
+          </td>
+        </tr>
+        <tr>
+          <th>Production Lead Time / 交期</th>
+          <td colspan="3">
+            {{ submission.productionLeadTime }}
+          </td>
+        </tr>
+
+        <tr>
+          <th colspan="4">Factory Remarks / 工厂备注</th>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <div class="pre">{{ submission.factoryRemarks }}</div>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="4">Factory Images / 工厂产品图片</th>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <div class="factory-images">
+              <div *ngFor="let url of submission.imagesFromFactory; let i=index" class="image">
+                <img [src]="url" alt="Factory image" />
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <th>3<sup>rd</sup> Party Audit Report or Certificate / 第三方审核报告/认证</th>
+          <td colspan="3">
+            <div class="pre">{{ submission.certificates }}</div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+  <div class="j">
+    <div class="section__header">Packaging Information / 包装信息</div>
+
+    <table class="details__table">
+      <tbody>
+        <tr>
+          <th>Packaging / 包装方式</th>
+          <td> {{ submission.packaging }} </td>
+        </tr>
+        <tr>
+          <th>Master L / 外箱长度</th>
+          <td>
+            {{ submission.masterCartonDepth }}
+          </td>
+        </tr>
+
+        <tr>
+          <th>Master W / 外箱宽度</th>
+          <td>
+            {{ submission.masterCartonWidth }}
+          </td>
+        </tr>
+        <tr>
+          <th>Master H / 外箱高度</th>
+          <td>
+            {{ submission.masterCartonHeight }}
+          </td>
+        </tr>
+        <tr>
+          <th>Master Carton Weight / 外箱重量</th>
+          <td>
+            {{ submission.masterCartonWeight }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="images">
+    <div class="section__header">Images</div>
+    <div class="source-images">
+      <div *ngFor="let image of source.images" class="image" >
+        <img [src]="image" alt="Product Image" />
+      </div>
+    </div>
+  </div>
+</div>

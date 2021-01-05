@@ -1,0 +1,138 @@
+<form [formGroup]="productForm" (keydown.enter)="$event.preventDefault()" class="product w-100-p" fxLayout="column" fxFlex>
+    <mat-tab-group fxFlex *ngIf="fields.length > 0">
+        <mat-tab label="Basic Info">
+            <app-product-basic-form [product]="product" [form]="productForm"  [fieldLabel]="fieldLabel" [visibleField]="visibleField" [requiredField]="requiredField" [fields]="fields"></app-product-basic-form>
+        </mat-tab>
+
+        <mat-tab label="Description" *ngIf="descriptions.length > 0 && pageType=='edit'">
+            <app-product-supplier-description [product]="product" [form]="productForm" [descriptions]="descriptions">
+            </app-product-supplier-description>
+        </mat-tab>
+
+        <mat-tab label="Product Images" *ngIf="pageType=='edit'">
+            <app-product-image-gallery [product]="product"></app-product-image-gallery>
+        </mat-tab>
+        <mat-tab label="Portal Customers" *ngIf="pageType=='edit'">
+            <app-product-customers-margin [product]="product" [form]="productForm"></app-product-customers-margin>
+        </mat-tab>
+        <mat-tab label="Attributes" *ngIf="pageType=='edit'">
+            <ng-template mat-tab-label>
+                Attributes
+            </ng-template>
+            <ng-template matTabContent>
+                <product-attributes-editor [product]="product"[priceTable]="priceTable"  (save)="saveVariationEditor($event)"></product-attributes-editor>
+            </ng-template>
+        </mat-tab>
+
+
+        <mat-tab label="Pricing" *ngIf="pageType=='edit'">
+            <ng-template mat-tab-label>
+                Pricing
+            </ng-template>
+            <mat-card>
+            <ng-template matTabContent>
+                <div fxFlex>
+                    <product-form-pricing-level
+                    (save)="saveVariationEditor($event)"
+                    (addOnPricings)="addOnPricings($event)"
+                    ></product-form-pricing-level> 
+                </div>
+            </ng-template>
+        </mat-card>
+        </mat-tab>
+
+        <mat-tab label="Kits" *ngIf="pageType=='edit'&&product.productType=='2'">
+            <app-product-kits [product]="product" (save)="saveProduct()"></app-product-kits>
+        </mat-tab>
+
+        <mat-tab label="Related Products" *ngIf="pageType=='edit'&&product.productType!='2'">
+            <related-product [product]="product" (save)="saveProduct()"></related-product>
+        </mat-tab>
+
+        <mat-tab label="Charges" *ngIf="pageType=='edit'">
+            <app-product-charges (save)="saveCharges($event)"></app-product-charges>
+        </mat-tab>
+
+
+        <mat-tab label="Stores" *ngIf="pageType=='edit'">
+            <app-product-stores [product]="product"></app-product-stores>
+        </mat-tab>
+        <mat-tab label="Decoration" *ngIf="pageType=='edit'">
+            <app-product-deco></app-product-deco>
+        </mat-tab>
+
+        <mat-tab label="Inventory" *ngIf="pageType=='edit' && inventoryCount !=0">
+            <app-inventory-list></app-inventory-list>
+        </mat-tab>
+
+        <mat-tab label="Shipping" *ngIf="pageType=='edit'">
+            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+
+                <div class="py-16" fxLayout="row">
+                    <mat-form-field fxFlex>
+                        <input matInput name="Width" formControlName="width" placeholder="Width">
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <input matInput name="Height" formControlName="height" placeholder="Height">
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <input matInput name="Depth" formControlName="depth" placeholder="Depth">
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field class="w-100-p">
+                    <input matInput name="Weight" formControlName="weight" placeholder="Weight">
+                </mat-form-field>
+
+                <mat-form-field class="w-100-p">
+                    <input matInput name="extraShippingFee" formControlName="extraShippingFee"
+                        placeholder="Extra Shipping Fee" type="number">
+                    <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+            </div>
+        </mat-tab>
+        <mat-tab label="Purchase Order History" *ngIf="pageType=='edit'">
+            <app-product-purchase-order-history></app-product-purchase-order-history>
+        </mat-tab>
+        <mat-tab label="Sales Order History" *ngIf="pageType=='edit'">
+            <app-product-sales-order-history></app-product-sales-order-history>
+        </mat-tab>
+    </mat-tab-group>
+    <div class="p-16" *ngIf="!embed">
+        <button mat-raised-button color="accent" class="save-product-button mr-8" *ngIf="pageType ==='new'"
+            (click)="saveProduct()">
+            <span>ADD</span>
+        </button>
+
+        <ng-container *ngIf="product.id !== '' && product.id">
+            <ng-container *checkPermission="[product.id, 'Product']; requiredPermission 'allowEdit'">
+                <button mat-raised-button color="accent" class="save-product-button mr-8" *ngIf="pageType ==='edit'"
+                    (click)="saveProduct()">
+                    <span>SAVE</span>
+                </button>
+            
+            
+                <button mat-raised-button color="accent" class="save-product-button mr-8" *ngIf="pageType ==='edit'"
+                    (click)="cloneProduct()">
+                    <span>Clone</span>
+                </button>
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="pageType === 'edit'">
+            <ng-container *ngIf="permissionsEnabled">
+                <permission-entity-group-dialog
+                    *checkPermission="[product.id, 'Product']; requiredPermission 'allowPermission'"
+                    [entityId]="product.id" [entityType]="'Product'" class="permission-btn">
+                </permission-entity-group-dialog>
+            </ng-container>
+        </ng-container>
+
+
+        <button mat-raised-button color="warn" (click)="cancel()">Cancel</button>
+    </div>
+</form>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

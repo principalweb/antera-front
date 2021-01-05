@@ -1,0 +1,97 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+  mat-dialog-content {
+    max-height: none;
+  }
+
+  mat-dialog-actions {
+    display: block !important;
+    border-top: 2px solid #ddd;
+    button {
+      float: right;
+      margin-right: 15px;
+      margin-bottom: 10px;
+    }
+  }
+
+  mat-table {
+    min-height: 250px;
+    max-height: 500px;
+
+    mat-header-cell,
+    mat-cell {
+      padding: 0 12px;
+      text-align: left;
+      width: 139px;
+    }
+
+    .mat-cell.mat-column-settings {
+      padding: 4px;
+    }
+    .mat-column-settings {
+      min-width: 220px;
+      .mat-checkbox-label {
+        font-size: 14px;
+      }
+    }
+
+    mat-row {
+      cursor: pointer;
+    }
+
+    .mat-cell-checkbox {
+      display: flex;
+      justify-content: center;
+      color: black;
+      text-align: center;
+
+      .mat-checkbox {
+        .mat-checkbox-ripple {
+          display: none !important; //fix for broken rendering
+        }
+      }
+    }
+
+    .w-p-30 {
+      min-width: 25%;
+    }
+
+    .w-p-10 {
+      min-width: 10%;
+    }
+  }
+}
+
+.mat-pseudo-checkbox-checked {
+  background: mat-color($accent) !important;
+}
+
+.filter-input {
+  .mat-option-pseudo-checkbox {
+    display: none;
+  }
+
+  .mat-icon-button {
+    position: absolute;
+    top: 4px;
+    right: 0;
+
+    .mat-icon {
+      margin: 0;
+    }
+  }
+}
+
+
+.mat-column-cost {
+  width: 75px !important;
+}
+
+.longer-header {
+  width: 70px !important;
+  .mat-header-cell {
+    width: 70px !important;
+  }
+}
+

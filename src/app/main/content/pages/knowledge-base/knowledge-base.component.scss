@@ -1,0 +1,45 @@
+@import "src/@fuse/scss/fuse";
+
+#knowledgebase {
+
+    .header {
+        flex: 1 0 auto;
+        min-height: 124px !important;
+        max-height: 124px !important;
+
+        @include media-breakpoint('xs') {
+            height: 240px;
+            padding: 16px;
+        }
+    }
+
+    .content {
+        max-width: 1920px;
+        width: 100%;
+        margin: 0 auto;
+
+        .articles-list {
+            width: 450px;
+            min-width: 450px;
+            height: fit-content;
+            margin: 16px;
+
+            @include media-breakpoint('lt-xs') {
+                min-width: 300px;
+                margin: 16px 0;
+            }
+
+            .mat-list-item {
+                text-decoration: none !important;
+
+                .mat-list-item-content {
+
+                }
+            }
+
+            .see-all-link {
+                font-size: 14px;
+            }
+        }
+    }
+}

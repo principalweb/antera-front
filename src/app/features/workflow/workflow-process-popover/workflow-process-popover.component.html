@@ -1,0 +1,35 @@
+<div class="row-cell workflow-process color-label" [ngStyle]="value && value.color ? {'background' : value.color} : ''" (click)="execAction(value.action, {orderId: row.orderId, vendorId: row.vendorId, vendor: row.vendor, events: value.name}, $event)">
+    {{ value && value.name && value.name != 'X' ? value.name : ''}}
+    <div class="corner-hitbox" [matMenuTriggerFor]="popoverMenu" (click)="$event.stopPropagation()">
+    </div>
+</div>
+
+<mat-menu #popoverMenu="matMenu" class="workflow-menu">
+    <div class="workflow-popover">
+        <div class="workflow-popover-content">
+            <button
+                *ngFor="let ev of availableEvents" mat-raised-button class="workflow-popover-available-process" [ngStyle]="{'background': ev.color}"
+                (click)="selectEvent(ev)">
+                {{ ev.name == 'X' ? '' : ev.name }}
+            </button>
+        </div>
+    </div>
+</mat-menu>
+
+<!--div *ngIf="value.action == 'sendpo'">
+  <embedded-purchase-order-modern
+    [orderId]="row.orderId"
+    [orderNo]="row.orderNo"
+    [vendorName]="row.vendorName"
+    [vendorId]="row.vendorId"
+    [hidden]=true
+    (onDocumentReady)="onDocumentReady()"
+  ></embedded-purchase-order-modern>
+</div-->
+
+
+<!--
+
+<div class="row-cell workflow-process color-label" [ngStyle]="{'background' : value.color}" (click)="execAction(value.action, {vendorId: row.vendorId, orderId: row.orderId}, $event)">
+-->
+

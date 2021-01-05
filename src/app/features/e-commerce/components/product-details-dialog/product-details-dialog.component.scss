@@ -1,0 +1,45 @@
+@import "src/@fuse/scss/fuse";
+
+.app-product-details-dialog{
+    width: 100%;
+
+    @include media-breakpoint('xs') {
+        max-width: 100vw !important;
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+        overflow: hidden;
+
+        .mat-toolbar {
+            min-height: initial;
+            flex: none;
+        }
+
+        .toolbar-bottom {
+            height: auto;
+        }
+    }
+
+    .dialog-content-wrapper {
+        height: 85vh;
+
+        @include media-breakpoint('xs') {
+            height: 100vh;
+        }
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    div[mat-dialog-content] {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .center {
+        display: flex;
+        flex: 1;
+        position: relative;
+    }
+}

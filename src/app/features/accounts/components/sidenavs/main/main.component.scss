@@ -1,0 +1,44 @@
+@import "src/@fuse/scss/fuse";
+
+:host {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    height: 100%;
+
+    .sidenav-content {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        max-width: 280px;
+
+        @include media-breakpoint(gt-sm) {
+            padding: 24px 4px 24px 24px;
+            max-width: 320px;
+        }
+
+        .fuse-card {
+            min-width: 100%;
+            max-width: 100%;
+
+            .figure {
+                font-size: 36px;
+                color: map-get($accent, 500);
+                cursor: pointer;
+            }
+
+            .label {
+                margin-top: -4px;
+                margin-bottom: 4px;
+            }
+
+            > div {
+                border-right: 1px solid map-get($primary, 100);
+
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+    }
+}

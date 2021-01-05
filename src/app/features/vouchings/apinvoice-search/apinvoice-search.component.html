@@ -1,0 +1,122 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">Search A/P Invoice</span>
+      <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <form name="form" [formGroup]="searchForm" (submit)="search()">
+      <mat-radio-group aria-label="Select an option" formControlName="searchType" fxLayout="row" fxLayoutAlign="flex-start center">
+          <mat-radio-button value="1">PO #</mat-radio-button>
+          <mat-radio-button value="2" class="ml-20">Invoice Number</mat-radio-button>
+          <mat-form-field class="ml-8">
+            <input type="text" matInput formControlName="invoiceNumber" (keypress)="searchForm.patchValue({searchType:'2'})">
+          </mat-form-field>
+          <mat-radio-button value="3" class="ml-20">Invoice Date</mat-radio-button>
+          <mat-form-field class="ml-8">
+            <input matInput [matDatepicker]="dp" (dateChange)="searchForm.patchValue({searchType:'3'})" readonly formControlName="invoiceDate">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp disabled="false"></mat-datepicker>
+          </mat-form-field>
+          <button mat-raised-button color="accent" class="ml-8" tabindex="1" [disabled]="!enableSearch">Search</button>
+          <span *ngIf="searchApi!=''" class="search-notify ml-8">Searching {{searchApi}}...</span>
+      </mat-radio-group>
+    </form>
+    <div>
+      <mat-table fxFlex #table
+          [dataSource]="dataSource">
+
+          <ng-container cdkColumnDef="invoiceNumber">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>Invoice Number</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                  <p class="text-truncate" matTooltip="{{data.number}}">{{data.number}}</p>
+              </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="poNumber">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>PO Number</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                  <p class="text-truncate" matTooltip="{{data.purchaseOrderNumber}}">{{data.purchaseOrderNumber}}</p>
+              </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="type">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>Type</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                  <p class="text-truncate" matTooltip="{{data.type}}">{{data.type}}</p>
+              </mat-cell>
+          </ng-container>
+
+
+          <ng-container cdkColumnDef="invoiceDate">
+            <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                <span>Invoice Date</span>
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                <p class="text-truncate" matTooltip="{{data.invoiceDate}}">{{data.invoiceDate | date:'M/d/yyyy'}}</p>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="salesAmount">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>Sales Amount</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                  <p class="email">{{data.currency=='USD'?'$':''}}{{data.salesAmount}}
+                  </p>
+              </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="shippingAmount">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>Shipping Amount</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                  <p class="email">{{data.currency=='USD'?'$':''}}{{data.shippingAmount}}
+                  </p>
+              </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="totalAmount">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>Total Amount</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+                  <p class="email">{{data.currency=='USD'?'$':''}}{{data.totalAmount}}
+                  </p>
+              </mat-cell>
+          </ng-container>
+
+          <ng-container cdkColumnDef="compare">
+              <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                  <span>&nbsp;</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let data; let i = index" fxHide fxShow.gt-sm>
+                  <p class="email">
+                    <button mat-raised-button color="accent" (click)="compare(i)">Compare</button>
+                  </p>
+              </mat-cell>
+          </ng-container>
+
+          <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+                  class="category-row"
+                  matRipple>
+          </mat-row>
+      </mat-table>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button tabindex="2" (click)="close()">Cancel</button>
+  </div>
+</div>

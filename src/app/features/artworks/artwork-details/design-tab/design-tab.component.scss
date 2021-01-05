@@ -1,0 +1,511 @@
+@import "src/@fuse/scss/fuse";
+
+app-artwork-design-tab {
+  display: flex;
+  flex-direction: column;
+  min-height: 1px;
+}
+
+.customer-view {
+  text-align: center;
+}
+
+.uploaded-image {
+  position: relative;
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
+
+  img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+  }
+}
+
+#artwork-details-design {
+  min-height: 1px;
+
+  .customer-view {
+    width: 50%;
+    padding: 16px;
+    border: 2px solid #999;
+    position: relative;
+    background: #CCCCCC url("/assets/images/backgrounds/checker.png") top left repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right:22px;
+    border-radius: 5px;
+
+    @include media-breakpoint("lt-sm") {
+      width: 100% !important;
+    }
+
+    .upload-button,
+    .remove-button {
+      width: 100%;
+      height: 100%;
+    }
+
+    .remove-button {
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .feature-image-title {
+      font-size: 14px;
+      width: 90%;
+      text-align: center;
+    }
+    .feature-image {
+      position: relative;
+      max-width: 300px !important;
+      width: 100%;
+    }
+
+    &:hover {
+      .remove-button {
+        transition: 0.3s opacity;
+        opacity: 1;
+      }
+
+      .uploaded-image {
+        transition: 0.3s opacity;
+        opacity: 0.2;
+      }
+    }
+  }
+
+  .form-actions {
+    padding: 16px;
+  }
+
+  #design-files-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .mat-table {
+      flex: 1;
+      height: 230px;
+      overflow: auto;
+     display: block;
+    top: 0px;
+    position: absolute;
+    width: 70%;
+    }
+
+    .mat-header-row {
+      min-height: 33px !important;
+    }
+
+    .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
+      opacity: 0;
+    }
+
+    .mat-sort-header-pointer-left.ng-trigger.ng-trigger-leftPointer {
+      transform: rotate(-45deg);
+    }
+
+    .mat-sort-header-pointer-right.ng-trigger.ng-trigger-rightPointer {
+      transform: rotate(45deg);
+    }
+
+    .activity-item {
+      position: relative;
+    }
+
+    adf-upload-button {
+      label {
+        display: none;
+      }
+
+      mat-icon {
+        color: #fff;
+        margin-left: 3px;
+      }
+    }
+
+    .mat-raised-button {
+      min-width: 30px !important;
+      line-height: 30px !important;
+      padding: 0 !important;
+    }
+  }
+
+  .mw-300 {
+    min-width: 300px;
+  }
+
+  .description-stitches {
+    margin-bottom: 20px;
+
+    .row {
+      padding: 4px;
+      border-bottom: 1px solid #ddd;
+
+      &.row-header {
+        border-bottom: 1px solid #aaa;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    .no {
+      width: 60px;
+    }
+    .actions {
+      width: 40px;
+      margin-top: -12px;
+      margin-bottom: -12px;
+    }
+    .stitches {
+      width: 60px;
+      margin-right: 10px;
+    }
+  }
+
+  .add-variation {
+    width: 100%;
+    height: 100%;
+    margin: 10px 0;
+  }
+
+  .variations-container {
+    overflow-x: scroll;
+  }
+
+  .no-vendor {
+    position: absolute;
+    top: 32px;
+    font-size: 0.8em;
+    color: red;
+  }
+
+  .note {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .pre {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    text-align: justify;
+  }
+
+  .small-note {
+    -ms-flex: 0 1 auto;
+    word-wrap: break-word;
+  }
+  .deco-details{
+      width:31%;
+      margin: 1%;
+      padding: 1%;
+      text-align: center;
+  }
+  .deco-details a{
+      text-align:center;
+      float:left;
+  }
+
+    .w-p-10 {
+      min-width: 10%;
+    }
+
+.art-card-deco-details {
+
+    border-radius: 2px;
+    max-width: 100%;
+    width: 100%;
+    min-height:200px;
+/*    max-width: 200px;
+    max-height: 100px;
+    margin-top: 5px;
+    margin-left : 20px; */
+    padding: 5px;
+
+    .mat-card-image {
+      margin: 2px auto;
+      height: 100%;
+      width: 120px;
+      border:2px solid #EEEEEE;
+      padding:2px;
+    }
+    .itemCodeText{
+        padding:2px;
+        margin:2px;
+    }
+    .home-card-content {
+      display: flex;
+      justify-content: space-between;
+
+      & > * {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: auto;
+        max-width: 50%;
+
+        &:first-child {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+        }
+
+        &:last-child {
+          flex-direction: column;
+          align-items: start;
+          padding: 8px;
+        }
+      }
+    }
+    .art-card-deco-details-content{
+        height:220px;
+    }
+    .art-card-deco-details-content-left{
+        text-align:center;
+        width:40%;
+    }
+    .art-card-deco-details-content-left p{
+       text-align:center;
+    }
+    .art-card-deco-details-content-right{
+        text-align:center;
+        width:50%;
+        height: 220px;    
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    .art-card-deco-details-content-right p{
+        padding:5px;
+        min-width:30%;
+        margin-left:5px;
+        border: 1px solid #eeeeee;
+        border-radius: 5px;
+        margin-top: 0px;
+    }
+    .mat-card-outer-box{
+        /*border:2px solid #AAAAAA;*/
+    }
+    .header-cell{
+       text-align:left;
+    }
+    .header-cell-size{
+        width:100%;
+    }
+}
+
+    .mat-card-outer-box{
+        /*border:2px solid #CCCCCC;*/
+        padding:20px;
+        text-align:center;
+    }
+
+    mat-table {
+    display: block;
+    top: 0px;
+    position: absolute;
+    width: 40%;
+    margin-left:5px;
+    height: 220px;
+    overflow-y: scroll;    
+    }   
+    mat-card-title{
+        text-align:right;
+    }
+    .mat-card-footer{
+       margin:0px;
+       font-size:16px;
+       font-weight:bold;
+    }
+
+    .mat-card-header-text {
+        margin: 0 16px;
+        right: 0;
+        position: absolute;
+        top:-30px;
+    }
+
+.example-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 25px 25px 0;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.example-list {
+  border: solid 1px #ccc;
+  min-height: 60px;
+  background: transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+    
+
+}
+
+.example-box {
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  
+  background: white;
+  font-size: 14px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+              
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+  height:0px;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  min-height: 60px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-handle {
+  top: 10px;
+  right: 10px;
+  color: #ccc;
+  cursor: move;
+  width: 24px;
+  height: 24px;
+  float: right;
+  margin-right: 10px;
+}
+
+.section--variations .example-list{
+    border: solid 0px #ccc;
+    margin-left: 10px;
+    cursor: move;
+}
+}
+.imgCdkDragPreview{
+  width: 100px;
+  height: 100px;
+  border:2px solid #EEEEEE;
+}
+.header-cell-size{
+    width:100%;
+    max-width:100%;
+}
+
+.artCardHeader {
+    display: flex;
+    min-height:50px;
+    max-height:50px;
+    marign-bottom:20px;
+}
+
+.variationBoxHeader{
+    width:490px;
+    overflow-y:hidden;
+    min-height:400px;
+    max-height:1200px;
+}
+.productBoxHeader{
+    width:100%;
+    border-left:0px solid #eeeeee;
+    overflow-y:hidden;
+    min-height:50px;
+    max-height:50px;
+    overflow-x: hidden;
+    overflow-y:hidden;
+}
+
+.artCard {
+    display: flex;
+    min-height:400px;
+    max-height:1200px;
+    marign-bottom:20px;
+}
+
+.variationBox{
+    width:490px;
+    overflow-y:scroll;
+    overflow-x:hidden;
+    min-height:400px;
+    max-height:1200px;
+    border-right:2px solid #CCCCCC;
+    padding-top: 12px;
+
+}
+.productBox{
+    width:100%;
+    border-left:0px solid #eeeeee;
+    overflow-y:scroll;
+    min-height:400px;
+    max-height:1200px;
+    overflow-x: hidden;
+
+}
+.revert-variation{
+cursor:pointer;
+margin-left:5px;
+}
+.columnList {
+  column-count: 2;
+}
+.statusBar{
+    width:100%;
+    text-align:right;
+}
+.statusBar .mat-button-toggle-button{
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 50px;
+}
+.avOrderNo{
+        background-color: #e0e0e0;
+}
+.artworkDescription{
+    height:100%;
+}
+.artworkDescription .mat-card{
+    height:100%;
+}
+.artworkDescription .mat-card .mat-toolbar-single-row{
+
+}
+
+.top-artwork-details{
+    min-height:350px !important;
+}
+
+.ml-10.cancel {
+  margin-left: 10px;
+}

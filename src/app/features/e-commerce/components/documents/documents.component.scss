@@ -1,0 +1,38 @@
+app-documents {
+
+  display: block;
+  height: 100%;
+  min-height: 1px;
+
+  .documents-wrapper,
+  .documents-wrapper-content {
+    display: block;
+    height: 100%;
+    min-height: 1px;
+  }
+  .box_label_button{
+      margin-left:20px;
+  }
+  mat-list-item {
+    &:hover {
+      background-color: #eeeeee;
+    }
+  }
+  .doc-list {
+    &--internal {
+      .mat-list-item .mat-list-icon {
+        color: #9b9b9b;
+      }
+    }
+    &--customer {
+      .mat-list-item .mat-list-icon {
+        color: #108a00;
+      }
+    }
+    &--vendor {
+      .mat-list-item .mat-list-icon {
+        color: #058ec0;
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+<div id="quote" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button class="mr-16" mat-icon-button routerLink="/e-commerce/quotes">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        {{(order.orderType.toLowerCase() == 'quote' ? 'Quote' : 'Order')}} #{{order.orderNo}} for {{order.accountName}}
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <div class="order-total" fxFlex fxLayout="row-reverse" fxLayoutAlign="start center">
+                <div fxLayout="column" fxHide.xs>
+                    <div class="h2">Order Total: {{order.finalGrandTotalPrice | currency:'USD':'symbol'}}
+                    <span *ngIf="! (customerViewService.state$ | async)?.enabled">&nbsp;| Gross Profit: {{order.grossProfit | currency:'USD':'symbol' }}
+                            <span *ngIf="order.grossProfit" class="profit-percentage">&nbsp;
+                                {{ ( order.grossProfitPercent / 100 ) | percent:sysconfigOrderFormTotalDecimalUpto }}
+                            </span>
+
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+            <div class="toolbar">
+                <div class="order-status mr-8" fxFlex fxLayout="row">
+                    <div fxFlex>
+                        Status:
+                        <span class="status h6 p-4" [ngClass]="colors[order.orderStatus]">
+                            {{order.orderStatus}}
+                        </span>
+                    </div>
+                    <ng-container *ngIf="newOrderFormEnabled && !forceNewOrderForm">
+                        <button mat-button (click)="toggleNewOrderForm()" class="orange-fg">
+                            {{ !newOrderFormToggled ? 'Try New Order Form' : 'Back to Original Form' }}
+                        </button>
+                    </ng-container>
+                </div>
+                <ng-container *ngIf="!loading">
+                    <div class="quote-buttons" *ngIf="order.orderType.toLowerCase() == 'quote'" fxLayout="row"
+                        fxLayoutAlign="end center">
+
+                        <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                            <ng-container *ngIf="permissionsEnabled">
+                                <permission-entity-group-dialog style="margin-right:10px"
+                                    *checkPermission="[order.id, 'Order']; requiredPermission 'allowPermission'"
+                                    [entityId]="order.id" [entityType]="'Order'">
+                                </permission-entity-group-dialog>
+                            </ng-container>
+                            <!--button mat-raised-button color="accent" (click)="getPortalPrview()"
+                                matTooltip="Shortcut to the Quote in Portal">Portal Preview</button-->
+                            <a mat-raised-button color="accent"
+                            href="{{quotePreviewUrl}}" matTooltip="Shortcut to the Quote in Portal"
+                            target="_blank" *ngIf="quotePreviewUrl !=''">Portal Preview</a>
+                            <button mat-raised-button color="accent" class="ml-8"
+                                (click)="emailInteractiveQuote()"
+                                matTooltip="Convert this quote to an order"  *ngIf="quotePreviewUrl !=''">Email Interactive Quote</button>
+                            <button mat-raised-button color="accent" class="ml-8"
+                                (click)="convertQuoteToOrder()"
+                                matTooltip="Convert this quote to an order">Book</button>
+                            <button mat-raised-button color="accent" class="ml-8"
+                                (click)="updateOrderStatus('Favorite')"
+                                matTooltip="Saves a copy of the quote when you convert it to an Order">Favorite</button>
+                            <button mat-raised-button color="warn" class="ml-8" (click)="cancelQuote()">
+                                <mat-icon>highlight_off</mat-icon> Cancel
+                            </button>
+                        </ng-container>
+                    </div>
+
+                </ng-container>
+            </div>
+
+            <div *ngIf="noteService.showButton()" [ngClass]="{'example-button-container': !noteService.open.value, 'btn-moved': noteService.open.value}">
+                <button (click)="toogleNotification(sidenav, $event)" mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
+                    {{ noteService.numberOfNotes() }}
+                    <mat-icon *ngIf="!noteService.open.value">arrow_left</mat-icon>
+                    <mat-icon *ngIf="noteService.open.value">arrow_right</mat-icon>
+        
+                </button>
+            </div>
+
+            <mat-sidenav-container>
+                <mat-sidenav #sidenav mode="over" position="end">
+                    <activity-sidenav></activity-sidenav>
+                </mat-sidenav>
+                <mat-sidenav-content>
+                    <!-- CONTENT -->
+                    <div class="content">
+
+                        <mat-tab-group [(selectedIndex)]="noteService.orderTabIndex" (selectedTabChange)="updateTabIndex()" class="fixed" #tabs>
+
+                            <mat-tab label="Quote Details">
+                                <div class="quote-details tab-content p-24" fusePerfectScrollbar>
+                                    <order-details-overview [order]="order" [fields]="fields" (edit)="editOrder($event)"
+                                        (payment)="receivePayment()"></order-details-overview>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="Products">
+                                <div class="products tab-content">
+                                    <order-details-product-step *ngIf="!newOrderFormToggled"></order-details-product-step>
+                                    <app-order-container *ngIf="newOrderFormToggled"></app-order-container>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="Documents">
+                                <ng-template matTabContent>
+                                    <div class="tab-content--documents tab-content" fxFlex>
+                                        <app-documents [fields]="fields" [ordersConfig]="ordersConfig" [documentsToUpload]="documentsToUpload" (removeDocumentsToUpload)="removeDocumentsToUpload($event)"></app-documents>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+
+                            <mat-tab label="Activities">
+                                <ng-template matTabContent>
+                                    <div class="products tab-content" fusePerfectScrollbar>
+                                        <app-order-activity-list [order]="order"></app-order-activity-list>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+
+                            <mat-tab label="History">
+                                <ng-template matTabContent>
+                                    <app-history></app-history>
+                                </ng-template>
+                            </mat-tab>
+
+                        </mat-tab-group>
+
+
+                    </div>
+                    <!-- / CONTENT -->
+                </mat-sidenav-content>
+            </mat-sidenav-container>
+         
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

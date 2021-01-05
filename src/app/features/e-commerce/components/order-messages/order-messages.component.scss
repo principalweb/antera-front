@@ -1,0 +1,20 @@
+@import "src/@fuse/scss/fuse";
+
+.order-messages{
+  .mat-form-field-infix{
+    width: 720px;
+    @include media-breakpoint('lt-md') {
+        width: 300px;
+    }
+
+    @include media-breakpoint('xs') {
+        width: 220px;
+    }
+  }
+
+  .message-container{
+    margin: 10px 0 30px;
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+  }
+}

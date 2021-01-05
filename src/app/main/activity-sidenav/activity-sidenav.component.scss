@@ -1,0 +1,29 @@
+.note-header {
+    border-bottom: 2px solid white;
+}
+
+.activity-side-nav {
+    color: white;
+    height: 100vh;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    width: 300px;
+    background-color: #2d323e;
+    z-index: 1000;
+    box-shadow: -10px 0px 10px 1px #aaaaaa;
+}
+
+.activity-side-nav-closed {
+    color: white;
+    height: 100%;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 10px;
+    width: 300px;
+    background-color: #2d323e;
+    z-index: 1000;
+    box-shadow: -10px 0px 10px 1px #aaaaaa;
+}
+
+

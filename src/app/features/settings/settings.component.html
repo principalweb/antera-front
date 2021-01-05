@@ -1,0 +1,82 @@
+<div id="settings" class="page-layout carded fullwidth inner-scroll list-page">
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">settings</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Integrations</span>
+      </div>
+      <!-- / APP TITLE -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="content-card">
+      <mat-tab-group class="settings-tab-group-1">
+        <mat-tab label="API Token">
+          <ng-template matTabContent>
+            <app-api-token-tab></app-api-token-tab>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="ASI">
+          <ng-template matTabContent>
+            <app-configurations-tab></app-configurations-tab>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="TaxJar">
+          <ng-template matTabContent>
+            <app-taxjar></app-taxjar>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Ship Station">
+          <ng-template matTabContent>
+            <app-shipstation></app-shipstation>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Card Connect">
+          <ng-template matTabContent>
+            <app-payments-tab></app-payments-tab>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="BOLT">
+          <ng-template matTabContent>
+            <app-bolt-tab></app-bolt-tab>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="PromoStandards">
+          <ng-template matTabContent>
+            <app-promostandards></app-promostandards>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="QBO" *ngIf="qboActive">
+          <ng-template matTabContent>
+            <app-qbocustomer></app-qbocustomer>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="XERO" *ngIf="xeroActive">
+          <ng-template matTabContent>
+            <xerocustomer></xerocustomer>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="CXML" *ngIf="cxmlEnabled">
+          <ng-template matTabContent>
+            <app-cxml></app-cxml>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Dubow" *ngIf="dubowEnabled">
+          <ng-template matTabContent>
+            <app-dubow></app-dubow>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

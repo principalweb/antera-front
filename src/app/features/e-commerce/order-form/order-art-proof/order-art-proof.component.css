@@ -1,0 +1,22 @@
+.proof__image {
+  max-width: 300px;
+  min-height: 200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.proof-status {
+}
+
+.proof-status--4 {
+  color: green;
+}
+
+.proof-status--2 {
+  color: red;
+}
+
+.proof-status--1,
+.proof-status--3 {
+  color: orange;
+}

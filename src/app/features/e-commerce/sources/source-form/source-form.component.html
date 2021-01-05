@@ -1,0 +1,143 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <form *ngIf="sourceForm" [formGroup]="sourceForm" class="p-16" fusePerfectScrollbar>
+        <div class="px-16 two-columns">
+            <mat-form-field>
+                <input matInput name="gcName" formControlName="gcName" placeholder="Name">
+                <app-error [group]="sourceForm" field="gcName" label="GC Name"></app-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="text" name="gcItemNumber" formControlName="gcItemNumber"
+                    placeholder="Item Number">
+                <app-error [group]="sourceForm" field="gcItemNumber" label="GC Item Number"></app-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="hidden" formControlName="assignedSalesRepId" />
+                <input type="text" matInput placeholder="Assigned To" formControlName="assignedSalesRep"
+                    [matAutocomplete]="autoAssignee" />
+                <mat-autocomplete #autoAssignee="matAutocomplete" [displayWith]="displayName"
+                    (optionSelected)="selectAssignee($event)">
+                    <mat-option [value]="salesRep" *ngFor="let salesRep of filteredAssignees | async">
+                        {{ salesRep.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <app-error [group]="sourceForm" field="assignedSalesRep" label="Assigned To"></app-error>
+            </mat-form-field>
+
+
+            <mat-form-field>
+                <input type="hidden" formControlName="accountId" />
+                <input matInput placeholder="Account Name" formControlName="accountName" [matAutocomplete]="autoAccount"
+                    autocomplete="off" />
+                <mat-autocomplete #autoAccount="matAutocomplete" [displayWith]="displayName"
+                    (optionSelected)="selectAccount($event)">
+                    <mat-option *ngFor="let acc of filteredAccounts | async" [value]="acc">
+                        {{ acc.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <app-error [group]="sourceForm" field="accountName" label="Account Name"></app-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="hidden" formControlName="contactId" />
+                <input matInput placeholder="Contact Name" formControlName="contactName" [matAutocomplete]="autoContact"
+                    autocomplete="off" />
+                <mat-autocomplete #autoContact="matAutocomplete" [displayWith]="displayName"
+                    (optionSelected)="selectContact($event)">
+                    <mat-option *ngFor="let c of filteredContacts | async" [value]="c">
+                        {{ c.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <app-error [group]="sourceForm" field="contactName" label="Contact Name"></app-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex>
+                <input type="hidden" formControlName="assignedSourcingRep" />
+                <input type="text" matInput placeholder="Sourcing Rep" formControlName="assignedSourcingRep"
+                    [matAutocomplete]="autoAssignSourcing" />
+                <mat-autocomplete #autoAssignSourcing="matAutocomplete" [displayWith]="displayName"
+                    (optionSelected)="selectAssignedSourcing($event)">
+                    <mat-option [value]="salesRep" *ngFor="let salesRep of filteredSourceAssignees | async">
+                        {{ salesRep.name }}
+                    </mat-option>
+                </mat-autocomplete>
+                <app-error [group]="sourceForm" field="assignedSourcingRep" label="Sourcing Rep"></app-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-select placeholder="Status" formControlName="status">
+                    <mat-option [value]="st.value" *ngFor="let st of statuses">
+                        {{ st.label }}
+                    </mat-option>
+                </mat-select>
+                <app-error [group]="sourceForm" field="status" label="Status"></app-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input type="hidden" formControlName="opportunityId" />
+                <input matInput placeholder="Opportunity Number" formControlName="opportunityNo"
+                    [matAutocomplete]="autoOpportunity" autocomplete="off" />
+                <mat-autocomplete #autoOpportunity="matAutocomplete" [displayWith]="displayOportunityNo"
+                    (optionSelected)="selectOpportunity($event)">
+                    <mat-option *ngFor="let o of filteredOpportunities" [value]="o">
+                        {{ o.opportunityNo }} : {{ o.opportunityName }}
+                    </mat-option>
+                </mat-autocomplete>
+                <app-error [group]="sourceForm" field="opportunityNo" label="Opportunity Number"></app-error>
+            </mat-form-field>
+
+        </div>
+        <div class="px-16">
+            <mat-form-field class="w-100-p">
+                <textarea matInput class="w-100-p" name="specifications" formControlName="specifications"
+                    placeholder="Specifications"></textarea>
+            </mat-form-field>
+        </div>
+        <div class="px-16 two-column">
+            <mat-form-field>
+                <input matInput name="decorationType" formControlName="decorationType" placeholder="Decoration Type">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput name="testingRequirements" formControlName="testingRequirements"
+                    placeholder="Testing Requirements">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput name="size" formControlName="size" placeholder="Size">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput name="material" formControlName="material" placeholder="Material">
+            </mat-form-field>
+        </div>
+
+        <input type="hidden" formControlName="dateEntered" />
+        <input type="hidden" formControlName="dateModified" />
+        <input type="hidden" formControlName="createdById" />
+        <input type="hidden" formControlName="createdByName" />
+        <input type="hidden" formControlName="modifiedById" />
+        <input type="hidden" formControlName="modifiedByName" />
+
+    </form>
+    <!-- / CONTENT -->
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'" mat-raised-button (click)="create()" class="save-button mat-accent"
+            aria-label="SAVE">SAVE
+        </button>
+
+        <button *ngIf="action ==='edit'" mat-raised-button (click)="update()" class="save-button mat-accent"
+            aria-label="SAVE">SAVE
+        </button>
+
+    </div>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

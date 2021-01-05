@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clients-__CI_ENVIRONMENT_SLUG__-__APP__
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      location: __CI_ENVIRONMENT_SLUG__
+      app: __APP__
+  replicas: __REPLICAS__
+  template:
+    metadata:
+      labels:
+        location: __CI_ENVIRONMENT_SLUG__
+        app: __APP__
+    spec:
+      containers:
+      - name: __APP__
+        image: __CI_REGISTRY_IMAGE__:__VERSION__
+        resources:
+          requests:
+            cpu: __CPU__
+            memory: __MEMORY__
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: __PORT__
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: regcred

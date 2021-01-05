@@ -1,0 +1,131 @@
+@import "src/@fuse/scss/fuse";
+
+.scrumboard-board-list {
+    width: 284px;
+    min-width: 284px;
+    max-width: 284px;
+    padding-right: 24px !important;
+
+    .list {
+        max-height: 100%;
+        background-color: #EEF0F2;
+        color: #000;
+        border-radius: 2px;
+        transition: box-shadow 150ms ease;
+        height: 100%;
+
+        .list-header {
+            height: 64px;
+            min-height: 64px;
+            padding: 0 8px 0 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+            @include media-breakpoint(lt-sm) {
+                height: 48px;
+                min-height: 48px;
+            }
+        }
+
+        .list-content {
+            position: relative;
+            overflow: hidden;
+            overflow-y: auto;
+            min-height: 0;
+            flex: 1;
+            height: calc(100vh - 325px);
+            
+            .list-cards {
+                position: relative;
+                min-height: 32px;
+                padding: 0 16px;
+                background: mat-color($mat-grey, 200) !important;
+                height: 100%;
+            }
+        }
+
+        .list-footer {
+            display: flex;
+            flex-direction: column;
+            flex: 1 0 auto;
+            min-height: 48px;
+        }
+
+    }
+
+
+    .ngx-dnd-content {
+        user-select: none;
+    }
+
+    &.gu-mirror {
+        position: fixed !important;
+        margin: 0 !important;
+        z-index: 9999 !important;
+        opacity: 0.8;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+        filter: alpha(opacity=80);
+
+        > .list {
+            @include mat-elevation(7);
+        }
+    }
+
+    &.gu-hide {
+        display: none !important;
+    }
+
+    &.gu-unselectable {
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+    &.gu-transit {
+        opacity: 0.2;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+        filter: alpha(opacity=20);
+    }
+
+    .add-card-button {
+        position: relative;
+        height: 48px;
+        min-height: 48px;
+        padding: 0 16px;
+        text-align: left;
+        text-transform: none;
+        font-weight: 500;
+        font-size: 14px;
+        background-color: #DCDFE2;
+        cursor: pointer;
+        border-radius: 2px;
+
+        mat-icon {
+            margin-right: 8px;
+            color: rgba(0, 0, 0, 0.6);
+        }
+    }
+}
+
+.card-tooltip {
+    white-space: pre-line;
+    font-size: 1.1em;
+}
+
+.removeListTip {
+    white-space: pre-line !important;
+    font-size: 18px !important;
+}
+
+.delete-grey-icon {
+   color: #e0e0e0 !important;
+   font-size: 20px;
+}
+
+.full-width-trash {
+    width: 100%;
+}
+
+.list-selected-border {
+    border: 5px solid #43a047;
+}

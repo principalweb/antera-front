@@ -1,0 +1,307 @@
+Running the automatic migrations. Please, be patient and wait until the execution completes.
+Found and fixed the following deprecations:
+
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/services/config.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/services/match-media.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/navigation/navigation.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/sidebar/sidebar.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.directive.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/utils/utils.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/auth.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/artworks.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/qb.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/integration.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/store.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/category.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/partner.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/contacts.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/documents.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/inventory.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/productions.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/countdown/countdown.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/navigation/horizontal/nav-collapse/nav-horizontal-collapse.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/search-bar/search-bar.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/search-bar/search-bar.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/shortcuts/shortcuts.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/theme-options/theme-options.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/content.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/navbar/navbar.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/toolbar/shortcuts/toolbar-shortcuts.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/templates/multi-quote-modern/multi-quote-modern.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/related-contacts-dialog/related-contacts-dialog.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/related-accounts-dialog/related-accounts-dialog.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/templates/embedded-purchase-order-decoration-modern/embedded-purchase-order-decoration-modern.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/saved-search/saved-search.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/shipping-form/shipping-form.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/equipment-form/equipment-form.component.ts
+Fixed 4 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/aws.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/shared/aws-file-manager/aws-file-manager.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/main.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/authentication/login/auth-guard.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/opportunities.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/sources.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/file-manager/common/guards/preview.guard.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/accounts/account-list/account-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/accounts/components/overview-tab/overview-tab.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/accounts/components/contact-lists/contact-lists.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/accounts/components/related-contact-lists/related-contact-lists.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/autocomplete-auto-active-first-option/autocomplete-auto-active-first-option-example.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/autocomplete-display/autocomplete-display-example.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/autocomplete-filter/autocomplete-filter-example.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/autocomplete-overview/autocomplete-overview-example.ts
+Fixed 5 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/cdk-table-basic/cdk-table-basic-example.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/form-field-custom-control/form-field-custom-control-example.ts
+Fixed 7 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/table-http/table-http-example.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/components/angular-material/example-viewer/example-viewer.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/manage-menu/manage-menu.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/manage-menu/manage-menu.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-franchise/royalty-franchise.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/franchise-list/franchise-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-caps/cap-list/cap-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/partner/partner-form/partner-form.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/partner/partner-list/partner-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-reports/royalty-reports.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-reports/invoice-report/invoice-report.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-reports/open-order-report/open-order-report.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-reports/summary-report/summary-report.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-reports/adjusted-order-report/adjusted-order-report.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty-reports/franchise-vendor-report/franchise-vendor-report.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/category/category-form/category-form.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/category/category-list/category-list.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/site/site-form/site-form.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/bin/bin-form/bin-form.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/bin/bin-list/bin-list.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/site/site-list/site-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/artworks/artwork-details/artwork-details-file-util.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/artworks/artworks-list/artworks-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/artworks/artworks/artworks.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/artworks/board/board.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/cases/cases.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/cases/cases/cases.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/cases/cases-list/cases-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/dashboards/project/project.service.ts
+Fixed 4 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/contacts/contact-list/contact-list.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/contacts/contacts.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/contacts/sidenavs/main/main.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/dashboards/project/finance/finance.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/dashboard/dashboard.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/product/product.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/order.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/products/products.service.ts
+Fixed 6 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/products/product-list/product-list.component.ts
+Fixed 6 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/products/product-images/product-images.component.ts
+Fixed 7 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/product/product.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/orders.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/orders/orders.component.ts
+Fixed 7 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/order/order.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/quotes/quotes.component.ts
+Fixed 7 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/quote/quote.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/inventory-item-details/inventory-item-details.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/inventory-list/inventory-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/history/history.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/history/history.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/product-deco/product-deco-form/product-deco-form.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/product-deco/product-deco-list/product-deco-list.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/sources/source-list/source-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/sources/board/board.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/external/external.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/faqs/faq.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/faqs/faq.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/guided-sessions/sessions.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/guided-sessions/sessions/sessions.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/guided-sessions/session.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/guided-sessions/session/session.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/leads/leads.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/leads/leads-list/leads-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/leads/leads.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/locations/locations.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/locations/locations/locations.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/locations/locations-list/locations-list.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/opportunities/opportunity-list/opportunity-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/opportunities/board/board.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/production-details/production-details.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/productions-list/productions-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/productions/productions.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/board/board.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/production-details/production-details-file-util.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/projects/projects.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/projects/projects/projects.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/projects/projects-list/projects-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receivings.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receivings.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receiving-items/receiving-items.component.ts
+Fixed 5 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receiving-list/receiving-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/create-report-dialog/create-report-dialog.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/filter-form/filter-form.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report-list/report-list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report/report-detail.service.ts
+Fixed 7 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report/report-detail.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/settings/settings.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/settings/components/ps-detail/ps-detail.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/settings/components/promostandards/promostandards.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/settings/components/sanmar/sanmar.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/store/store-form/store-form.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/store/store-list/store-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/users.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/user-details-dialog/user-details-dialog.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/user-list/user-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/users.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/user-detail/user-detail.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/webstore/webstore.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/webstore/webstore-list/webstore-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/webstore/webstore/webstore.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow-control.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow-status/workflow-status.component.ts
+Fixed 4 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow/workflow.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow-list/workflow-list.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/academy/courses.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/academy/courses/courses.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/academy/course.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/academy/course/course.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/calendar/calendar.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/calendar/calendar.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/chat/chat.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/chat/sidenavs/left/user/user.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/file-manager/components/ftree/ftree.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail-list/mail-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail-details/mail-details.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/mail.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts
+Fixed 4 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/folders.effects.ts
+Fixed 4 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/filters.effects.ts
+Fixed 4 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/labels.effects.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/mail.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/guards/resolve.guard.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/sidenavs/main/main-sidenav.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/mail-list/mail-list-item/mail-list-item.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/mail-details/mail-details.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/scrumboard.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/scrumboard.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/board/board.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/board/dialogs/card/card.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/board/list/list.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/board/dialogs/card/label-selector/label-selector.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/board/sidenavs/settings/settings.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/board/sidenavs/settings/board-color-selector/board-color-selector.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/todo.service.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/todo.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/sidenavs/main/main-sidenav.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/todo-list/todo-list-item/todo-list-item.component.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/todo-list/todo-list.component.ts
+Fixed 3 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/todo-details/todo-details.component.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/invoices/invoice.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/profile/profile.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/search/search.service.ts
+Fixed 2 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/knowledge-base/knowledge-base.service.ts
+Fixed 1 error(s) in /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/knowledge-base/knowledge-base.component.ts
+
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/@fuse/components/search-bar/search-bar.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/artworks.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/aws.service.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/category.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/contacts.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/documents.service.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/integration.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/inventory.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/opportunities.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/partner.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/productions.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/qb.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/sources.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/core/services/store.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/bin/bin-form/bin-form.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/bin/bin-list/bin-list.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/category/category-form/category-form.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/category/category-list/category-list.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/site/site-form/site-form.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/customer-admin-config/site/site-list/site-list.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/manage-menu/manage-menu.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/manage-menu/manage-menu.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/partner/partner-form/partner-form.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/partner/partner-list/partner-list.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/admin/royalty/royalty.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/artworks/artwork-details/artwork-details-file-util.service.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/artworks/artworks-list/artworks-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/cases/cases-list/cases-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/cases/cases.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/contacts/contact-list/contact-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/dashboards/project/finance/finance.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/history/history.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/inventory-list/inventory-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/product-deco/product-deco-form/product-deco-form.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/components/product-deco/product-deco-list/product-deco-list.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/order.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/orders.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/orders/orders.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/product/product.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/products/products.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/quotes/quotes.component.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/e-commerce/sources/source-list/source-list.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/faqs/faq.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/guided-sessions/session.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/guided-sessions/sessions.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/leads/leads.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/locations/locations-list/locations-list.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/locations/locations.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/opportunities/opportunity-list/opportunity-list.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/production-details/production-details-file-util.service.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/productions/productions-list/productions-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/projects/projects-list/projects-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/projects/projects.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receiving-items/receiving-items.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receiving-list/receiving-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/receivings/receivings.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report-list/report-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/reports/report/report-detail.service.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/settings/components/promostandards/promostandards.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/settings/components/ps-detail/ps-detail.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/store/store-form/store-form.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/store/store-list/store-list.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/user-detail/user-detail.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/user-details-dialog/user-details-dialog.component.ts:10:2 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/user-list/user-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/users.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/users/users.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/webstore/webstore-list/webstore-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/webstore/webstore.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow-control.service.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow-list/workflow-list.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/features/workflow/workflow/workflow.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/academy/course.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/academy/courses.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/calendar/calendar.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/chat/chat.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/mail.service.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/filters.effects.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/folders.effects.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/labels.effects.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail-ngrx/store/guards/resolve.guard.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail-details/mail-details.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail-list/mail-list.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/mail/mail.service.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/scrumboard/scrumboard.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/apps/todo/todo.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/invoices/invoice.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/knowledge-base/knowledge-base.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/profile/profile.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/content/pages/search/search.service.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/main/navbar/navbar.component.ts:2:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/shared/aws-file-manager/aws-file-manager.component.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/shared/related-accounts-dialog/related-accounts-dialog.component.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/shared/related-contacts-dialog/related-contacts-dialog.component.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/shared/saved-search/saved-search.component.ts:3:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/shared/shipping-form/shipping-form.component.ts:6:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/app/shared/templates/multi-quote-modern/multi-quote-modern.component.ts:5:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/autocomplete-auto-active-first-option/autocomplete-auto-active-first-option-example.ts:4:1 - duplicate RxJS import
+WARNING: /Users/kwilliams/Code/frontend-upgrade/src/assets/angular-material-examples/cdk-table-basic/cdk-table-basic-example.ts:3:1 - duplicate RxJS import

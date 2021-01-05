@@ -1,0 +1,67 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>Attach Category</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="isLoading">
+		<mat-spinner></mat-spinner>
+    </div>
+
+    <mat-dialog-content fxLayoutAlign="center" class="p-12 m-0">
+        <form [formGroup]="dataForm" (submit)="save()" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+            <div fxLayout="row" fxLayout.xs="column">
+                <div fxLayout="column" fxFlex class="mr-20">
+                    <div class="form-group">
+                        <div fxLayout="row">
+                            <mat-form-field class="fixed-here">
+                                <input matInput autocomplete="off" (keydown)="$event.stopPropagation()" name="categorySearch"
+                                    [(ngModel)]="currentSearch" placeholder="Search Categories" formControlName="categorySearch" />
+                            </mat-form-field>
+                            <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+                                <button mat-raised-button (click)="save()" class="save-button mat-accent" aria-label="Update" matTooltip="Update">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="empty-div">
+
+                        </div>
+                        
+                            <div fusePerfectScrollbar [fusePerfectScrollbarOptions]="{'minScrollbarLength': 150}" class="row-wrap" fxLayout="row wrap">
+                                <div [matTooltip]="category.category" class="check-box-item" *ngFor="let category of categories">
+                                    
+                                    <mat-checkbox [value]="category.id" (change)="onSelectedChange($event, category)">{{category.category | ellipsis: 10}}
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+    </mat-dialog-content>
+
+</div>
+
+<!-- <mat-select fxLayout="row" fxLayout.xs="column" placeholder="Categories" formControlName="categories" multiple required
+    (selectionChange)="filterCategories()">
+    <mat-option class="filter-input" (click)="$event.preventDefault()" disabled>
+
+        <button mat-icon-button (click)="clearCategorySearch()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-option>
+    <mat-option *ngFor="let category of categories" [value]="category">
+        {{category.category}}
+    </mat-option>
+</mat-select> -->

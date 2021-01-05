@@ -1,0 +1,694 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="px-32">
+	<div class="mx-400 mt-20 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">QuickBooks Online</span>
+    <button mat-raised-button color="accent" (click)="action='setting'" *ngIf="action=='report'&&false">Settings</button>
+    <button mat-raised-button color="accent" (click)="action='report'" *ngIf="action=='setting'&&false">Transaction Report</button>
+  </div>
+  <qbo-transaction-report *ngIf="action=='report'"></qbo-transaction-report>
+  <mat-accordion *ngIf="action=='setting'">
+      <mat-expansion-panel [expanded]="'true'">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Connection
+          </mat-panel-title>
+          <mat-panel-description>
+            Establish connection and import configurations.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="false">
+                <div class="form-group">
+                    <mat-form-field>
+                      <mat-select placeholder="Decimal Number" formControlName="qboNumberDecimalValue">
+                          <mat-option *ngFor="let decimal of decimalNumbers" [value]="decimal.value">
+                            {{decimal.label}}
+                          </mat-option>
+                      </mat-select>
+                      <mat-hint>Applied on Rates of Invoice & PO</mat-hint>
+                    </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <a class="ml-96" mat-raised-button color="accent" href="/protected/quickbooks/oauth2" target="_blank">Connect</a>
+                <button class="ml-96" (click)="importData()" mat-raised-button color="accent">Import</button>
+              </div>
+            </div>
+        </form>
+
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Customer
+          </mat-panel-title>
+          <mat-panel-description>
+            Mapping Account/Contacts as Customers
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-slide-toggle formControlName="EnableAnteraContactToQboCustomer">Map CRM Account Contacts as QBO Sub-customers.</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+              </div>
+            </div>
+        </form>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Product
+          </mat-panel-title>
+          <mat-panel-description>
+            Assign GL Accounts
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="false">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="Product Identifier" formControlName="ItemIdentifierProperty1">
+                            <mat-option *ngFor="let identifier of itemIdentifiers" [value]="identifier.value">
+                              {{identifier.label}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <table>
+                  <tr>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Product - Expense Account" formControlName="InvItemExpenseAccountId">
+                                    <mat-option *ngFor="let account of financialAccounts.expenseAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Product - Income Account" formControlName="InvItemIncomeAccountId">
+                                    <mat-option *ngFor="let account of financialAccounts.incomeAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Additional Charges - Expense Account" formControlName="SrvItemExpenseAccountId">
+                                    <mat-option *ngFor="let account of financialAccounts.expenseAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Additional Charges - Income Account" formControlName="SrvItemIncomeAccountId">
+                                    <mat-option *ngFor="let account of financialAccounts.incomeAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                      <td>&nbsp;
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Decorator - Expense Account" formControlName="NonInvItemExpenseAccountId">
+                                    <mat-option *ngFor="let account of financialAccounts.expenseAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Decorator - Income Account" formControlName="NonInvItemIncomeAccountId">
+                                    <mat-option *ngFor="let account of financialAccounts.incomeAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                      <td>&nbsp;
+                      </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+              </div>
+            </div>
+        </form>
+
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Inventory
+          </mat-panel-title>
+          <mat-panel-description>
+            Assign GL Accounts
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <table>
+                  <tr>
+                    <td>
+                      <div class="form-group">
+                        Adjustment - Increase (JE)
+                      </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Debit" formControlName="aiDebit">
+                                  <mat-option *ngFor="let account of financialAccounts.assetAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Credit" formControlName="aiCredit">
+                                  <mat-option *ngFor="let account of financialAccounts.allAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Adjustment - Decrease (JE)
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Debit" formControlName="adDebit">
+                                  <mat-option *ngFor="let account of financialAccounts.allAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Credit" formControlName="adCredit">
+                                  <mat-option *ngFor="let account of financialAccounts.assetAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Receipt (JE)
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Debit" formControlName="rDebit">
+                                  <mat-option *ngFor="let account of financialAccounts.assetAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Credit" formControlName="rCredit">
+                                  <mat-option *ngFor="let account of financialAccounts.allAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Vouching/Bill
+                    </td>
+                    <td>
+                        <div class="form-group">
+                          Expense Account from Product
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                          Accounts Payable
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Vouching/Bill (JE)
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select placeholder="Debit" formControlName="vDebit">
+                                  <mat-option *ngFor="let account of financialAccounts.allAccounts" [value]="account.id">
+                                    {{account.name}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                          Expense Account from Product
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
+                      <td>
+                        Inventory Release (JE)
+                      </td>
+                      <td>
+                          <div class="form-group">
+                            Expense Account from Product
+                          </div>
+                      </td>
+                      <td>
+                          <div class="form-group">
+                              <mat-form-field>
+                                <mat-select placeholder="Credit" formControlName="sCredit">
+                                    <mat-option *ngFor="let account of financialAccounts.assetAccounts" [value]="account.id">
+                                      {{account.name}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </td>
+                    </tr>
+                  <tr>
+                    <td>
+                        Invoice
+                    </td>
+                    <td>
+                        <div class="form-group">
+                          Income Account from Product
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                          Accounts Receivable
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+              </div>
+            </div>
+        </form>
+
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+              PurchaseOrder
+          </mat-panel-title>
+          <mat-panel-description>
+              Set PurchaseOrder sync options.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="false">
+                  <mat-slide-toggle formControlName="IncludeOrderIdInPurchaseOrderMemo">Put the advance order id in the PurchaseOrder memo field.</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-slide-toggle formControlName="NoZeroAmountItemsInPO">Do not transfer zero amount line items.</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-slide-toggle formControlName="BillRollAddCharge">Roll additional charges to product on Bill.</mat-slide-toggle>
+              </div>
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="form-group">
+                      <mat-form-field class="textarea">
+                          <textarea matInput rows="3" placeholder="Product Description" formControlName="PurchaseLineDescForProductMatrix" class="form-control"></textarea>
+                          <mat-hint>[ProductName], [LineDescription], [LineDescription_1stLine], [LineDescriptionForVendor], [LineItemCode], [LineItemNum], [AddChargeDescription], [Color], [Size]</mat-hint>
+                      </mat-form-field>
+                  </div>
+                  <div class="form-group">
+                      <mat-form-field class="textarea">
+                          <textarea matInput rows="3" placeholder="Additional Charge Description" formControlName="PurchaseLineDescForAddCharge" class="form-control"></textarea>
+                          <mat-hint>[ProductName], [LineDescription], [LineDescription_1stLine], [LineDescriptionForVendor], [LineItemCode], [LineItemNum], [AddChargeDescription], [Color], [Size]</mat-hint>
+                      </mat-form-field>
+                  </div>
+              </div>
+            </div>
+        </form>
+        <div class="px-16" *ngIf="showCustomFields && poCustomFields.length > 0">
+            <div class="mx-400 mt-30 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+                <span class="mat-title mb-0">Map Custom Fields</span>
+            </div>
+            <form [formGroup]="poCustomFieldForm">
+              <div class="form-group" *ngFor="let poCustomField of poCustomFields">
+                  <mat-form-field>
+                    <mat-select [placeholder]="'Custom Field - ' + poCustomField.qbName?poCustomField.qbName:'Not Labeled'" [formControlName]="poCustomField.qbId">
+                        <mat-option *ngFor="let customField of customFields" [value]="customField.value">
+                          {{customField.label}}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+            </form>
+        </div>
+    <div class="px-16">
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+      <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+    </div>
+    </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+              Invoice
+          </mat-panel-title>
+          <mat-panel-description>
+              Set Invoice sync options.
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="enableGST">Enable GST,this requires a tax code of GST to be created in quickbooks</mat-slide-toggle>
+              </div>
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST">
+                <mat-slide-toggle formControlName="enableGSTUsa">Post GST tax to USA based QBO company</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST && credsForm.value.enableGSTUsa">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="GST GL Account" formControlName="gstGl">
+                            <mat-option *ngFor="let account of financialAccounts.liabilityAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST && credsForm.value.enableGSTUsa">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="HST GL Account" formControlName="hstGl">
+                            <mat-option *ngFor="let account of financialAccounts.liabilityAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST && credsForm.value.enableGSTUsa">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="PST BC GL Account" formControlName="pstbcGl">
+                            <mat-option *ngFor="let account of financialAccounts.liabilityAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST && credsForm.value.enableGSTUsa">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="PST Manitoba GL Account" formControlName="rstGl">
+                            <mat-option *ngFor="let account of financialAccounts.liabilityAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST && credsForm.value.enableGSTUsa">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="PST Saskatchewan GL Account" formControlName="pstGl">
+                            <mat-option *ngFor="let account of financialAccounts.liabilityAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!credsForm.value.enableGST && credsForm.value.enableGSTUsa">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="QST GL Account" formControlName="qstGl">
+                            <mat-option *ngFor="let account of financialAccounts.liabilityAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="enableQbTax">Enable tax calculation in QuickBooks</mat-slide-toggle>
+              </div>
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="disableRolling">Expand rolled charges on Invoice</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-slide-toggle formControlName="IncludeSalesRepEmailToInvoice">Include salesperson email in QBO invoice email address field.</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-slide-toggle formControlName="NoZeroAmountItemsInInvoice">Do not transfer zero amount line items.</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <mat-slide-toggle formControlName="EnableAnteraUserToQboDepartment">Map sales rep of antera orders to location(department) of the QBO invoice.</mat-slide-toggle>
+              </div>
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="form-group">
+                      <mat-form-field class="textarea">
+                          <textarea matInput rows="3" placeholder="Product Description" formControlName="SalesLineDescForProductMatrix" class="form-control"></textarea>
+                          <mat-hint>[ProductName], [LineDescription], [LineDescription_1stLine], [LineDescriptionForVendor], [LineItemCode], [LineItemNum], [AddChargeDescription], [Color], [Size]</mat-hint>
+                      </mat-form-field>
+                  </div>
+                  <div class="form-group">
+                      <mat-form-field class="textarea">
+                          <textarea matInput rows="3" placeholder="Additional Charge Description" formControlName="SalesLineDescForAddCharge" class="form-control"></textarea>
+                          <mat-hint>[ProductName], [LineDescription], [LineDescription_1stLine], [LineDescriptionForVendor], [LineItemCode], [LineItemNum], [AddChargeDescription], [Color], [Size]</mat-hint>
+                      </mat-form-field>
+                  </div>
+              </div>
+            </div>
+        </form>
+        <form [formGroup]="creditForm">
+          <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="space-between center">
+              <span class="mat-title mb-0">Map QBO Terms to Antera Terms</span>
+          </div>
+          <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngFor="let qboTerm of qboCreditTerms">
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select [placeholder]="qboTerm.qbName" [formControlName]="qboTerm.qbId">
+                      <mat-option *ngFor="let localTerm of creditTerms" [value]="localTerm.id">
+                        {{localTerm.label}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <div class="px-16" *ngIf="showCustomFields && invoiceCustomFields.length > 0">
+            <div class="mx-400 mt-30 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+                <span class="mat-title mb-0">Map Custom Fields</span>
+            </div>
+            <form [formGroup]="invoiceCustomFieldForm">
+              <div class="form-group" *ngFor="let invoiceCustomField of invoiceCustomFields">
+                  <mat-form-field>
+                    <mat-select [placeholder]="'Custom Field - ' + invoiceCustomField.qbName?invoiceCustomField.qbName:'Not Labeled'" [formControlName]="invoiceCustomField.qbId">
+                        <mat-option *ngFor="let customField of customFields" [value]="customField.value">
+                          {{customField.label}}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+            </form>
+        </div>
+    <div class="px-16">
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+      <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+    </div>
+    </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel *ngIf="showTaxMap && credsForm.value.enableGST">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Tax
+          </mat-panel-title>
+          <mat-panel-description>
+            Map Rates
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <table>
+                  <tr *ngFor="let gr of gstRates">
+                    <td>
+                        <div class="form-group">
+                            <mat-form-field>
+                              <mat-select [placeholder]="gr.label" [formControlName]="gr.code">
+                                  <mat-option *ngFor="let qtr of qboTaxRates" [value]="qtr.qbId">
+                                    {{qtr.qbName}}
+                                  </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+              </div>
+            </div>
+        </form>
+
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Payment
+          </mat-panel-title>
+          <mat-panel-description>
+              Set payment configurations
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="enableIndependentPayments">Enable Payment transactions without Invoice</mat-slide-toggle>
+              </div>
+              <div class="mx-400 mt-20" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="ContinueOnPaymentLinkingError">Ignore payment linking error on Invoicing</mat-slide-toggle>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="Deposit Payments to" formControlName="PaymentReceiveAccount">
+                            <mat-option *ngFor="let account of financialAccounts.paymentAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="Refund from" formControlName="RefundFromAccount">
+                            <mat-option *ngFor="let account of financialAccounts.receivableAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="Deposit Credit Payments to" formControlName="CreditPaymentReceiveAccount">
+                            <mat-option *ngFor="let account of financialAccounts.paymentAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+              </div>
+            </div>
+        </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Vouching (Bill)
+          </mat-panel-title>
+          <mat-panel-description>
+              Set Vouching/Bill configurations
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form [formGroup]="credsForm">
+            <div class="px-16">
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="Temporary expense posting account" formControlName="vouchingTemporaryCostAccount">
+                            <mat-option *ngFor="let account of financialAccounts.allAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="false">
+                  <div class="form-group">
+                      <mat-form-field>
+                        <mat-select placeholder="Vendor Credit Posting Bank Account" formControlName="billBankAccount">
+                            <mat-option *ngFor="let account of financialAccounts.bankAccounts" [value]="account.id">
+                              {{account.name}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+              </div>
+            </div>
+        </form>
+      </mat-expansion-panel>
+  </mat-accordion>
+</div>

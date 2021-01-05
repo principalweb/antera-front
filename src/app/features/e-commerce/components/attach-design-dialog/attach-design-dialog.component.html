@@ -1,0 +1,58 @@
+<form [formGroup]="form" (submit)="save()">
+    <h2 mat-dialog-title>Attach Files</h2>
+    <mat-dialog-content fxLayout="column" fxLayoutAlign="start center">
+        <div class="mat-body">Attach finished artwork files to attach to PO</div>
+        <div class="feature-image" fxFlex="none">
+            <div fxFlex fxLayout="column"
+                    fxLayoutAlign="center center"
+                    class="upload-button"
+                    *ngIf="!imgLoading && !form.value.featureImage">
+                <mat-icon class="font-size-100 secondary-text h-100 w-100">file_upload</mat-icon>
+                <input type="file" id="uploadAwsFile" (change)="onFileUploadEventForAws($event)" hidden #uploadAwsFile>
+                <button mat-stroked-button color="accent" (click)="uploadAwsFile.click()">Choose File</button>
+            </div>
+            <div fxFlex fxLayout="column" fxLayoutAlign="center center"
+                    *ngIf="imgLoading">
+                <mat-spinner></mat-spinner>
+            </div>
+            <div fxFlex fxLayout="column"
+                    fxLayoutAlign="center center"
+                    class="remove-button"
+                    *ngIf="form.value.featureImage">
+                <button mat-raised-button
+                        color="warn"
+                        (click)="removeFeaturedImage()">
+                    <mat-icon>delete</mat-icon> Remove
+                </button>
+            </div>
+            <div class="uploaded-image" *ngIf="form.value.featureImage">
+                <img [src]="form.value.featureImage" fxFlex
+                     [default]= "'assets/images/ecommerce/product-image-placeholder.png'">
+            </div>
+        </div>
+        <mat-form-field class="w-100-p mt-8">
+            <mat-select formControlName="designTypeId"
+                        placeholder="Artwork Type"
+                        (selectionChange)="selectDesignType($event)">
+                <mat-option [value]="dtype.id"
+                            *ngFor="let dtype of designTypes">
+                    {{ dtype.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-100-p">
+            <textarea matInput
+                      formControlName="notes"
+                      rows="2"
+                      placeholder="Notes">
+            </textarea>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+        <button mat-button type="submit" color="accent">CREATE</button>
+        <button mat-button color="warn" mat-dialog-close>CANCEL</button>
+    </mat-dialog-actions>
+</form>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

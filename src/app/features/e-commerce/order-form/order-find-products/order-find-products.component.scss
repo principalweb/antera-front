@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .products {
+        &__container {
+            display:flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            flex: 1 1 auto;
+        }
+    }
+
+}

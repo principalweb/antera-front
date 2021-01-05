@@ -1,0 +1,45 @@
+<div mat-dialog-content>
+    <ng-container [formGroup]="form">
+        <button mat-raised-button color="accent" (click)="addBoxLabel()" class="mr-8">ADD LABEL</button>
+        <table class="simple" formArrayName="boxLabelQuantity">
+          <thead>
+            <tr>
+              <th style="width: 250px;">Box</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tr *ngFor="let item of boxLabelQuantityArray.controls; index as i" [formGroupName]="i">
+            <td class="left">
+              <div *ngIf="item.value as box" fxLayout="row">
+                <div>
+                  <div>Box Label {{ i + 1 }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="right">
+              <div fxLayout="row">
+				  <mat-form-field class="w-25-p">
+					  <input matInput formControlName="qty" placeholder="Quantity">
+				  </mat-form-field>
+				<mat-form-field class="w-25-p ml-8">
+					<input matInput formControlName="shipDate"
+						[matDatepicker]="pickershipDate"
+						placeholder="Ship Date">
+					<mat-datepicker-toggle matSuffix [for]="pickershipDate">
+					</mat-datepicker-toggle>
+					<mat-datepicker #pickershipDate></mat-datepicker>
+				</mat-form-field>
+                <button mat-icon-button (click)="removeBoxLabel(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
+    </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="save()" class="mr-8">SAVE</button>
+  <button mat-button class="red-fg" (click)="close()">CANCEL</button>
+</div>

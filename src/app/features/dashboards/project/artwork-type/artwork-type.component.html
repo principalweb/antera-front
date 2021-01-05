@@ -1,0 +1,274 @@
+<div id="home-dashboard" class="content">
+
+    <mat-tab-group dynamicHeight>
+
+        <mat-tab label="Home">
+            
+            <div class="widget-group grey-100-bg p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                    [@animateStagger]="{value:'50'}">
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"  *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.due_today">
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Total Quantity <strong class="pb-8 teal-fg">{{widgetArtWorkTypeData.due_today.qty}}</strong>
+                            </div>
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetArtWorkTypeData.due_today.total}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Today
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-auto" *ngIf="widgetArtWorkTypeData">
+                                {{widgetArtWorkTypeData.type}}
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center" *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.due_tomorrow">
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Total Quantity <strong class="pb-8 teal-fg">{{widgetArtWorkTypeData.due_tomorrow.qty}}</strong>
+                            </div>
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetArtWorkTypeData.due_tomorrow.total}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Tomorrow
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-auto" *ngIf="widgetArtWorkTypeData">
+                                {{widgetArtWorkTypeData.type}}
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center" *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.due_this_week">
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Total Quantity <strong class="pb-8 teal-fg">{{widgetArtWorkTypeData.due_this_week.qty}}</strong>
+                            </div>
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetArtWorkTypeData.due_this_week.total}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due This Week
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            >
+                            <div class="mat-caption text-auto" *ngIf="widgetArtWorkTypeData">
+                                {{widgetArtWorkTypeData.type}}
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center" *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.due_next_week">
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Total Quantity <strong class="pb-8 teal-fg">{{widgetArtWorkTypeData.due_next_week.qty}}</strong>
+                            </div>
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetArtWorkTypeData.due_next_week.total}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Next Week
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-auto" *ngIf="widgetArtWorkTypeData">
+                                {{widgetArtWorkTypeData.type}}
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+               
+               <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center" *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.due_future">
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Total Quantity <strong class="pb-8 teal-fg">{{widgetArtWorkTypeData.due_future.qty}}</strong>
+                            </div>
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetArtWorkTypeData.due_future.total}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                Orders Due Future
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center">
+                            <div class="mat-caption text-auto" *ngIf="widgetArtWorkTypeData">
+                                {{widgetArtWorkTypeData.type}}
+                            </div>
+                            <!-- <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center">
+                            <div class="pb-8 green-fg font-size-36 line-height-48 text-truncate">
+                                
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                fxFlex="100" fxFlex.gt-sm="60">
+
+                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                    <div class="h3 px-16 py-24">
+                        All Orders
+                    </div>
+
+                    <mat-divider></mat-divider>
+                    <mat-table fxFlex #table *ngIf="widgetArtWorkTypeData" [dataSource]="widgetArtWorkTypeData.orders">
+                        <ng-container cdkColumnDef="customerName">
+                            <mat-header-cell *cdkHeaderCellDef> Customer </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.customerName}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="orderNumber">
+                            <mat-header-cell *cdkHeaderCellDef> Order # </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.orderNumber}} </mat-cell>
+                        </ng-container>
+                         <ng-container cdkColumnDef="status">
+                            <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.orderStatus}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="quantity">
+                            <mat-header-cell *cdkHeaderCellDef> QTY </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.quantity}} </mat-cell>
+                        </ng-container>
+                        <ng-container cdkColumnDef="dueDate">
+                            <mat-header-cell *cdkHeaderCellDef> Due Date </mat-header-cell>
+                            <mat-cell *cdkCellDef="let order"> {{order.dueDate | date}} </mat-cell>
+                        </ng-container>
+                        <mat-header-row *cdkHeaderRowDef="orderColumns"></mat-header-row>
+                        <mat-row *cdkRowDef="let order; columns: orderColumns"></mat-row>
+                    </mat-table>
+                    <div class="empty-row" *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.orders.length === 0">No data found!</div>
+                </div>
+
+                </fuse-widget>
+               
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                fxFlex="100" fxFlex.gt-sm="40">
+
+                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                    <div class="h3 px-16 py-24">
+                        Tasks
+                    </div>
+
+                    <mat-divider></mat-divider>
+
+                    <mat-table [dataSource]="widgetArtWorkTypeData.tasks" *ngIf="widgetArtWorkTypeData" [@animateStagger]="{value:'50'}">
+
+                        <ng-container cdkColumnDef="task">
+                            <!-- Added filter row by Olena -->
+                            <mat-header-cell class="pr-8" *cdkHeaderCellDef>Task</mat-header-cell>
+                            <mat-cell class="pr-8" *cdkCellDef="let task">
+                                <p class="text-truncate font-weight-600">{{ task.name }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container cdkColumnDef="description">
+                            <!-- Added filter row by Olena -->
+                            <mat-header-cell class="pr-8" *cdkHeaderCellDef>Description</mat-header-cell>
+                            <mat-cell class="pr-8" *cdkCellDef="let task">
+                                <p class="text-truncate font-weight-600">{{ task.description }}</p>
+                            </mat-cell>
+                        </ng-container>
+
+                       
+                        <mat-header-row *cdkHeaderRowDef="taskColumns"></mat-header-row>
+                        <mat-row *cdkRowDef="let task; columns: taskColumns;"
+                                matRipple [@animate]="{value:'*',params:{y:'100%'}}">
+                        </mat-row>
+                    </mat-table>
+                    <div class="empty-row" *ngIf="widgetArtWorkTypeData && widgetArtWorkTypeData.tasks.length === 0">No data found!</div>
+                </div>
+
+                </fuse-widget>
+            </div>
+            <!-- / WIDGET GROUP -->
+
+        </mat-tab>
+
+        </mat-tab-group>
+
+</div>

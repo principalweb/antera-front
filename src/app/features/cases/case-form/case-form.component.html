@@ -1,0 +1,112 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-dialog-content class="p-24 m-0">
+
+        <form name="form" [formGroup]="caseForm"
+              fxLayout="column" fusePerfectScrollbar>
+
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="number"
+                               placeholder="Number" readonly>
+                    </mat-form-field>
+                </div>
+                <div class="mb-24" fxFlex></div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <mat-select formControlName="priority" placeholder="Priority">
+                            <mat-option [value]="priority" *ngFor="let priority of priorities">{{ priority }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <mat-select formControlName="status" placeholder="Status">
+                            <mat-option [value]="st" *ngFor="let st of status">{{ st }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start"
+                     fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <input matInput formControlName="accountName"
+                               placeholder="Account Name">
+                    </mat-form-field>
+                </div>
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start"
+                     fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <mat-select formControlName="type" placeholder="Type">
+                            <mat-option [value]="type" *ngFor="let type of accTypes">{{ type }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxFlex="none">
+                <mat-icon class="mr-12 mt-12"></mat-icon>
+                <mat-form-field fxFlex>
+                    <input matInput formControlName="subject" placeholder="Subject">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxFlex="none">
+                <mat-icon class="mr-12 mt-12"></mat-icon>
+                <mat-form-field fxFlex>
+                    <textarea formControlName="description"
+                              matInput type="text" max-rows="4"
+                              placeholder="General Info"></textarea>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxFlex="none">
+                <mat-icon class="mr-12 mt-12"></mat-icon>
+                <mat-form-field fxFlex>
+                    <textarea formControlName="resolution"
+                              matInput type="text" max-rows="4"
+                              placeholder="Resolution"></textarea>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxFlex="none">
+                <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                    <mat-icon class="mr-12 mt-12"></mat-icon>
+                    <mat-form-field fxFlex>
+                        <input matInput
+                               formControlName="salesRep"
+                               placeholder="Assigned To">
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxFlex.xs="none"></div>
+            </div>
+        </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="m-0 p-16"
+        fxLayout="row" fxLayoutAlign="space-between center">
+
+    <button mat-raised-button
+            (click)="dialogRef.close(caseForm)"
+            class="save-button mat-accent"
+            aria-label="SAVE"
+            >SAVE</button>
+    </mat-dialog-actions>
+
+</div>

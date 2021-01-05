@@ -1,0 +1,82 @@
+.inquiry__document {
+    width: 100%;
+    min-height: 900px;
+    padding: 16px 48px 16px 48px;
+
+    .logo {
+      max-width: 250px;
+    }
+
+    .section__header {
+      background: #b4bc1d;
+      color: white; 
+      padding: 8px;
+      margin: 4px 0;
+    }
+  
+    .pre {
+      line-height: 1.2;
+      white-space: pre-wrap;
+    }
+
+    .pricing__table {
+      th, td {
+        border: none;
+      }
+    }
+  
+    .details__table {
+      table-layout: fixed;
+      width: 100%;
+      border-collapse: collapse;
+
+     
+
+      caption {
+        padding: 4px;
+        text-align: left;
+        border: 1px solid #cccccc;
+      }
+      th {
+        max-width: 180px;
+        min-width: 120px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 4px;
+        border: 1px solid #cccccc;
+      }
+    }
+
+    .factory-images, .source-images {
+      display:flex;
+      flex-wrap: wrap;
+
+      .image {
+        display:flex;
+        flex-direction: column;
+        margin: 1rem;
+        max-width: 200px;
+        overflow: hidden;
+        width: calc(33.3333% - 2rem);
+
+        img {
+          max-width: 100%;
+          height: auto;
+          
+        }
+      }
+    }
+ 
+    .summary {
+      &__title {
+        font-size: 30px;
+        text-transform: uppercase;
+      }
+      .label {
+        color: rgba(0, 0, 0, 0.54);
+      }
+    }
+  }
+  

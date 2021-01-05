@@ -1,0 +1,17 @@
+<div (click)="$event.stopPropagation()" [ngClass]="{'activity-side-nav': open, 'activity-side-nav-closed': !open}">
+  <h3 class="mat-title">Activities</h3>
+  <div class="note-header mt-8" fxLayout="row" fxLayoutAlign="space-around">
+    <h5 class="font-weight-600 mt-0 mb-0 equal-width-sidenav">Type</h5>
+    <h5 class="font-weight-600 mt-0 mb-0 equal-width-sidenav">Date</h5>
+    <h5 class="font-weight-600 mt-0 mb-0 equal-width-sidenav">User</h5>
+    <h5 class="font-weight-600 mt-0 mb-0 equal-width-sidenav">Subject</h5>
+    <h5 class="font-weight-600 mt-0 mb-0 equal-width-sidenav">Description</h5>
+    <h5 class="font-weight-600 mt-0 mb-0 equal-width-sidenav">Status</h5>
+  </div>
+  <div class="activity-list-side-nav mb-8">
+    <div class="activity-list-side-nav-item" *ngFor="let note of notes">
+      <p>{{ note.type}}: {{ note.dueDate | date: shortDate }} {{ note.assignedName }}, {{ note.value.name}}, {{ note.description }}, {{ note.status }}</p>
+    </div>
+  </div>
+</div>
+

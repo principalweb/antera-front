@@ -1,0 +1,49 @@
+@import "src/@fuse/scss/fuse";
+
+fuse-e-commerce-products {
+
+    .header {
+
+        .search-input-wrapper {
+            max-width: 480px;
+        }
+
+        @include media-breakpoint(lt-xs) {
+            height: 176px !important;
+            min-height: 176px !important;
+            max-height: 176px !important;
+        }
+    }
+
+    .content {
+        display:flex;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .top-bg {
+        @include media-breakpoint(lt-xs) {
+            height: 240px;
+        }
+    }
+
+    .mat-button-toggle-group {
+        align-self: center;
+    }
+
+    .mat-drawer-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mat-product-list {
+        
+        .mat-list-item {
+            cursor: pointer;
+        }
+    }
+
+    .search-button-toggle-group {
+        margin-left: 10px;
+    }
+}

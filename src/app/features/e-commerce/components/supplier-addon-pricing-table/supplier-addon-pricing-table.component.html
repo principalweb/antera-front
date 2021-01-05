@@ -1,0 +1,37 @@
+<table class="simple decoration-charge" *ngIf="quantities">
+  <thead>
+    <tr>
+      <th class="col--charge">Charge</th>
+      <th>&nbsp;</th>
+      <!-- <th>{{ charge.ChargePriceArray.ChargePrice[0]?.xUom }}</th> -->
+      <ng-container *ngFor="let qty of quantities">
+        <th>{{ qty }}</th>
+      </ng-container>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let charge of decoration?.ChargeArray?.Charge">
+      <td class="col col--charge">
+        {{ charge.chargeName }}
+        {{ charge.charge}}
+      </td>
+      <td class="col col--price-label">
+        <div>Price</div>
+        <div>Repeat Price</div>
+      </td>
+      <ng-container *ngFor="let qty of quantities">
+        <td class="col col--qty">
+          <ng-container
+            *ngIf="getChargePrice(charge.chargeId, qty) as chargePrice">
+            <div> {{ chargePrice.price }} </div>
+            <div> {{ chargePrice.repeatPrice }} </div>
+          </ng-container>
+        </td>
+      </ng-container>
+      <td class="col">
+        <button mat-button (click)="addChargeAction(charge)">Add</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

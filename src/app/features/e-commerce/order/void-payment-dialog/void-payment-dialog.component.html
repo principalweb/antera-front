@@ -1,0 +1,41 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row>
+            <div>{{ dialogTitle }}</div>
+            <button mat-button class="mat-icon-button dialog-close"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+
+    <mat-sidenav-container class="content-card">
+
+        <mat-dialog-content class="p-24 m-0">
+            <form [formGroup]="form">
+                <div fxLayout="column">
+                    <input type="hidden" formControlName="oId" required/>
+                    <input type="hidden" formControlName="trackId" required/>
+                    <input type="hidden" formControlName="userId" required/>
+                    <mat-form-field class="w-100-p">
+                        <input matInput type="number" placeholder="Payment Amount" formControlName="amount">
+                    </mat-form-field>
+                </div>
+            </form>
+        </mat-dialog-content>
+
+        <mat-dialog-actions class="m-0 p-16 pb-36" fxLayout="row" fxLayoutAlign="space-between center">
+            <button
+                    mat-raised-button
+                    (click)="voided()"
+                    [disabled]="paymentValid"
+                    class="save-button mat-accent"
+                    aria-label="SAVE">Void
+            </button>
+        </mat-dialog-actions>
+
+    </mat-sidenav-container>
+
+</div>

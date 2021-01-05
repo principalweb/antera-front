@@ -1,0 +1,52 @@
+<div class="px-32">
+    <form name="form" [formGroup]="credsForm">
+        <div class="mt-40 mb-16 mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="mat-title mb-0">Card Connect Configuration</span>
+            <mat-slide-toggle labelPosition="before" formControlName="enabled">
+                Enable
+            </mat-slide-toggle>
+        </div>
+        <div class="mt-20 mx-400">
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <span class="mat-body-1 w-80 mr-16 text-right">Merchant ID</span>
+                <mat-form-field fxFlex>
+                    <input matInput formControlName="merchantid">
+                </mat-form-field>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <span class="mat-body-1 w-80 mr-16 text-right">User Name</span>
+                <mat-form-field fxFlex>
+                    <input matInput formControlName="username">
+                </mat-form-field>
+            </div>
+            <span class="mat-body-1 w-80 mr-16 text-right">(This is Not Card Connect Website Log In Username. This is API Username Provided with Merchant ID.)</span>
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <span class="mat-body-1 w-80 mr-16 text-right">Password</span>
+                <mat-form-field fxFlex>
+                    <input matInput formControlName="password" type="password">
+                </mat-form-field>
+            </div>
+            <span class="mat-body-1 w-80 mr-16 text-right">(This is Not Card Connect Website Log In Password. This is API Password Provided with Merchant ID.)</span>
+            <div fxLayout="row" fxLayoutAlign="start center" class="h-64">
+                <span class="mat-body-1 w-80 mr-16 text-right">Send Email</span>
+                <mat-checkbox formControlName="sendemail"></mat-checkbox>
+                <span class="mat-caption ml-16">Email Send to Sales Rep for each Payment Transaction</span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" class="h-64">
+                <span class="mat-body-1 w-80 mr-16 text-right">Test Mode</span>
+                <mat-checkbox formControlName="sandbox"></mat-checkbox>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center" class="h-64">
+                <span class="mat-body-1 w-80 mr-16 text-right">Allow eCheck/ACH</span>
+                <mat-checkbox formControlName="echeck"></mat-checkbox>
+                <span class="mat-caption ml-16">Merchant needs to have the agreement with Card Connect for eCheck transaction. Please Contact Card Connect if requires.</span>
+            </div>
+            <div class="actions">
+                <button mat-raised-button color="accent" (click)="save()">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="loading" *ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>

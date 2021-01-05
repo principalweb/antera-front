@@ -1,0 +1,104 @@
+<div class="pricing-margin-container">
+  <form [formGroup]="pricingMarginForm">
+    <mat-form-field class="full-width-form">
+      <mat-select
+        formControlName="margin"
+        (selectionChange)="selectionChange($event)"
+      >
+        <mat-option
+          *ngFor="let pricingMargin of pricingMargins"
+          [value]="pricingMargin.type"
+        >
+          {{ pricingMargin.margin }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <ul [ngSwitch]="currentMargin">
+      <div *ngSwitchCase="'1'">
+        <mat-form-field>
+          <input matInput placeholder="40" formControlName="percentage" />
+          <span matSuffix>%</span>
+          <mat-error *ngIf="pricingMarginForm.get('percentage').invalid">
+            Percentage is required
+          </mat-error>
+        </mat-form-field>
+        &nbsp;&nbsp;
+        <button
+          mat-raised-button
+          [disabled]="disableAddPercentage"
+          (click)="savePercentage()"
+          color="accent"
+        >
+          Save
+        </button>
+      </div>
+      <div *ngSwitchCase="'2'">
+
+        <br />
+        &nbsp; &nbsp;
+        <button
+          mat-raised-button
+          [disabled]="disableAddMargin"
+          (click)="addToCostMarginList()"
+          color="accent"
+        >
+          Add
+        </button>
+
+        &nbsp;&nbsp;
+        <button
+          mat-raised-button
+          [disabled]="disableAddAllMargins"
+          (click)="savePercentageMargin($event)"
+          color="accent"
+        >
+          Save
+        </button>
+        <br>
+        <mat-form-field class="half-with-input">
+          <label for="cost">Cost</label>
+          <input matInput formControlName="valueCost" />
+          <mat-error *ngIf="pricingMarginForm.get('valueCost').invalid">
+            Value is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="half-with-input right-container">
+          <label for="margin">Margin</label>
+          <input matInput formControlName="valueMargin" />
+          <span matSuffix>%</span>
+          <mat-error *ngIf="pricingMarginForm.get('valueMargin').invalid">
+            Margin Percentage is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-list dense *ngFor="let item of costMarginList; let i = index">
+          <mat-list-item
+            >Cost: {{ item.cost }} Margin: {{ item.margin }} %
+            <button mat-button (click)="removeFromList(i)">X</button>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      <div *ngSwitchCase="'3'">
+
+        <mat-form-field>
+          <input matInput placeholder="40" formControlName="percentage" />
+          <span matSuffix>%</span>
+          <mat-error *ngIf="pricingMarginForm.get('percentage').invalid">
+            Percentage is required
+          </mat-error>
+        </mat-form-field>
+        &nbsp; &nbsp;
+        <button
+          mat-raised-button
+          [disabled]="disableAddPercentage"
+          (click)="savePercentage()"
+          color="accent"
+        >
+          Save
+        </button>
+      </div>
+      <div *ngSwitchDefault>Choose a Option From Drop Down</div>
+    </ul>
+  </form>
+</div>

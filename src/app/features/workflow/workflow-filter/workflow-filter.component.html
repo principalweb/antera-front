@@ -1,0 +1,9 @@
+<button mat-icon-button [matMenuTriggerFor]="popoverMenu" (click)="$event.stopPropagation()"><mat-icon>filter_list</mat-icon></button>
+
+<mat-menu #popoverMenu="matMenu" class="workflow-menu">
+  <div class="p-20" flexLayout="column" flexLayoutGap="20px">
+    <div *ngFor="let item of wcs.processTypes">
+      <mat-checkbox [(ngModel)]="wcs.filter[value.name][item.id]" (click)="performFilter(value.name, item.id)"></mat-checkbox><span class="ml-16">{{ item.name? item.name : "None" }}</span>
+    </div>
+  </div>
+</mat-menu>

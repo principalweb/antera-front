@@ -1,0 +1,411 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0 toolbar-margin">
+        <mat-toolbar-row class="toolbar-row" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <mat-dialog-content class="m-0 p-0">
+        <mat-tab-group>
+            <mat-tab label="Contact">
+                <form name="contactForm" [formGroup]="contactForm" class="p-24 w-100-p" fxLayout="column" fxFlex>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">account_circle</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="firstName" formControlName="firstName" placeholder="First Name" matInput required>
+                                <app-error [group]="contactForm" field="firstName" label="First Name"></app-error>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="lastName" formControlName="lastName" placeholder="Last Name" matInput required>
+                                <app-error [group]="contactForm" field="lastName" label="Last Name"></app-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">work</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="title" formControlName="title" matInput placeholder="Title">
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">business</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input formControlName="department" matInput placeholder="Department">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input type="hidden" formControlName="reportsToId"/>
+                                <input type="text"
+                                        formControlName="reportsTo"
+                                        matInput
+                                        placeholder="Reports To"
+                                        [matAutocomplete]="autoContactAssigned"
+                                        >
+                                <mat-autocomplete #autoContactAssigned="matAutocomplete"
+                                                    [displayWith]="displayName"
+                                                    (optionSelected)="selectReporter($event)">
+                                    <mat-option *ngFor="let reporter of filteredContacts" [value]="reporter">
+                                        {{ reporter.name | capitalizeFirst }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">local_shipping</mat-icon>
+                            <mat-form-field fxFlex>
+                                <mat-select formControlName="shippingType" placeholder="Shipping Type">
+                                    <mat-option [value]="sType.value" *ngFor="let sType of shipAccTypes">{{ sType.label }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="shippingAcctNumber" formControlName="shippingAcctNumber" matInput placeholder="Shipping Account Number">
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input type="hidden" formControlName="salesRepId" required/>
+                                <input type="text"
+                                    formControlName="salesRep"
+                                    matInput
+                                    placeholder="Sales Rep"
+                                    [matAutocomplete]="autoAssigned"
+                                    required>
+                                <mat-autocomplete #autoAssigned="matAutocomplete"
+                                                [displayWith]="displayName"
+                                                (optionSelected)="selectAssignee($event)">
+                                    <mat-option *ngFor="let salesRep of filteredUsers" [value]="salesRep">
+                                        {{ salesRep.name | capitalizeFirst }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <!-- <app-error [group]="contactForm" field="salesRep" label="This field"></app-error> -->
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">phone</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="phone" formControlName="phone" matInput placeholder="Phone" required>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">phone</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="phoneMobile" formControlName="phoneMobile" matInput placeholder="Mobile">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input name="fax" formControlName="fax" matInput placeholder="Fax">
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12">email</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input type="email" name="email" formControlName="email" matInput placeholder="Email" required>
+                                <app-error [group]="contactForm" field="email" label="Email"></app-error>
+								<ng-container *ngIf="isEmailExist">
+									<mat-error>
+										Email already exists
+									</mat-error>
+								</ng-container>
+
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field class="w-50-p pr-32">
+                                <mat-select formControlName="leadSource"
+                                            placeholder="Lead Source">
+                                    <mat-option  [value]="leadSource.value" *ngFor="let leadSource of leadSources">
+                                        {{ leadSource.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column">
+                        <div fxLayout="row" class="textarea-wrapper" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <textarea name="generalInfo" formControlName="generalInfo" placeholder="General Info" matInput type="text" max-rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutAlign="start stretch">
+                        <div fxFlex fxFlex.xs="100" fxLayout="column" class="ml-24 p-8">
+                            <mat-form-field>
+                                <input name="billAddress1" formControlName="billAddress1" matInput placeholder="Billing Address 1">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="billAddress2" formControlName="billAddress2" matInput placeholder="Billing Address 2">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="billCity" formControlName="billCity" matInput placeholder="Billing City">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="billState" formControlName="billState" matInput placeholder="Billing State">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="billPostalcode" formControlName="billPostalcode" matInput placeholder="Billing Postal Code">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="billCountry" formControlName="billCountry" matInput placeholder="Billing Country">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex fxFlex.xs="100" fxLayout="column" class="ml-24 p-8">
+                            <mat-form-field>
+                                <input name="shipAddress1" formControlName="shipAddress1" matInput placeholder="Shipping Address 1">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="shipAddress2" formControlName="shipAddress2" matInput placeholder="Shipping Address 2">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="shipCity" formControlName="shipCity" matInput placeholder="Shipping City">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="shipState" formControlName="shipState" matInput placeholder="Shipping State">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="shipPostalcode" formControlName="shipPostalcode" matInput placeholder="Shipping Postal Code">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input name="shipCountry" formControlName="shipCountry" matInput placeholder="Shipping Country">
+                            </mat-form-field>
+
+                            <mat-checkbox
+                                class="mt-20 w-100-p"
+                                (change)="copyBillingAddress($event)">
+                                Copy address from left
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+
+            <mat-tab label="Account">
+                <form name="accountForm" [formGroup]="accountForm" class="p-24 w-100-p" fxLayout="column" fxFlex>
+                    <div fxLayout="row wrap" fxLayoutAlign="start stretch">
+                        <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+                            <mat-form-field>
+                                <input matInput placeholder="Account Name" formControlName="accountName" required>
+                                <app-error [group]="accountForm" field="accountName" label="Account Name"></app-error>
+                            </mat-form-field>
+
+                            <!--<mat-form-field >
+                                <input matInput placeholder="Sales Rep" formControlName ="salesRep">
+                            </mat-form-field> -->
+
+
+                            <mat-form-field fxFlex>
+                                <input type="hidden" formControlName="salesRepId"/>
+                                <input type="text"
+                                        formControlName="salesRep"
+                                        minlength="3"
+                                        matInput
+                                        placeholder="Sales Rep"
+                                        [matAutocomplete]="autoAssigned"
+                                        required>
+                                <mat-autocomplete #autoAssigned="matAutocomplete"
+                                                    [displayWith]="displayName"
+                                                    (optionSelected)="selectAccountAssignee($event)">
+                                    <mat-option *ngFor="let salesRep of filteredUsers" [value]="salesRep">
+                                        {{ salesRep.name | capitalizeFirst }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <!-- <app-error [group]="contactForm" field="salesRep" label="This field"></app-error> -->
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex>
+                                <input type="hidden" formControlName="csrId"/>
+                                <input type="text"
+                                        formControlName="csr"
+                                        minlength="3"
+                                        matInput
+                                        placeholder="CSR"
+                                        [matAutocomplete]="autoCSRAssigned">
+                                <mat-autocomplete #autoCSRAssigned="matAutocomplete"
+                                                    [displayWith]="displayName"
+                                                    (optionSelected)="selectCSR($event)">
+                                    <mat-option *ngFor="let csr of filteredUsers" [value]="csr">
+                                        {{ csr.name | capitalizeFirst }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <!-- <app-error [group]="contactForm" field="salesRep" label="This field"></app-error> -->
+                            </mat-form-field>
+
+
+                            <mat-form-field>
+                                <input type="text"
+                                        formControlName="parentAccount"
+                                        matInput
+                                        placeholder="Parent Account"
+                                        [matAutocomplete]="autoParent">
+                                <mat-autocomplete #autoParent="matAutocomplete"
+                                                    [displayWith]="displayName"
+                                                    (optionSelected)="selectParentAccount($event)">
+                                    <mat-option *ngFor="let acc of filteredAccounts" [value]="acc">
+                                        {{ acc.name | capitalizeFirst }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Phone" formControlName="phone" required>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-select formControlName="rating" placeholder="Rating">
+                                    <mat-option [value]="rating.value" *ngFor="let rating of ratings">
+                                        {{ rating.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-select formControlName="partnerType" placeholder="Partner Type" required>
+                                    <mat-option [value]="type.value" *ngFor="let type of pTypes">{{ type.label }}</mat-option>
+                                </mat-select>
+                                <app-error [group]="accountForm" field="partnerType" label="Partner Type"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-select formControlName="accountType" placeholder="Account Type" required>
+                                    <mat-option [value]="type.value" *ngFor="let type of accTypes">{{ type.label }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-select formControlName="timeZone" placeholder="Timezone">
+                                    <mat-option [value]="tz.timeZone" *ngFor="let tz of timezones">{{tz.timeZone}} {{tz.gmtOffset}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-select formControlName="corporateIdentityId" placeholder="Corporate Identity">
+                                    <mat-option [value]=""></mat-option>
+                                    <mat-option *ngFor="let identity of corporateIdentities" [value]="identity.id">
+                                    {{identity.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+                        <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Address" formControlName="billAddress1">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Address 2" formControlName="billAddress2">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing City" formControlName="billCity">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing State" formControlName="billState">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Zip Code" formControlName="billPostalcode">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Billing Country" formControlName="billCountry">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Address" formControlName="shipAddress1">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Address 2" formControlName="shipAddress2">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping City" formControlName="shipCity">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping State" formControlName="shipState">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Zip Code" formControlName="shipPostalcode">
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="Shipping Country" formControlName="shipCountry">
+                            </mat-form-field>
+
+                            <mat-checkbox
+                                class="mt-20 w-100-p"
+                                (change)="copyAccountBillingAddress($event)">
+                                Copy address from left
+                            </mat-checkbox>
+
+                        </div>
+                    </div>
+                </form>
+            </mat-tab>
+        </mat-tab-group>
+
+    </mat-dialog-content>
+    <!-- / CONTENT -->
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button
+            mat-raised-button
+            (click)="convert()"
+            class="save-button mat-accent mb-16"
+            aria-label="SAVE">
+            SAVE
+        </button>
+
+    </mat-dialog-actions>
+
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

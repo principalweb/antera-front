@@ -1,0 +1,94 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar>
+    
+    <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+
+        <form name="mailForm" [formGroup]="mailForm" class="mail-form" fxLayout="column" fxFlex>
+        
+            <mat-form-field>
+                <input matInput name="from"
+                        placeholder="From"
+                        formControlName="from"
+                        type="email" required>
+            </mat-form-field>
+
+            <!--
+            <mat-form-field>
+                <mat-chip-list name="to" formControlName="to" #toList>
+                    <mat-chip
+                        *ngFor="let to of mail.to"
+                        [selectable]="true"
+                        [removable]="true"
+                        (removed)="removeTo(to)">
+                        {{to}}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input 
+                        placeholder="To"
+                        type="email"
+                        [matChipInputFor]="toList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        [matChipInputAddOnBlur]="true"
+                        (matChipInputTokenEnd)="addTo($event)"
+                    />
+                </mat-chip-list>
+            </mat-form-field>
+            -->
+
+            <mat-form-field>
+                <input matInput name="subject"
+                        placeholder="Subject"
+                        formControlName="subject" required> 
+            </mat-form-field>
+
+            <mat-form-field>
+                <textarea matInput name="message"
+                            placeholder="Message"
+                            formControlName="body"
+                            rows="6" required>
+                </textarea>
+            </mat-form-field>
+
+            <div [innerHTML]="mail.body | safeHtml"></div>
+
+            <div class="attachment-list">
+                <div class="attachment" *ngFor="let attachment of mail.attachments; let i=index;" fxLayout="row" fxLayoutAlign="space-between center">
+                    <div>
+                        <span class="filename">{{attachment.filename}}</span>
+                    </div>
+
+                    <button mat-icon-button aria-label="Delete attachment" (click)="deleteAttachment(i)">
+                        <mat-icon class="s-16">close</mat-icon>
+                    </button>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button mat-raised-button
+                    (click)="send()"
+                    class="save-button mat-accent"
+                    aria-label="Send">
+                SEND
+            </button>
+
+            <div class="ml-8 attach-file" matTooltip="Attach a file">
+                <input type="file" id="fileInput" (change)="onFileChange($event)" #fileInput>
+                <mat-icon>attach_file</mat-icon>
+            </div>
+
+        </div>             
+    </div>
+</div>

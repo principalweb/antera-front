@@ -1,0 +1,119 @@
+<div class="container">
+  <mat-table fxFlex #table matSort
+      [dataSource]="dataSource"
+      [formGroup]="filterForm"
+      (matSortChange)="sortChange($event)">
+
+      <ng-container matColumnDef="select">
+          <mat-header-cell class="w-60" *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell class="w-60" *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="reference">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Reference No</span>
+              <input class="form-control" formControlName="reference" placeholder="">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.reference}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="account">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span>Vendor</span>
+              <!-- <input class="form-control" formControlName="vendorName" placeholder=""> -->
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.account.name}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="pos">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span>PO</span>
+              <!-- <input class="form-control" formControlName="vendorName" placeholder=""> -->
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{getUniqueOrderNumber(data.apCreditLines)}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="notes">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Notes</span>
+              <input class="form-control" formControlName="notes" placeholder="">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.notes}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="amount">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Amount</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.amount | number: '1.2-2'}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="balance">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Balance</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.balance | number: '1.2-2'}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <ng-container cdkColumnDef="created">
+          <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+              <span mat-sort-header>Created Date</span>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+              <p class="email text-truncate">
+                  {{data.created | date}}
+              </p>
+          </mat-cell>
+      </ng-container>
+
+      <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+              class="category-row"
+              (click)="showForm(data)"
+              matRipple>
+      </mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+              [length]="payload.meta.totalCount"
+              [pageIndex]="0"
+              [pageSize]="50"
+              (page)="paginate($event)"
+              [pageSizeOptions]="[10, 20, 50, 100]"
+              [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

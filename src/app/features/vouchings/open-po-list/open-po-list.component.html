@@ -1,0 +1,130 @@
+<mat-table  fxFlex
+            #table [dataSource]="dataSource"
+            matSort (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="poNumber">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>PO #</span>
+            <input class="form-control" formControlName="poNumber" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.poNumber }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendor">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Vendor</span>
+            <input class="form-control" formControlName="vendor" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.vendor }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendorPhone">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Vendor Phone</span>
+            <input class="form-control" formControlName="vendorPhone" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.vendorPhone }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendorEmail">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Vendor Email</span>
+            <input class="form-control" formControlName="vendorEmail" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.vendorEmail }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vouchingStatus">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Vouching Status</span>
+            <input class="form-control" formControlName="vouchingStatus" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.vouchingStatus }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="amount">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Amount</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.poAmount | currency }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="createdBy">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Created By</span>
+            <input class="form-control" formControlName="createdBy" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.createdBy }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Date Created</span>
+            <input class="form-control" formControlName="dateCreated" (keyup.enter)="filterPOs()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{ row.dateCreated | date }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="vouching-row"
+        (click)="editRow(row)"
+        matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<div class="h-64 text-center p-20" *ngIf="dataSource.total == 0">
+    You don't have vouchings in this module.
+</div>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100, 300, 500, 750]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,56 @@
+Item Code,Name,Description,Cost,Price
+CS,Creative Service,Creative Service,$60.00 ,$100.00 
+CC,Copy Change Charge,Copy Change Charge,$12.00 ,$15.00 
+ARCH,Artwork Charge,Artwork Charge,$40.00 ,$50.00 
+PROP,Product Option Charge,Product Option Charge,$43.20 ,$54.00 
+STCH,Set-up Charge,Set-up Charge,$40.00 ,$50.00 
+SMCH,Sample Charge,Sample Charge,$30.00 ,$50.00 
+F,,Freight Charge,$50.00 ,$100.00 
+CH,Cut Charge,,$60.00 ,$100.00 
+SRCH,Screen Charge,,$39.20 ,$49.00 
+OTR,Other,Other,$0.00 ,$0.00 
+SU,Set-Up Charge,,$45.00 ,$56.25 
+DIC1,Decorator Imprint Charge 1,Decorator Imprint Charge 1,$0.00 ,$0.00 
+DIC2,Decorator Imprint Charge 2,Decorator Imprint Charge 2,$0.00 ,$0.00 
+DIC3,Decorator Imprint Charge 3,Decorator Imprint Charge 3,$0.00 ,$0.00 
+DIC4,Decorator Imprint Charge 4,Decorator Imprint Charge 4,$0.00 ,$0.00 
+DIC5,Decorator Imprint Charge 5,Decorator Imprint Charge 5,$0.00 ,$0.00 
+DIC6,Decorator Imprint Charge 6,Decorator Imprint Charge 6,$0.00 ,$0.00 
+DIC7,Decorator Imprint Charge 7,Decorator Imprint Charge 7,$0.00 ,$0.00 
+DIC8,Decorator Imprint Charge 8,Decorator Imprint Charge 8,$0.00 ,$0.00 
+DIC9,Decorator Imprint Charge 9,Decorator Imprint Charge 9,$0.00 ,$0.00 
+DIC10,Decorator Imprint Charge 10,Decorator Imprint Charge 10,$0.00 ,$0.00 
+ADDONS,,Addon Charges,$0.00 ,$0.00 
+PROF,Proof Charge,,$10.00 ,$12.50 
+HTR,Hang Tag Removal,Hang Tag Removal,$0.30 ,$0.00 
+TSCH,Typesetting Charge,,$16.00 ,$20.00 
+CM,Color Match,Color Match,$50.00 ,$100.00 
+DC1,Die Charge,Die Charge,$50.00 ,$100.00 
+DC2,Digitizing Charge,Digitizing Charge,$50.00 ,$100.00 
+EMB,Embroidery Run Charge,Embroidery Run Charge,$50.00 ,$100.00 
+EC,Extra Color Imprint,Extra Color Imprint,$50.00 ,$100.00 
+FC,Film Charge,Film Charge,$50.00 ,$100.00 
+IC,Ink Color Change,Ink Color Change,$50.00 ,$100.00 
+LTM,Less Than Minimum,Less Than Minimum,$50.00 ,$100.00 
+PERS,Personalization,Personalization,$50.00 ,$100.00 
+PC,Plate Charge,Plate Charge,$50.00 ,$100.00 
+PB,Poly Bag,Poly Bag,$50.00 ,$100.00 
+PP,Prepreduction Proof,Prepreduction Proof,$50.00 ,$100.00 
+PRT,Print Charge,Print Charge,$50.00 ,$100.00 
+PF,Proof Charge,Proof Charge,$50.00 ,$100.00 
+RSU,Re-Set-Up Charge,Re-Set-Up Charge,$50.00 ,$100.00 
+RNC,Run Charge,Run Charge,$50.00 ,$100.00 
+RC,Rush Charge,Rush Charge,$50.00 ,$100.00 
+SC,Screen Charge,Screen Charge,$50.00 ,$100.00 
+SP,Screen Print,Screen Print,$50.00 ,$100.00 
+SNDP,Second Position Imprint Charge,Second Position Imprint Charge,$50.00 ,$100.00 
+SNDS,Second Side Imprint,Second Side Imprint,$50.00 ,$100.00 
+TC,Tape Charge,Tape Charge,$50.00 ,$100.00 
+U/LS,Up-Charge for Larger Size,Up-Charge for Larger Size,$25.00 ,$50.00 
+COCH,Add. Color Charge,,$36.00 ,$45.00 
+AC1,Art Charge,,$0.00 ,$1.00 
+AC2,Art Charge w/comm,,$0.00 ,$1.00 
+ICHA,Imprint Charge,,$15.00 ,$25.00 
+DMC,Decorator Main Charge,Decorator Main Charge,$50.00 ,$100.00 
+DIC,Decorator Imprint Charge,Decorator Imprint Charge,$50.00 ,$100.00 
+DAC,Decorator Additional Charge,Decorator Additional Charge,$50.00 ,$100.00 

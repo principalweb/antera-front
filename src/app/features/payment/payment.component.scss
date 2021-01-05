@@ -1,0 +1,50 @@
+@import "src/@fuse/scss/fuse";
+
+app-payment {
+  .payment-method {
+    $icon-size: 56px;
+    width: 33vw;
+
+    .mat-icon {
+      width: $icon-size;
+      height: $icon-size;
+      line-height: $icon-size;
+      min-width: $icon-size;
+      min-height: $icon-size;
+      font-size: $icon-size;
+     }
+  
+      .credit-icon{
+          color: #fa7b17;
+      }
+  
+      .echeck-icon{
+          color: #188fbe;
+      }
+
+      .dialog-content {
+          .eCheck,
+          .credit-card {
+              cursor: pointer;
+  
+              &:hover {
+                  background-color: #eeeeee;
+              }
+          }
+      }
+  }
+
+  .credit-card {
+    width: 33vw;
+    .card-name{
+        padding-top: 5px !important;
+    }
+  }
+
+  .echeck {
+    width: 33vw;
+    .card-name{
+        padding-top: 5px !important;
+    }
+  }
+}

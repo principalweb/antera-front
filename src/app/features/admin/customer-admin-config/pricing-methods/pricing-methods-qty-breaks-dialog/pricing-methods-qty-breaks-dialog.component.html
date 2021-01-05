@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Enter New Price break</h1>
+<div mat-dialog-content style="min-height: 150px">
+  <mat-form-field>
+    <input
+      (keyup.enter)="pushToList()"
+      autocomplete="off"
+      autofill="false"
+      placeholder="0"
+      matInput
+      [(ngModel)]="newPriceBreak"
+    />
+  </mat-form-field>
+
+  <button (click)="pushToList()" mat-icon-button color="primary">
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <mat-chip-list
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <mat-chip
+      [removable]="true"
+      (removed)="remove(priceBreak)"
+      cdkDrag
+      *ngFor="let priceBreak of priceBreaks"
+    >
+      {{ priceBreak }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    [mat-dialog-close]="priceBreaks"
+    cdkFocusInitial
+  >
+    Save <mat-icon>save</mat-icon>
+  </button>
+</div>

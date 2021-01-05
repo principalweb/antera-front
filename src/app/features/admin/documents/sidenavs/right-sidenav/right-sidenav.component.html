@@ -1,0 +1,33 @@
+<!-- SIDENAV HEADER -->
+<div fxLayout="column" fxLayoutAlign="space-between start"
+     class="header p-24 pb-4" ngClass="accent">
+
+    <div class="logo" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">content_copy</mat-icon>
+        <span class="logo-text" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Templates</span>
+    </div>
+
+</div>
+<!-- / SIDENAV HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<div class="content fuse-white" fusePerfectScrollbar *fuseIfOnDom [@animate]="{value:'*',params:{y:'50px'}}">
+
+    <div class="nav">
+
+        <div class="nav-subheader">Choose a template</div>
+
+        <div class="menu-list">
+            <div class="menu" *ngFor="let template of templates">
+                <div (click)="selectTemplate(template, $event)">
+                    <img class="template-image"
+                        [alt]="template.name"
+                        [src]="template.url"/>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- / SIDENAV CONTENT -->
+

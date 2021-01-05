@@ -1,0 +1,1392 @@
+<div id="order-details-overview">
+
+    <div class="section order-details pb-16">
+
+        <form name="form" [formGroup]="basicOrderInfoForm">
+
+            <div class="basic-order-info p-8">
+                <mat-card fxFlex>
+                    <div fxLayout="row" fxLayoutAlign="space-between center">
+                        <div fxLayout="row">
+                            <h3 class="mat-title mr-8 accent-text font-weight-600">Basic
+                                {{order.orderType.toLowerCase() == 'quote' ? 'Quote' : 'Order'}} Info</h3>
+                            <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                                <button *ngIf="editingBasicInfo" data-role="basicInfoSaveButton" mat-icon-button (click)="saveOrder('BasicOrderInfo')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+                                <button data-role="basicInfoEditCancelButton" mat-icon-button (click)="editBasicOrderInfo()">
+                                    <mat-icon *ngIf="!editingBasicInfo">edit</mat-icon>
+                                    <mat-icon *ngIf="editingBasicInfo">close</mat-icon>
+                                </button>
+                            </ng-container>
+                        </div>
+                        <!-- <div *ngIf="editingBasicInfo" class="w-80-p">
+                            <mat-form-field>
+                                <mat-select
+                                    [(value)]="order.orderStatus"
+                                    (selectionChange)="changeOrderStatus($event.value)"
+                                    placeholder="Status"
+                                    disabled
+                                    >
+                                    <mat-option [value]="status.name" *ngFor="let status of filteredStatusList">{{ status.name }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div> -->
+                    </div>
+                    <div *ngIf="!editingBasicInfo" fxLayout="row wrap" fxLayoutAlign="start stretch">
+                          <div fxLayout="column" class="BasicInfoLeft">
+                              <div fxLayout="row wrap" fxLayoutAlign="start stretch">
+                              <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('orderIdentity', fields)}}: <span
+                                          class="accent-text">{{ order.orderIdentity }}</span>
+                                  </div>
+                              </div>
+
+                              <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{order.orderType.toLowerCase() == 'quote' ? 'Quote' : 'Order'}} #: <span
+                                          class="accent-text">{{ order.orderNo}}</span>
+                                  </div>
+                              </div>
+
+                              <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('orderType', fields)}}: <span
+                                          class="accent-text">{{order.orderType | capitalizeFirst}}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="visibleField('invoiceNo', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('invoiceNo', fields)}}: <span
+                                          class="accent-text">{{ order.invoiceNo }}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="visibleField('altNumber', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('altNumber', fields)}}: <span
+                                          class="accent-text">{{ order.altNumber }}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="identityEnabled && order?.corporateIdentity && visibleField('partnerIdentityId', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25"
+                                  fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('partnerIdentityId', fields)}}: <span
+                                          class="accent-text">{{ order?.corporateIdentity?.name }}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="commissionEnabled  && visibleField('commissionGroupId', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25"
+                                  fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      Commission Group: <span class="accent-text">{{ order?.commissionGroupName }}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="visibleField('taxRate', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      Tax Rate: <span class="accent-text">{{ order?.taxRate }} %</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="visibleField('isPromoItem', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('isPromoItem', fields)}}: <span class="accent-text">{{ order?.isPromoItem }}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="visibleField('projectName', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('projectName', fields)}}: <span class="accent-text">{{ order?.projectName }}</span>
+                                  </div>
+                              </div>
+
+                              <div *ngIf="visibleField('pricingMethods', fields)" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                                  <div class=" mb-0 font-weight-500">
+                                      {{fieldLabel('pricingMethods', fields)}}: <span class="accent-text">{{ order?.pricingMethodsName }}</span>
+                                  </div>
+                              </div>
+
+
+                            </div>
+                          </div>
+                          <div fxLayout="column"  class="BasicInfoRight">
+                                <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="row" class="p-8">
+                                    <div class=" mb-0 font-weight-500">
+                                        {{fieldLabel('orderDate', fields)}}: <span
+                                            class="accent-text">{{ order.orderDate }}</span>
+                                    </div>
+                                </div>
+
+                                <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="row" class="p-8"
+                                    *ngIf="order.bookedDate != '' && order.bookedDate != '0000-00-00'">
+                                    <div class=" mb-0 font-weight-500">
+                                        Booked Date: <span class="accent-text">{{ order.bookedDate }}</span>
+                                    </div>
+                              </div>
+                              <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="row" class="p-8"
+                                  *ngIf="order.orderStatus == 'Billed'">
+                                  <div class=" mb-0 font-weight-500">
+                                      Invoice Date: <span class="accent-text">{{ order.invoiceDate }}</span>
+                                  </div>
+                              </div>
+                              <div *ngIf="visibleField('dueDate', fields) && order?.dueDate !=''" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                                    fxFlex.gt-sm="25" fxLayout="row" class="p-8">
+                                    <div class=" mb-0 font-weight-500">
+                                        {{fieldLabel('dueDate', fields)}}: <span class="accent-text">{{ order?.dueDate }}</span>
+                                    </div>
+                              </div>
+
+                        </div>
+                    </div>
+                    <div *ngIf="editingBasicInfo" fxLayout="column">
+                        <div class="five-columns">
+                            <mat-form-field>
+                                <input matInput placeholder="{{fieldLabel('orderIdentity', fields)}}"
+                                    formControlName="orderIdentity">
+                                    <app-error *ngIf="requiredField('orderIdentity',fields)" [group]="basicOrderInfoForm" field="orderIdentity" label="{{fieldLabel('orderIdentity', fields)}}"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput
+                                    placeholder="{{(order.orderType.toLowerCase() == 'quote' ? 'Quote' : 'Order')}} #"
+                                    formControlName="orderNo">
+                                    <app-error *ngIf="requiredField('orderNo',fields)" [group]="basicOrderInfoForm" field="orderNo" label="{{fieldLabel('orderNo', fields)}}"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-select formControlName="orderType"
+                                    placeholder="{{fieldLabel('orderType', fields)}}">
+                                    <mat-option [value]="type.value" *ngFor="let type of oTypes">{{ type.label }}
+                                    </mat-option>
+                                </mat-select>
+                                <app-error *ngIf="requiredField('orderType',fields)" [group]="basicOrderInfoForm" field="orderType" label="{{fieldLabel('orderType', fields)}}"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="order.orderStatus != 'Booked' && order.orderStatus != 'Billed'">
+                                <input matInput formControlName="orderDate" [matDatepicker]="picker"
+                                    placeholder="{{fieldLabel('orderDate', fields)}}">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <app-error *ngIf="requiredField('orderDate',fields)" [group]="basicOrderInfoForm" field="orderDate" label="{{fieldLabel('orderDate', fields)}}"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="order.orderStatus == 'Booked'">
+                                <input matInput formControlName="bookedDate" placeholder="Booked Date">
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="order.orderStatus == 'Billed'">
+                                <input matInput formControlName="invoiceDate" placeholder="Invoice Date">
+                            </mat-form-field>
+
+
+                            <mat-form-field *ngIf="visibleField('invoiceNo', fields)">
+                                <input matInput placeholder="{{fieldLabel('invoiceNo', fields)}}"
+                                    formControlName="invoiceNo">
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="visibleField('altNumber', fields)">
+                                <input matInput placeholder="{{fieldLabel('altNumber', fields)}}"
+                                    formControlName="altNumber">
+                                <app-error *ngIf="requiredField('altNumber',fields)" [group]="basicOrderInfoForm" field="altNumber" label="{{fieldLabel('altNumber', fields)}}"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="identityEnabled && visibleField('partnerIdentityId', fields)">
+                                <mat-select formControlName="partnerIdentityId" placeholder="{{fieldLabel('partnerIdentityId', fields)}}">
+                                    <mat-option [value]="">
+                                        -- select --
+                                    </mat-option>
+                                    <mat-option *ngFor="let identity of corporateIdentities" [value]="identity.id">
+                                        {{identity.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <app-error *ngIf="requiredField('partnerIdentityId',fields)" [group]="basicOrderInfoForm" field="partnerIdentityId" label="{{fieldLabel('partnerIdentityId', fields)}}"></app-error>
+                            </mat-form-field>
+                            <mat-form-field *ngIf="commissionEnabled && visibleField('commissionGroupId', fields)" fxFlex>
+                                <!--mat-select formControlName="commissionGroupId" placeholder="Commission Group">
+                                    <mat-option *ngFor="let group of commissionGroups" [value]="group.id">
+                                        {{group.name}}
+                                    </mat-option>
+                                </mat-select-->
+                                    <input type="hidden" formControlName="commissionGroupId" />
+                                    <input type="text" formControlName="commissionGroupName" matInput
+                                        placeholder="Commission Group"
+                                        [matAutocomplete]="autoCommissionGroupAssigned">
+                                    <mat-autocomplete #autoCommissionGroupAssigned="matAutocomplete" [displayWith]="displayName"
+                                        (optionSelected)="selectCommissionGroup($event)">
+                                        <mat-option *ngFor="let cg of commissionGroups" [value]="cg">
+                                            {{ cg.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="basicOrderInfoForm?.get('commissionGroupId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(basicOrderInfoForm, 'commissionGroupName', 'commissionGroupId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                <app-error *ngIf="requiredField('commissionGroupId',fields)" [group]="basicOrderInfoForm" field="commissionGroupId" label="Commission Group"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="visibleField('taxRate', fields)">
+                                <input matInput placeholder="{{fieldLabel('taxRate', fields)}}"
+                                    formControlName="taxRate">
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="visibleField('isPromoItem', fields)">
+                                <mat-select formControlName="isPromoItem"
+                                    placeholder="{{fieldLabel('isPromoItem', fields)}}">
+                                    <mat-option [value]="itemType.value" *ngFor="let itemType of isPromoItemOptions">
+                                        {{ itemType.label }}</mat-option>
+                                </mat-select>
+                                <app-error *ngIf="requiredField('isPromoItem',fields)" [group]="basicOrderInfoForm" field="isPromoItem" label="{{fieldLabel('isPromoItem', fields)}}"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="visibleField('dueDate', fields)">
+                                <input matInput formControlName="dueDate" [matDatepicker]="pickerDueDate"
+                                    placeholder="{{fieldLabel('dueDate', fields)}}">
+                                <mat-datepicker-toggle matSuffix [for]="pickerDueDate"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerDueDate></mat-datepicker>
+                                <app-error *ngIf="requiredField('dueDate',fields)" [group]="basicOrderInfoForm" field="dueDate" label="{{fieldLabel('dueDate', fields)}}"></app-error>
+                            </mat-form-field>
+                            <mat-form-field *ngIf="visibleField('projectName', fields)">
+                                <input matInput placeholder="{{fieldLabel('projectName', fields)}}"
+                                    formControlName="projectName">
+                                    <app-error *ngIf="requiredField('projectName',fields)" [group]="basicOrderInfoForm" field="projectName" label="{{fieldLabel('projectName', fields)}}"></app-error>
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+
+                </mat-card>
+            </div>
+
+        </form>
+
+        <div class="account-details p-8">
+            <mat-card fxFlex>
+                <form name="form" [formGroup]="accountDetailsForm">
+
+
+                    <div *ngIf="editingAccountDetails" fxLayoutAlign="space-between center">
+                        <div class="mr-16">
+                            <span class="mr-16">Select Address to use:</span>
+                            <mat-radio-group (change)="selectAddress($event)">
+                                <mat-radio-button class="mr-8" value="Contact" [checked]="pullContactAddr">Contact
+                                </mat-radio-button>
+                                <mat-radio-button value="Account" [checked]="pullAccountAddr">Account
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <mat-form-field *ngIf="locations && locations?.length" fxFlex>
+                            <mat-label>Alternate Account Location</mat-label>
+                            <mat-select (selectionChange)="selectLocation($event)" formControlName="locationId" #myLocationSelect>
+                                <mat-select-trigger>
+                                    {{ getLocationName() }}
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let location of locations" [value]="location.id">
+                                    {{ location.locationName }}
+                                    <small>
+                                        {{ location.billingAddressStreet }}
+                                        {{ location.billingAddressStreet2 }}
+                                        {{ location.billingAddressCity }}
+                                        {{ location.billingAddressState }}
+                                        {{ location.billingAddressPostalcode }}
+                                    </small>
+                                    <small>
+                                        {{ location.shippingAddressStreet }}
+                                        {{ location.shippingAddressStreet2 }}
+                                        {{ location.shippingAddressCity }}
+                                        {{ location.shippingAddressState }}
+                                        {{ location.shippingAddressPostalcode }}
+                                    </small>
+                                </mat-option>
+                            </mat-select>
+                            <span matSuffix *ngIf="accountDetailsForm.get('locationId')?.value">
+                                <button mat-icon-button (click)="clearLocation()">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </span>
+                        </mat-form-field>
+
+                    </div>
+
+
+                    <div fxLayout="row wrap" fxLayoutAlign="space-between">
+
+                        <div class="order-info p-8" fxFlex.xs="100" fxFlex.sm="50" fxLayout="column">
+                            <div fxLayout="row">
+                                <h3 class="mat-title mb-0 mr-8 accent-text font-weight-600">Account Details</h3>
+                                <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                                    <button *ngIf="editingAccountDetails" data-role="accountDetailsSaveButton" mat-icon-button
+                                        (click)="saveOrder('AccountDetails')">
+                                        <mat-icon>save</mat-icon>
+                                    </button>
+                                    <button data-role="accountDetailsEditCancelButton" mat-icon-button (click)="editAccountDetails()">
+                                        <mat-icon *ngIf="!editingAccountDetails">edit</mat-icon>
+                                        <mat-icon *ngIf="editingAccountDetails">close</mat-icon>
+                                    </button>
+                                </ng-container>
+                            </div>
+                            <div *ngIf="!editingAccountDetails && order.contactId != '' && order.contactId" fxLayout="column">
+                                <div class="mat-body-2 mb-0">
+                                    {{fieldLabel('contactName', fields)}}: <a routerLink="/contacts/{{order.contactId}}"><span>{{ order.contactSalutation }} {{ order.contactName }}</span></a>
+                                </div>
+
+                                <div *ngIf="currentContact" class="mat-body-2">
+                                    <span class="some-space">Email:</span>  <a href="mailto:{{currentContact.email}}" *ngIf="currentContact.email">{{ currentContact.email }}</a>
+                                    <button mat-icon-button color="accent" (click)="composeDialog(currentContact.email)" *ngIf="currentContact.email">
+                                        <mat-icon>email</mat-icon>
+                                    </button>
+                                </div>
+
+                                <div class="mat-body-2 mb-0">                                     
+                                     Account Name: 
+                                     <a routerLink="/accounts/{{order.accountId}}"><span>{{ order.accountName }}</span></a>
+                                </div>
+
+                                <div *ngIf="visibleField('attentionTo', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('attentionTo', fields)}}: <span>{{ order.attentionTo }}</span>
+                                </div>
+
+                                <!-- <div class="mat-body-2 mb-0">
+                                    Location: <span>{{ order.taxLocation }}</span>
+                                </div> -->
+
+                                <div *ngIf="visibleField('customerPo', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('customerPo', fields)}}: <span>{{ order.customerPo }}</span>
+                                </div>
+
+                                <div class="mat-body-2 mb-0">
+                                    {{fieldLabel('salesPerson', fields)}}: <span>{{ order.salesPerson }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('csrName', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('csrName', fields)}}: <span>{{ order.csrName }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('creditTerms', fields)" class="mat-body-2">
+                                    {{fieldLabel('creditTerms', fields)}}: <span
+                                        class="accent-text">{{ displayCreditTerm(order.creditTerms) }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('productionManagerName', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('productionManagerName', fields)}}:
+                                    <span>{{ order.productionManagerName }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('totalCommission', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('totalCommission', fields)}}: <span>{{ order.totalCommission }}</span>
+                                </div>
+
+                                <!--div *ngIf="order?.corporateIdentity && order?.corporateIdentity?.name && visibleField('partnerIdentityId', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('partnerIdentityId', fields)}}:
+                                    <span>{{ order?.corporateIdentity?.name }}</span>
+                                </div-->
+
+                                <div *ngIf="visibleField('csrEmbroideryUserName', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('csrEmbroideryUserName', fields)}}:
+                                    <span>{{ order.csrEmbroideryUserName }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('csrScreenprintUserName', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('csrScreenprintUserName', fields)}}:
+                                    <span>{{ order.csrScreenprintUserName }}</span>
+                                </div>
+
+                            </div>
+
+
+                            <div *ngIf="editingAccountDetails" fxLayout="column">
+
+
+                                <mat-form-field>
+                                    <input type="hidden" formControlName="contactId" />
+                                    <input type="text" formControlName="contactName" matInput
+                                        placeholder="{{fieldLabel('contactName', fields)}}"
+                                        [matAutocomplete]="autoContactAssigned" required>
+                                    <mat-autocomplete #autoContactAssigned="matAutocomplete" [displayWith]="displayName"
+                                        (optionSelected)="selectContact($event)">
+                                        <mat-option *ngFor="let contact of filteredContacts" [value]="contact">
+                                            {{ contact.name | capitalizeFirst }}
+                                        </mat-option>
+                                        <mat-option [value]="{id: 'add', name:''}">
+                                            <mat-icon>add</mat-icon> Add Contact
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('contactId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(accountDetailsForm, 'contactName', 'contactId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('contactName',fields)" [group]="accountDetailsForm" field="contactName" label="{{fieldLabel('contactName', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input type="hidden" formControlName="accountId" />
+                                    <input type="text" formControlName="accountName" matInput
+                                        placeholder="{{fieldLabel('accountName', fields)}}"
+                                        [matAutocomplete]="autoAccountAssigned" required>
+                                    <mat-autocomplete #autoAccountAssigned="matAutocomplete" [displayWith]="displayName"
+                                        (optionSelected)="selectAccount($event)">
+                                        <mat-option *ngFor="let account of filteredAccounts" [value]="account">
+                                            {{ account.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('accountId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(accountDetailsForm, 'accountName', 'accountId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('accountName',fields)" [group]="accountDetailsForm" field="accountName" label="{{fieldLabel('accountName', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('attentionTo', fields)">
+                                    <input matInput placeholder="{{fieldLabel('attentionTo', fields)}}"
+                                        formControlName="attentionTo" [required]="requiredField('attentionTo',fields)">
+                                        <app-error *ngIf="requiredField('attentionTo',fields)" [group]="accountDetailsForm" field="attentionTo" label="{{fieldLabel('attentionTo', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('locationId', fields)">
+                                    <mat-select formControlName="locationId"
+                                        placeholder="{{fieldLabel('locationId', fields)}}"
+                                        (selectionChange)="selectLocation($event)"
+                                        [required]="requiredField('locationId',fields)">
+                                        <mat-option [value]="location.id" *ngFor="let location of locations">
+                                            {{ location.name }}</mat-option>
+                                    </mat-select>
+                                    <app-error *ngIf="requiredField('locationId',fields)" [group]="accountDetailsForm" field="locationId" label="{{fieldLabel('locationId', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('customerPo', fields)">
+                                    <input matInput placeholder="{{fieldLabel('customerPo', fields)}}"
+                                        formControlName="customerPo" [required]="requiredField('customerPo',fields)">
+                                        <app-error *ngIf="requiredField('customerPo',fields)" [group]="accountDetailsForm" field="customerPo" label="{{fieldLabel('customerPo', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input type="hidden" formControlName="salesPersonId" required />
+                                    <input type="text" formControlName="salesPerson" matInput
+                                        placeholder="{{fieldLabel('salesPerson', fields)}}"
+                                        [matAutocomplete]="autoAssigned" required>
+                                    <mat-autocomplete #autoAssigned="matAutocomplete" [displayWith]="displayName"
+                                        (optionSelected)="selectAssignee($event)">
+                                        <mat-option *ngFor="let salesPerson of filteredUsers" [value]="salesPerson">
+                                            {{ salesPerson.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('salesPersonId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(accountDetailsForm, 'salesPerson', 'salesPersonId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('salesPerson',fields)" [group]="accountDetailsForm" field="salesPerson" label="{{fieldLabel('salesPerson', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('csrName', fields)">
+                                    <input type="hidden" formControlName="csr"
+                                        [required]="requiredField('csr',fields)" />
+                                    <input type="text" formControlName="csrName" matInput
+                                        placeholder="{{fieldLabel('csrName', fields)}}" [matAutocomplete]="autoCsr"
+                                        [required]="requiredField('csrName',fields)">
+                                    <mat-autocomplete #autoCsr="matAutocomplete" [displayWith]="displayName"
+                                        (optionSelected)="selectCsr($event)">
+                                        <mat-option *ngFor="let csr of filteredCsrs" [value]="csr">
+                                            {{ csr.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('csr')?.value" matSuffix mat-icon-button
+                                        aria-label="Clear" (click)="clearCsr()">
+                                        <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('csrName',fields)" [group]="accountDetailsForm" field="csrName" label="{{fieldLabel('csrName', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('creditTerms', fields)">
+                                    <mat-select formControlName="creditTerms"
+                                        placeholder="{{fieldLabel('creditTerms', fields)}}">
+                                        <mat-option [value]="ct.value" *ngFor="let ct of creditTerms">{{ ct.label }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <app-error *ngIf="requiredField('creditTerms',fields)" [group]="accountDetailsForm" field="creditTerms" label="{{fieldLabel('creditTerms', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('productionManagerName', fields)">
+                                    <input type="hidden" formControlName="productionManagerId"
+                                        [required]="requiredField('productionManagerName',fields)" />
+                                    <input type="text" formControlName="productionManagerName" matInput
+                                        placeholder="{{fieldLabel('productionManagerName', fields)}}"
+                                        [required]="requiredField('productionManagerName',fields)"
+                                        [matAutocomplete]="autoproductionManagerName">
+                                    <mat-autocomplete #autoproductionManagerName="matAutocomplete"
+                                        [displayWith]="displayName" (optionSelected)="selectProdManagers($event)">
+                                        <mat-option *ngFor="let productionManagerName of filteredProdManagers"
+                                            [value]="productionManagerName">
+                                            {{ productionManagerName.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('productionManagerId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(accountDetailsForm, 'productionManagerName', 'productionManagerId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('productionManagerName',fields)" [group]="accountDetailsForm" field="productionManagerName" label="{{fieldLabel('productionManagerName', fields)}}"></app-error>
+                                </mat-form-field>
+
+
+                                <mat-form-field *ngIf="visibleField('commissionId', fields)">
+                                    <mat-select formControlName="commissionId"
+                                        placeholder="{{fieldLabel('commissionId', fields)}}"
+                                        [required]="requiredField('commissionId',fields)">
+                                        <mat-option [value]="commission.id" *ngFor="let commission of commissions">
+                                            {{ commission.commissionName }}</mat-option>
+                                    </mat-select>
+                                    <app-error *ngIf="requiredField('commissionId',fields)" [group]="accountDetailsForm" field="commissionId" label="{{fieldLabel('commissionId', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <!--mat-form-field *ngIf="visibleField('partnerIdentityId', fields)">
+                                    <mat-select formControlName="partnerIdentityId"
+                                        placeholder="{{fieldLabel('partnerIdentityId', fields)}}"
+                                        [required]="requiredField('partnerIdentityId',fields)">
+                                        <mat-option [value]="identity.id" *ngFor="let identity of identities">
+                                            {{ identity.name }}</mat-option>
+                                    </mat-select>
+                                    <app-error *ngIf="requiredField('partnerIdentityId',fields)" [group]="accountDetailsForm" field="partnerIdentityId" label="{{fieldLabel('partnerIdentityId', fields)}}"></app-error>
+                                </mat-form-field-->
+
+                                <mat-form-field *ngIf="visibleField('csrEmbroideryUserName', fields)">
+                                    <input type="hidden" formControlName="csrEmbroideryUserId"
+                                        [required]="requiredField('csrEmbroideryUserName',fields)" />
+                                    <input type="text" formControlName="csrEmbroideryUserName" matInput
+                                        placeholder="{{fieldLabel('csrEmbroideryUserName', fields)}}"
+                                        [required]="requiredField('csrEmbroideryUserName',fields)"
+                                        [matAutocomplete]="autoCsrEmbroideryUserName">
+                                    <mat-autocomplete #autoCsrEmbroideryUserName="matAutocomplete"
+                                        [displayWith]="displayName" (optionSelected)="selectCsrEmbroidery($event)">
+                                        <mat-option *ngFor="let csrEmbroideryUserName of filteredCsrEmb"
+                                            [value]="csrEmbroideryUserName">
+                                            {{ csrEmbroideryUserName.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('csrEmbroideryUserId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(accountDetailsForm, 'csrEmbroideryUserName', 'csrEmbroideryUserId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('csrEmbroideryUserName',fields)" [group]="accountDetailsForm" field="csrEmbroideryUserName" label="{{fieldLabel('csrEmbroideryUserName', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('csrScreenprintUserName', fields)">
+                                    <input type="hidden" formControlName="csrScreenprintUserId"
+                                        [required]="requiredField('csrScreenprintUserName',fields)" />
+                                    <input type="text" formControlName="csrScreenprintUserName" matInput
+                                        placeholder="{{fieldLabel('csrScreenprintUserName', fields)}}"
+                                        [required]="requiredField('csrScreenprintUserName',fields)"
+                                        [matAutocomplete]="autoCsrScreenprintUserName">
+                                    <mat-autocomplete #autoCsrScreenprintUserName="matAutocomplete"
+                                        [displayWith]="displayName" (optionSelected)="selectCsrScreenprint($event)">
+                                        <mat-option *ngFor="let csrScreenprintUserName of filteredCsrScr"
+                                            [value]="csrScreenprintUserName">
+                                            {{ csrScreenprintUserName.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="accountDetailsForm?.get('csrScreenprintUserId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAutoCompleteField(accountDetailsForm, 'csrScreenprintUserName', 'csrScreenprintUserId')">
+                                      <mat-icon>close</mat-icon>
+                                    </button>
+                                    <app-error *ngIf="requiredField('csrScreenprintUserName',fields)" [group]="accountDetailsForm" field="csrScreenprintUserName" label="{{fieldLabel('csrScreenprintUserName', fields)}}"></app-error>
+                                </mat-form-field>
+
+                            </div>
+
+                        </div>
+
+                        <div class="order-info p-8" fxFlex.xs="100" fxFlex.sm="50" fxLayout="column">
+                            <div fxLayout="row">
+                                <h3 class="mat-title mb-0 mr-8 accent-text font-weight-600">Billing Address</h3>
+                            </div>
+
+                            <div *ngIf="!editingAccountDetails" fxLayout="column">
+                                <div *ngIf="visibleField('billingCompanyName', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('billingCompanyName', fields)}}:
+                                    <span>{{ order.billingCompanyName }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('billingCustomerName', fields)" class="mat-body-2 mb-0">
+                                    {{fieldLabel('billingCustomerName', fields)}}:
+                                    <span>{{ order.billingCustomerSalutation }} {{ order.billingCustomerName }}</span>
+                                </div>
+
+                                <div class="mat-body-2">
+                                    {{ order.billingStreet }}
+                                </div>
+
+                                <div *ngIf="visibleField('billingStreet2', fields)" class="mat-body-2">
+                                    {{ order.billingStreet2 }}
+                                </div>
+
+                                <div class="mat-body-2">
+                                    {{ order.billingCity }}, {{ order.billingState }}, {{ order.billingPostalcode }}
+                                </div>
+
+                                <div class="mat-body-2">
+                                    {{ order.billingCountry }}
+                                </div>
+
+                                <div class="mat-body-2">
+                                    {{ order.billingPhone }}
+                                </div>
+                            </div>
+
+                            <div *ngIf="editingAccountDetails" fxLayout="column">
+                                <mat-form-field *ngIf="visibleField('billingCompanyName', fields)">
+                                    <input type="hidden" formControlName="billingCompanyId" />
+                                    <input matInput placeholder="{{fieldLabel('billingCompanyName', fields)}}"
+                                        formControlName="billingCompanyName" required>
+                                    <app-error *ngIf="requiredField('billingCompanyName',fields)" [group]="accountDetailsForm" field="billingCompanyName" label="{{fieldLabel('billingCompanyName', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <div class="mr-20">
+                                    <mat-form-field *ngIf="visibleField('billingCustomerSalutation', fields)" class="wd-25-mat-field mr-20">
+                                        <input type="text"
+                                               formControlName="billingCustomerSalutation"
+                                               minlength="3"
+                                               matInput
+                                               placeholder="{{fieldLabel('billingCustomerSalutation', fields)}}"
+                                               [matAutocomplete]="autoSalutation"
+                                               fxFlex="40"
+                                               >
+                                        <mat-autocomplete #autoSalutation="matAutocomplete"
+                                                          [displayWith]="displayName"
+                                                          (optionSelected)="selectBillingSalutation($event)">
+                                            <mat-option *ngFor="let salutation of salutationTypes" [value]="salutation">
+                                                {{ salutation.label }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <!-- <button *ngIf="contactForm?.get('salutation')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearSalutation()">
+                                          <mat-icon>close</mat-icon>
+                                        </button> -->
+                                        <!--app-error *ngIf="requiredField('billingCustomerSalutation',fields)" [group]="accountDetailsForm" field="billingCustomerSalutation" label="{{fieldLabel('billingCustomerSalutation', fields)}}"></app-error-->
+                                    </mat-form-field>
+                                    <mat-form-field *ngIf="visibleField('billingCustomerName', fields)" class="wd-66-mat-field">
+                                        <input type="hidden" formControlName="billingCustomerId" required />
+                                        <input matInput placeholder="{{fieldLabel('billingCustomerName', fields)}}"
+                                            formControlName="billingCustomerName">
+                                        <app-error *ngIf="requiredField('billingCustomerName',fields)" [group]="accountDetailsForm" field="billingCustomerName" label="{{fieldLabel('billingCustomerName', fields)}}"></app-error>
+                                    </mat-form-field>
+                                </div>
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('billingStreet', fields)}}"
+                                        formControlName="billingStreet">
+                                    <app-error *ngIf="requiredField('billingStreet',fields)" [group]="accountDetailsForm" field="billingStreet" label="{{fieldLabel('billingStreet', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('billingStreet2', fields)">
+                                    <input matInput placeholder="{{fieldLabel('billingStreet2', fields)}}"
+                                        formControlName="billingStreet2">
+                                    <app-error *ngIf="requiredField('billingStreet2',fields)" [group]="accountDetailsForm" field="billingStreet2" label="{{fieldLabel('billingStreet2', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('billingCity', fields)}}"
+                                        formControlName="billingCity">
+                                    <app-error *ngIf="requiredField('billingCity',fields)" [group]="accountDetailsForm" field="billingCity" label="{{fieldLabel('billingCity', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('billingState', fields)}}"
+                                        formControlName="billingState">
+                                    <app-error *ngIf="requiredField('billingState',fields)" [group]="accountDetailsForm" field="billingState" label="{{fieldLabel('billingState', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('billingPostalcode', fields)}}"
+                                        formControlName="billingPostalcode">
+                                    <app-error *ngIf="requiredField('billingPostalcode',fields)" [group]="accountDetailsForm" field="billingPostalcode" label="{{fieldLabel('billingPostalcode', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('billingCountry', fields)}}"
+                                        formControlName="billingCountry">
+                                    <app-error *ngIf="requiredField('billingCountry',fields)" [group]="accountDetailsForm" field="billingCountry" label="{{fieldLabel('billingCountry', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('billingPhone', fields)}}"
+                                        formControlName="billingPhone">
+                                    <app-error *ngIf="requiredField('billingPhone',fields)" [group]="accountDetailsForm" field="billingPhone" label="{{fieldLabel('billingPhone', fields)}}"></app-error>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                        <div class="order-info p-8" fxFlex.xs="100" fxFlex.sm="50" fxLayout="column">
+                            <div fxLayout="row">
+                                <h3 class="mat-title mb-0 mr-8 accent-text font-weight-600">Shipping Address</h3>
+                            </div>
+
+                            <div *ngIf="!editingAccountDetails" fxLayout="column">
+                                <div class="mat-body-2 mb-0">
+                                    {{fieldLabel('shippingCompanyName', fields)}}:
+                                    <span>{{ order.shippingCompanyName }}</span>
+                                </div>
+
+                                <div class="mat-body-2 mb-0">
+                                    {{fieldLabel('shippingCustomerName', fields)}}:
+                                    <span>{{ order.shippingCustomerSalutation }} {{ order.shippingCustomerName }}</span>
+                                </div>
+                                <div class="mat-body-2">
+                                    {{ accountDetailsForm.value.shippingStreet }}
+                                </div>
+
+                                <div *ngIf="visibleField('shippingStreet2', fields)" class="mat-body-2">
+                                    {{ accountDetailsForm.value.shippingStreet2 }}
+                                </div>
+
+                                <div class="mat-body-2">
+                                    {{ accountDetailsForm.value.shippingCity }}, {{ order.shippingState }},
+                                    {{ accountDetailsForm.value.shipPostalcode }}
+                                </div>
+
+                                <div class="mat-body-2">
+                                    {{ accountDetailsForm.value.shipCountry }}
+                                </div>
+
+                                <div *ngIf="visibleField('shippingPhone', fields)" class="mat-body-2">
+                                    {{ accountDetailsForm.value.shippingPhone }}
+                                </div>
+                            </div>
+
+                            <div *ngIf="editingAccountDetails" fxLayout="column">
+
+                                <mat-form-field>
+                                    <input type="hidden" formControlName="shippingCompanyId" />
+                                    <input matInput placeholder="{{fieldLabel('shippingCompanyName', fields)}}"
+                                        formControlName="shippingCompanyName">
+                                    <app-error *ngIf="requiredField('shippingCompanyName',fields)" [group]="accountDetailsForm" field="shippingCompanyName" label="{{fieldLabel('shippingCompanyName', fields)}}"></app-error>
+                                </mat-form-field>
+                                <div>
+                                    <mat-form-field *ngIf="visibleField('shippingCustomerSalutation', fields)" class="mr-20 wd-25-mat-field">
+                                        <input type="text"
+                                            formControlName="shippingCustomerSalutation"
+                                            minlength="3"
+                                            matInput
+                                            placeholder="{{fieldLabel('shippingCustomerSalutation', fields)}}"
+                                            [matAutocomplete]="autoSalutation"
+                                            >
+                                        <mat-autocomplete #autoSalutation="matAutocomplete"
+                                                        [displayWith]="displayName"
+                                                        (optionSelected)="selectShippingSalutation($event)">
+                                            <mat-option *ngFor="let salutation of salutationTypes" [value]="salutation">
+                                                {{ salutation.label }}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <!-- <button *ngIf="contactForm?.get('salutation')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearSalutation()">
+                                        <mat-icon>close</mat-icon>
+                                        </button> -->
+                                        <!--app-error *ngIf="requiredField('shippingCustomerSalutation',fields)" [group]="contactForm" field="shippingCustomerSalutation" label="{{fieldLabel('shippingCustomerSalutation', fields)}}"></app-error-->
+                                    </mat-form-field>
+                                    <mat-form-field class="wd-66-mat-field">
+                                        <input type="hidden" formControlName="shippingCustomerId" />
+                                        <input matInput placeholder="{{fieldLabel('shippingCustomerName', fields)}}"
+                                            formControlName="shippingCustomerName">
+                                        <app-error *ngIf="requiredField('shippingCustomerName',fields)" [group]="accountDetailsForm" field="shippingCustomerName" label="{{fieldLabel('shippingCustomerName', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                </div>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('shippingStreet', fields)}}"
+                                        formControlName="shippingStreet">
+                                    <app-error *ngIf="requiredField('shippingStreet',fields)" [group]="accountDetailsForm" field="shippingStreet" label="{{fieldLabel('shippingStreet', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('shippingStreet2', fields)">
+                                    <input matInput placeholder="{{fieldLabel('shippingStreet2', fields)}}"
+                                        formControlName="shippingStreet2">
+                                    <app-error *ngIf="requiredField('shippingStreet2',fields)" [group]="accountDetailsForm" field="shippingStreet2" label="{{fieldLabel('shippingStreet2', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('shippingCity', fields)}}"
+                                        formControlName="shippingCity">
+                                    <app-error *ngIf="requiredField('shippingCity',fields)" [group]="accountDetailsForm" field="shippingCity" label="{{fieldLabel('shippingCity', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('shippingState', fields)}}"
+                                        formControlName="shippingState">
+                                    <app-error *ngIf="requiredField('shippingState',fields)" [group]="accountDetailsForm" field="shippingState" label="{{fieldLabel('shippingState', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('shipPostalcode', fields)}}"
+                                        formControlName="shipPostalcode">
+                                    <app-error *ngIf="requiredField('shipPostalcode',fields)" [group]="accountDetailsForm" field="shipPostalcode" label="{{fieldLabel('shipPostalcode', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <input matInput placeholder="{{fieldLabel('shipCountry', fields)}}"
+                                        formControlName="shipCountry">
+                                    <app-error *ngIf="requiredField('shipCountry',fields)" [group]="accountDetailsForm" field="shipCountry" label="{{fieldLabel('shipCountry', fields)}}"></app-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="visibleField('shippingPhone', fields)">
+                                    <input matInput placeholder="{{fieldLabel('shippingPhone', fields)}}"
+                                        formControlName="shippingPhone">
+                                    <app-error *ngIf="requiredField('shippingPhone',fields)" [group]="accountDetailsForm" field="shippingPhone" label="{{fieldLabel('shippingPhone', fields)}}"></app-error>
+                                </mat-form-field>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
+        <div class="p-8">
+            <mat-card fxFlex>
+                <div fxLayout="row">
+                    <div class="shipping-details" fxFlex="100">
+                        <div fxLayout="row">
+                            <h3 class="mat-title mr-8 accent-text font-weight-600">Shipping Details</h3>
+
+                            <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                                <button *ngIf="editingShippingDetails" data-role="shippingInfoSaveButton" mat-icon-button
+                                    (click)="saveOrder('ShippingDetails')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+                                <button data-role="shippingInfoEditCancelButton" mat-icon-button (click)="editShippingDetails()">
+                                    <mat-icon *ngIf="!editingShippingDetails">edit</mat-icon>
+                                    <mat-icon *ngIf="editingShippingDetails">close</mat-icon>
+                                </button>
+                            </ng-container>
+                        </div>
+                        <div *ngIf="!editingShippingDetails" fxLayout="column">
+                            <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="details-three-column">
+
+
+                                <div *ngIf="visibleField('factoryShipDate', fields)" class="mb-0 font-weight-500">
+                                    {{fieldLabel('factoryShipDate', fields)}}: <span
+                                        class="accent-text">{{ order.factoryShipDate | date : "y-MM-dd"}}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('shipVia', fields)" class="mb-0 font-weight-500">
+                                    {{fieldLabel('shipVia', fields)}}: <span
+                                        class="accent-text">{{ order.shipVia }}</span>
+                                </div>
+                                <div *ngIf="visibleField('shipDate', fields)" class="mb-0 font-weight-500">
+                                    {{fieldLabel('shipDate', fields)}}: <span
+                                        class="accent-text">{{ order.shipDate === '0000-00-00' ? '':order.shipDate}}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('inHandDateBy', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('inHandDateBy', fields)}}: <span
+                                        class="accent-text">{{ order.inHandDateBy }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('supplierShipDate', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('supplierShipDate', fields)}}: <span
+                                        class="accent-text">{{ order.supplierShipDate }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('supplierInHandsDate', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('supplierInHandsDate', fields)}}: <span
+                                        class="accent-text">{{ order.supplierInHandsDate }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('expectedPrintDate', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('expectedPrintDate', fields)}}: <span
+                                        class="accent-text">{{ order.expectedPrintDate }}</span>
+                                </div>
+
+                                <div *ngIf="visibleField('proofDueDate', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('proofDueDate', fields)}}: <span
+                                        class="accent-text">{{ order.proofDueDate }}</span>
+                                </div>
+
+
+                                <div *ngIf="visibleField('shippingAccountNo', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('shippingAccountNo', fields)}}: <span class="accent-text">
+                                        {{ order.shippingAccountNo }} </span>
+                                </div>
+
+                                <div *ngIf="visibleField('billComplete', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('billComplete', fields)}}: <span class="accent-text">
+                                        {{ order.billComplete == '0' ? 'No':'Yes' }} </span>
+                                </div>
+
+                                <div *ngIf="visibleField('vipDiscountsRate', fields)" class=" mb-0 font-weight-500">
+                                    <div>
+                                        {{fieldLabel('vipDiscountsRate', fields)}}: <span class="accent-text">
+                                            {{ order.vipDiscountsRate }}% </span>
+                                    </div>
+                                </div>
+                                <div *ngIf="visibleField('isRushOrder', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('isRushOrder', fields)}}: <span class="accent-text">
+                                        {{ order.isRushOrder }} </span>
+                                </div>
+
+                                <div *ngIf="visibleField('notePackagingSlip', fields)" class=" mb-0 font-weight-500">
+                                    {{fieldLabel('notePackagingSlip', fields)}}:
+                                    <span class="accent-text pre">{{ order.notePackagingSlip }}</span>
+                                </div>
+                                <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column">
+                                    <!-- <div class=" mb-0 font-weight-500 ">
+                                                {{fieldLabel('orderNote', fields)}}:
+                                                <span class="accent-text pre">{{ order.orderNote}}</span>
+                                            </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <form name="form" [formGroup]="shippingDetailsForm">
+                            <div *ngIf="editingShippingDetails" fxLayout="column">
+                                <div class="three-columns">
+
+                                    <mat-form-field *ngIf="visibleField('factoryShipDate', fields)">
+                                        <input matInput formControlName="factoryShipDate" [matDatepicker]="pickerFactoryShipDate"
+                                            placeholder="{{fieldLabel('factoryShipDate', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerFactoryShipDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #pickerFactoryShipDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('factoryShipDate',fields)" [group]="shippingDetailsForm" field="factoryShipDate" label="{{fieldLabel('factoryShipDate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field *ngIf="visibleField('shipVia', fields)">
+                                        <mat-select formControlName="shipVia"
+                                            placeholder="{{fieldLabel('shipVia', fields)}}">
+                                            <mat-option [value]="shipType.value" *ngFor="let shipType of shipsList">
+                                                {{ shipType.label }}</mat-option>
+                                        </mat-select>
+                                        <app-error *ngIf="requiredField('shipVia',fields)" [group]="shippingDetailsForm" field="shipVia" label="{{fieldLabel('shipVia', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field *ngIf="visibleField('shipDate', fields)">
+                                        <input matInput formControlName="shipDate" [matDatepicker]="pickerShipDate"
+                                            placeholder="{{fieldLabel('shipDate', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerShipDate"></mat-datepicker-toggle>
+                                        <mat-datepicker #pickerShipDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('shipDate',fields)" [group]="shippingDetailsForm" field="shipDate" label="{{fieldLabel('shipDate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field *ngIf="visibleField('inHandDateBy', fields)">
+                                        <input matInput formControlName="inHandDateBy" [matDatepicker]="pickerHandeDate"
+                                            placeholder="{{fieldLabel('inHandDateBy', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerHandeDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #pickerHandeDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('inHandDateBy',fields)" [group]="shippingDetailsForm" field="inHandDateBy" label="{{fieldLabel('inHandDateBy', fields)}}"></app-error>
+                                    </mat-form-field>
+
+
+                                    <mat-form-field *ngIf="visibleField('supplierShipDate', fields)">
+                                        <input matInput formControlName="supplierShipDate"
+                                            [matDatepicker]="pickerSupplierShipDate"
+                                            placeholder="{{fieldLabel('supplierShipDate', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerSupplierShipDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #pickerSupplierShipDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('supplierShipDate',fields)" [group]="shippingDetailsForm" field="supplierShipDate" label="{{fieldLabel('supplierShipDate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field *ngIf="visibleField('supplierInHandsDate', fields)">
+                                        <input matInput formControlName="supplierInHandsDate"
+                                            [matDatepicker]="pickerSupplierInHandsDate"
+                                            placeholder="{{fieldLabel('supplierInHandsDate', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerSupplierInHandsDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #pickerSupplierInHandsDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('supplierInHandsDate',fields)" [group]="shippingDetailsForm" field="supplierInHandsDate" label="{{fieldLabel('supplierInHandsDate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field *ngIf="visibleField('expectedPrintDate', fields)">
+                                        <input matInput formControlName="expectedPrintDate"
+                                            [matDatepicker]="pickerExpectedPrintDate"
+                                            placeholder="{{fieldLabel('expectedPrintDate', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerExpectedPrintDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #pickerExpectedPrintDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('expectedPrintDate',fields)" [group]="shippingDetailsForm" field="expectedPrintDate" label="{{fieldLabel('expectedPrintDate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <mat-form-field *ngIf="visibleField('proofDueDate', fields)">
+                                        <input matInput formControlName="proofDueDate"
+                                            [matDatepicker]="pickerProofDueDate"
+                                            placeholder="{{fieldLabel('proofDueDate', fields)}}">
+                                        <mat-datepicker-toggle matSuffix [for]="pickerProofDueDate">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #pickerProofDueDate></mat-datepicker>
+                                        <app-error *ngIf="requiredField('proofDueDate',fields)" [group]="shippingDetailsForm" field="proofDueDate" label="{{fieldLabel('proofDueDate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+
+
+
+                                </div>
+
+                                <div class="three-columns">
+
+                                    <mat-form-field *ngIf="visibleField('shippingAccountNo', fields)">
+                                        <input matInput placeholder="{{fieldLabel('shippingAccountNo', fields)}}"
+                                            formControlName="shippingAccountNo">
+                                            <app-error *ngIf="requiredField('shippingAccountNo',fields)" [group]="shippingDetailsForm" field="shippingAccountNo" label="{{fieldLabel('shippingAccountNo', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                    <div *ngIf="visibleField('billComplete', fields)" class="slide-toggle">
+                                        <mat-slide-toggle class="mt-20" formControlName="billComplete"
+                                            labelPosition="before">{{fieldLabel('billComplete', fields)}}
+                                        </mat-slide-toggle>
+                                    </div>
+
+                                    <mat-form-field *ngIf="visibleField('vipDiscountsRate', fields)">
+                                        <mat-select formControlName="vipDiscountsRate"
+                                            placeholder="{{fieldLabel('vipDiscountsRate', fields)}}">
+                                            <mat-option [value]="discount.value" *ngFor="let discount of vipDiscounts">
+                                                {{ discount.label }}</mat-option>
+                                        </mat-select>
+                                        <app-error *ngIf="requiredField('vipDiscountsRate',fields)" [group]="shippingDetailsForm" field="vipDiscountsRate" label="{{fieldLabel('vipDiscountsRate', fields)}}"></app-error>
+                                    </mat-form-field>
+
+                                </div>
+
+                                <div class="three-columns">
+
+                                    <!-- <mat-form-field>
+                                                <textarea matInput #note maxlength="1000" placeholder="{{fieldLabel('orderNote', fields)}}" formControlName="orderNote" type="text" rows="4"></textarea>
+                                                <mat-hint align="end">{{note.value.length}} / 1000</mat-hint>
+                                            </mat-form-field> -->
+
+                                    <div *ngIf="visibleField('isRushOrder', fields)" class="slide-toggle">
+                                        <mat-slide-toggle class="mt-20" formControlName="isRushOrder"
+                                            labelPosition="before" [required]="requiredField('isRushOrder',fields)">
+                                            {{fieldLabel('isRushOrder', fields)}}</mat-slide-toggle>
+                                    </div>
+
+                                    <mat-form-field *ngIf="visibleField('notePackagingSlip', fields)">
+                                        <textarea matInput #notePackaging maxlength="1000"
+                                            placeholder="{{fieldLabel('notePackagingSlip', fields)}}"
+                                            formControlName="notePackagingSlip" type="text" rows="4"
+                                            [required]="requiredField('notePackagingSlip',fields)"></textarea>
+                                        <mat-hint align="end">{{notePackaging.value.length}} / 1000</mat-hint>
+                                        <app-error *ngIf="requiredField('notePackagingSlip',fields)" [group]="shippingDetailsForm" field="notePackagingSlip" label="{{fieldLabel('notePackagingSlip', fields)}}"></app-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="logistics-details p-8" *ngIf="logisticsForm" fxFlex="50">
+                        <div fxLayout="row">
+                            <h3 class="mat-title mr-8 accent-text font-weight-600">Logistics Details</h3>
+                            <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                                <button *ngIf="editingLogistics" mat-icon-button (click)="saveOrder('Logistics')">
+                                    <mat-icon>save</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="editLogistics()">
+                                    <mat-icon *ngIf="!editingLogistics">edit</mat-icon>
+                                    <mat-icon *ngIf="editingLogistics">close</mat-icon>
+                                </button>
+                            </ng-container>
+                        </div>
+                        <div *ngIf="!editingLogistics" fxLayout="column">
+                            <div>
+                                <strong>Quality Expectation:</strong>
+                                {{logistics?.qualityExpectationRetail ? 'Retail' : ''}}
+                                {{logistics?.qualityExpectationPromotional ? 'Promotional' : ''}}
+                            </div>
+                            <div>
+                                <strong>Logo Release:</strong>
+                                {{ logistics?.logoRelease ? 'Yes' : 'No' }}
+                            </div>
+                            <div>
+                                <strong>Country Of Origin Placement:</strong>
+                                {{ logistics?.countryOfOriginPlacement }}
+                            </div>
+                            <div>
+                                <strong>Carton Markings:</strong>
+                                <div>{{ logistics?.cartonMarkings }}</div>
+                            </div>
+                        </div>
+                        <div class="logistics-form" *ngIf="editingLogistics" [formGroup]="logisticsForm">
+                            <div fxLayout="row">
+                                <mat-form-field class="mr-16">
+                                    <input type="text" matInput id="countryOfOriginPlacement"
+                                        placeholder="Country of Origin Placement"
+                                        formControlName="countryOfOriginPlacement" />
+                                </mat-form-field>
+                                <div>
+                                    <strong>Quality Expectation: </strong>
+                                    <mat-checkbox class="mr-8" formControlName="qualityExpectationRetail">
+                                        Retail
+                                    </mat-checkbox>
+                                    <mat-checkbox class="mr-8" formControlName="qualityExpectationRetail">
+                                        Promotional
+                                    </mat-checkbox>
+                                    <div>
+                                        <mat-checkbox class="mr-8" formControlName="logoRelease">
+                                            Logo Release Needed
+                                        </mat-checkbox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-form-field fxFlex>
+                                    <textarea matInput class="w-100-p" id="cartonMarkings" placeholder="Carton Markings"
+                                        formControlName="cartonMarkings"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+            </mat-card>
+        </div>
+    </div>
+
+    <!-- <div class="section pb-12">
+
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16">access_time</mat-icon>
+            <div class="h2 secondary-text">Order Status</div>
+        </d{{iv>
+
+        <table class="simple">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Updated By</th>
+                    <th>Updated On</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let status of order.status">
+                    <td>
+                        <span class="status h6 p-4" [ngClass]="status.color">
+                            {{status.name}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{status.updatedBy}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{status.date | date}}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <form class="update-status px-24 pt-12"
+              (ngSubmit)="updateStatus()"
+              [formGroup]="statusForm">
+            <div fxFlex="33" fxFlex.md="66" fxFlex.sm="100" fxFlex.xs="false" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayoutGap.xs="10">
+                <mat-form-field ngClass.gt-xs="mr-16" fxFlex>
+                    <mat-select formControlName="newStatus"
+                                placeholder="Select a status" required>
+                        <mat-option *ngFor="let status of orderStatuses"
+                                    [value]="status.id">
+                            {{status.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button class="mat-accent"
+                        [disabled]="statusForm.invalid">
+                    Update Status
+                </button>
+            </div>
+        </form>
+
+    </div> -->
+
+    <div class="section pb-12">
+
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16">attach_money</mat-icon>
+            <div class="h2 secondary-text">Payment Status</div>
+        </div>
+
+        <table class="simple">
+            <thead>
+                <tr>
+                    <th>TransactionID</th>
+                    <th>Payment Method</th>
+                    <th>Amount</th>
+                    <th>Updated By</th>
+                    <th>Updated On</th>
+                    <th>Balance</th>
+                    <th>Note</th>
+                    <th>
+                        <!-- Actions -->
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let payment of paymentList; let i=index;">
+                    <!-- <td>
+                        <span class="status h6 p-4" [ngClass]="status.color">
+                            {{status.name}}
+                        </span>
+                    </td> -->
+                    <td>
+                        <span>
+                            {{payment.referenceNumber}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{payment.paymentMethod}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{payment.amount | currency:'USD':'symbol'}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{payment.fullName}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{payment.paymentDate | date:'medium'}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{getBalancePerEachPayment(i) | currency:'USD':'symbol'}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{payment.notes}}
+                        </span>
+                    </td>
+                    <td>
+                        <mat-menu #paymentMenu="matMenu">
+                            <button mat-menu-item class="warn-fg" (click)="emitDeletePayment(payment)">Delete</button>
+                            <button mat-menu-item class="warn-fg" (click)="emitVoidPayment(payment)">Void</button>
+                            <button mat-menu-item class="warn-fg" (click)="emitRefundPayment(payment)">Refund</button>
+                        </mat-menu>
+
+                        <button mat-icon-button [matMenuTriggerFor]="paymentMenu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ng-container checkPermissionAction [pAction]="'pay_order'">
+            <button *ngIf="(order.orderType.toLowerCase() == 'order' && order.orderStatus.toLowerCase() != 'void' && order.orderStatus.toLowerCase() != 'cancelled')" mat-raised-button class="m-16 mat-accent"
+                (click)="receivePayment()">
+                Receive Payment
+            </button>
+        </ng-container>
+
+        <!-- <form class="update-status px-24 pt-12"
+              (ngSubmit)="updatePaymentStatus()"
+              [formGroup]="paymentStatusForm">
+
+            <div fxFlex="33" fxFlex.md="66" fxFlex.sm="100" fxFlex.xs="false" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start center" fxLayoutAlign.xs="start stretch" fxLayoutGap.xs="10">
+                <mat-form-field ngClass.gt-xs="mr-16" fxFlex>
+                    <mat-select formControlName="newStatus"
+                                placeholder="Select a status" required>
+                        <mat-option *ngFor="let status of paymentStatuses"
+                                    [value]="status.id">
+                            {{status.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button class="mat-accent"
+                        [disabled]="paymentStatusForm.invalid">
+                    Update Status
+                </button>
+            </div>
+        </form> -->
+    </div>
+
+
+    <div class="section pb-12">
+
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16">local_shipping</mat-icon>
+            <div class="h2 secondary-text">Shipping Status</div>
+        </div>
+
+        <table class="simple">
+            <thead>
+                <tr>
+                    <th>Tracking Code</th>
+                    <th>Shipping Method</th>
+                    <th>Ship Date</th>
+                    <th>Note</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngFor="let shipping of order.shippingDetails"-->
+                <tr *ngFor="let shipping of shipInfoList; let i=index;">
+                    <td class="tracking-code">
+                        {{shipping.trackNumber}}
+                    </td>
+                    <td>
+                        {{shipping.shippingMethod}}
+                    </td>
+                    <td>
+                        {{ shipping.shipDate }}
+                    </td>
+                    <td>
+                        {{ shipping.note }}
+                    </td>
+                    <td>
+                        <div fxFlex="row" fxLayoutAlign="end center">
+                            <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                                    (click)="$event.stopPropagation();">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #moreMenu="matMenu">
+                                <button mat-menu-item aria-label="remove" (click)="editShippingInfo(shipping)">
+                                    <mat-icon>edit</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item aria-label="remove" (click)="deleteShippingInfo(shipping)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Remove</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ng-container>
+            <button mat-raised-button class="m-16 mat-accent"
+                (click)="addTracking()">
+               Add Tracking Information
+            </button>
+        </ng-container>
+
+        <button *ngIf="cxmlAsnEnabled && shipInfoList.length > 0 && order && order.orderSource && order.orderSource == 'cxml'"
+          mat-raised-button class="m-16 mat-accent"
+          (click)="sendAsn()"
+          aria-label="Send ASN">
+            Send ASN
+        </button>
+    </div>
+
+</div>
+<!-- <activity-sidenav></activity-sidenav> -->
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+

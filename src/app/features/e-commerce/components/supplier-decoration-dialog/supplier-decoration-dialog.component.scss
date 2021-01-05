@@ -1,0 +1,28 @@
+:host {
+  .decoration-charge {
+    border-collapse: collapse;
+
+    caption {
+      text-align: left;
+    }
+
+    .col {
+      padding: 8px;
+      border: 1px solid #eee;
+
+      &.col--charge {
+        max-width: 300px;
+        width: 200px;
+        background: #eee;
+      }
+      &.col--price-label {
+        text-align: right;
+        width: 100px;
+        background: #eee;
+      }
+      &.col--qty {
+        width: 100px;
+      }
+    }
+  }
+}

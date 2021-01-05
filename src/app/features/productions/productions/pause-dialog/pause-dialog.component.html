@@ -1,0 +1,13 @@
+<div class="dialog-content-wrapper">
+    <h1 mat-dialog-title>Reason for Pausing</h1>
+    <mat-form-field>
+        <mat-select placeholder="Reason" disableRipple [(ngModel)]="selected">
+            <mat-option *ngFor="let opt of ddPaused" [value]="opt">
+                {{opt.label}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div mat-dialog-actions>
+        <button mat-button (click)="close()">Save &amp; Close</button>
+    </div>
+</div>

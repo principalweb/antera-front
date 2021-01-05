@@ -1,0 +1,44 @@
+.row-header {
+  .col-quantity {
+    font-weight: bold;
+  }
+}
+
+.col-label > div,
+.col-quantity > div {
+  min-height: 80px;
+}
+.col-label {
+  width: 100px;
+  padding-top: 16px;
+  margin-right: 16px;
+  text-align: right;
+}
+.col-quantity {
+  width: 80px;
+  margin-right: 8px;
+  text-align: center;
+  text-overflow: ellipsis;
+
+  .mat-form-field {
+    max-width: 100%;
+  }
+
+  input {
+    background: none;
+    border: none;
+    text-align: center;
+    max-width: 100%;
+  }
+}
+
+.col-quantity-new {
+  width: 80px;
+}
+.mat-dialog-actions {
+  margin: 0 8px;
+}
+
+.search-notify {
+  color: red;
+}

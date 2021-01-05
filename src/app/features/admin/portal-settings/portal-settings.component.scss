@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  width: 100%;
+
+  .space-between {
+    justify-content: space-between;
+  }
+
+  .mat-form-field-infix {
+    width: 120px;
+  }
+}

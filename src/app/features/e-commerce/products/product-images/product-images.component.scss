@@ -1,0 +1,152 @@
+@import "src/@fuse/scss/fuse";
+
+app-product-images {
+    flex: 1;
+    overflow: hidden;
+    position:relative;
+
+    .mat-table {
+        box-shadow: none;
+        overflow-y: auto;
+
+        .mat-header-row {
+            background: white;
+            width: 100%;
+
+            z-index: 1;
+        }
+
+
+        .mat-column-checkbox {
+            flex: 0 1 64px;
+
+            .mat-checkbox-ripple {
+                display: none !important; //fix for broken rendering
+            }
+        }
+
+        .mat-column-itemNumber {
+            flex: 0 1 84px;
+        }
+
+        .mat-column-logo {
+            flex: 0 1 40px;
+        }
+
+        .mat-column-buttons {
+            flex: 0 1 80px;
+        }
+
+        flex: none !important;
+
+    }
+    
+    .mat-paginator {
+        flex: none;
+    }
+
+    #photos-videos {
+
+        overflow: auto;
+
+        .period-media {
+            margin-bottom: 16px;
+
+            .media {
+                margin: 0 16px 16px 0;
+                position: relative;
+                cursor: pointer;
+                height: 168px;
+                width: 168px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+
+                img.wide {
+                    max-width: 100%;
+                    max-height: 100%;
+                    height: auto;                
+                }
+
+                img.tall {
+                    max-height: 65%;
+                    max-width: 100%;
+                    width: auto;
+                }
+
+                .preview {
+                    display: block;
+                    max-width: 105px;
+                    max-height: 105px;
+                }
+
+                .title {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 10;
+                    padding: 0 16px;
+                    height: 24px;
+                    line-height: 24px;
+                    background: rgba(0, 0, 0, 0.54);
+                    color: #FFF;
+                    font-size: 12px;
+                }
+
+                .item-no {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 30px;
+                    line-height: 30px;
+                    padding-left: 8px;
+                    background: rgba(0, 0, 0, 0.05);
+                    color: #222222;
+                    font-size: 12px;
+                    font-weight: bold;
+                    z-index: 10px;
+                }
+
+                mat-checkbox {
+                    position: absolute;
+                    top: 3px;
+                    right: 4px;
+                    z-index: 10;
+
+                    // .mat-checkbox-frame {
+                    //     border-color: white;
+                    // }
+                }
+
+                .auto-update {
+                    position: absolute;
+                    top: 35px;
+                    right: 5px;
+                    z-index: 10;
+                    border-radius: 50%;
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+
+.filter-input {
+    .mat-option-pseudo-checkbox {
+      display: none;
+    }
+  
+    .mat-icon-button {
+      position: absolute;
+      top: 4px;
+      right: 0;
+  
+      .mat-icon {
+        margin: 0;
+      }
+    }
+}

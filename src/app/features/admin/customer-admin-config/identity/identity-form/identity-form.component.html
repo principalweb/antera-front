@@ -1,0 +1,130 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>{{data.title}}</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner> 
+    </div>
+
+    <mat-dialog-content class="p-24 m-0">
+        <form [formGroup]="dataForm" (submit)="save()" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+            <div fxLayout="row" fxLayout.xs="column">
+                <div fxLayout="column" fxFlex class="mr-20">
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Name" formControlName="name" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Billing Street" formControlName="billingStreet" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Billing City" formControlName="billingCity" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Billing State" formControlName="billingState" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Billing Postal Code" formControlName="billingPostalcode" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Billing Country" formControlName="billingCountry" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Shipping Street" formControlName="shippingStreet" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Shipping City" formControlName="shippingCity" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Shipping State" formControlName="shippingState" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Shipping Postal Code" formControlName="shippingPostalcode" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Shipping Country" formControlName="shippingCountry" class="form-control">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Phone" formControlName="phone" class="form-control">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="column" fxFlex>
+                    <div class="py-16" fxLayout="row">
+                        <div class="form-group" fxFlex>
+                            <strong>Logo with Address for Documents</strong> Recommended 300 Pixels width 400 Pixels or less height.The system will resize images to fit.
+                         </div>
+                         <div class="form-group" flex="66">
+                           <input hidden type="file" id="logoUpload" (change)="onFileChange($event,'Accounts')" #importAccountsFile>
+                            <div class="ml-32" (click)="importAccountsFile.click()" *ngIf="logo">
+                                <img [src]="logo" *ngIf="logo" />
+                            </div>
+                            <div class="ml-32" (click)="importAccountsFile.click()">
+                                <div class="text-bold h1 mb-0"><mat-icon class="identity-mat-icon">desktop_windows</mat-icon>Upload from Computer</div>
+                                <div class="text-bold h5 secondary-text">Upload a new logo image from your computer</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-16 mt-40" fxLayout="row">
+                        <div class="form-group" fxFlex>
+                        <strong>Logo with Address for Reports and Customer Portal</strong> Recommended 300 Pixels width 400 Pixels or less height.The system will resize images to fit.
+                         </div>
+                        
+                        <div class="form-group" flex="66">
+                            <input hidden type="file" id="altLogoUpload" (change)="onFileChange($event,'altLogo')" #importAltLogoFile>
+                            <div class="ml-32" (click)="importAltLogoFile.click()" *ngIf="altLogo">
+                                <img [src]="altLogo" *ngIf="altLogo" />
+                            </div>
+                            <div class="ml-32" (click)="importAltLogoFile.click()">
+                                <div class="text-bold h1 mb-0"><mat-icon class="identity-mat-icon">desktop_windows</mat-icon>Upload from Computer</div>
+                                <div class="text-bold h5 secondary-text">Upload a new alternate logo image from your computer</div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </form>
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+            <button mat-raised-button
+                    (click)="save()"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

@@ -1,0 +1,129 @@
+<div class="toolbar">
+    <div class="mail-selection" fxFlex="row">
+        <div fxFlex="row" fxLayoutAlign="start center">
+
+            Click on the Inventory lines to view details
+        </div>
+
+    </div>
+</div>
+
+<mat-table fxFlex #table [dataSource]="dataSource" matSort
+           [formGroup]="filterForm"
+           (matSortChange)="sortChange($event)"
+           [@animateStagger]="{value:'50'}">
+
+    <ng-container matColumnDef="select">
+		<mat-header-cell *matHeaderCellDef>
+		  <mat-checkbox (change)="$event ? masterToggle() : null"
+						[checked]="selection.hasValue() && isAllSelected()"
+						[indeterminate]="selection.hasValue() && !isAllSelected()">
+		  </mat-checkbox>
+		</mat-header-cell>
+		<mat-cell *matCellDef="let row">
+		  <mat-checkbox (click)="$event.stopPropagation()"
+						(change)="$event ? selection.toggle(row) : null"
+						[checked]="selection.isSelected(row)">
+		  </mat-checkbox>
+		</mat-cell>
+	</ng-container>
+
+    <ng-container cdkColumnDef="sku">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>SKU</span>
+          <input class="form-control" formControlName="sku" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.sku">{{ item.sku }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="color">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Color</span>
+          <input class="form-control" formControlName="color" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.color">{{ item.color }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="size">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Size</span>
+          <input class="form-control" formControlName="size" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.size">{{ item.size }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="orderNo">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Order #</span>
+          <input class="form-control" formControlName="orderNo" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.orderNo">{{ item.orderNo }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="accountName">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Account Name</span>
+          <input class="form-control" formControlName="accountName" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.accountName">{{ item.accountName}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="reserved">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Reserved Qty</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.reserved }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="reserveDate">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Reserve Date</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.reserveDate | date:'medium'">{{ item.reserveDate | date:'medium'}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="remove">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>Unreserve</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm class="button">
+          <mat-icon aria-hidden="false" aria-label="Cancel Reserve" (click)="cancelReservation($event, item)" title="Cancel Reserve" color="accent">move_to_inbox</mat-icon>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let item; columns: displayedColumns;"
+             class="inventory-item"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+               [length]="dataSource.total"
+               [pageIndex]="dataSource.index"
+               [pageSize]="50"
+               [pageSizeOptions]="[10, 20, 50, 100]"
+               (page)="paginate($event)"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

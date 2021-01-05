@@ -1,0 +1,38 @@
+.app-admin-documents {
+}
+
+.page-layout.carded.left-sidebar > .center,
+.page-layout.carded.right-sidebar > .center {
+  margin-left: 30px;
+}
+
+.page-layout.carded.left-sidebar > .sidebar,
+.page-layout.carded.right-sidebar > .sidebar {
+  width: 350px;
+  min-width: 350px;
+  max-width: 350px;
+}
+.mat-card.doc-container {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.page-layout.carded.left-sidebar > .center > .content-card > .content,
+.page-layout.carded.right-sidebar > .center > .content-card > .content {
+  min-height: 1px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.page-layout.carded.left-sidebar > .sidebar .content,
+.page-layout.carded.right-sidebar > .sidebar .content {
+  padding: 8px 0 8px 8px;
+  min-height: 1px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

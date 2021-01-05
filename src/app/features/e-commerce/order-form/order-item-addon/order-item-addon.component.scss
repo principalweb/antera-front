@@ -1,0 +1,43 @@
+@import "../order";
+
+$border-color: #efefef;
+
+.item__addon__header:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  border-bottom: 1px solid #dcdcdc;
+  width: 16px;
+  left: 0;
+  margin-top: -8px;
+}
+
+:host {
+  border: 1px solid $border-color;
+  display: block;
+  margin: 0 0 8px 16px;
+}
+
+.item__addon {
+  width: 100%;
+  padding-left: 16px;
+
+  &__header {
+    align-items: center;
+
+    img {
+      max-width: 50px;
+      margin-right: 16px;
+    }
+
+    @extend %orderColumns;
+  }
+
+  &__expand {
+    margin-left: 50px;
+  }
+
+  &__actions {
+    display: none;
+  }
+}

@@ -1,0 +1,161 @@
+<mat-table #table matSort
+           [dataSource]="dataSource"
+           [@animateStagger]="{value:'50'}"
+           [formGroup]="filterForm"
+           (matSortChange)="sort($event)">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic">
+            <mat-checkbox [checked]="checkboxes[logistic.id]"
+                          (change)="onSelectedChange(logistic.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="orderId">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>Order ID</span>
+            <!-- <input class="form-control" formControlName="orderId" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic">
+            <p class="text-truncate">{{logistic.orderId}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Modified  By -->
+    <ng-container cdkColumnDef="modifiedByName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>Modified By</span>
+            <!-- <input class="form-control" formControlName="accountName" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-xs>
+            <p class="text-truncate">{{logistic.modifiedByName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- ETD Column -->
+    <ng-container cdkColumnDef="etd">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>ETD</span>
+            <!-- <input class="form-control" formControlName="contactName" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-xs>
+            <p class="text-truncate">{{logistic.ETD}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Customs Cleared Column -->
+    <ng-container cdkColumnDef="customsCleared">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>Customs Cleared</span>
+            <!-- <input class="form-control" formControlName="leadSource" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-sm>
+            <p class="text-truncate">{{ logistic.customsCleared }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- In Route Column -->
+    <ng-container cdkColumnDef="inRoute">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>In Route</span>
+            <!-- <input class="form-control" formControlName="logisticType" placeholder=""> -->
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-sm>
+            <p class="text-truncate">{{logistic.inRoute}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- ETA Column -->
+    <ng-container cdkColumnDef="eta">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>ETA</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-md>
+            <p class="text-truncate">{{logistic.ETA}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- ADT  Column -->
+    <ng-container cdkColumnDef="adt">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>ADT</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-md>
+            <p class="text-truncate">{{logistic.ADT}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- plannedDeliveryDate Column -->
+    <ng-container cdkColumnDef="plannedDeliveryDate">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>Planned Delivery Date</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-lg>
+            <p class="text-truncate">{{logistic.plannedDeliveryDate}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- POD Column -->
+    <ng-container cdkColumnDef="POD">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef (keyup.enter)="filterLogistics()">
+            <span mat-sort-header>POD</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic" fxHide fxShow.gt-lg>
+            <p class="text-truncate">{{logistic.POD}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- More Buttons Column -->
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let logistic">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteLogistic(logistic)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let logistic; columns: displayedColumns;"
+             class="contact"
+             (click)="editLogistic(logistic)"
+             [ngClass]="{'mat-light-blue-50-bg':checkboxes[logistic.id]}"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+                [length]="dataSource.total"
+                [pageSize]="50"
+                [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                [showFirstLastButtons]="true"
+                (page)="paginate($event)">
+</mat-paginator>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

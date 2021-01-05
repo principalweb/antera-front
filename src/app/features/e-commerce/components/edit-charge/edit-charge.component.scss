@@ -1,0 +1,27 @@
+@import "src/@fuse/scss/fuse";
+
+.order-edit-charge-modal{
+  mat-dialog-container{
+    padding: 0;
+
+    .mat-dialog-title {
+      margin: 0;
+    }
+
+    mat-dialog-content{
+      margin: 0;
+      padding: 12px;
+
+      .mat-form-field-infix{
+        width: 720px;
+        @include media-breakpoint('lt-md') {
+            width: 450px;
+        }
+
+        @include media-breakpoint('xs') {
+            width: 210px;
+        }
+      }
+    }
+  }
+}

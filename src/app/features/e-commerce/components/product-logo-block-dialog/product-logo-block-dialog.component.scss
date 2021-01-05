@@ -1,0 +1,102 @@
+@import "src/@fuse/scss/fuse";
+
+.product-logo-block-dialog {
+  min-width: 400px;
+  //max-width: 800px !important;
+  max-width: 100vw !important;
+  
+
+  @include media-breakpoint("xs") {
+    min-width: none;
+  }
+
+  #logo__editor {
+    position: relative;
+    margin: 8px;
+
+    &__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  .active {
+    background: #efefef;
+  }
+  rect {
+    fill: rgba(170,170,170,0.6);
+    stroke: rgb(170,170,170);
+    stroke-width: 4px;
+    &.active {
+      fill: rgba(46, 204, 113, 0.5);
+      stroke: rgb(46, 204, 113);
+    }
+  }
+  .dialog-content-scrollable {
+    max-height: 85vh;
+  }
+
+  .stepper {
+    text-align: center;
+  }
+
+  .logo__fab {
+    position: absolute;
+    margin-top: 32px;
+    right: 16px;
+  }
+
+  .logo__preview {
+    border: 1px solid #efefef;
+    max-width: 800px;
+  }
+
+  .logo__details {
+    min-width: 250px;
+
+    .mat-list {
+      margin-top: 32px;
+    }
+  }
+
+  .mat-list .mat-icon {
+    cursor: pointer;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+    overflow: hidden;
+
+    .mat-toolbar {
+      min-height: initial;
+      flex: none;
+    }
+
+    .toolbar-bottom {
+      height: auto;
+    }
+  }
+
+  .dialog-content-wrapper {
+    @include media-breakpoint("xs") {
+      height: 100vh;
+    }
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  div[mat-dialog-content] {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .center {
+    display: flex;
+    flex: 1;
+    position: relative;
+  }
+}

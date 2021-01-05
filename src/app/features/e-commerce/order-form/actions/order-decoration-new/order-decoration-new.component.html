@@ -1,0 +1,18 @@
+<div fxLayout="column" class="h-100-p">
+  <div class="p-16 pb-0" fxFlex="none" fxLayout="row" fxLayoutAlign="start center">
+    <button mat-icon-button (click)="emitClose()" class="mr-8">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="h3 mr-8">Create Artwork</span>
+
+    <ng-container *ngIf="artworkDetails?.details?.id">
+      <button mat-raised-button color="accent" (click)="selectDecoration()">Add Decoration</button>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <app-artwork-details class="artwork-details" [embedded]="true" [embeddedData]="decoData"
+      (afterCreate)="emitCreate($event)">
+    </app-artwork-details>
+  </ng-container>
+</div>

@@ -1,0 +1,38 @@
+<div fxFlex>
+    <mat-toolbar>
+        <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="save()">
+            <mat-icon color="accent">save</mat-icon>
+            Save
+        </button>
+    </mat-toolbar>
+    <mat-table #table [dataSource]="actions" 
+            [@animateStagger]="{value:'50'}"
+            [trackBy]="trackById">
+
+        <ng-container cdkColumnDef="label">
+            <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                <span>Label</span>
+            </mat-header-cell>
+            <mat-cell class="pr-8" fxHide fxShow.gt-xs *cdkCellDef="let action">
+                <p class="company text-truncate">
+                    {{ action.label }}
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="allowAction">
+            <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                <span>Allow Action</span>
+            </mat-header-cell>
+            <mat-cell class="pr-8" fxHide fxShow.gt-xs *cdkCellDef="let action">
+                <mat-checkbox [(ngModel)]="action.allowAction"></mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *cdkRowDef="let entityType; columns: displayedColumns;" class="permission" matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+        </mat-row>
+    </mat-table>
+
+</div>

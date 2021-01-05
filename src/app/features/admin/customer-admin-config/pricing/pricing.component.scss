@@ -1,0 +1,34 @@
+.pricing-margin-container{
+    max-width: 900px;
+    min-height: 600px;
+    padding: 30px;
+    float: right;
+}
+
+.element-spacer {
+    flex: 1 1 auto;
+  }
+
+.full-width-form {
+    width: 85%;
+}
+
+.half-with-input {
+    max-width: 45%;
+}
+
+.right-container {
+    padding-left: 10px;
+}
+
+.ranges-container {
+    min-height: fit-content;
+}
+
+.ranges-form-container {
+    min-height: auto;
+}
+
+.mat-list {
+    overflow: auto;
+}

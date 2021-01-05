@@ -1,0 +1,154 @@
+<div id="invoice-list-view" class="page-layout carded fullwidth inner-scroll list-page">
+<!-- TOP BACKGROUND -->
+<div class="top-bg mat-accent-bg"></div>
+<!-- / TOP BACKGROUND -->
+<div class="center">
+  <div class="header white-fg h-80" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <!-- APP TITLE -->
+    <div class="logo my-12 m-sm-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+      <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Invoices</span>
+    </div>
+    <!-- / APP TITLE -->
+  </div>
+
+  <!-- CONTENT CARD -->
+  <div fusePerfectScrollbar class="content-card mat-white-bg">
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="newInvoice()">
+        <mat-icon>add</mat-icon> Create Invoice
+      </button>
+    </div>
+    <!-- TOOLBAR -->
+    <div class="orders-table" [formGroup]="filterForm">
+      <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+
+        <!-- Checkbox Column -->
+        <ng-container cdkColumnDef="checkbox">
+          <mat-header-cell class="w-60" *cdkHeaderCellDef>
+            <mat-checkbox>
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell class="w-60" *cdkCellDef="let invoice" (click)="$event.stopPropagation()">
+            <mat-checkbox [checked]="checkboxes[invoice.id]" (change)="onSelectedChange(invoice.id, $event)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <!-- / Checkbox Column -->
+
+        <!-- NUMBER COLUMN START -->
+        <ng-container cdkColumnDef="number">
+          <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Invoice Number</span>
+            <!-- <input class="form-control" formControlName="number" placeholder="" (keyup.enter)="fetchList()"> -->
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.number" [matTooltipPosition]="'above'">
+            <p class="text-truncate">{{invoice.number | ellipsis: 15}}</p>
+          </mat-cell>
+        </ng-container>
+        <!-- NUMBER COLUMN END -->
+
+        <!-- LABEL COLUMN START -->
+        <ng-container cdkColumnDef="label">
+          <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Label</span>
+            <input class="form-control" formControlName="label" placeholder="">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.label"
+            [matTooltipPosition]="'above'">
+            <p class="text-truncate mr-8">{{invoice.label | ellipsis: 35}}</p>
+          </mat-cell>
+        </ng-container>
+        <!-- LABEL COLUMN END -->
+
+        <!-- CUSTOMER COLUMN START -->
+        <ng-container cdkColumnDef="customer">
+          <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Customer</span>
+            <input class="form-control" formControlName="customer" placeholder="">
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.customer" [matTooltipPosition]="'above'">
+            <a (click)=$event.stopPropagation() routerLink="/accounts/{{invoice.customerId}}"><p class="text-truncate">{{invoice.customer | ellipsis: 15}}</p></a>
+          </mat-cell>
+        </ng-container>
+        <!-- CUSTOMER COLUMN END -->
+
+        <!-- Date -->
+        <ng-container cdkColumnDef="created">
+          <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Created</span>
+        
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.created">
+            <p class="text-truncate">{{ invoice.created | date }}</p>
+          </mat-cell>
+        </ng-container>
+
+        <!-- / Date -->
+
+        <!-- Amount -->
+        <ng-container cdkColumnDef="salesAmount">
+          <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span>Amount</span>
+        
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-xs [matTooltip]="invoice.salesAmount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })"
+            [matTooltipPosition]="'above'">
+            <p class="text-truncate">${{invoice.salesAmount.toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+              })}}</p>
+          </mat-cell>
+        </ng-container>
+
+
+        <!-- / Amount -->
+
+        <!-- STATUS COLUMN START -->
+        <ng-container cdkColumnDef="status">
+          <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span class="w-60">Status</span>
+            <mat-select disableRipple class="form-control" (selectionChange)="statusChange($event)">
+              <!-- <mat-option *ngFor="let type of orderService.statuses" [value]="type.name">
+                {{type.name}}
+              </mat-option> -->
+              <mat-option value="Unpaid">
+                Unpaid
+              </mat-option>
+              <mat-option value="Paid">
+                Paid
+              </mat-option>
+            </mat-select>
+          </mat-header-cell>
+          <mat-cell *cdkCellDef="let invoice" fxHide fxShow.gt-md>
+            <p class="status text-truncate h6 p-4">
+              {{invoice.status}}
+            </p>
+          </mat-cell>
+        </ng-container>
+        <!-- STATUS COLUMN END -->
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        
+        <mat-row class="order" (click)="navigateToInvoice(invoice.id)" matRipple
+          *cdkRowDef="let invoice; columns: displayedColumns;"
+          [ngStyle]="{'cursor': 'pointer'}"
+          [ngClass]="{'highlight': checkboxes[invoice.id]}">
+        </mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="invoiceService.totalCount" [pageIndex]="0" [pageSize]="50" (page)="paginate($event)"
+        [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+      </mat-paginator>
+    </div>
+  </div>
+
+</div>
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+</div>

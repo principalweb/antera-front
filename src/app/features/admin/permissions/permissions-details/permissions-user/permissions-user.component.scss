@@ -1,0 +1,54 @@
+@import "src/@fuse/scss/fuse";
+app-permissions-user {
+    flex: 1;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+
+    .mat-table {
+        box-shadow: none;
+        position: static;
+        overflow-y: auto;
+
+        .mat-header-row {
+            background: white;
+            width: 100%;
+        }
+
+        .mat-column-checkbox {
+            flex: 0 1 64px;
+
+            .mat-checkbox-ripple {
+                display: none !important; //fix for broken rendering
+            }
+        }
+
+        .mat-column-logo {
+            flex: 0 1 40px;
+        }
+
+        .mat-column-buttons {
+            flex: 0 1 80px;
+        }
+
+        .mat-row {
+            position: relative;
+            cursor: pointer;
+                        z-index: 0;
+
+            .mat-cell {
+                min-width: 0;
+
+                &.mat-column-detail-button {
+                    flex: 0 1 auto;
+                    padding: 0 24px 0 0;
+                    }
+                }
+            }
+        }
+    
+    .mat-paginator {
+        flex: none;
+    }
+
+}

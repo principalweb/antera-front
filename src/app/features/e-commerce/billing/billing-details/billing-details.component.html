@@ -1,0 +1,211 @@
+<div id="order" class="page-layout carded inner-scroll fullwidth">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button class="mr-16" mat-icon-button routerLink="/e-commerce/billing">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2">
+                        Billing #{{order.orderNo}} for {{order.accountName}}
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <div class="order-total" fxFlex fxLayout="row-reverse" fxLayoutAlign="start center">
+                <div fxLayout="column" fxHide.xs>
+                    <div class="h2">Order Total: {{order.finalGrandTotalPrice | currency:'USD':'symbol'}}
+                        <span *ngIf="! (customerViewService.state$ | async)?.enabled">&nbsp;| Gross Profit: {{order.grossProfit | currency:'USD':'symbol' }}
+                            <span *ngIf="order.grossProfit" class="profit-percentage">&nbsp;
+                                {{ ( order.grossProfitPercent / 100 ) | percent:sysconfigOrderFormTotalDecimalUpto }}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <div class="toolbar">
+                <div class="order-status mr-8" fxLayout="row" fxFlex>
+                    <div fxFlex>
+                        Status:
+                        <span class="status h6 p-4" [ngClass]="colors[order.orderStatus]">
+                            {{order.orderStatus}}
+                        </span>
+                    </div>
+                    <ng-container *ngIf="newOrderFormEnabled && !forceNewOrderForm">
+                        <button mat-button (click)="toggleNewOrderForm()" class="orange-fg">
+                            {{ !newOrderFormToggled ? 'Try New Order Form' : 'Back to Original Form' }}
+                        </button>
+                    </ng-container>
+                </div>
+                <div class="order-buttons" *ngIf="order.orderType == 'CreditMemo'" fxLayout="row">
+                    <ng-container *ngIf="order.orderStatus == 'Billed'">
+                        <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                            <mat-icon>highlight_off</mat-icon> Cancel
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="order.orderStatus == 'Pending'">
+                        <button mat-raised-button color="accent" (click)="updateOrderStatus('Booked')">Book</button>
+                        <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                            <mat-icon>highlight_off</mat-icon> Cancel
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="order.orderStatus == 'Booked'">
+                        <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                            <mat-icon>highlight_off</mat-icon> Cancel
+                        </button>
+                    </ng-container>
+
+                </div>
+                <div class="order-buttons" *ngIf="order.orderType == 'Sample'" fxLayout="row">
+                    <ng-container *ngIf="order.orderStatus == 'Pending'">
+                        <button mat-raised-button color="accent" (click)="updateOrderStatus('Booked')">Book</button>
+                        <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                            <mat-icon>highlight_off</mat-icon> Cancel
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="order.orderStatus == 'Booked'">
+                        <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                            <mat-icon>highlight_off</mat-icon> Cancel
+                        </button>
+                    </ng-container>
+
+                </div>
+                <div class="order-buttons"
+                    *ngIf="order.orderType.toLowerCase() == 'merged' || order.orderType.toLowerCase() == 'order' || order.orderType.toLowerCase() === 'webstore' || order.orderType.toLowerCase() === 'storeorder'"
+                    fxLayout="row">
+                    <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                        <ng-container *ngIf="permissionsEnabled">
+                            <permission-entity-group-dialog style="margin-right:10px"
+                                *checkPermission="[order.id, 'Order']; requiredPermission 'allowPermission'"
+                                [entityId]="order.id" [entityType]="'Order'">
+                            </permission-entity-group-dialog>
+                        </ng-container>
+                        <ng-container *ngIf="order.orderStatus == 'Pending'">
+                            <button mat-raised-button color="accent"
+                                (click)="validateCreditLimit('Booked')">Book</button>
+                            <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowDelete'">
+                                <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                                    <mat-icon>highlight_off</mat-icon> Cancel
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="order.orderStatus == 'Booked'">
+                            <ng-container checkPermissionAction [pAction]="'invoice_order'">
+                                <button mat-raised-button color="accent" class="ml-8"
+                                    (click)="publishInvoiceToQBO()">Invoice</button>
+                            </ng-container>
+                            <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowDelete'">
+                                <button mat-raised-button color="warn" class="ml-8" (click)="cancelOrder()">
+                                    <mat-icon>highlight_off</mat-icon> Cancel
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="order.orderStatus == 'Billed'">
+                            <button *ngIf="!qboInvoicePublished && qboSynced && this.qboActive" mat-raised-button
+                                color="warn" class="ml-8" (click)="publishInvoiceToQBO()">INV Error</button>
+                            <button *ngIf="qboInvoicePublished && qboSynced && this.qboActive" mat-flat-button
+                                class="ml-8 green-500 invoice-sync" (click)="publishInvoiceToQBO()">INV Synced</button>
+                            <button mat-raised-button color="accent" class="ml-8"
+                                (click)="updateOrderStatus('Void')">Void</button>
+                        </ng-container>
+                        <ng-container *ngIf="order.orderStatus == 'Cancelled'">
+                            <button mat-raised-button color="accent" (click)="updateOrderStatus('Booked')">Book</button>
+                        </ng-container>
+                        <ng-container *ngIf="order.orderStatus == 'Void'">
+                            <button *ngIf="qboInvoicePublished && qboSynced && this.qboActive" mat-raised-button
+                                color="warn" class="ml-8" (click)="voidInvoiceToQBO()">Sync Void</button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+            <!-- CONTENT -->
+            <div class="content">
+                <mat-tab-group [selectedIndex]="selectedIndex" class="fixed" #tabs>
+
+                    <mat-tab label="{{(order.orderType.toLowerCase() == 'quote' ? 'Quote' : 'Order')}} Details">
+                        <div class="order-details tab-content p-24" fusePerfectScrollbar>
+                            <order-details-overview [order]="order" [paymentList]="paymentList" [fields]="fields"
+                                (edit)="editOrder($event)" (payment)="receivePayment()"
+                                (deletePayment)="deletePayment($event)" (voidPayment)="voidPayment($event)"
+                                (refundPayment)="refundPayment($event)"></order-details-overview>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Products" *ngIf="editable">
+                        <div class="products tab-content" fusePerfectScrollbar>
+                            <order-details-product-step *ngIf="!newOrderFormToggled"></order-details-product-step>
+                            <app-order-container *ngIf="newOrderFormToggled"></app-order-container>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Documents">
+                        <ng-template matTabContent>
+                            <div class="tab-content tab-content--documents" fxFlex>
+                                <app-documents [ordersConfig]="ordersConfig" [paymentList]="paymentList" [fields]="fields" [documentsToUpload]="documentsToUpload" (removeDocumentsToUpload)="removeDocumentsToUpload($event)"></app-documents>
+                            </div>
+                        </ng-template>
+                    </mat-tab>
+
+                    <mat-tab label="Activities">
+                        <ng-template matTabContent>
+                            <div class="products tab-content" fusePerfectScrollbar>
+                                <app-order-activity-list [order]="order"></app-order-activity-list>
+                            </div>
+                        </ng-template>
+                    </mat-tab>
+
+                    <mat-tab label="History">
+                        <ng-template matTabContent>
+                            <app-history></app-history>
+                        </ng-template>
+                    </mat-tab>
+
+                </mat-tab-group>
+
+                <div class="order-buttons" *ngIf="order.orderType.toLowerCase() == 'creditmemo-disabled'" fxLayout="row"
+                    fxLayoutAlign="end center">
+                    <ng-container *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                        <ng-container>
+                            <button *ngIf="!qboCmSynced" mat-raised-button color="accent" class="ml-8"
+                                (click)="publishCmToQBO()">QB Sync</button>
+                            <button *ngIf="!qboCmPublished && qboCmSynced" mat-raised-button color="warn" class="ml-8"
+                                (click)="publishCmToQBO()">QB Error</button>
+                            <button *ngIf="qboCmPublished && qboCmSynced" mat-flat-button
+                                class="ml-8 green-500-bg invoice-sync" (click)="publishCmToQBO()">QB Synced</button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

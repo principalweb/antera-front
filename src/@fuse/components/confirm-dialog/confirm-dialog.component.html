@@ -1,0 +1,8 @@
+<h1 matDialogTitle>{{confirmDialogTitle}}</h1>
+<div mat-dialog-content>{{confirmMessage}}
+    <span><br><br>{{confirmNote}}</span>
+</div>
+<div mat-dialog-actions class="pt-24">
+    <button mat-raised-button class="mat-accent mr-16" (click)="close(true)">{{confirmButtonText}}</button>
+    <button mat-button (click)="close(false)">{{cancelButtonText}}</button>
+</div>

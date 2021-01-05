@@ -1,0 +1,5 @@
+<form [formGroup]="orderedForm">
+<input class="form-control" [ngStyle]="{'text-align': 'right'}" formControlName="orderQuantity" 
+class="form-control" 
+[value]="myQuantity && myQuantity.quantity ? myQuantity.quantity : quantityOrderedInput" placeholder="" type="number">
+</form>

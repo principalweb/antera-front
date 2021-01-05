@@ -1,0 +1,408 @@
+<mat-table fxFlex="none" matSort
+        [dataSource]="dataSource"
+        [formGroup]="filterForm"
+        (matSortChange)="sortChange($event)"
+        [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.pageSize"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator.pageSize">
+            </mat-checkbox>
+        </mat-header-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="productId">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="fetchList()">
+            <span mat-sort-header>Item #</span>
+            <input class="form-control" formControlName="productId">
+        </mat-header-cell>
+    </ng-container>
+
+    <!-- Image Column -->
+    <ng-container cdkColumnDef="image">
+        <mat-header-cell header-cell *cdkHeaderCellDef (keyup.enter)="fetchList()"></mat-header-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="productName">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="fetchList()">
+            <span mat-sort-header>Name</span>
+            <input class="form-control" formControlName="productName">
+        </mat-header-cell>
+    </ng-container>
+
+    <!-- In House Id Column -->
+    <ng-container cdkColumnDef="inhouseId">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="fetchList()">
+            <span mat-sort-header>IN-House ID</span>
+            <input class="form-control" formControlName="inhouseId">
+        </mat-header-cell>
+    </ng-container>
+
+    <!-- Store Column -->
+    <ng-container cdkColumnDef="store">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell"
+                         fxHide fxShow.gt-xs
+                         (keyup.enter)="fetchList()"
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Tags</span>
+            <mat-select
+                multiple disableRipple 
+                class="form-control"
+                formControlName="storeNames"
+                displayWith="mapField('store')"
+                (selectionChange)="fetchList()">
+                <mat-option class="filter-input" (click)="$event.preventDefault()" disabled>
+                    <input matInput autocomplete="off"
+                        (keydown)="$event.stopPropagation()"
+                        placeholder="Search Stores"
+                        [formControl]="storeSearch"/>
+                    <button mat-icon-button (click)="clearStoreSearch()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-option>
+                <ng-container>
+                    <mat-option [value]="'nonStore'">
+                       Not Tagged
+                    </mat-option>
+                </ng-container>
+                <ng-container *ngFor="let store of filteredStores">
+                    <mat-option [value]="store" *ngIf="!productsService.nonStore">
+                        {{store.store}}
+                    </mat-option>
+                </ng-container>
+            </mat-select >
+        </mat-header-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendorName">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm (keyup.enter)="fetchList()" *cdkHeaderCellDef>
+            <span mat-sort-header>Supplier</span>
+            <mat-select class="form-control"
+                        multiple disableRipple
+                        formControlName="vendorName"
+                        displayWith="mapField('vendor')"
+                        (selectionChange)="fetchList()">
+                <mat-option class="filter-input" (click)="$event.preventDefault()" disabled>
+                    <input matInput autocomplete="off"
+                        (keydown)="$event.stopPropagation()"
+                        placeholder="Search Vendors"
+                        [formControl]="vendorSearch"/>
+                    <button mat-icon-button (click)="clearVendorSearch()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-option>
+                <mat-option *ngIf="loading" class="hide-checkbox">
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                        <mat-spinner color="accent" diameter="20"></mat-spinner>
+                    </div>
+                </mat-option>
+                <ng-container *ngFor="let vendor of vendors">
+                    <mat-option [value]="vendor" *ngIf="vendor">
+                        {{ vendor.vendor }}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-header-cell>
+    </ng-container>
+
+    <!-- Category Column -->
+    <ng-container cdkColumnDef="category">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md (keyup.enter)="fetchList()" *cdkHeaderCellDef>
+            <span mat-sort-header>Categories</span>
+            <mat-select class="form-control"
+                        multiple disableRipple
+                        formControlName="categoryName"
+                        displayWith="mapField('category')"
+                        (selectionChange)="fetchList()">
+                <mat-option class="filter-input" (click)="$event.preventDefault()"  disabled>
+                    <input matInput autocomplete="off"
+                        (keydown)="$event.stopPropagation()"
+                        placeholder="Search Categories"
+                        [formControl]="categorySearch"/>
+                    <button mat-icon-button (click)="clearCategorySearch()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-option>
+                <ng-container>
+                    <mat-option [value]="'nonCategory'">
+                       Not Assigned
+                    </mat-option>
+                </ng-container>
+                <ng-container *ngFor="let category of categories">
+                    <mat-option [value]="category" *ngIf="category && !productsService.nonCategory">
+                        {{ category.category }}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-header-cell>
+    </ng-container>
+
+    <!-- Price Column  -->
+    <!-- <ng-container cdkColumnDef="price">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Price</span>
+            <input class="form-control" formControlName="price" placeholder="">
+        </mat-header-cell>  
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
+            <p class="price text-truncate" *ngIf="product.priceTaxIncl">
+                {{product.priceTaxIncl | currency:'USD':'symbol'}}
+            </p>
+            <p class="price text-truncate" *ngIf="!product.priceTaxIncl">
+                None
+            </p>
+        </mat-cell>
+    </ng-container> -->
+
+    <!-- Quantity Column
+    <ng-container cdkColumnDef="quantity">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Quantity</span>
+            <input class="form-control" formControlName="quantity" placeholder="">
+        </mat-header-cell> 
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-lg>
+
+            <span *ngIf="product.quantity" class="quantity-indicator text-truncate"
+                  [ngClass]="{'red-500-bg':product.quantity <= 5, 'amber-500-bg':product.quantity > 5 && product.quantity <= 25,'green-600-bg':product.quantity > 25}">
+            </span>
+            <span *ngIf="product.quantity">
+                {{product.quantity}}
+            </span>
+            <span *ngIf="!product.quantity">
+                None
+            </span>
+        </mat-cell>
+    </ng-container> -->
+<!-- Source Column -->
+    <ng-container cdkColumnDef="expirationDate">
+        <!-- Added filter row by Nick -->
+        <mat-header-cell class="header-cell" fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Expiration Date</span>
+            <mat-select [formControl]="expirationDate" class="form-control">
+                <mat-option value="expired">Expired</mat-option>
+                <mat-option value="active">Active</mat-option>
+            </mat-select>
+        </mat-header-cell> 
+    </ng-container>
+
+    <!-- Source Column -->
+    <ng-container cdkColumnDef="source">
+        <!-- Added filter row by Nick -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Source</span>
+            <mat-select 
+                        class="form-control" 
+                        [(ngModel)]="selectedProductSource"
+                        [ngModelOptions]="{standalone: true}"
+                        (selectionChange)="fetchList()"
+                        >
+                <mat-option [value]="source.id" *ngFor="let source of sources">
+                    {{ source.name }}
+                </mat-option>
+            </mat-select>
+        </mat-header-cell> 
+    </ng-container>
+
+    <!-- Active Column -->
+    <ng-container cdkColumnDef="active">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header><span style="white-space: nowrap;">Auto Update</span></span>
+            <mat-select [formControl]="shell" class="form-control">
+                <mat-option value="">All</mat-option>
+                <mat-option value="1">On</mat-option>
+                <mat-option value="0">Off</mat-option>
+            </mat-select>
+        </mat-header-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg (keyup.enter)="fetchList()" *cdkHeaderCellDef>
+            <span mat-sort-header>Date Created</span>
+            <input class="form-control" formControlName="dateCreated">
+        </mat-header-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateModified">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg (keyup.enter)="fetchList()" *cdkHeaderCellDef>
+            <span mat-sort-header>Date Modified</span>
+            <input class="form-control" formControlName="dateModified">
+        </mat-header-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="productType">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg (keyup.enter)="fetchList()" *cdkHeaderCellDef>
+            <span mat-sort-header>Type</span>
+            <mat-select [formControl]="productType" class="form-control">
+                <mat-option value="">All</mat-option>
+                <mat-option value="1">Product</mat-option>
+                <mat-option value="2">Kit</mat-option>
+                <mat-option value="3">Service</mat-option>
+                <mat-option value="4">Freight</mat-option>
+                <mat-option value="5">Discount</mat-option>
+            </mat-select>
+        </mat-header-cell>
+    </ng-container> 
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+</mat-table>
+<mat-table fxFlex fxLayout="column"
+        matSort
+        [formGroup]="filterForm"
+        (matSortChange)="sortChange($event)"
+        [dataSource]="dataSource"
+        [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-cell *cdkCellDef="let product">
+            <mat-checkbox [checked]="checkboxes[product.id]"
+                          (change)="onSelectedChange(product.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="productId">
+        <mat-cell *cdkCellDef="let product">
+            <p class="text-truncate">{{product.productId}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Image Column -->
+    <ng-container cdkColumnDef="image">
+        <mat-cell *cdkCellDef="let product">
+            <img *ngIf="product.MediaContent[0]"  
+                [ngClass]="{'product-image-wide': product.MediaContent[0].width/product.MediaContent[0].height >1, 'product-image-tall': product.MediaContent[0].width/product.MediaContent[0].height <=1}"
+                [alt]="product.name"
+                [src]="product.MediaContent[0].url"
+                [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            <img *ngIf="!product.MediaContent[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+        </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="productName">
+        <mat-cell *cdkCellDef="let product">
+            <p class="text-truncate" matTooltip="{{product.productName}}">{{product.productName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- In House Id Column -->
+    <ng-container cdkColumnDef="inhouseId">
+        <mat-cell *cdkCellDef="let product">
+            <p class="text-truncate">{{product.inhouseId}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Store Column -->
+    <ng-container cdkColumnDef="store">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
+            <p *ngIf="!product.StoreArray || product.StoreArray.length == 0" class="text-truncate">None</p>
+            <mat-chip-list *ngIf="product.StoreArray.length == 1">
+                <mat-chip (click) = "filterByStore($event, product.StoreArray[0]?.store)">{{product.StoreArray[0].store}}</mat-chip>
+            </mat-chip-list>
+            <mat-chip-list *ngIf="product.StoreArray.length > 1">
+                <mat-chip *ngFor="let pStore of product.StoreArray" matTooltip="{{pStore.store}}" (click) = "filterByStore($event, pStore.store)">{{pStore.store | slice:0:1}}</mat-chip>
+            </mat-chip-list>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vendorName">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-sm>
+            <p class="text-truncate">{{product.vendorName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Category Column -->
+    <ng-container cdkColumnDef="category">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
+            <div>
+                <p *ngIf="product.ProductCategoryArray.length == 0" class="text-truncate">None</p>
+                <mat-chip-list *ngIf="product.ProductCategoryArray.length == 1">
+                    <mat-chip (click) = "filterByCategory($event, product.ProductCategoryArray[0])">{{product.ProductCategoryArray[0]}}</mat-chip>
+                </mat-chip-list>
+                <mat-chip-list *ngIf="product.ProductCategoryArray.length > 1">
+                    <mat-chip *ngFor="let category of product.ProductCategoryArray" matTooltip="{{category}}" (click) = "filterByCategory($event, category)">{{category | slice:0:1}}</mat-chip>
+                </mat-chip-list>
+            </div>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Expiration Date Column -->
+    <ng-container cdkColumnDef="expirationDate">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
+            {{ product.expirationDate }}
+        </mat-cell>
+    </ng-container>
+
+    <!-- Source Column -->
+    <ng-container cdkColumnDef="source">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
+            {{ getSourceLabel(product.source) }}
+        </mat-cell>
+    </ng-container>
+
+    <!-- Active Column -->
+    <ng-container cdkColumnDef="active">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-lg>
+            <button mat-icon-button *ngIf="product.shell == '0'" (click)="updateStatus(product, $event)">
+                <mat-icon class="active-icon red-500-bg s-24">close</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="product.shell == '1'" (click)="updateStatus(product, $event)">
+                <mat-icon class="active-icon green-600-bg s-24">check</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{product.dateCreated | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateModified">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{product.dateModified | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="productType">
+        <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{product.productTypeName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+    <mat-row *cdkRowDef="let product; columns: displayedColumns;"
+              class="product"
+              matRipple
+              (click)="goto(product.id)">
+    </mat-row>
+</mat-table>
+
+<div class="no-records" *ngIf="dataSource.total == 0">
+    There are currently no products in your system.<br>
+    Add products to get started.
+</div>
+
+<mat-paginator #paginator
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                (page)="paginate($event)"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

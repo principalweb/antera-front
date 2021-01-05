@@ -1,0 +1,715 @@
+<div class="profit-sheet tab-content p-24" fusePerfectScrollbar>
+    <div class="section pb-48 customer">
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0 mr-16">assignment</mat-icon>
+            <div class="h2 secondary-text">SUMMARY</div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="p-16 mx--8">
+
+            <div fxFlex.xs="100" fxFlex.sm="50" fxFlex
+                 fxLayout="column" class="p-8">
+                <mat-card fxFlex>
+                    <div fxLayout="row">
+                        <h3 class="mat-title mb-0 mr-8 accent-text">Order Info</h3>
+                    </div>
+          
+                    <div class="mat-subheading-2 mb-0">
+                        ORDER Type: {{ order.orderType }}
+                    </div>
+                    <div class="mat-body-1">
+                        INCOTERM: LDP WCP
+                    </div>
+                    <div class="mat-body-1">
+                        IN HANDS DATE: {{ order.inHandDateBy }}
+                    </div>
+                </mat-card>
+            </div>
+                  
+        </div>
+
+        <table class="simple product">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>PRODUCT NAME</th>
+                    <th>CLIENT</th>
+                    <th>SALES REP</th>
+                    <th>PRODUCTION REP</th>
+                    <th>Client PO #</th>
+                    <th>GC Order #</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="product-row">
+                    <td>
+                        {{order.orderDate}}
+                    </td>
+                    <td>
+                        Backpack
+                    </td>
+                    <td>
+                        {{order.accountName}}
+                    </td>
+                    <td>
+                        Backpack                    
+                    </td>
+                    <td>
+                        {{order.salesPerson}}
+                    </td>
+                    <td>
+                        {{order.contactName}}
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <form [formGroup]="profitSheetForm">
+        <div class="section pb-48 income">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">INCOME</div>
+            </div>
+    
+            <table class="simple income">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Projected</th>
+                        <th>Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="quantity-row">
+                        <td>
+                            Units Sold (Item A)
+                        </td>
+                        <td>
+                            {{salesInputData.revenue.quantities[4]}}
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="unit-price-row">
+                        <td>
+                            Unit Cost Sold (Item A)
+                        </td>                  
+                        <td>
+                           {{salesInputData.revenue.unitPrices[4]}}
+                        </td>
+                        <td>
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" formControlName="unitCostsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Price (Item A)</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">${{calcRevenue(4) | number : '1.2-2'}}</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">${{getTotalPriceItemA() | number : '1.2-2'}}</span>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Units Sold (Item B)
+                        </td>
+                        <td>
+                            {{salesInputData.revenue.quantities[5]}}
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldB" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="unit-price-row">
+                        <td>
+                            Unit Cost Sold (Item B)
+                        </td>                  
+                        <td>
+                           {{salesInputData.revenue.unitPrices[5]}}
+                        </td>
+                        <td>
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" formControlName="unitCostsSoldB" pattern="[0-9]+([\.,][0-9]+)*" format>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Price (Item B)</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">${{calcRevenue(5) | number : '1.2-2'}}</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">${{getTotalPriceItemB() | number : '1.2-2'}}</span>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Domestic Delivery & Fulfillment
+                        </td>
+                        <td>
+                            {{getDomesticDeliveryFulfillmentProjected()}}
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="domesticDeliveryAndFullfillment" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Tooling / Testing / Other Charges
+                        </td>
+                        <td>
+                            {{getToolingAndTestingAndOtherChangesProjected()}}
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="toolingAndTestingAndOtherChanges" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Airfreight
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="airFreight" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Miscellaneous Charges
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="miscellaneousCharges" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">TOTAL INCOME</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$140,250.00</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section pb-48 production-costs">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">PRODUCTION COSTS</div>
+            </div>
+    
+            <table class="simple production-costs">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Projected</th>
+                        <th>Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="quantity-row">
+                        <td>
+                            Units (Item A)
+                        </td>
+                        <td>
+                            20,000
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="unit-price-row">
+                        <td>
+                            Unit Cost (Item A)
+                        </td>                  
+                        <td>
+                           $3.00
+                        </td>
+                        <td>
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" formControlName="unitCostsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Unit Cost (Item A)</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$60,000.00</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Units (Item B)
+                        </td>
+                        <td>
+                            0
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldB" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="unit-price-row">
+                        <td>
+                            Unit Cost (Item B)
+                        </td>                  
+                        <td>
+                           $0.00
+                        </td>
+                        <td>
+                          <div class="currency">
+                              $<input class="form-control" type="number" placeholder="0" formControlName="unitCostsSoldB" pattern="[0-9]+([\.,][0-9]+)*" format>
+                          </div>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">Total Unit Cost (Item B)</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Setup / Tooling / Factory Costs
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="domesticDeliveryAndFullfillment" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Testing Costs
+                        </td>
+                        <td>
+                            $250.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="toolingAndTestingAndOtherChanges" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Inspection Costs
+                        </td>
+                        <td>
+                            $300.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="airFreight" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="small-note">
+                Inspection charge: $300.00 per inspection by 3rd party; min $450.00 per inspection by 3rd inspection company or refer to bills.
+            </div>
+        </div>
+
+        <div class="section pb-48 intl-shipping">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">INTL SHIPPING</div>
+            </div>
+    
+            <table class="simple intl-shipping">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Projected</th>
+                        <th>Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="quantity-row">
+                        <td>
+                            Ocean Freight & Insurance
+                        </td>
+                        <td>
+                            $4,640.25
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Air Freight                        
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Filing Fees                        
+                        </td>
+                        <td>
+                            $190.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Duty                        
+                        </td>
+                        <td>
+                            $11,160.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Courier Fees                        
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">TOTAL INTERNATIONAL COSTS</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$15,990.25</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section pb-48 domestic-serv">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">DOMESTIC SERV</div>
+            </div>
+    
+            <table class="simple domestic-serv">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Projected</th>
+                        <th>Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="quantity-row">
+                        <td>
+                            Handling Fee
+                        </td>
+                        <td>
+                            $150.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Unloading/Palletizing
+                        </td>
+                        <td>
+                            $750.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Inland Freight                       
+                        </td>
+                        <td>
+                            $3,333.33
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Storage                        
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Fulfillment                       
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Other                       
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">DOMESTIC SERVICE EXPENSES</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$15,990.25</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section pb-48 administrative">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">ADMINISTRATIVE</div>
+            </div>
+    
+            <table class="simple administrative">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Projected</th>
+                        <th>Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="quantity-row">
+                        <td>
+                            Sample Charges                        
+                        </td>
+                        <td>
+                            $250.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Bank and LC Charges
+                        </td>
+                        <td>
+                            $65.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Card Processing                      
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Miscellaneous                        
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Terms Financing                       
+                        </td>
+                        <td>
+                            $4,207.50
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Rebate                       
+                        </td>
+                        <td>
+                            $5,965.57
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="quantity-row">
+                        <td>
+                            Satate or City Tax                       
+                        </td>
+                        <td>
+                            $0.00
+                        </td>
+                        <td >
+                            <input class="form-control" type="number" placeholder="0" formControlName="unitsSoldA" pattern="[0-9]+([\.,][0-9]+)*" format>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">TOTAL ADMINISTRATIVE EXPENSES</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$10,488.07</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section pb-48 total-summary">
+            <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="m-0 mr-16">monetization_on</mat-icon>
+                <div class="h2 secondary-text">TOTAL SUMMARY</div>
+            </div>
+    
+            <table class="simple administrative">
+                <thead>
+                    <tr>
+                        <th>                            
+                          <span class="mat-body-2 text-truncate font-weight-600">SUMMARY</span>
+                        </th>
+                        <th>                          
+                          <span class="mat-body-2 text-truncate font-weight-600">PROJECTED</span>
+                        </th>
+                        <th>                          
+                            <span class="mat-body-2 text-truncate font-weight-600">ACTUAL</span>
+                        </th>                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">INCOME</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$140,250.00</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">TOTAL EXPENSE</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$91,261.65</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">GROSS PROFIT</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$48,988.35</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                    <tr class="total-price-row">
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">GROSS MARGIN</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">34.93%</span>
+                        </td>
+                        <td>
+                            <span class="mat-body-2 text-truncate font-weight-600">$0.00</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <div class="section mb-48" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <button
+                mat-raised-button
+                (click)="save()"
+                class="save-button mat-accent"
+                aria-label="SAVE">
+             SAVE
+            </button>
+
+        </div>
+    </div>
+</div>

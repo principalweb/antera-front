@@ -1,0 +1,64 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">Edit Selected Charge Pricing</span>
+      <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+
+
+    <form *ngIf="priceForm" name="form" [formGroup]="priceForm" (submit)="save()">
+      <div fxLayout="row">
+        <div class="col-label">
+          <div>Quantity</div>
+          <div>Sales Price</div>
+          <div>Cost</div>
+        </div>
+        <ng-container *ngFor="let quantity of priceForm.get('chargePrice').controls; let i=index"
+          formArrayName="chargePrice">
+          <div class="col-quantity" [formGroupName]="i">
+            <div>
+              <mat-form-field>
+                <input matInput type="text" formControlName="xMinQty">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput type="text" formControlName="salePrice">
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <input matInput type="text" formControlName="price">
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-container>
+        <div class="col-quantity-new">
+            <button mat-button type="button" mat-button (click)="addPriceBreak()">
+              Add Qty
+            </button>
+        </div>
+      </div>
+
+      <!-- Set selected sku price break settings per available quantity -->
+
+      <!-- Each(Quantity) -->
+
+      <!-- Price -->
+      <!-- Margin -->
+      <!-- Cost -->
+      <!-- Profit -->
+
+      <!-- Add New Quantity -->
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button tabindex="2" (click)="close()">Cancel</button>
+    <button mat-raised-button color="accent" tabindex="1" (click)="save()">Update</button>
+  </div>
+</div>

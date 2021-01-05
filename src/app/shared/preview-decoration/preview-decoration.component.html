@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Decoration</h1>
+<div mat-dialog-content>
+  <div>
+    <h3>{{ deco.designModal }} {{ deco.designName }}</h3>
+    <div>
+      <strong>{{ deco.decoTypeName }}</strong>
+      <span>{{ deco.decoChargeName }}</span>
+    </div>
+    <div class="thumbnails">
+      <div *ngFor="let thumbnail of deco.variationImagesThumbnail">
+        <img [src]="thumbnail" [alt]="deco.designName" />
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="navigateTo()">
+    <mat-icon>link</mat-icon> View Artwork
+  </button>
+</div>

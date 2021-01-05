@@ -1,0 +1,447 @@
+
+<mat-sidenav-container hasBackdrop="false" *ngIf="this.product.productId">
+  <mat-sidenav-content fxLayout="row" [class.mat-sidenav-content-85]="priceType == 'Blank' && (relatedVendors.length > 0 || relatedProducts.length > 0)" [class.mat-sidenav-content-100]="priceType!='Blank' || (relatedVendors.length == 0 && relatedProducts.length == 0)">
+    <div class="pricing-inventory-container" fxLayout="column" [class.mat-sidenav-content-100]="priceType!='Blank' || (relatedVendors.length == 0 && relatedProducts.length == 0)">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <h2 mat-dialog-title>Add To Order</h2>
+        <h3> <b> Pricing Method: </b>  {{data?.order?.pricingMethodsName}}</h3>
+        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="20px">
+          <div *ngIf="vendorProductNotes != ''" class="w-240 mat-subheading-1 font-weight-500">
+            <br>
+              Vendor Product Notes: <span class="font-size-13 font-weight-400">{{ vendorProductNotes }}</span>
+          </div>
+          <div *ngIf="eqp" fxLayout="row" fxLayoutAlign="start center">
+            <div class="mat-subheading-1 font-weight-500">EQP: </div>
+            <mat-icon class="ml-4 mb-16">check_box</mat-icon>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="50px" fxFlex>
+        <div fxLayout="column" fxFlex="33">
+
+          <div class="mb-20" fxFlex="none" fxLayout="row" fxLayoutGap="20px">
+            <div class="product-image" fxFlex>
+              <img [src]="sColor? sColor.imageUrl: ''"
+                  [alt]="product.productName"
+                  [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            </div>
+            <div fxFlex>
+              <div class="mat-body-1 mb-8">{{product.productName}}</div>
+              <mat-divider></mat-divider>
+              <div class="mt-8">
+                <div>
+                  <span class="mr-8">Vendor:</span>
+                  <span>{{product.vendorName}}</span>
+                </div>
+                <div>
+                  <span class="mr-8">Color:</span>
+                  <span>{{sColor.color}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-divider fxFlex="none"></mat-divider>
+          <div fxFlex="none" class="help-text">Select from the colors below:</div>
+          <div fxFlex class="mt-20" fusePerfectScrollbar>
+            <div fxLayout="row wrap">
+              <div class="color-image" fxFlex="20"
+                  fxFlex.sm="33" fxFlex.xs="50"
+                  fxLayout="column"
+                  (click)="selectColor(color)"
+                  *ngFor="let color of colors">
+                <img [src]="color.imageUrl" alt=""
+                    [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+                <span [class.accent-50-bg]="sColor === color">
+                  {{ color.color }}
+                </span>
+                <span class="quantity" *ngIf="color.quantity > 0">
+                  {{ color.quantity }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right-column" fxLayout="column" fxFlex>
+          <div>
+            <mat-slide-toggle
+              labelPosition="before"
+              color="primary"
+              [checked]="liveInventory"
+              (change)="changeLiveInventory($event)"
+            >{{ liveInventory? 'Live Inventory': 'Receiving Inventory' }}</mat-slide-toggle>
+          </div>
+          <div *ngIf="priceTypes.length>0" class="price-type">
+
+          <nav mat-tab-nav-bar>
+            <a mat-tab-link
+                (click)="setPriceType('Blank')"
+                [active]="priceType === 'Blank'">
+              Blank
+            </a>
+            <a mat-tab-link (click)="setPriceType(pType)"
+              [matTooltip]="pType + ' Pricing'"
+              [active]="priceType === pType"
+              *ngFor="let pType of priceTypes">
+              {{pType}}
+            </a>
+          </nav>
+          </div>
+          <div *ngIf="priceType && priceType != 'Blank'">
+            Additional decoration charges may apply <button mat-icon-button (click)="openDecorationDialog()"><mat-icon>info</mat-icon></button>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+              <span>Price / Cost / Margin(%)</span>
+              <button mat-icon-button
+                      [disabled]="data?.configState?.permissions?.restrict_order_sales_pricing?.data"
+                      color="accent"
+                      (click)="editPrices()"
+                      matTooltip="Edit"
+                      *ngIf="!editMode">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                      color="accent"
+                      matTooltip="Save"
+                      (click)="savePrices()"
+                      *ngIf="editMode">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button
+                      [disabled]="data?.configState?.permissions?.restrict_order_sales_pricing?.data"
+                      color="accent"
+                      matTooltip="Lock"
+                      (click)="toggleLock()"
+                      *ngIf="!modifiedPrices.locked">
+                <mat-icon>lock_open</mat-icon>
+              </button>
+              <button mat-icon-button
+                      color="accent"
+                      matTooltip="Unlock"
+                      (click)="toggleLock()"
+                      *ngIf="modifiedPrices.locked">
+                <mat-icon>lock</mat-icon>
+              </button>
+              <button mat-icon-button
+                      color="accent"
+                      matTooltip="Update all sizes to XL"
+                      (click)="applyToAllSizes()"
+                      [disabled]="!editMode">
+                <mat-icon>aspect_ratio</mat-icon>
+              </button>
+              <button mat-icon-button
+                      color="accent"
+                      matTooltip="Update all colors"
+                      (click)="applyToAllColors()"
+                      [disabled]="!editMode">
+                <mat-icon>format_paint</mat-icon>
+              </button>
+              <button mat-icon-button
+                      color="accent"
+                      matTooltip="Reset"
+                      (click)="clearModifiedPrices()"
+                      [disabled]="modifiedPrices.priceBreaks.length==0">
+                <mat-icon class="orange-fg">settings_backup_restore</mat-icon>
+              </button>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+              <mat-form-field fxFlex class="mr-20" *ngIf="product?.uomDetails?.length">
+                  <mat-select [(ngModel)]="uomId"
+                              (selectionChange)="changeUom($event)"
+                              placeholder="UOM"
+                              >
+                      <mat-option [value]="uom.id" *ngFor="let uom of product.uomDetails">
+                          {{ uom.name }}
+                      </mat-option>
+                  </mat-select>
+              </mat-form-field>
+
+              <mat-form-field fxFlex class="mr-20" *ngIf="product?.uomDetails?.length">
+                <mat-label>Conversion Ratio</mat-label>
+                <input matInput [(ngModel)]="conversionRatio" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Margin Override (%)"
+                  [matAutocomplete]="autoMargin"
+                  [(ngModel)]="margin"
+                  (blur)="checkMargin($event)"
+                  (keyup.enter)="checkMargin($event)"
+                />
+                <span matSuffix>%</span>
+                <mat-icon matSuffix (click)="overrideMargin()" *ngIf="margin">clear</mat-icon>
+                <mat-autocomplete #autoMargin="matAutocomplete">
+                    <mat-option [value]="defaultProductMargin">
+                        Default ({{ defaultProductMargin}}%)
+                    </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex fusePerfectScrollbar>
+            <mat-table
+              [class.edit]="editMode"
+              [dataSource]="priceList"
+              [formGroup]="priceForm"
+            >
+              <ng-container cdkColumnDef="label1">
+                <mat-header-cell class="header-cell w-120" *cdkHeaderCellDef>
+                  <span>Pricing</span>
+                </mat-header-cell>
+                <mat-cell class="w-120" *cdkCellDef="let element">
+                  <span class="text-truncate" [matTooltip]="element['label1']">
+                    {{ element['label1'] }}
+                  </span>
+                </mat-cell>
+              </ng-container>
+              <ng-container cdkColumnDef="label2">
+                <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef></mat-header-cell>
+                <mat-cell class="labels-cell w-60" *cdkCellDef="let element">
+                  <div [class.py-8]="editMode" style="padding: 22px 0;">
+                    <div class="price-padding">Price</div>
+                    <div class="price-padding">Cost</div>
+                    <div class="price-padding">Margin</div>
+                  </div>
+                </mat-cell>
+              </ng-container>
+              <ng-container *ngFor="let col of sizes" [cdkColumnDef]="col">
+                <mat-header-cell class="header-cell" [class.py-8]="editMode" *cdkHeaderCellDef>
+                  <span>{{ col }}</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element; let i=index">
+                  <div [ngClass]="stClass(element[col])" *ngIf="!editMode">
+                    <div class="p36">{{ toNumber(element[col].price) | number:sysconfigOrderFormCostDecimalUpto }}</div>
+                    <div class="p36">{{ toNumber(element[col].cost) | number:sysconfigOrderFormCostDecimalUpto }}<span *ngIf="checkOnSale(element[col].sku)" [title]="getSaleMsg(element[col].sku)" class="onsale">&nbsp;&nbsp;*&nbsp;&nbsp;</span></div>
+                    <div class="p36">{{ element[col].margin ? element[col].margin + '%' : '' }} &nbsp;</div>
+                  </div>
+                  <div
+                    [class.active-cell]="activeCell && activeCell.i === i && activeCell.sku === element[col].sku"
+                    class="p-8" *ngIf="editMode"
+                  >
+                    <div class="price-padding">
+                      <input
+                        (focus)="setActive(element[col], i)"
+                        (blur)="adjustFromPrice(i, col, $event)"
+                        (keyup.enter)="adjustFromPrice(i, col, $event)"
+                        [formControlName]="col+'-'+i+'-price'"
+                        [disabled]="restrictEditPrice"
+                      />
+                    </div>
+                    <div class="price-padding">
+                      <input
+                        (focus)="setActive(element[col], i)"
+                        (blur)="adjustFromCostOrMargin(i, col, $event)"
+                        (keyup.enter)="adjustFromCostOrMargin(i, col, $event)"
+                        [formControlName]="col+'-'+i+'-cost'"
+                      />
+                    </div>
+                    <div class="price-padding">
+                      <input
+                        (focus)="setActive(element[col], i)"
+                        (blur)="adjustFromCostOrMargin(i, col, $event, false)"
+                        (keyup.enter)="adjustFromCostOrMargin(i, col, $event, false)"
+                        [formControlName]="col+'-'+i+'-margin'"
+                        [disabled]="restrictEditPrice"
+                      />
+                    </div>
+                  </div>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *cdkHeaderRowDef="displayedColumns" class="h-36 primary-bg"></mat-header-row>
+              <mat-row
+                *cdkRowDef="let row; let i=index; columns: displayedColumns;"
+                [class.light-blue-50-bg]="hRow === i"
+                style="min-height: 104px;"
+              ></mat-row>
+            </mat-table>
+
+            <div class="ps">
+              <mat-table [dataSource]="mList"
+                        [formGroup]="mForm"
+                        *ngIf="mList.length > 0">
+                <ng-container cdkColumnDef="label1">
+                  <mat-header-cell class="header-cell w-120" *cdkHeaderCellDef>
+                    <span>Order Quantity</span>
+                  </mat-header-cell>
+                  <mat-cell class="w-120" *cdkCellDef="let element">
+                    <span class="text-truncate" [matTooltip]="element['label1']">
+                      {{ element['label1'] }}
+                    </span>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="label2">
+                  <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef></mat-header-cell>
+                  <mat-cell class="labels-cell w-60" *cdkCellDef>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container *ngFor="let col of sizes" [cdkColumnDef]="col">
+                    <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                        <span>{{ col }}</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let element">
+                      <div>
+                        <input type="number" class="quantity-input"
+                              (blur)="updateQuantity(element[col], $event)"
+                              (keyup.enter)="updateQuantity(element[col], $event)"
+                              [formControlName]="element[col].name">
+
+                      </div>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *cdkHeaderRowDef="displayedColumns" class="h-36 primary-bg"></mat-header-row>
+                <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <div class="loading" *ngIf="loading1">
+                <mat-spinner></mat-spinner>
+              </div>
+            </div>
+
+            <div class="ps">
+              <mat-table [dataSource]="locationList"
+                        *ngIf="locationList.length > 0 && product.poType=='Stock'">
+                <ng-container cdkColumnDef="label1">
+                  <mat-header-cell class="header-cell w-120" *cdkHeaderCellDef>
+                    <span>Local Warehouses</span>
+                  </mat-header-cell>
+                  <mat-cell class="w-120" *cdkCellDef="let element">
+                    <span class="text-truncate" [matTooltip]="element['label1']">
+                      {{ element['label1'] }}
+                    </span>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="label2">
+                  <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef></mat-header-cell>
+                  <mat-cell class="labels-cell w-60" *cdkCellDef>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container *ngFor="let col of sizes" [cdkColumnDef]="col">
+                    <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                        <span>{{ col }}</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let element">
+                      <div>
+                        <div>
+                          {{ anteraInventory(col, element[col].fobId) }}
+                        </div>
+                      </div>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *cdkHeaderRowDef="displayedColumns" class="h-36 primary-bg"></mat-header-row>
+                <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <div class="loading" *ngIf="loading1">
+                <mat-spinner></mat-spinner>
+              </div>
+            </div>
+
+            <div class="ps">
+              <mat-table [dataSource]="suppliersList">
+                <ng-container cdkColumnDef="label1">
+                  <mat-header-cell class="header-cell w-140" *cdkHeaderCellDef>
+                    <span>Supplier Warehouses</span>
+                  </mat-header-cell>
+                  <mat-cell class="w-120" *cdkCellDef="let element">
+                    <span class="text-truncate" [matTooltip]="element['label1']">
+                      {{ element['label1'] }}
+                    </span>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="label2">
+                  <mat-header-cell class="header-cell w-40" *cdkHeaderCellDef></mat-header-cell>
+                  <mat-cell class="labels-cell w-60" *cdkCellDef>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container *ngFor="let col of sizes" [cdkColumnDef]="col">
+                    <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                        <span>{{ col }}</span>
+                    </mat-header-cell>
+                    <mat-cell *cdkCellDef="let element">
+                      <div>
+                        <div>{{ supplierInventory(col, element[col].fobId) }}</div>
+                      </div>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *cdkHeaderRowDef="displayedColumns" class="h-36 primary-bg"></mat-header-row>
+                <mat-row *cdkRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <div class="loading" *ngIf="loading2">
+                <mat-spinner></mat-spinner>
+              </div>
+            </div>
+
+
+            <mat-table [dataSource]="locationList">
+              <ng-container cdkColumnDef="label1">
+                <mat-header-cell class="header-cell w-120" *cdkHeaderCellDef>
+                </mat-header-cell>
+              </ng-container>
+
+              <ng-container cdkColumnDef="label2">
+                <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef></mat-header-cell>
+              </ng-container>
+
+              <ng-container *ngFor="let col of sizes" [cdkColumnDef]="col">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                  {{ col }}
+                </mat-header-cell>
+              </ng-container>
+              <mat-header-row *cdkHeaderRowDef="displayedColumns" class="h-36 primary-bg"></mat-header-row>
+            </mat-table>
+          </div>
+        </div>
+      </div>
+      <div class="sum" fxLayout="row" fxLayoutAlign="start center">
+        <div class="mr-32" fxFlex="none">
+          <span class="mr-16">Total Items Selected</span>
+          <span>{{ totalCount }}</span>
+        </div>
+        <div fxFlex="none">
+          <span class="mr-16">Total Amount Selected</span>
+          <span>${{ totalAmount }}</span>
+        </div>
+        <div fxFlex></div>
+        <div class="mt-16" fxLayout="row" fxLayoutAlign="end center">
+          <button mat-button color="accent" matDialogClose>CANCEL</button>
+        <ng-container *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">
+              <button mat-button color="accent" (click)="addToOrder()">SAVE TO ORDER</button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+  <mat-sidenav #sidenav mode="side" disableClose="true" [opened]="priceType == 'Blank' && (relatedVendors.length > 0 || relatedProducts.length > 0)" position="end">
+      <h3>Alternate Vendors</h3>
+      <mat-card *ngFor="let item of relatedVendors" (click)="replaceProduct(item)">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <img *ngIf="item.MediaContent && item.MediaContent[0] && item.MediaContent[0].url" [src]="item.MediaContent[0].url" [alt]="item.productId">
+          </div>
+          <mat-card-title>{{item.productId}}</mat-card-title>
+          <mat-card-subtitle>{{item.vendorName}}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+      <mat-divider></mat-divider>
+      <h3>Related Products</h3>
+      <mat-card *ngFor="let item of relatedProducts" (click)="replaceProduct(item)">
+        <mat-card-header>
+          <div mat-card-avatar>
+            <img *ngIf="item.MediaContent && item.MediaContent[0] && item.MediaContent[0].url" [src]="item.MediaContent[0].url" [alt]="item.productId">
+          </div>
+          <mat-card-title>{{item.productId}}</mat-card-title>
+          <mat-card-subtitle>{{item.vendorName}}</mat-card-subtitle>
+        </mat-card-header>
+      </mat-card>
+  </mat-sidenav>
+</mat-sidenav-container>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

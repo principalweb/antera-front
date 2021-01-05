@@ -1,0 +1,66 @@
+<!-- SIDENAV HEADER -->
+<div fxLayout="column" fxLayoutAlign="space-between start"
+     class="header p-24 pb-4" ngClass="mat-accent-bg" ngClass.gt-md="white-fg">
+
+    <div class="logo ml-8" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">mail</mat-icon>
+        <span class="logo-text" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Mailbox</span>
+    </div>
+
+    <button class="mb-16" mat-icon-button (click)="logout()" matTooltip="Log out of Email" *ngIf="false">
+        <mat-icon class="active-icon white-500-fg s-24" aria-label="Logout">exit_to_app</mat-icon>
+    </button>
+</div>
+<!-- / SIDENAV HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<div class="content" fusePerfectScrollbar *fuseIfOnDom [@animate]="{value:'*',params:{y:'50px'}}">
+
+    <div class="p-24">
+        <button mat-raised-button fxFlex
+                class="accent compose-dialog-button"
+                (click)="composeDialog()"
+                aria-label="Compose">
+            {{ 'MAIL.COMPOSE' | translate }}
+        </button>
+    </div>
+
+
+    <div class="nav">
+
+        <div class="nav-item" *ngFor="let folder of mailCredentialsList" >
+            <a class="nav-link accent" matRipple  [routerLinkActive]="['active', 'accent']">
+                <mat-icon class="nav-link-icon ">mail</mat-icon>
+                <span class="text-truncate" *ngIf="currentEmail == folder.email"><strong>{{folder.email}}</strong></span>
+                <span class="text-truncate" *ngIf="currentEmail != folder.email">{{folder.email}}</span>
+            </a>
+
+            <a class="nav-link accent" matRipple (click)="getMyInbox(folder.email)" [routerLinkActive]="['active', 'accent']" *ngIf="folder.credential.imapUser !=''">
+                <mat-icon class="nav-link-icon  ml-20">inbox</mat-icon>
+                <span class="text-truncate" *ngIf="currentFolder == 'inbox'">
+	                <span *ngIf="currentEmail == folder.email"><strong>Inbox</strong></span>
+	                <span *ngIf="currentEmail != folder.email">Inbox</span>
+                </span>
+                <span class="text-truncate" *ngIf="currentFolder != 'inbox'">
+	                <span>Inbox</span>
+                </span>
+            </a>
+
+            <a class="nav-link accent" matRipple (click)="getMySent(folder.email)" [routerLinkActive]="['active', 'accent']" *ngIf="folder.credential.imapUser !=''">
+                <mat-icon class="nav-link-icon  ml-20">send</mat-icon>
+                <span class="text-truncate" *ngIf="currentFolder == 'sent'">
+	                <span *ngIf="currentEmail == folder.email"><strong>Sent</strong></span>
+	                <span *ngIf="currentEmail != folder.email">Sent</span>
+                </span>
+                <span class="text-truncate" *ngIf="currentFolder != 'sent'">
+	                <span>Sent</span>
+                </span>
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+<!-- / SIDENAV CONTENT -->

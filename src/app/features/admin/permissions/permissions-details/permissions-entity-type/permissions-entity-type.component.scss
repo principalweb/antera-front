@@ -1,0 +1,17 @@
+@import "src/@fuse/scss/fuse";
+app-permissions-entity-type {
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .table-container {
+        height: 100%;
+        overflow: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+
+}

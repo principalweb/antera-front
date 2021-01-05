@@ -1,0 +1,313 @@
+{
+    "NAV": {
+        "Home": "Home",
+        "CRM": {
+            "Title": "CRM",
+            "Accounts": "Accounts",
+            "Contacts": "Contacts",
+            "Locations": "Locations",
+            "Leads": "Leads",
+            "Opportunities": "Opportunities",
+            "Projects": "Projects",
+            "Cases": "Cases"
+        },
+        "Order Management": {
+            "Title": "Order Management",
+            "Purchase Orders": "Purchase Orders",
+            "Invoicing": "Invoicing",
+            "Products": "Products",
+            "Sourcing": "Sourcing",
+            "Quotes": "Quotes",
+            "Orders": "Orders",
+            "Billing": "Billing",
+            "Workflow": "Work Flow",
+            "Inventory": "Inventory",
+            "Receiving": "Receiving",
+            "Production": "Production",
+            "Vouching": "Vouching",
+            "ApCredit": "Vendor Credit"
+        },
+        "Artwork": "Artwork",
+        "CALENDAR": "Calendar",
+        "Activities": "Activities",
+        "Mail": "Mail",
+        "Chat": "Chat",
+        "Reports": "Reports",
+        "File Manager": "File Manager",
+        "Web Store": "Web Store",
+        "Tag": "Tag",
+        "Royalty": "Royalty",
+        "Support": {
+            "Title": "Support",
+            "Knowledge Base": "Knowledge Base",
+            "Support Tickets" : "Support Tickets",
+            "FAQ": "FAQ",
+            "Training Videos": "Training Videos",
+            "Guided Sessions": "Guided Sessions"
+        },
+        "Admin": {
+            "Title": "Admin",
+            "My Account": "My Account",
+            "Users": "Users",
+            "Imports": "Imports",
+            "Dropdowns": "Dropdowns",
+            "Module Fields": "Module Fields",
+            "Purge Records": "Purge Records",
+            "KPI Dashboard": {
+                "Title": "KPI Dashboard",
+                "Executive": "Executive",
+                "Marketing": "Marketing",
+                "Production": "Production"
+            },
+            "Commissions": {
+                "Title": "Commissions",
+                "Plans": "Commission Plans",
+                "Groups": "Commission Groups",
+                "Adjustments": "Commission Adjustments"
+            },
+            "Decoration Fees": "Decoration Fees",
+            "Promo Standards": "Promo Standards",
+            "PDF Templates": "PDF Templates",
+            "Partners": "Partners",
+            "Documents": "Documents",
+            "Currency" : "Currency",
+            "Promostandards Admin": "Promostandards Admin",
+            "Configuration": "Configuration",
+            "Permissions": "Permissions"
+        },
+        "Antera Admin": {
+            "Title": "Antera Admin",
+            "Manage Menu": "Manage Menu",
+            "Settings": "Settings"
+        }
+    },
+    "APP": {
+        "LANGUAGE": "Language",
+        "SIGN_IN": "Sign in",
+        "SIGN_OUT": "Sign out",
+        "PREVIEW": {
+            "Title": "Preview"
+        },
+        "NEW_MENU": {
+            "LABEL": "New",
+            "MENU_ITEMS": {
+                "CREATE_FOLDER": "Create folder",
+                "UPLOAD_FILE": "Upload file",
+                "UPLOAD_FOLDER": "Upload folder"
+            },
+            "TOOLTIPS": {
+                "CREATE_FOLDER": "Create new folder",
+                "CREATE_FOLDER_NOT_ALLOWED": "You can't create a folder here. You might not have the required permissions, check with your IT Team.",
+                "UPLOAD_FILES": "Select files to upload",
+                "UPLOAD_FILES_NOT_ALLOWED": "You need permissions to upload here, check with your IT Team.",
+                "UPLOAD_FOLDERS": "Select folders to upload",
+                "UPLOAD_FOLDERS_NOT_ALLOWED": "You need permissions to upload here, check with your IT Team."
+            }
+        },
+        "BROWSE": {
+            "PERSONAL": {
+                "Title": "My Files",
+                "SIDENAV_LINK": {
+                    "LABEL": "My Files",
+                    "TOOLTIP": "View your Personal Files"
+                }
+            },
+            "FAVORITES": {
+                "Title": "Starred",
+                "SIDENAV_LINK": {
+                    "LABEL": "Starred",
+                    "TOOLTIP": "View your favorite files and folders"
+                },
+                "EMPTY_STATE": {
+                    "Title": "No favorite files or folders",
+                    "TEXT": "Favorite items that you want to easily find later."
+                }
+            },
+            "SHARED": {
+                "Title": "Sharred with me",
+                "SIDENAV_LINK": {
+                    "LABEL": "Shared",
+                    "TOOLTIP": "View files that have been shared"
+                },
+                "EMPTY_STATE": {
+                    "Title": "No shared files or folders",
+                    "TEXT": "Items you share using the Share option are shown here."
+                }
+            },
+            "RECENT": {
+                "Title": "Recent",
+                "SIDENAV_LINK": {
+                    "LABEL": "Recent",
+                    "TOOLTIP": "View files you recently edited"
+                },
+                "EMPTY_STATE": {
+                    "Title": "No recent files",
+                    "TEXT": "Items you upload or edit in the last 30 days are shown here."
+                }
+            },
+            "TRASHCAN": {
+                "Title": "Offline",
+                "SIDENAV_LINK": {
+                    "LABEL": "Offline",
+                    "TOOLTIP": "View deleted files in the trash"
+                },
+                "EMPTY_STATE": {
+                    "Title": "Trash is empty",
+                    "FIRST_TEXT": "Items you delete are moved to the Trash.",
+                    "SECOND_TEXT": "Empty Trash to permanently delete items."
+                }
+            },
+            "ABOUT": {
+                "Title": "About"
+            }
+        },
+        "ACTIONS": {
+            "VIEW": "View",
+            "EDIT": "Edit",
+            "DOWNLOAD": "Download",
+            "COPY": "Copy",
+            "MOVE": "Move",
+            "DELETE": "Delete",
+            "DELETE_PERMANENT": "Permanently delete",
+            "MORE": "More actions",
+            "UNDO": "Undo",
+            "RESTORE": "Restore",
+            "FAVORITE": "Favorite",
+            "UNSHARE": "Unshare",
+            "DETAILS": "View details",
+            "VERSIONS": "Manage Versions"
+        },
+        "DIALOGS": {
+            "CONFIRM_PURGE": {
+                "Title": "Delete from trash?",
+                "MESSAGE": "This will permanently remove the selected item(s).",
+                "YES_LABEL": "Delete",
+                "NO_LABEL": "Keep"
+            }
+        },
+        "DOCUMENT_LIST": {
+            "ACTIONS": {
+                "FOLDER": {
+                    "DOWNLOAD_AS_ZIP": "Download as ZIP",
+                    "COPY": "Copy...",
+                    "MOVE": "Move...",
+                    "DELETE": "Delete"
+                },
+                "DOCUMENT": {
+                    "DOWNLOAD": "Download",
+                    "COPY": "Copy...",
+                    "MOVE": "Move...",
+                    "MANAGE_VERSIONS": "Manage Versions...",
+                    "DELETE": "Delete"
+                }
+            },
+            "COLUMNS": {
+                "NAME": "Name",
+                "SIZE": "Size",
+                "MODIFIED_ON": "Modified",
+                "MODIFIED_BY": "Modified by",
+                "STATUS": "Status",
+                "Title": "Title",
+                "LOCATION": "Location",
+                "SHARED_BY": "Shared by",
+                "DELETED_ON": "Deleted",
+                "DELETED_BY": "Deleted by",
+                "DESCRIPTION": "Description"
+            }
+        },
+        "SITES_VISIBILITY": {
+            "PUBLIC": "Public",
+            "MODERATED": "Moderated",
+            "PRIVATE": "Private"
+        },
+        "MESSAGES": {
+            "ERRORS": {
+                "GENERIC": "the action was unsuccessful. Try again or contact your IT Team.",
+                "CONFLICT": "This name is already in use, try a different name.",
+                "NODE_MOVE": "Move unsuccessful, a file with the same name already exists.",
+                "EXISTENT_FOLDER": "There's already a folder with this name. Try a different name.",
+                "NODE_DELETION": "{{ name }} couldn't be deleted",
+                "NODE_DELETION_PLURAL": "{{ number }} items couldn't be deleted",
+                "NODE_RESTORE": "{{ name }} couldn't be restored",
+                "NODE_RESTORE_PLURAL": "{{ number }} items couldn't be restored",
+                "PERMISSION": "You don't have access to do this",
+                "TRASH": {
+                    "NODES_PURGE": {
+                        "PLURAL": "{{ number }} items couldn't be deleted",
+                        "SINGULAR": "{{ name }} couldn't be deleted"
+                    },
+                    "NODES_RESTORE": {
+                        "PARTIAL_PLURAL": "{{ number }} items not restored because of issues with the restore location",
+                        "NODE_EXISTS": "Can't restore, {{ name }} already exists",
+                        "LOCATION_MISSING": "Can't restore {{ name }}, the original location no longer exists",
+                        "GENERIC": "There was a problem restoring {{ name }}"
+                    }
+                }
+            },
+            "INFO": {
+                "TRASH": {
+                    "NODES_PURGE": {
+                        "PLURAL": "{{ number }} items deleted",
+                        "SINGULAR": "{{ name }} deleted",
+                        "PARTIAL_SINGULAR": "{{ name }} deleted, {{ failed }} couldn't be deleted",
+                        "PARTIAL_PLURAL": "{{ number }} items deleted, {{ failed }} couldn't be deleted"
+                    },
+                    "NODES_RESTORE": {
+                        "PLURAL": "Restore successful",
+                        "SINGULAR": "{{ name }} restored"
+                    }
+                },
+                "NODE_DELETION": {
+                    "SINGULAR": "{{ name }} deleted",
+                    "PLURAL": "Deleted {{ number }} items",
+                    "PARTIAL_SINGULAR": "Deleted {{ success }} item, {{ failed }} couldn't be deleted",
+                    "PARTIAL_PLURAL": "Deleted {{ success }} items, {{ failed }} couldn't be deleted"
+                },
+                "NODE_COPY": {
+                    "SINGULAR": "Copied {{ success }} item",
+                    "PLURAL": "Copied {{ success }} items",
+                    "PARTIAL_SINGULAR": "Copied {{ success }} item, {{ failed }} couldn't be copied.",
+                    "PARTIAL_PLURAL": "Copied {{ success }} items, {{ failed }} couldn't be copied.",
+                    "FAIL_SINGULAR": "{{ failed }} item couldn't be copied.",
+                    "FAIL_PLURAL": "{{ failed }} items couldn't be copied."
+                },
+                "NODE_MOVE": {
+                    "SINGULAR": "Moved {{ success }} item.",
+                    "PLURAL": "Moved {{ success }} items.",
+                    "PARTIAL": {
+                        "SINGULAR": "Partially moved {{ partially }} item.",
+                        "PLURAL": "Partially moved {{ partially }} items.",
+                        "FAIL": "{{ failed }} couldn't be moved."
+                    }
+                }
+            }
+        },
+        "CONTENT_METADATA": {
+            "EXIF_GROUP_TITLE": "Image EXIF"
+        },
+        "INFO_DRAWER": {
+            "TITLE": "Details",
+            "TABS": {
+                "PROPERTIES": "Properties",
+                "VERSIONS": "Versions"
+            }
+        }
+    },
+    "NODE_SELECTOR": {
+        "COPY_ITEM": "Copy {{ name }} to...",
+        "COPY_ITEMS": "Copy {{ number }} items to...",
+        "MOVE_ITEM": "Move {{ name }} to...",
+        "MOVE_ITEMS": "Move {{ number }} items to...",
+        "SEARCH": "Search"
+    },
+    "VERSION": {
+        "DIALOG": {
+            "TITLE": "Manage Versions",
+            "CLOSE": "Close"
+        },
+        "SELECTION": {
+            "EMPTY": "Please choose a document to see the versions of it.",
+            "NO_PERMISSION": "You don't have permission to manage the versions of this content."
+        }
+    }
+}

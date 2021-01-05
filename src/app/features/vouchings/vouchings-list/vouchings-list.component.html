@@ -1,0 +1,123 @@
+<mat-table fxFlex #table matSort
+    [dataSource]="dataSource"
+    [formGroup]="filterForm"
+    (matSortChange)="sortChange($event)"
+    [@animateStagger]="{value:'50'}">
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="invoiceNumber">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Invoice Number</span>
+            <input class="form-control" formControlName="invoiceNumber" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.invoiceNumber}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="paidAmount">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Amount</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.paidAmount | currency:'USD':'symbol':decimalConfig }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="invoiceCredit">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Credit</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.invoiceCredit | currency:'USD':'symbol':'1.2-2' }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="invoiceTotal">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Total Amount</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.invoiceTotal | currency:'USD':'symbol':'1.2-2' }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="vouchedDate">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Date Vouched</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{ data.vouchedDate | date:'shortDate' }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="totalTaxOnPo">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Tax</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.totalTaxOnPo}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="qbsync">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span>QB</span>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data; let index = index;" fxHide fxShow.gt-sm>
+            <button mat-button class="mat-button" [ngClass]="{'accent':data.qbBillId && data.qbJeId, 'warn': !data.qbBillId || !data.qbJeId}"
+                    (click)="qbPush($event, data.id)" title="Sync to QB">
+                QB Sync {{ !data.qbBillId ? 'Bill' : (!data.qbJeId ? 'JE' : '')}}
+            </button>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+            class="category-row"
+            (click)="showDetail(data)"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+            [length]="dataSource.total"
+            [pageIndex]="0"
+            [pageSize]="50"
+            (page)="paginate($event)"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+[@animate]="{value:'*',params:{opacity:1}}"
+*ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>

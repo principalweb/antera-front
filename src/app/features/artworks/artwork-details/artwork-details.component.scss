@@ -1,0 +1,19 @@
+app-artwork-details {
+    .header {
+        min-height: 50px !important;
+        height: 50px !important;
+        max-height: 50px !important;
+    }
+
+    .logo-text a {
+        color: white;
+        cursor: pointer;
+    }
+
+    .mat-tab-group {
+        min-height: 0;
+    }
+    .mat-tab-body-wrapper {
+        flex: 1 1 auto;
+    }
+}

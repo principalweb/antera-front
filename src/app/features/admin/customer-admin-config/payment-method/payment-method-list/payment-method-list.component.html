@@ -1,0 +1,56 @@
+<div id="admin-dropdown-options" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+  <div fxFlex class="content-card p-20">
+    <div fxLayout="row" fxLayoutAlign="start center">
+        <button mat-raised-button
+                color="accent"
+                class="text-capitalize"
+                (click)="add()">
+            <mat-icon>add</mat-icon> Add
+        </button>
+    </div>
+    <div class="dropdown-options mt-20" fusePerfectScrollbar>
+        <table class="dropdown-option-table">
+            <thead>
+                <tr>
+                    <th>Label</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                    <th>&nbsp;&nbsp;&nbsp;Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let paymentMethod of paymentMethodList; let i=index;">
+                    <td>
+                        <span>
+                            {{paymentMethod.paymentLabel | titlecase}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{paymentMethod.paymentValue}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            <mat-slide-toggle (change)="sliderToggled(paymentMethod, $event)" [(ngModel)]="paymentMethod.enable"></mat-slide-toggle>
+                        </span>
+                    </td>
+                    <td>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                            <div fxLayout="row">
+                                <button *ngIf="paymentMethod.edit" mat-icon-button (click)='edit(paymentMethod)'>
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button *ngIf="paymentMethod.edit" mat-icon-button (click)='delete(paymentMethod)'>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>

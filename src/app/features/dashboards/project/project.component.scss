@@ -1,0 +1,86 @@
+@import "src/@fuse/scss/fuse";
+$top-bg-image: url("/assets/images/backgrounds/header-bg.jpg") top left/cover no-repeat;
+
+#dashboard-project {
+
+    .mat-drawer-content,
+    .mat-sidenav-content {
+        flex: 1 1 100%;
+    }
+
+    .center {
+
+        > .header {
+            min-height: 63px;
+            max-height: 63px;
+            background: $top-bg-image;
+
+            .selected-project {
+                background: rgba(0, 0, 0, 0.12);
+                color: #FFFFFF;
+                padding: 8px 16px;
+                height: 40px;
+                line-height: 24px;
+                font-size: 16px;
+            }
+
+            .project-selector {
+                padding: 2px 16px;
+                height: 40px;
+                width: 133px;
+
+                margin-left: 1px;
+                border-radius: 0;
+                background: rgba(0, 0, 0, 0.12);
+
+                mat-icon {
+                    color: #FFFFFF;
+                }
+            }
+
+            .welcome-message {
+                font-size: 30px;
+            }
+        }
+
+        > .content {
+            flex: 1;
+
+            mat-tab-group {
+                height: 100%;
+
+                .mat-tab-body-wrapper {
+                    flex-grow: 1;
+                }
+            }
+
+            .mat-tab-label-container {
+                padding: 0 24px;
+            }
+        }
+    }
+
+    .sidenav {
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
+    }
+
+    .widget {
+
+        &.widget5 {
+
+            .gridline-path.gridline-path-horizontal {
+                display: none;
+            }
+
+            .date-range {
+                flex-wrap: wrap;
+            }
+        }
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,165 @@
+body {
+
+  .mat-icon, mat-icon {
+    font-family: 'Material Icons' !important;
+  }
+
+  > mat-sidenav-container {
+    height: 100%;
+  }
+
+  /************** By Benzur **************/
+
+  // clean up size of icons on buttons
+  button mat-icon {
+    font-size: 21px !important;
+  }
+
+  // clean up box with 0 search results
+  .no-search-results {
+    font-weight: normal;
+    text-align: center;
+    color: #949494 !important;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  // smaller mat-toolbars
+  .details-section-header {
+    height: 40px;
+    font-size: 18px;
+    background-color: whitesmoke;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  /************** /By Benzur **************/
+
+  // By Olena, Table Filter Fields
+  .header-cell {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 400;
+    flex-wrap: wrap;
+
+    span {
+      display: block;
+      width: 100%;
+    }
+
+    span button {
+      // width: 150px !important;
+      color: #000000;
+    }
+
+    .mat-sort-header-button {
+      white-space: nowrap;
+    }
+
+    .form-control {
+      background-color: #e2e2e2;
+      margin-top: 5px !important;
+      height: 20px !important;
+      border-radius: 2px;
+      color: #4f4f4f;
+      padding-left: 2px;
+      padding-right: 2px;
+      width: 90% !important;
+      max-width: 150px;
+      text-align: left;
+
+      @media screen and (max-width: 1920px) {
+        width: 130px;
+      }
+
+      @media (min-width: 1280px) and (max-width: 1919px) {
+        width: 90px;
+      }
+    }
+    // Placeholder text color
+    .form-control::placeholder {
+      color: #a8a8a8;
+    }
+  }
+
+  // By Olena, Search input underline
+  .search-input-wrapper {
+    max-width: 480px;
+
+    mat-form-field .mat-form-field-underline {
+      background-color: white;
+      opacity: 0.75;
+    }
+
+    mat-focused .mat-form-field-label {
+      background-color: white;
+      opacity: 0.75;
+    }
+
+    .mat-focused .mat-form-field-underline .mat-form-field-ripple {
+      background-color: white;
+      opacity: 0.75;
+    }
+
+    button {
+      margin-left: -28px;
+    }
+
+    input {
+      caret-color: white;
+    }
+  }
+  .white-fg {
+    color: white !important;
+
+    mat-form-field .mat-form-field-underline {
+      background-color: white;
+      opacity: 0.75;
+    }
+
+    mat-focused .mat-form-field-label {
+      background-color: white;
+      opacity: 0.75;
+    }
+
+    .mat-focused .mat-form-field-underline .mat-form-field-ripple {
+      background-color: white;
+      opacity: 0.75;
+    }
+    input {
+      caret-color: white;
+    }
+  }
+
+  .mat-tooltip.tooltip {
+    white-space: pre-line;
+    font-size: 13px; // current default is 10px :-/
+  }
+
+  .shortcuts .mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  mat-option.hide-checkbox {
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  // Fixed mat-tab-group 
+  .mat-tab-group.fixed {
+    flex: 1 1 auto;
+    max-width: 100%;
+
+    > .mat-tab-body-wrapper {
+      flex: 1 1 auto;
+      max-width: 100%;
+
+      > .mat-tab-body-content {
+        display: flex;
+      }
+    }
+
+    > .mat-tab-body-wrapper .tab-content {
+      flex: 1 1 auto;
+      max-width: 100%;
+    }
+  }
+}

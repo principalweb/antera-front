@@ -1,0 +1,221 @@
+<mat-table fxFlex #table [dataSource]="dataSource" matSort
+           [formGroup]="filterForm"
+           (matSortChange)="sortChange($event)"
+           [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="productId">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Item No</span>
+          <input class="form-control" formControlName="productId" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.inhouseId">{{ item.productId }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="inhouseId">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>In-House ID</span>
+          <input class="form-control" formControlName="inhouseId" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.inhouseId }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="productName">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Name</span>
+          <input class="form-control" formControlName="productName" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.productName">{{ item.productName}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="sku">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Sku</span>
+          <input class="form-control" formControlName="sku" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.sku">{{ item.sku }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="size">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Size</span>
+          <input class="form-control" formControlName="size" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.size+' - '+item.sku">{{item.size}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="color">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Color</span>
+          <input class="form-control" formControlName="color" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.color+' - '+item.sku">{{item.color}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="site">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Site</span>
+          <input class="form-control" formControlName="site" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.site">{{ item.site }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="bin">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Bin</span>
+          <input class="form-control" formControlName="bin" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate" [title]="item.bin">{{ item.bin }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="newSite">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>New Site</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+          <mat-form-field>
+              <mat-select [formControl]="af.get(item.binId+'_'+item.sku+'_siteId')">
+                  <mat-option [value]="site.fobId"
+                              *ngFor="let site of fob">
+                      {{ site.fobCity }}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="newBin">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>New Bin</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+          <mat-select [formControl]="af.get(item.binId+'_'+item.sku+'_binId')">
+              <mat-option [value]="bin.binId"
+                          *ngFor="let bin of bins[af.value[item.binId+'_'+item.sku+'_siteId']]|originBin:item.binId">{{ bin.bin }}</mat-option>
+          </mat-select>
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="quantity">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Qty on Hand</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.quantity }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="quantityEdit">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Transfer Qty</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <input class="form-control" [formControl]="af.get(item.binId+'_'+item.sku)" placeholder="" (keyup)="calculateChange(item.binId, item.sku)">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="quantityDiff">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Qty Change</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.quantityChange }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="price">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Price</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.price }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="save">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef>
+        <span>
+          Transfer
+        </span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm class="button">
+        <mat-icon aria-hidden="false" aria-label="Save inventory transfer" (click)="transfer(item)" title="Save inventory adjustment" color="accent">save</mat-icon>
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="reserved">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Reserved</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.reserved }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="minQty">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Min</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.min}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="max">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Max</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.max}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateModified">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm  *cdkHeaderCellDef (keyup.enter)="loadData()">
+          <span mat-sort-header>Last Modified</span>
+          <input class="form-control" formControlName="dateModified" placeholder="">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let item" fxHide fxShow.gt-sm>
+        <p class="text-truncate">{{ item.dateModified | date}}</p>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedClumns"></mat-header-row>
+    <mat-row *cdkRowDef="let item; columns: displayedClumns;"
+             class="inventory-item"
+             matRipple
+             [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+               [length]="dataSource.total"
+               [pageIndex]="dataSource.index"
+               [pageSize]="50"
+               [pageSizeOptions]="[10, 20, 50, 100]"
+               (page)="paginate($event)"
+               [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,26 @@
+:host {
+    height: 60px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .list-header-name {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .total {
+        margin-right: 22px !important;
+        font-weight: 550;
+        font-size: 150%;
+    }
+
+    input {
+        min-width: 0;
+    }
+}

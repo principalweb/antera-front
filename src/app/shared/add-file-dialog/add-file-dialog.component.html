@@ -1,0 +1,28 @@
+<div class="add-file-popup">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <mat-toolbar-row>
+        <h1 mat-dialog-title class="m-0 py-12">Add New File </h1>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <form [formGroup]="uploadForm">
+      <mat-dialog-content>
+          <div class="mt-12" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+            <input type="file" id="logo" (change)="onFileChange($event)" #fileInput>
+          </div>
+        </mat-dialog-content>
+        
+        <mat-dialog-actions class="py-20">
+          <button mat-raised-button class="accent"
+              (click)="dialogRef.close()"
+              aria-label="Close dialog">
+              Close
+          </button>
+          <button mat-raised-button color="accent" [disabled]="loading" (click)="uploadFile()">Upload</button>
+        </mat-dialog-actions>
+  </form>
+
+  <div class="loading" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+  </div>
+</div>

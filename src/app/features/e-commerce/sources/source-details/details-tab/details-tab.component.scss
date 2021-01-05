@@ -1,0 +1,167 @@
+@import "src/@fuse/scss/fuse";
+
+#source-details-tab {
+
+  height: calc(100vh - 190px);
+  overflow-y: scroll;
+
+  .customer-view {
+
+    width: 370px;
+    height: 358px;
+    border: 2px solid #444;
+    position: relative;
+    padding: 4px;
+    margin-right: 8px;
+
+    @include media-breakpoint('lt-sm') {
+      width: 100% !important;
+    }
+
+    .upload-button,
+    .remove-button {
+      width: 100%;
+      height: 100%;
+    }
+
+    .remove-button {
+      opacity: 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .uploaded-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    } 
+
+    .feature-image {
+      position: relative;
+    }
+
+    &:hover {
+      
+      .remove-button {
+        transition: .3s opacity;
+        opacity: 1;
+      }
+
+      .uploaded-image {
+        transition: .3s opacity;
+        opacity: 0.2;
+      }
+    }
+
+  }
+
+  .upload-new-file, .customer-view {
+
+    #fileInput {
+      opacity: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      cursor: pointer;
+      width: 100%;
+    }
+  }
+
+  #design-files-table{
+
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .mat-table {
+
+        flex: 1;
+        height: 230px;
+        overflow: auto;
+
+    }
+
+    .mat-header-row {
+      min-height: 33px !important;
+    }
+
+    .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
+        opacity: 0;
+    }
+
+    .mat-sort-header-pointer-left.ng-trigger.ng-trigger-leftPointer{
+        transform: rotate(-45deg);
+    }
+
+    .mat-sort-header-pointer-right.ng-trigger.ng-trigger-rightPointer{
+        transform: rotate(45deg);
+    }
+
+    .activity-item {
+        position: relative;
+    }
+
+    .mat-raised-button{
+      min-width: 30px !important;
+      line-height: 30px !important;
+      padding: 0 !important;
+    }
+  }
+  .mw-300 {
+    min-width: 300px;
+  }
+
+  .description-stitches {
+    margin-bottom: 20px;
+
+    .row {
+      padding: 16px;
+      border-bottom: 1px solid #ddd;
+
+      &.row-header {
+        border-bottom: 1px solid #aaa;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    .no {
+      width: 60px;
+    }
+    .actions {
+      width: 40px;
+      margin-top: -12px;
+      margin-bottom: -12px;
+    }
+    .stitches {
+      width: 60px;
+      margin-right: 10px;
+    }
+  }
+
+  .add-variation {
+    width: 100%;
+    height: 100%;
+    margin: 10px 0;
+  }
+
+  .variations-container {
+    overflow-x: scroll;
+  }
+
+  .no-vendor {
+    position: absolute;
+    top: 32px;
+    font-size: 0.8em;
+    color: red;
+  }
+}

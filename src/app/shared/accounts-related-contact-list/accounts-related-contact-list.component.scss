@@ -1,0 +1,28 @@
+.accounts-related-contact-list .mat-dialog-container {
+    min-width: 70vw !important;
+    padding: 0;
+
+    .related-contacts-table {
+        .mat-header-cell {
+            .mat-sort-header-arrow {
+                opacity: 0;
+                transform: translateY(0px);
+                .mat-sort-header-pointer-left {
+                    transform: rotate(-45deg);
+                }
+                .mat-sort-header-pointer-right {
+                    transform: rotate(45deg);
+                }
+            }
+        }
+
+    }
+
+    .contact-row {
+        position: relative;
+
+        .mat-checkbox-ripple {
+            display: none;
+        }
+    }
+}

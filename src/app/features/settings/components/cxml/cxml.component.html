@@ -1,0 +1,121 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="px-32">
+	<div class="mx-400 mt-20 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+		<span class="mat-title mb-0">CXML</span>
+    <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="changeAction('log')" *ngIf='action=="settings"'>
+      PO LOG
+    </button>
+    <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="changeAction('settings')" *ngIf='action=="log"'>
+      Settings
+    </button>
+	</div>
+      <form [formGroup]="credsForm" *ngIf="action=='settings'">
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="To - Domain" formControlName="CrmDomain" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="To - Identity" formControlName="CrmIdentity" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="From - Domain" formControlName="CustomerDomain" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="From - Identity" formControlName="CustomerIdentity" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Sender - Domain" formControlName="SenderDomain" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Sender - Identity" formControlName="SenderIdentity" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Sender - Shared Secret" formControlName="Secret" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Sender - User Agent" formControlName="CustomerAgent" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Invoice URL" formControlName="InvoiceUrl" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="ASN URL" formControlName="AsnUrl" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="AttachDecoration">Attach decoration to PO.</mat-slide-toggle>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="ZeroDecoration">Zero decoraton price.</mat-slide-toggle>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="MergeInvoiceDeco">Merge decoraton to product on invoice.</mat-slide-toggle>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+              <mat-form-field>
+                <mat-select formControlName="DefaultPOWarehosue" placeholder='Default Warehouse'>
+                  <mat-option [value]="fob.fobId"
+                              *ngFor="let fob of fobList">
+                      {{ fob.fobCity }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+              <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+            </div>
+          </div>
+      </form>
+  <cxml-po-log *ngIf="action=='log'"></cxml-po-log>
+</div>

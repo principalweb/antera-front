@@ -1,0 +1,44 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner> 
+</div>
+<form [formGroup]="credsForm">
+<div class="px-32">
+  <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">Ship Station</span>
+        <mat-slide-toggle formControlName="enabled">Enabled</mat-slide-toggle>
+  </div>
+
+  <div class="px-16">
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+      <span class="mat-body-1 w-80 mr-16 text-right">API Key</span>
+      <mat-form-field fxFlex>
+        <input matInput formControlName="apiKey" class="form-control">
+      </mat-form-field>
+    </div>
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+      <span class="mat-body-1 w-80 mr-16 text-right">API Secret</span>
+      <mat-form-field fxFlex>
+        <input matInput formControlName="apiSecret" class="form-control">
+      </mat-form-field>
+    </div>
+    <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+      <span class="mat-body-1 w-80 mr-16 text-right">No of Days to Delivery</span>
+      <mat-form-field fxFlex>
+        <input matInput formControlName="noOfDaysToDelivery" class="form-control">
+      </mat-form-field>
+    </div>
+    <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mat-body-1 w-200 mr-16 text-right">Do Not Send Order to ShipStation When Book. 
+      <br>Only Send Order to ShipStation When Workflow <b>Shipping Status is Ready as Production is Done </b>.</span>
+          <mat-slide-toggle formControlName="bookingOrderNotSentShipStation"></mat-slide-toggle>
+    </div>
+    <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="mat-body-1 w-200 mr-16 text-right">Do Not Bring ShipStation Prices</span>
+          <mat-slide-toggle formControlName="doNotAddPrice"></mat-slide-toggle>
+    </div>
+    <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+        <button class="ml-96" mat-raised-button (click)="saveConfig()" color="accent">SAVE</button>
+    </div>
+  </div>
+</div>
+</form>

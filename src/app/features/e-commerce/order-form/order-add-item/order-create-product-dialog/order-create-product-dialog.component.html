@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Create product</h2>
+<div mat-dialog-content>
+
+  <app-product-form #productForm [embed]="true" (saved)="onFormSaved($event)"></app-product-form>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="save()">Save To Order</button>
+  <button mat-button (click)="close()">Cancel</button>
+</div>

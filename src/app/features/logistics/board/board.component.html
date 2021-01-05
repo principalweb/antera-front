@@ -1,0 +1,25 @@
+<div class="board-content ngx-dnd-container p-16 p-mat-24"
+     *fuseIfOnDom [@animateStagger]="{value:'50'}"
+     #board fusePerfectScrollbar>
+
+    <div fxLayout="row" ngxDroppable="status"
+         [model]="stList" (drop)="onDrop($event)">
+
+        <fuse-scrumboard-board-list
+            class="scrumboard-board-list list-wrapper ngx-dnd-item"
+            [condensed]="condensed"
+            [model]="st" ngxDraggable
+            [list]="statusGroup[st.stageKey]"
+            [stage]="st" fxFlex="none"
+            (selectCard)="onSelectCard($event)"
+            *ngFor="let st of stList"
+            [@animate]="{value:'*',params:{duration:'350ms',x:'100%'}}">
+        </fuse-scrumboard-board-list>
+
+        <fuse-scrumboard-board-add-list
+            ngxDraggable
+            [moves]="false"
+            (onlistAdd)="onListAdd($event)"
+        ></fuse-scrumboard-board-add-list>
+    </div>
+</div>

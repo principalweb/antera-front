@@ -1,0 +1,162 @@
+<div class="px-32">
+  <div class="mt-40 mb-16 mx-400" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">Order settings</span>
+  </div>
+
+  <div class="mt-24 mx-400">
+    <form *ngIf="ordersConfigForm" [formGroup]="ordersConfigForm">
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Debug Order (Disable Order Cache)</span>
+        <mat-checkbox formControlName="debugOrderDetails"></mat-checkbox>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Enable Order Cache</span>
+        <mat-checkbox formControlName="enableOrderCache"></mat-checkbox>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Tax Rate</span>
+        <mat-form-field fxFlex>
+          <input matInput formControlName="defaultTaxRate">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Product Margin</span>
+        <mat-form-field fxFlex>
+          <input type="number" matInput formControlName="productsMargin">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Decoration Margin</span>
+        <mat-form-field fxFlex>
+          <input type="number" matInput formControlName="decoMargin">
+        </mat-form-field>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Decoration Price Calcuation</span>
+			<mat-form-field>
+				<mat-select formControlName="defaultDecorationPriceLogic"
+					placeholder="Decoration Price Calcuation">
+					<mat-option [value]="dc.value" *ngFor="let dc of defaultDecorationPriceLogicList">{{ dc.name }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Shipping Margin</span>
+        <mat-form-field fxFlex>
+          <input type="number" matInput formControlName="shippingMargin">
+        </mat-form-field>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Gross Profit</span>
+        <mat-checkbox formControlName="enableGrossProfit"></mat-checkbox>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Corporate Identity</span>
+        <mat-checkbox formControlName="identityEnabled"></mat-checkbox>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">CXML</span>
+        <mat-checkbox formControlName="cxmlEnabled"></mat-checkbox>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Dubow</span>
+        <mat-checkbox formControlName="dubowEnabled"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Lock Invoiced Orders</span>
+        <mat-checkbox formControlName="lockInvoicedOrders"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Lock Vouched Orders</span>
+        <mat-checkbox formControlName="lockVouchedOrders"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Show New Order Form</span>
+        <mat-checkbox formControlName="enableOrderFormV2"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Force New Order Form</span>
+        <mat-checkbox formControlName="forceOrderFormV2"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Enable GST Tax</span>
+        <mat-checkbox formControlName="enableGstOnPo"></mat-checkbox>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Default GST Tax Rate</span>
+        <mat-form-field fxFlex>
+          <input matInput formControlName="defaultGstRateOnPo">
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Default Store Order Status</span>
+        <mat-form-field>
+          <mat-select formControlName="defaultStoreOrderStatus" placeholder="Status">
+            <mat-option [value]="orderType.name" *ngFor="let orderType of orderTypes">
+              {{ orderType.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Decoration Supplier Decorated By Default</span>
+        <mat-checkbox formControlName="defaultToSupplierDecorated"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Enable art proof creation</span>
+        <mat-checkbox formControlName="enableArtProof"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Upload Reports To Cloud</span>
+        <mat-checkbox formControlName="enableReportsUploadingToCloud"></mat-checkbox>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Enable Addon Product Pricing</span>
+        <mat-checkbox formControlName="enableAddonProductPricing"></mat-checkbox>
+      </div>
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Fiscal year start</span>
+			<mat-form-field>
+				<mat-select formControlName="fiscalYearStart"
+					placeholder="Fiscal Year Starts From">
+					<mat-option [value]="month" *ngFor="let month of months">{{ month }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+      </div>
+
+      <div class="mb-32" fxLayout="row" fxLayoutAlign="start center">
+        <span class="mat-body-1 w-120 mr-16 text-right">Purchase Module</span>
+        <mat-form-field>
+          <mat-select placeholder="PO Documents" formControlName="poDoc">
+              <mat-option *ngFor="let poDoc of poDocs" [value]="poDoc.value">
+                {{poDoc.label}}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="mb-16">
+        <button mat-raised-button color="accent" (click)="save()">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="loading" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

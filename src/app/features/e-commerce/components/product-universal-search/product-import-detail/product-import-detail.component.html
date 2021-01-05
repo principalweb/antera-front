@@ -1,0 +1,130 @@
+<div fxLayout="row" fxLayoutAlign="space-between" class="px-24">
+  <h3 class="mat-title accent-text" *ngIf="!productDetail">Product Details</h3>
+  <h3 class="mat-title accent-text" *ngIf="productDetail">{{ productDetail.productName }}</h3>
+  <button mat-raised-button color="accent" class="save-product-button mr-8"
+      (click)="closeDetail()">
+      <span>Back to Search</span>
+  </button>
+</div>
+<div fxLayout="row" class="p-24">
+  <div fxFlex="primaryImage != '' ? 60 : 100" fxLayout="column" fxFill *ngIf="productDetail">
+    <div>
+      <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+        <div class="mat-subheading-2">
+          Vendor Name: <span class="accent-text">{{ productDetail.vendor }}</span>
+        </div>
+        <div class="mat-subheading-2">
+          Item #: <span class="accent-text">{{ productDetail.productId }}</span>
+        </div>
+        <div class="mat-subheading-2">
+          Description: <span class="accent-text">{{ productDetail.description }}</span>
+        </div>
+        <div class="mat-subheading-2">
+          Colors:
+          <span class="accent-text">
+            <button
+              mat-raised-button
+              *ngFor="let color of colors"
+              class="mr-4 mb-8"
+              [ngStyle]="{'color': color.hex ? color.hex : color.color }"
+              (click)="sColor=color.color;primaryImage = colorImage[color.color] ? colorImage[color.color] : primaryImage"
+              [disabled]='sColor==color.color'
+            >
+                {{ color.color }}
+            </button>
+          </span>
+        </div>
+        <div class="mat-subheading-2">
+          Size:
+          <span class="accent-text">
+            <button mat-raised-button *ngFor="let s of size" [disabled]="sSize==s" class="mr-4 mb-8" (click)="sSize=s">{{ s }}</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 class="mat-title accent-text">Pricing</h3>
+      <mat-chip-list>
+        <mat-chip *ngIf="sColor!=''" [removable]="true" (removed)="sColor=''">
+          {{ sColor }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <mat-chip *ngIf="sSize!=''" [removable]="true" (removed)="sSize=''" >
+          {{ sSize }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+      <table mat-table [dataSource]="productDetail.ProductPartArray.ProductPart" *ngIf="productDetail">
+        <ng-container matColumnDef="info">
+          <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
+          <td mat-cell *matCellDef="let part">
+            <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+              <div class="mat-subheading-2">
+                Vendor SKU: <span class="accent-text">{{ part.partId }}</span>
+              </div>
+              <div class="mat-subheading-2">
+                Size: <span class="accent-text">{{ part.ApparelSize.labelSize }}</span>
+              </div>
+              <div class="mat-subheading-2">
+                Color: <span class="accent-text">{{ part.ColorArray.Color.colorName }}</span>
+              </div>
+              <div class="mat-subheading-2">
+                Hex: <span class="accent-text">{{ part.ColorArray.Color.hex }}</span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef> &nbsp; </th>
+          <td mat-cell *matCellDef="let part">
+            <div>
+              <table mat-table [dataSource]="part.partPrice.PartPriceArray ? part.partPrice.PartPriceArray.PartPrice : part.partPrice[0].PartPriceArray.PartPrice">
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                  <td mat-cell *matCellDef="let element"> {{element.minQuantity}} </td>
+                </ng-container>
+                <ng-container matColumnDef="price">
+                  <th mat-header-cell *matHeaderCellDef> Price </th>
+                  <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                </ng-container>
+                <ng-container matColumnDef="effdate">
+                  <th mat-header-cell *matHeaderCellDef> Effective Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.priceEffectiveDate | date}} </td>
+                </ng-container>
+                <ng-container matColumnDef="expdate">
+                  <th mat-header-cell *matHeaderCellDef> Expiry Date </th>
+                  <td mat-cell *matCellDef="let element"> {{element.priceExpiryDate | date}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['quantity', 'price', 'effdate', 'expdate']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['quantity', 'price', 'effdate', 'expdate'];"></tr>
+              </table>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['info', 'price']" [hidden]="true"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['info', 'price'];"
+          [hidden]="(sColor!=''&&row.ColorArray.Color.colorName!=sColor)||(sSize!=''&&sSize!=row.ApparelSize.labelSize)"
+        ></tr>
+      </table>
+    </div>
+  </div>
+  <div fxFlex="40" fxLayout="column" fxFill *ngIf="productDetail && primaryImage != ''">
+    <div fxLayoutAlign="center center">
+      <img *ngIf="primaryImage!==''" [src]="primaryImage" class="primary">
+    </div>
+    <div fxLayout="row wrap">
+      <div class="mr-16 mb-16" *ngFor="let image of productDetail.MediaContent; let i=index">
+        <div class="product-image">
+          <img class="media" [src]="image.url" (click)="primaryImage=image.url">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

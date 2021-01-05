@@ -1,0 +1,43 @@
+<div class="products__container">
+  <div class="actions">
+
+    <div fxFlex>
+
+      <button mat-icon-button class="mr-16" (click)="emitClose()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-raised-button class="ml-8" color="accent" (click)="addToOrder()">
+        <mat-icon>playlist_add</mat-icon>
+        Add To Order
+      </button>
+      <button mat-raised-button class="ml-8" (click)="addNewProduct()">
+        <mat-icon>add</mat-icon>
+        New Product
+      </button>
+      <button mat-raised-button class="ml-8" (click)="actions.emit('clear-filters'); clearFilters()">
+        <mat-icon>layers_clear</mat-icon>
+        Clear Filters
+      </button>
+      <button mat-raised-button class="ml-8" (click)="actions.emit('advanced-search'); openAdvanceSearchDialog();">
+        <mat-icon>search</mat-icon>
+        Advanced Search
+      </button>
+    </div>
+
+    <mat-button-toggle-group fxFlex="none" [value]="view" (change)="changeView($event)">
+      <mat-button-toggle value="list" matTooltip="Products List">
+        <mat-icon>view_list</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="images" matTooltip="Product Images">
+        <mat-icon>featured_video</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <ng-container *ngIf="view === 'list'">
+    <app-product-list #listView [disableRow]="true"></app-product-list>
+  </ng-container>
+  <ng-container *ngIf="view === 'images'">
+    <app-product-images #imagesView fxLayout="column" [disableItem]="true"></app-product-images>
+  </ng-container>
+
+</div>

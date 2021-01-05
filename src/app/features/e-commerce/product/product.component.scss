@@ -1,0 +1,119 @@
+#product {
+
+    .header {
+
+        .product-image {
+            overflow: hidden;
+            width: 36px;
+            height: 36px;
+            // border: 3px solid rgba(0, 0, 0, 0.12);
+
+            img {
+                height: 100%;
+                width: auto;
+                max-width: none;
+            }
+        }
+
+        .subtitle {
+            margin: 6px 0 0 0;
+        }
+    }
+
+    .content {
+
+        display:flex;
+        flex-direction: column;
+        position:relative;
+
+        .mat-tab-group {
+            margin-top:64px;
+        }
+
+        .mat-tab-header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        .mat-tab-group,
+        .mat-tab-body-wrapper,
+        .tab-content{
+            flex: 1 1 auto;
+            max-width: 100%;
+            min-height: 1px;
+        }
+
+        .tab-content {
+            flex: 1 1 auto;
+
+
+            &.products {
+                display: flex;
+            }
+        }
+
+        .mat-tab-body-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .mat-tab-label {
+            height: 64px;
+        }
+
+        .pricing-tabs {
+
+            .mat-tab-label
+            {
+                height: 48px;
+                min-width: 100px;
+            }
+        }
+
+        .category-list {
+            width: 100%;
+        }
+
+        .product-image {
+            overflow: hidden;
+            width: 128px;
+            height: 128px;
+            margin-bottom: 8px;
+            border: 3px solid rgba(0, 0, 0, 0.12);
+            position: relative;
+
+            img {
+                height: 100%;
+                width: auto;
+                max-width: none;
+            }
+
+            &.add-button {
+                cursor: pointer;
+            }
+
+            .mat-button {
+                bottom: -36px;
+                background: rgba(0, 0, 0, 0.25);
+                position: absolute;
+                transition: .5s bottom;
+
+                .mat-icon {
+                    color: rgba(255,255,255,.6);
+                }
+            }
+
+            &:hover {
+                .mat-button {
+                    bottom: 0;
+                }
+            }
+        }
+
+        app-product-basic-form {
+            flex: 1;
+        }
+    }
+
+}

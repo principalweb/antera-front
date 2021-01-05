@@ -1,0 +1,86 @@
+<div style="width:100%">
+  <div style="width:800px;margin:auto;margin-top:10px" *ngIf="!this.isLoading">
+    <mat-card>
+      <mat-card-content >
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex="40">Customer Portal</div>
+          <div fxFlex="60">
+            <mat-select [(value)]="storeID" (selectionChange)="handleCustomerPortalChange($event)" placeholder="Customer Portal">
+              <mat-option [value]="relatedAccount.relId"
+                          *ngFor="let relatedAccount of contactsService.onRelatedAccountsChanged | async">{{ relatedAccount.accountName }}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div style="width:800px;margin:auto;margin-top:10px" *ngIf="this.isLoading || this.isForm">
+    <mat-card>
+      <mat-card-content *ngIf="this.isLoading" style="margin:auto">
+        <mat-spinner style="margin:auto"></mat-spinner>
+
+      </mat-card-content>
+      <mat-card-content *ngIf="this.isForm && ! this.isLoading">
+
+        <div fxLayout="row" fxLayoutAlign="end center" style="width:100%">
+          <button mat-icon-button color="primary" (click)="save()">
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+        <mat-list dense>
+          <mat-list-item style="height:auto;margin-bottom:5px">
+            <mat-card style="width:100%">
+
+              <mat-card-content style="width:100%">
+                <div fxLayout="row" fxLayoutAlign="start center" style="width:100%">
+                  <div fxFlex="20">Module</div>
+                  <div fxFlex="20" fxLayoutAlign="center center">Show</div>
+                  <div fxFlex="20">&nbsp;</div>
+                  <div fxFlex="20" fxLayoutAlign="center center">Show All Contacts</div>
+                  <div fxFlex="20">&nbsp;</div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </mat-list-item>
+          <mat-list-item *ngFor="let module of modules" style="height:auto;margin-bottom:5px">
+            <mat-card style="width:100%">
+
+              <mat-card-content style="width:100%">
+
+                <div fxLayout="row" fxLayoutAlign="start center" style="width:100%">
+                  <div fxFlex="20">{{module.name}}</div>
+                  <div fxFlex="20" fxLayoutAlign="center center">
+                    <mat-checkbox [checked]="module.isShow" (change)="showPermissionCheck($event,module.index)"></mat-checkbox>
+                  </div>
+                  <div fxFlex="20">
+                    &nbsp;
+                    <mat-form-field appearance="fill" style="width:100%" *ngIf="module.isShow">
+                      <mat-label>Permissions</mat-label>
+                      <mat-select multiple [(value)]="module.showPermissions">
+                        <mat-option *ngFor="let status of this.statuses[module.name]" [value]="status.id">{{status.name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="20" fxLayoutAlign="center center">
+                    <mat-checkbox [checked]="module.isContactShow" (change)="showContactPermissionCheck($event,module.index)"></mat-checkbox>
+                  </div>
+                  <div fxFlex="20">
+                    &nbsp;
+                    <mat-form-field appearance="fill" style="width:100%" *ngIf="module.isContactShow">
+                      <mat-label>Permissions</mat-label>
+                      <mat-select multiple [(value)]="module.showContactPermissions">
+                        <mat-option *ngFor="let status of this.statuses[module.name]" [value]="status.id">{{status.name}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

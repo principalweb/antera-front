@@ -1,0 +1,52 @@
+<div id="account-details" class="page-layout simple h-100-p">
+
+    <div class="header h-80 mat-accent-bg p-16 p-sm-24"
+         fxLayout="row" fxLayoutAlign="space-between center"
+         *ngIf="!embedded">
+
+        <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon mr-16"
+                      [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"
+                      *fuseIfOnDom>work</mat-icon>
+            <div class="logo-text h1"
+                 [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"
+                 *fuseIfOnDom>
+                <a routerLink="/artworks">Artwork</a>
+                <span *ngIf="action==='edit'">
+                    &nbsp;&gt;&nbsp;Artwork # {{ details.designNo }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <mat-tab-group fxFlex *ngIf="action==='edit'" (selectedTabChange)="tabClicked($event)">
+        <mat-tab label="Details">
+            <app-artwork-design-tab
+                class="w-100-p"
+                [action]="action"
+                [artwork]="details"
+                [embedded]="embedded"
+                *ngIf="details"
+            ></app-artwork-design-tab>
+        </mat-tab>
+        <mat-tab label="Files">
+            <app-aws-file-manager
+            class="w-100-p"
+            [recordId]="details.designNo"
+            [artworkOrderId]="artworkOrderId"
+            [artworkId]="artworkId"
+            [accountId]="details.customerId"
+            [awsFileManagerType]="awsFileManagerType"
+            ></app-aws-file-manager>
+        </mat-tab>
+    </mat-tab-group>
+
+    <app-artwork-design-tab
+        class="w-100-p"
+        [action]="action"
+        [artwork]="details"
+        [embedded]="embedded"
+        (afterCreate)="afterCreate.emit($event)"
+        *ngIf="details && action!=='edit'"
+    ></app-artwork-design-tab>
+</div>

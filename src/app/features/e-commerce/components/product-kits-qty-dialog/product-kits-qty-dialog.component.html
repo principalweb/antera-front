@@ -1,0 +1,60 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                Kits
+            </span>
+            <div>
+                <!--button mat-button class="mat-icon-button"
+                        (click)="save()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button-->
+            </div>
+        </mat-toolbar-row>
+
+    </mat-toolbar>
+
+    <mat-dialog-content class="p-24 m-0">
+        <h3>You have selected a kit. How many kits would you like to add?</h3>
+		<div *ngFor="let item of kitProducts; let i=index">
+		<div fxLayout="row" fxLayoutAlign="start center" class="content" *ngIf="i == '0'">
+			<div class="blocks" fxFlex = "2%"></div>
+			<div class="blocks" fxFlex = "80%"><label><strong> Product Name </strong></label></div>
+			<div class="blocks" fxFlex>Qty</div>
+			<br><br>
+		</div>
+		<div fxLayout="row" fxLayoutAlign="start center" class="content" *ngIf="item.productType == '2'">
+			<div class="blocks" fxFlex = "2%"><strong>*</strong></div>
+			<div class="blocks" fxFlex = "80%"><label><strong> {{item.productName}} </strong></label></div>
+			<div class="blocks" fxFlex>
+                <mat-form-field>
+                    <input matInput type="number" min="1" max="99999" step="1" placeholder="" [(ngModel)]="kitProducts[i].kitQty">
+                </mat-form-field>
+            </div>
+		</div>
+		</div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between right">
+        <div fxLayout="row" fxLayoutAlign="right">
+            <button
+                mat-raised-button
+                (click)="save()"
+                class="save-button mat-accent"
+                aria-label="Ok">
+             Ok
+            </button>
+        </div>
+
+    </mat-dialog-actions>
+
+    <div class="center">
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="loading">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+</div>

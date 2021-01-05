@@ -1,0 +1,82 @@
+<form [formGroup]="form" (submit)="save()">
+    <mat-dialog-content fxLayout="column">
+        
+        <mat-toolbar class="m-0" fxFlex="none" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">Type</span>
+
+            <button mat-icon-button mat-dialog-close>
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar>
+        <div class="p-16" fxLayout="row" flex="none">
+            <div class="image" fxFlex="none">
+                <img [src]="imageUrl" [alt]="data.productName"/>
+            </div>
+            <div>
+                <h2>{{ data.productName }}</h2>
+                <h2>Item#: {{ data.itemNo }}</h2>
+            </div>
+        </div>
+
+        <mat-table class="products-table px-16" [dataSource]="list">
+
+            <ng-container cdkColumnDef="size">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef>Size</mat-header-cell>
+                <mat-cell *cdkCellDef="let row">
+                    <p class="text-truncate">{{row.size}}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="quantity">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef>Quantity</mat-header-cell>
+                <mat-cell *cdkCellDef="let row">
+                    <p class="text-truncate">{{row.quantity}}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="inventory">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef>Inventory</mat-header-cell>
+                <mat-cell *cdkCellDef="let row">
+                    <p class="text-truncate">{{row.inventoryReceivedQty}}</p>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container cdkColumnDef="warehouse">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef>Warehouse</mat-header-cell>
+                <mat-cell *cdkCellDef="let row; let i=index">
+                    <mat-form-field floatLabel="never">
+                        <mat-select placeholder="Warehouse" [formControlName]="'warehouse'+i">
+                            <mat-option [value]="warehouse.fobId"
+                                        *ngFor="let warehouse of warehouses"
+                            >{{ warehouse.fobCity }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+    
+            <ng-container cdkColumnDef="type">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef>Type</mat-header-cell>
+                <mat-cell *cdkCellDef="let row; let i=index">
+                    <mat-form-field floatLabel="never">
+                        <mat-select placeholder="Type" [formControlName]="'type'+i">
+                            <mat-option value="DropShip">DropShip</mat-option>
+                            <mat-option value="Stock">Stock</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+                     class="linitemtype" matRipple>
+            </mat-row>
+
+        </mat-table>
+    </mat-dialog-content>
+    <mat-dialog-actions class="px-16" fxLayout="row" fxLayoutAlign="end center">
+        <button mat-raised-button type="submit" color="accent">SAVE</button>
+    </mat-dialog-actions>
+</form>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

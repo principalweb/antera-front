@@ -1,0 +1,106 @@
+<mat-table fxFlex #table matSort
+        [dataSource]="dataSource"
+        [@animateStagger]="{value:'50'}">
+    <!-- Checkbox Column -->
+    
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selectedCount > 0 && selectedCount === paginator.length"
+                        [indeterminate]="selectedCount > 0 && selectedCount < paginator .length">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let webstore">
+            <mat-checkbox [(ngModel)]="checkboxes[webstore.id]"
+                          (ngModelChange)="onSelectedChange(webstore.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="clientName">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterWebstores()">
+            <span mat-sort-header>Client Name</span>
+            <input class="form-control" [formControl]="clientName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let webstore">
+            <p class="company text-truncate">
+                {{ webstore.clientName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="hostName">
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef (keyup.enter)="filterWebstores()">
+            <span mat-sort-header>Host Name</span>
+            <input class="form-control" [formControl]="hostName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let webstore">
+            <p class="company text-truncate">
+                {{ webstore.hostName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="points">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterWebstores()">
+            <span mat-sort-header>Points</span>
+            <input class="form-control" [formControl]="points" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let webstore" fxHide fxShow.gt-xs>
+            <p class="company text-truncate">
+                {{ webstore.points }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="enabled">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef mat-sort-header>Enabled</mat-header-cell>
+        <mat-cell *cdkCellDef="let webstore" fxHide fxShow.gt-xs>
+            <mat-slide-toggle
+                [ngModel]="webstore.enabled"
+                (click)="toggleEnable(webstore, $event)"
+            ></mat-slide-toggle>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef fxFlex="none" class="w-40"></mat-header-cell>
+        <mat-cell *cdkCellDef="let webstore" fxFlex="none" class="w-40">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <!-- <button mat-menu-item aria-label="clone">
+                        <mat-icon>content_copy</mat-icon>
+                        <span>Clone</span>
+                    </button> -->
+                    <button mat-menu-item aria-label="remove" (click)="deleteWebstore(webstore)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let webstore; columns: displayedColumns;"
+            class="webstore"
+            (click)="editWebstore(webstore)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[webstore.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>

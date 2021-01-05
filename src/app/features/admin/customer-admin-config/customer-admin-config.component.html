@@ -1,0 +1,155 @@
+<div id="admin-configuration" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">lock</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Configuration</span>
+      </div>
+      <!-- / APP TITLE -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="content-card">
+
+      <mat-tab-group [selectedIndex]="customerAdminConfigService.selectedTabIndex">
+        <mat-tab label="Order Config">
+          <ng-template matTabContent>
+            <app-order-configuration></app-order-configuration>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Identity" *ngIf="identityEnabled">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-identity></app-identity>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Module Fields">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-module-fields></app-module-fields>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Category">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-category></app-category>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Attribute Sort">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <attributes></attributes>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Dropdown Editor">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-admin-dropdown></app-admin-dropdown>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Payment Methods">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-payment-method></app-payment-method>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Decoration Types">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-decoration-types></app-decoration-types>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Deco Type Group">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-deco-type-groups></app-deco-type-groups>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Decoration Locations">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-decoration-locations></app-decoration-locations>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Additional Charges">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-additional-charges></app-additional-charges>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Warehouse" *ngIf="inventoryEnabled">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-site></app-site>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Reports">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+            <app-report-admin></app-report-admin>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="TimeZones">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-time-zones></app-time-zones>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Uom">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-uom></app-uom>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Uom Groups">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-uom-groups></app-uom-groups>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Production">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <production-settings></production-settings>
+            </div>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Pricing">
+          <ng-template matTabContent>
+            <div class="content tab-content">
+              <app-pricing-methods></app-pricing-methods>
+              <!-- <app-pricing></app-pricing> -->
+            </div>
+          </ng-template>
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+  </div>
+
+</div>

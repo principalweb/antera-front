@@ -1,0 +1,30 @@
+<div fxLayout="column">
+  <h2 mat-dialog-title class="pb-0">Choose Payment Method</h2>
+  <div class="dialog-content p-16" fxLayout="column">
+    <div class="manual-entry p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onCheckCashSelected()">
+        <mat-icon class="manual-icon">account_balance_wallet</mat-icon>
+        <div class="ml-24">
+          <div class="text-bold mat-title mb-0">Cash or Check</div>
+        </div>
+    </div>
+    <div *ngIf="boltEnabled" class="manual-entry p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onCreditCardSelected()">
+        <mat-icon class="credit-icon">credit_card</mat-icon>
+        <div class="ml-24">
+          <div class="text-bold mat-title mb-0">Credit Card - BOLT ONLY</div>
+        </div>
+    </div>
+    <div class="manual-entry p-16" fxLayout="row" fxLayoutAlign="start center" (click)="onApplyCreditSelected()">
+        <mat-icon class="credit-memo-icon">account_balance_wallet</mat-icon>
+        <div class="ml-24">
+            <div class="text-bold mat-title mb-0">Apply Credit</div>
+            <div class="w-100-p">
+                <label>Available Credit : </label><span class="accent-text">{{ creditAmount | currency:'USD':'symbol'}}</span> 
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="mt-24" fxLayout="row" fxLayoutAlign="end start">
+    <button mat-button color="accent" matDialogClose>CANCEL</button>
+  </div>
+</div>
+

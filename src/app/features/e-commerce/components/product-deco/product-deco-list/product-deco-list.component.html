@@ -1,0 +1,96 @@
+<mat-table fxFlex #table matSort
+    [dataSource]="dataSource"
+    [formGroup]="filterForm"
+    (matSortChange)="sortChange($event)"
+    [@animateStagger]="{value:'50'}">
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="customerName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+            <span mat-sort-header>Customer</span>
+            <input class="form-control" formControlName="customerName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.customerName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="designName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+            <span mat-sort-header>Design</span>
+            <input class="form-control" formControlName="designName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.designName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container cdkColumnDef="storeName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+            <span mat-sort-header>Store</span>
+            <input class="form-control" formControlName="storeName" placeholder="">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.storeName}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="autoAttach">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef (keyup.enter)="loadData()">
+            <span mat-sort-header>Default</span>
+              <mat-select placeholder="All" formControlName="autoAttach" (selectionChange)="loadData()" class="form-control">
+                  <mat-option *ngFor="let status of enabled" [value]="status.value">
+                    {{status.name}}
+                  </mat-option>
+              </mat-select>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let data" fxHide fxShow.gt-sm>
+            <p class="email text-truncate">
+                {{data.autoAttach == 1?'Yes':'No'}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let data; columns: displayedColumns;"
+            class="category-row"
+            (click)="showDetail(data)"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator
+            [length]="dataSource.total"
+            [pageIndex]="0"
+            [pageSize]="50"
+            (page)="paginate($event)"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+[@animate]="{value:'*',params:{opacity:1}}"
+*ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,19 @@
+<div fxLayout="column" class="webstore-form">
+    <h2 mat-dialog-title class="pb-0">{{ dialogTitle }}</h2>
+    <div class="dialog-content dialog-content-webstore p-16" fxLayout="column">
+        <div *ngFor="let store of storeList;">
+            <mat-checkbox 
+                [(ngModel)]="checkboxes[store.id]" 
+                (ngModelChange)="onSelectedChange(store.id)"
+                (click)="$event.stopPropagation()">
+                {{store.store}}
+            </mat-checkbox>        
+        </div>
+    </div>
+    <div class="mt-24 webstore-dialog-footer" fxLayout="row" fxLayoutAlign="end start">
+        <button mat-raised-button mat-button class="save-button mat-accent" (click)="onStoresSelected()">Add</button>
+        <button mat-button class="close" matDialogClose>CANCEL</button>
+    </div>
+</div>
+      
+      

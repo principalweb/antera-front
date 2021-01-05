@@ -1,0 +1,45 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+
+    <div class="info" fxFlex FlexLayout="column">
+
+        <div class="row-1" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <div class="subject text-truncate">
+                {{mail.subject | htmlToPlaintext | slice:0:72}}{{mail.subject.length > 72 ? '...' : ''}}
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="end center">
+
+                <mat-icon class="mr-4" *ngIf="mail.attachments && mail.attachments.length > 0">attachment</mat-icon>
+
+                <div class="h6">{{mail.date | date:'h:mm a dd MMM'}}</div>
+
+                <button mat-icon-button color="accent" (click)="saveEmail()">
+                    <mat-icon aria-label="Save email">archive</mat-icon>
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- <div class="row-2" fxLayout="row" fxLayoutAlign="start center">
+
+            <div fxLayout="column" fxLayoutAlign="start start">
+
+                <div class="subject text-truncate">
+                    {{mail.subject}}
+                </div> -->
+
+                <!-- <div class="message text-truncate">
+                    {{mail.body | htmlToPlaintext | slice:0:180}}{{mail.body.length > 180 ? '...' : ''}}
+                </div> -->
+                
+                <!-- <div [innerHTML]="shortDescription | safeHtml"></div> -->
+
+            <!-- </div>
+
+        </div> -->
+
+    </div>
+
+</div>

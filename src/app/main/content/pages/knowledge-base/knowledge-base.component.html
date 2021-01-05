@@ -1,0 +1,79 @@
+<div id="knowledgebase" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- HEADER -->
+    <div class="header mat-accent-bg p-16 p-sm-24" 
+        fxLayout="row" 
+        fxLayoutAlign="space-between center">
+
+        <div class="hero-text">
+            <h1>Knowledge Base</h1>
+            <h3>We want you to have all the information you need. Please Email support@anterasoftware.com to request additional videos.</h3>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="search-input-wrapper mx-12 m-md-0"
+                fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+            <label for="search" class="mr-8">
+                <mat-icon class="secondary-text">search</mat-icon>
+            </label>
+            <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+                <input matInput [formControl]="searchInput" id="search" placeholder="Search for articles">
+            </mat-form-field>
+            <button *ngIf="searchInput.value" mat-icon-button (click)="clearSearch()">
+                <mat-icon aria-label="Close">close</mat-icon>
+            </button>
+        </div>
+        <!-- / SEARCH -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <div fxLayout="row wrap" fxLayoutAlign="center">
+
+            <mat-nav-list class="articles-list mat-white-bg mat-elevation-z4" *ngFor="let category of filteredKnowledgeList; let i=index;">
+
+                <h3 mat-subheader [ngClass]="category.color">{{category.title}}</h3>
+
+                <ng-container *ngIf="expandedList[i] == true">
+                    <ng-container *ngFor="let article of category.featuredArticles">
+                        <div class="pr-16" fxLayout="row" fxLayoutAlign="space-between center">    
+                            <a mat-list-item
+                                (click)="readArticle(article)">
+                                <mat-icon class="mr-8">note</mat-icon>
+                                {{ article.title }}
+                            </a>
+                            <span class="font-weight-600">{{ article.duration }}</span>
+                        </div>
+                    </ng-container>
+                </ng-container>
+
+                <ng-container *ngIf="expandedList[i] == false">
+                    <ng-container *ngFor="let article of category.featuredArticles; let j=index;">
+                        <div class="pr-16" fxLayout="row" fxLayoutAlign="space-between center">
+                            <a mat-list-item *ngIf="j < 4"
+                                (click)="readArticle(article)">
+                                <mat-icon class="mr-8">note</mat-icon>
+                                {{ article.title }}
+                            </a>
+                            <span *ngIf="j < 4" class="font-weight-600">{{ article.duration }}</span>
+                        </div>
+
+                    </ng-container>
+                </ng-container>
+
+                <button mat-icon-button (click)="expandSection(i)" *ngIf="category.featuredArticles.length > 4">
+                    <mat-icon *ngIf="expandedList[i] == false" aria-label="See more videos">arrow_downward</mat-icon>
+                    <mat-icon *ngIf="expandedList[i] == true" aria-label="See more videos">arrow_upward</mat-icon>
+                </button>
+
+            </mat-nav-list>
+
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

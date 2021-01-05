@@ -1,0 +1,86 @@
+<div class="split-ship">
+  <div class="split-ship-title mat-accent-bg p-12" fxLayout fxLayoutAlign="space-between center">
+    <h3 mat-dialog-title class="white-fg">Split ship</h3>
+    <button mat-icon-button color="primary" (click)="onClose()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+  <div class="p-16 h-500" fusePerfectScrollbar>
+    <div>
+      <div class="text-center mat-headline">Split Ship Location</div>
+      <div>Add new Location</div>
+    </div>
+    <div class="border-top border-bottom py-8" fxLayout fxLayoutAlign="space-between center">
+      <u class="text-italic accent-fg">undefined</u>
+      <button mat-raised-button color="accent">upload List</button>
+    </div>
+    <div fxLayout fxLayout.lt-md="column" fxLayoutGap="15px" class="pt-12 pb-20">
+      <div fxFlex="60" fxFlex.lt-md="false" fxLayout="row wrap" fxLayoutAlign="space-between">
+        <form *ngFor="let field of widget.location">
+          <mat-form-field>
+            <input matInput [placeholder]="field.title" [required]="field.required">
+          </mat-form-field>
+        </form>
+      </div>
+      <div fxFlex="40" fxFlex.lt-md="false">
+        <div class="mb-4">Location For:</div>
+        <div>
+          <mat-radio-group>
+            <mat-radio-button
+              *ngFor="let field of widget.location_for; let i=index;"
+              [value]="i"
+              class="mr-16">
+              {{ field.title }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <div fxLayout fxLayout.lt-md="column" class="pt-20" fxLayoutGap="20px">
+      <div *ngFor="let type of widget.address_types" fxFlex fxFlex.lt-md="false">
+        <div> {{type.title}} </div>
+        <form *ngFor="let field of widget.address">
+          <mat-form-field fxFlex>
+            <input matInput [placeholder]="field.title">
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+    <div class="pb-24 border-bottom">
+      <button mat-raised-button color="accent">Add New Location</button>
+    </div>
+    <div>
+      <div class="py-8">Choose Location:</div>
+      <div>
+        <button mat-icon-button color="accent"><mat-icon>add_box</mat-icon></button>
+      </div>
+      <div fxLayout fxLayoutGap="15px" fxLayoutAlign="start center">
+        <form>
+          <mat-form-field fxFlex>
+            <input matInput placeholder="Quantity">
+          </mat-form-field>
+        </form>
+
+        <mat-form-field>
+          <mat-select placeholder="Location">
+            <mat-option *ngFor="let option of widget.location_options" [value]="option.value">
+              {{ option.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button color="accent"><mat-icon>indeterminate_check_box</mat-icon></button>
+
+        <form>
+          <mat-form-field fxFlex>
+            <input matInput placeholder="Notes">
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions class="py-20">
+    <button mat-raised-button color="accent" (click)="onClose()">Cancel</button>
+    <button mat-raised-button color="accent">Submit</button>
+  </mat-dialog-actions>
+</div>

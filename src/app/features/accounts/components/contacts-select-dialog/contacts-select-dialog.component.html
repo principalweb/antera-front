@@ -1,0 +1,23 @@
+<app-account-contact-lists
+    *ngIf="action == 'all'"
+    title="Select a contact"
+    [checkbox]="true"
+    (selectRow)="selectContact($event)">
+</app-account-contact-lists>
+<app-related-contact-lists
+    *ngIf="action == 'related'"
+    title="Select a contact"
+    [checkbox]="true"
+    (selectRow)="selectContact($event)">
+</app-related-contact-lists>
+<div class="p-16 pt-0" *ngIf="action=='related'">
+    <button mat-raised-button color="accent"
+            (click)="create()">Create</button>
+</div>
+<div class="p-16 pt-0" *ngIf="action=='all'">
+    <button mat-raised-button color="accent"
+            (click)="addContactsToAccount()">Add</button>
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

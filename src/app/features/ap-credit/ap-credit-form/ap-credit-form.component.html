@@ -1,0 +1,79 @@
+<div class="px-32 pt-20" fxLayout="row">
+  <form [formGroup]="dataForm" (submit)="save()">
+      <div class="px-16">
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+              <mat-form-field>
+                <input matInput placeholder="Vendor" [matAutocomplete]="auto" [formControl]='vendorName'>
+                <mat-error *ngIf="vendorName.hasError('incorrect')">
+                  Please select a valid vendor
+                </mat-error>
+              </mat-form-field>
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="vendorDisplay.bind(this)">
+                <mat-option *ngIf="vendorLoading" class="is-loading"><mat-spinner diameter="50"></mat-spinner></mat-option>
+                <ng-container *ngIf="!vendorLoading">
+                  <mat-option *ngFor="let vendor of filteredVendors" [value]="vendor">
+                    <span>{{ vendor.name }}</span>
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Reason for Credit" formControlName="advanceReasonId">
+                    <mat-option [value]="reason.id" *ngFor="let reason of creditReason">
+                      {{ reason.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Reference Number" formControlName="reference" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Notes" formControlName="notes" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Amount" formControlName="amount" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center" *ngIf="!itemCredit&&false">
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Category" formControlName="accountingId">
+                    <mat-option [value]="account.id" *ngFor="let account of financialAccounts.allAccounts">
+                      {{ account.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="External Ref" formControlName="externalRef" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+       <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center" *ngIf="!itemCredit">
+          <a class="link text-capitalize mr-8 mat-raised-button mat-accent" routerLink="/ap-credit">CANCEL</a>
+          <button type="submit" class="" mat-raised-button color="accent">SAVE</button>
+        </div>
+      </div>
+  </form>
+  <ap-credit-form-items *ngIf="dataForm.value.accountId!=''" [dataForm]="dataForm" fxFlex (totalAmount)='updateTotalAmount($event)'></ap-credit-form-items>
+</div>

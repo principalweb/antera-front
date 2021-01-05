@@ -1,0 +1,93 @@
+<div class="content kpi-executive p-28 pb-40" ngStyle.gt-lg="height: 100%;" fusePerfectScrollbar>
+  <div fxFill fxLayout="column">
+    <div class="kpi-executive-title mat-headline">Executive</div>
+    <div fxLayout="column">
+      <div *ngFor="let column of dashlets" fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayoutGap.lt-md="15px" fxLayout.lt-md="column">
+
+        <div
+          *ngFor="let dashlet of column"
+          class="m-10"
+          [fxShow]="dashlet.show"
+          [fxFlex]='dashlet.width.normal'
+          [fxFlex.lt-lg]='dashlet.width.responsive'
+          fxFlex.lt-md="false"
+          class="kpi-executive-panel mt-24">
+
+          <div class="mat-subheading-2 p-8 pl-24 m-0">
+            {{ dashlet.title }}
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="mb-32">
+            <div *ngIf="dashlet.chartType == 'gauge'" fxLayout fxLayoutAlign="center start">
+              <ngx-gauge
+                type="semi"
+                size="180"
+                [value]="dashlet.value"
+                thick="13"
+                cap="round"
+                [min]="0"
+                [max]="100">
+              </ngx-gauge>
+            </div>
+            <div *ngIf="dashlet.chartType != 'gauge'" [ngClass]="dashlet.chartType == 'map' ? 'mt-4' : 'mt-28'">
+              <div
+                *ngIf="dashlet.showNumber"
+                fxLayout
+                [fxLayoutAlign]="dashlet.align ? dashlet.align : 'center start'"
+                [ngClass]="{'pl-24' : dashlet.align }">
+                <div>
+                  <div class="mat-display-2 m-0">{{ dashlet.value }}<span *ngIf="dashlet.unit">{{ dashlet.unit }}</span></div>
+                  <div *ngIf="dashlet.subtitle" class="mat-caption hint-text">{{ dashlet.subtitle }}</div>
+                </div>
+                <div *ngIf="dashlet.income">
+                  <span class="fuse-dark-400-fg font-size-28">{{ dashlet.income.tag }}</span>
+                  <span>
+                    <mat-icon class="green-400-fg font-size-34">arrow_drop_up</mat-icon>
+                    <span class="green-400-fg font-size-28">{{ dashlet.income.value }}%</span>
+                  </span>
+                </div>
+              </div>
+              <div id="chart" *ngIf="dashlet.chartType" class="position-relative h-212 mb-16">
+
+                <div fxLayout fxLayoutAlign="center">
+                  <kpi-dashboard-map *ngIf="dashlet.chartType == 'map'"></kpi-dashboard-map>
+                </div>
+
+                <ngx-charts-pie-chart
+                    *ngIf="dashlet.chartType == 'pie'"
+                    [view]="dashlet.view"
+                    [scheme]="dashlet.scheme"
+                    [results]="dashlet.datas"
+                    [legend]="dashlet.legend"
+                    [legendTitle]="dashlet.title"
+                    [explodeSlices]="dashlet.explodeSlices"
+                    [labels]="dashlet.labels"
+                    [doughnut]="dashlet.doughnut"
+                    [gradient]="dashlet.gradient"
+                    [arcWidth]="dashlet.arcWidth"
+                    (select)="dashlet.onSelect($event)">
+                </ngx-charts-pie-chart>
+
+                <div *ngIf="dashlet.chartId" id="chart_site_visitors_overview-legend" class="noselect"></div>
+
+                <canvas
+                    *ngIf="dashlet.chartType == 'horizontalBar' || dashlet.chartType == 'line'"
+                    baseChart
+                    [id]="dashlet.chartId"
+                    [datasets]="dashlet.datasets"
+                    [labels]="dashlet.labels"
+                    [colors]="dashlet.colors"
+                    [options]="dashlet.options"
+                    [chartType]="dashlet.chartType">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<canvas #charts></canvas>

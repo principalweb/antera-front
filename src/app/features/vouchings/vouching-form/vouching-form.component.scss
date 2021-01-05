@@ -1,0 +1,36 @@
+.mat-form-field {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+.width-60 {
+  width: 60%;
+}
+
+.push-right {
+  margin-right: auto;
+  color: blue;
+}
+
+.mat-sidenav {
+  width: 40%;
+}
+
+.mat-sidenav-content {
+  min-height: 480px;
+  .mat-form {
+    width: 30%;
+  }
+  form {
+    width: 30%;
+  }
+  mat-accordion {
+    width: 70%;
+  }
+  mat-accordion-full {
+    width: 100% !important;
+  }
+}
+.delete-button {
+  margin-left: 35px;
+}

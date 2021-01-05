@@ -1,0 +1,36 @@
+<div class="px-32">
+  <div class="mx-400 mt-40 mb-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <span class="mat-title mb-0">SanMar USA Credential</span>
+  </div>
+  <form [formGroup]="credsForm" (submit)="cfSubmit()">
+      <div class="px-16">
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Account Number" formControlName="extra" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="User Name" formControlName="username" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+            <div class="form-group">
+                <mat-form-field>
+                    <input type="password" matInput placeholder="Password" formControlName="pass" class="form-control">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+          <mat-slide-toggle formControlName="enableIncentive">Enable Incentive Price</mat-slide-toggle>
+        </div>
+        <div class="mx-400 mt-16 mb-16" fxLayout="row" fxLayoutAlign="start center">
+          <button type="submit" class="ml-96" mat-raised-button color="accent">SAVE</button>
+        </div>
+      </div>
+  </form>
+</div>

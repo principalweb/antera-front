@@ -1,0 +1,132 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm">
+
+  <!-- Checkbox Column -->
+  <ng-container cdkColumnDef="checkbox">
+    <mat-header-cell *cdkHeaderCellDef>
+        <mat-checkbox (change)="toggleAll($event)"
+                    [checked]="selection.checkedAll | async"
+                    [indeterminate]="selection.checkedAny | async">
+        </mat-checkbox>
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let row">
+        <mat-checkbox [checked]="checkboxes[row.id]"
+                      (change)="onSelectedChange(row.id)"
+                      (click)="$event.stopPropagation()">
+        </mat-checkbox>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="name">
+      <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+          <span mat-sort-header>Name</span>
+          <input class="form-control" formControlName="name" (keyup.enter)="filterDecoTypes()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" matTooltip="{{row.name}}">
+          <p class="text text-truncate fong-weight-600">
+              {{row.name}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="detailName">
+    <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+        <span mat-sort-header>Detail</span>
+        <input class="form-control" formControlName="detailName" (keyup.enter)="filterDecoTypes()">
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let row">
+        <p class="text text-truncate fong-weight-600">
+            {{row.detailName}}
+        </p>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="active">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+          <span mat-sort-header>Active</span>
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row">
+        <button mat-icon-button *ngIf="row.active" (click)="updateActive(row, $event)">
+            <mat-icon class="active-icon green-500-bg white-fg s-24">check_box</mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="!row.active" (click)="updateActive(row, $event)">
+            <mat-icon class="active-icon orange-500-fg s-32">check_box_outline_blank</mat-icon>
+        </button>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="modifiedByName">
+      <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+          <span mat-sort-header>Updated By</span>
+          <input class="form-control" formControlName="modifiedByName" (keyup.enter)="filterDecoTypes()">
+      </mat-header-cell>
+      <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+          <p class="text text-truncate">
+              {{row.modifiedByName}}
+          </p>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="createdByName">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+        <span mat-sort-header>Created By</span>
+        <input class="form-control" formControlName="createdByName" (keyup.enter)="filterDecoTypes()">
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+        <p class="text text-truncate">
+            {{row.createdByName}}
+        </p>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Date Modified Column -->
+  <ng-container cdkColumnDef="dateModified">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+        <span mat-sort-header>Date Modified</span>
+        <input class="form-control" formControlName="dateModified" (keyup.enter)="filterDecoTypes()">
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+        <p class="text text-truncate">{{row.dateModified | date}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Date Modified Column -->
+  <ng-container cdkColumnDef="dateEntered">
+    <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+        <span mat-sort-header>Date Created</span>
+        <input class="form-control" formControlName="dateEntered" (keyup.enter)="filterDecoTypes()">
+    </mat-header-cell>
+    <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-lg>
+        <p class="text text-truncate">{{row.dateEntered | date}}</p>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+  <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+          class="deco-type-row" matRipple
+          (click)="editDecoType(row.id)"
+          [@animate]="{value:'*',params:{y:'100%'}}">
+  </mat-row>
+</mat-table>
+
+<div class="h-64 text-center p-20" *ngIf="dataSource.total == 0">
+  You don't have decoration types in this module.
+</div>
+
+<mat-paginator #paginator
+            [length]="dataSource.total"
+            (page)="paginate($event)"
+            [pageIndex]="0"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

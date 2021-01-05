@@ -1,0 +1,45 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>{{dialogTitle}}</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner> 
+    </div>
+
+    <mat-dialog-content class="p-24 m-0">
+        <form [formGroup]="dataForm" (submit)="save()" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Name" formControlName="name" class="form-control">
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="URL" formControlName="url" class="form-control">
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-slide-toggle formControlName="enabled">Enabled</mat-slide-toggle>
+            </div>
+        </form>
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+            <button mat-raised-button
+                    (click)="save()"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

@@ -1,0 +1,129 @@
+<div id="academy-courses" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- HEADER -->
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+
+        <div class="hero-text">
+            <h1>WELCOME TO TRAINING VIDEOS</h1>
+            <h3>
+                Please select a training session below. In the event you do not see a session you would like, please send a request to <a href="mailto:support@anterasoftware.com">support@anterasoftware.com</a>.
+            </h3>
+        </div>
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <div fxLayout="column" fxLayoutAlign="center">
+
+            <div class="filters" fxLayout="column" fxLayoutAlign="center center"
+                 fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between end">
+
+                        <button mat-raised-button color="accent"
+                                class="text-capitalize mr-8"
+                                fxHide fxShow.gt-md
+                                (click)="syncTraining()">
+                            <mat-icon>sync</mat-icon> UPDATE
+                        </button>
+
+            </div>
+
+
+            <div class="filters" fxLayout="column" fxLayoutAlign="center center"
+                 fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+                <mat-form-field class="course-search">
+
+                    <input matInput placeholder="Search for a course" [(ngModel)]="searchTerm"
+                           (input)="filterCoursesByTerm()">
+
+                </mat-form-field>
+
+                <mat-form-field class="category-selector">
+
+                    <mat-select placeholder="Select Category" [(ngModel)]="currentCategory"
+                                (selectionChange)="filterCoursesByCategory()">
+                        <mat-option [value]="'all'">
+                            All
+                        </mat-option>
+                        <mat-option *ngFor="let category of categories" [value]="category.value">
+                            {{ category.label }}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+
+            </div>
+
+            <div class="courses" fxLayout="row wrap" fxLayoutAlign="center">
+
+                <div class="course" *ngFor="let course of filteredCourses" fxFlex="100" fxFlex.gt-xs="50"
+                     fxFlex.gt-sm="20" [ngClass]="course.category">
+
+                    <div class="course-content" fxLayout="column">
+
+                        <div class="header" fxLayout="row" fxLayoutAlign="center center"
+                             [ngClass]="course.category.replace(' ', '-') + '-bg'">
+
+                            <div class="category" fxFlex>
+                                {{course.category}}
+                            </div>
+
+                            <div class="length" fxLayout="row" fxLayoutAlign="center center" *ngIf="checkVideoUrl(course.url)">
+                                <mat-icon class="length-icon s-20">access_time</mat-icon>
+                                <div class="min">{{course.duration}} min</div>
+                            </div>
+
+                        </div>
+
+                        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+                            <div class="h1"><p>{{course.title}}</p></div>
+                            <div class="updated">Updated {{course.dateModified}}</div>
+                        </div>
+
+                        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+                            <!--button mat-button color="accent"
+                                    [routerLink]="'/apps/academy/courses/' + course.id + '/' + course.slug">
+                                START
+                            </button-->
+                            <!--button mat-button color="accent" (click)="watchTraining(course)">
+                                START
+                            </button-->
+							<button mat-raised-button color="accent"
+									class="text-capitalize mr-8"
+									fxHide fxShow.gt-md
+									(click)="watchTraining(course)" *ngIf="checkVideoUrl(course.url)">
+								<mat-icon>play_circle_outline</mat-icon> START
+							</button>
+							<button mat-raised-button color="accent"
+									class="text-capitalize mr-8"
+									fxHide fxShow.gt-md
+									(click)="watchTraining(course)" *ngIf="!checkVideoUrl(course.url)">
+								<mat-icon>picture_as_pdf</mat-icon> READ
+							</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="no-courses" *ngIf="filteredCourses.length === 0">
+                    No courses found!
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

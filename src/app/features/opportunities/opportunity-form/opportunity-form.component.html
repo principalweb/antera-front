@@ -1,0 +1,408 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div id="opportunity" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+        <!-- CENTER -->
+        <div class="center">
+
+            <div class="page-layout simple right-sidenav" fusePerfectScrollbar>
+
+                <mat-sidenav-container>
+
+                    <!-- CENTER -->
+                    <div class="center" fusePerfectScrollbar>
+
+                        <!-- CONTENT CARD -->
+                        <div class="content-card mat-white-bg">
+
+                            <!-- CONTENT -->
+                            <div class="content content-opportunity">
+
+                                <form *ngIf="opportunityForm" name="opportunityForm" [formGroup]="opportunityForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+                                    <mat-tab-group class="test5">
+
+                                        <mat-tab label="General Info" class="test1">
+                                            <div class="tab-content p-24" fxLayout="column">
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('name', fields)" fxFlex>
+                                                        <input matInput
+                                                            name="name"
+                                                            formControlName="name"
+                                                            placeholder="{{fieldLabel('name', fields)}}" required>
+                                                        <app-error *ngIf="requiredField('name',fields)" [group]="opportunityForm" field="name" label="{{fieldLabel('name', fields)}}"></app-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('salesRep', fields)"  fxFlex>
+                                                        <input type="hidden" formControlName="salesRepId" required/>
+                                                        <input type="text" matInput
+                                                                placeholder="{{fieldLabel('salesRep', fields)}}"
+                                                                formControlName="salesRep"
+                                                                [matAutocomplete]="autoAssignee" required/>
+                                                        <mat-autocomplete #autoAssignee="matAutocomplete"
+                                                                            [displayWith]="displayName"
+                                                                            (optionSelected)="selectAssignee($event)">
+                                                            <mat-option [value]="salesRep"
+                                                                        *ngFor="let salesRep of filteredAssignees | async">
+                                                                {{ salesRep.name }}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+														<button *ngIf="opportunityForm?.get('salesRepId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAssignee()">
+														  <mat-icon>close</mat-icon>
+														</button>
+
+                                                        <app-error *ngIf="requiredField('salesRep',fields)" [group]="opportunityForm" field="salesRep" label="{{fieldLabel('salesRep', fields)}}"></app-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('assignedSourcingRep', fields)"  fxFlex>
+                                                            <input type="hidden" formControlName="assignedSourcingRepId" />
+                                                            <input type="text" matInput
+                                                                    placeholder="{{fieldLabel('assignedSourcingRep', fields)}}"
+                                                                    formControlName="assignedSourcingRep"
+                                                                    [matAutocomplete]="autoAssignSourcing" />
+                                                            <mat-autocomplete #autoAssignSourcing="matAutocomplete"
+                                                                                [displayWith]="displayName"
+                                                                                (optionSelected)="selectAssignedSourcing($event)">
+                                                                <mat-option [value]="salesRep"
+                                                                            *ngFor="let salesRep of filteredSourceAssignees | async">
+                                                                    {{ salesRep.name }}
+                                                                </mat-option>
+                                                            </mat-autocomplete>
+   															<button *ngIf="opportunityForm?.get('assignedSourcingRepId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAssignedSourcing()">
+															  <mat-icon>close</mat-icon>
+															</button>
+                                                            <app-error *ngIf="requiredField('assignedSourcingRep',fields)" [group]="opportunityForm" field="assignedSourcingRep" label="{{fieldLabel('assignedSourcingRep', fields)}}"></app-error>
+                                                        </mat-form-field>
+
+
+
+
+
+                                                </div>
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('opportunityType', fields)"  fxFlex>
+                                                        <mat-select placeholder="{{fieldLabel('opportunityType', fields)}}" formControlName="opportunityType" required>
+                                                            <mat-option [value]="type.value" *ngFor="let type of businessTypes">
+                                                                {{ type.label }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('opportunityType',fields)" [group]="opportunityForm" field="opportunityType" label="{{fieldLabel('opportunityType', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                    <mat-form-field *ngIf="visibleField('amount', fields)"  fxFlex>
+                                                        <input matInput
+                                                            name="amount"
+                                                            formControlName="amount"
+                                                            placeholder="{{fieldLabel('amount', fields)}}" required>
+                                                        <app-error *ngIf="requiredField('amount',fields)" [group]="opportunityForm" field="amount" label="{{fieldLabel('amount', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('salesStage', fields)"  fxFlex>
+                                                        <mat-select placeholder="{{fieldLabel('salesStage', fields)}}"
+                                                                    formControlName="salesStage"
+                                                                    (selectionChange)="changeProbability($event)" required>
+                                                            <mat-option [value]="st.stageKey" *ngFor="let st of salesStages">
+                                                                {{ st.stage }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('salesStage',fields)" [group]="opportunityForm" field="salesStage" label="{{fieldLabel('salesStage', fields)}}"></app-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('probability', fields)"  fxFlex>
+                                                        <input matInput
+                                                            name="probability"
+                                                            formControlName="probability"
+                                                            placeholder="{{fieldLabel('probability', fields)}}" required>
+                                                        <app-error *ngIf="requiredField('probability',fields)" [group]="opportunityForm" field="probability" label="{{fieldLabel('probability', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('dateClosed', fields)"  fxFlex>
+                                                        <input matInput [matDatepicker]="closeDatePicker" (focus)="closeDatePicker.open()" [matDatepicker]="closeDatePicker" [(ngModel)]="dateClosed" [ngModelOptions]="{standalone: true}" placeholder="{{fieldLabel('dateClosed', fields)}}{{requiredField('dateClosed',this.fields) ? ' *' : ''}}">
+                                                        <mat-datepicker-toggle matSuffix [for]="closeDatePicker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #closeDatePicker></mat-datepicker>
+
+                                                    </mat-form-field>
+                                                    <mat-form-field *ngIf="visibleField('eventDate', fields)"  fxFlex>
+                                                        <input matInput [matDatepicker]="eventDatePicker" (focus)="eventDatePicker.open()" [matDatepicker]="eventDatePicker" [(ngModel)]="eventDate" [ngModelOptions]="{standalone: true}" placeholder="{{fieldLabel('eventDate', fields)}}{{requiredField('eventDate',this.fields) ? ' *' : ''}}">
+                                                        <mat-datepicker-toggle matSuffix [for]="eventDatePicker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #eventDatePicker></mat-datepicker>
+
+                                                    </mat-form-field>
+                                                    <mat-form-field *ngIf="visibleField('inhandsDate', fields)"  fxFlex>
+                                                        <input matInput [matDatepicker]="inHandsDatePicker" (focus)="inHandsDatePicker.open()" [matDatepicker]="inHandsDatePicker" [(ngModel)]="inhandsDate" [ngModelOptions]="{standalone: true}" placeholder="{{fieldLabel('inhandsDate', fields)}}{{requiredField('eventDate',this.fields) ? ' *' : ''}}">
+                                                        <mat-datepicker-toggle matSuffix [for]="inHandsDatePicker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #inHandsDatePicker></mat-datepicker>
+
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-icon class="mt-20" class="icon-hint" *ngIf="opportunityForm?.get('accountId')?.value" (click)="redirectAccount(opportunityForm?.get('accountId')?.value)">link</mat-icon>
+                                                     <mat-form-field  fxFlex *ngIf="customerType != 'New'">
+                                                        <input type="hidden" formControlName="accountId"/>
+                                                        <input type="text" id="account_input" matInput
+                                                            placeholder="{{fieldLabel('accountName', fields)}}"
+                                                            [matAutocomplete]="autoAccount"
+                                                            formControlName="accountName">
+                                                        <mat-autocomplete #autoAccount="matAutocomplete"
+                                                                            (optionSelected)="selectAccount($event)">
+                                                            <mat-option
+                                                                *ngFor="let acc of filteredAccounts | async"
+                                                                [value]="acc"
+                                                                >{{ acc.name }}</mat-option>
+                                                                <mat-option [value]="{id: 'add'}">
+                                                                    <mat-icon>add</mat-icon> Create New Account
+                                                                </mat-option>
+                                                        </mat-autocomplete>
+						                                <button *ngIf="opportunityForm?.get('accountId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearAccount()">
+						                                  <mat-icon>close</mat-icon>
+						                                </button>
+                                                        <!--app-error *ngIf="requiredField('accountName',fields)" [group]="opportunityForm" field="accountName" label="{{fieldLabel('accountName', fields)}}"></app-error-->
+                                                    </mat-form-field>
+
+                                                    <mat-form-field  fxFlex *ngIf="customerType == 'New'">
+                                                        <input type="text" matInput
+                                                               formControlName="accountNameExtra"
+                                                               placeholder="{{fieldLabel('accountNameExtra', fields)}}">
+                                                        <!--app-error *ngIf="requiredField('accountNameExtra',fields)" [group]="opportunityForm" field="accountNameExtra" label="{{fieldLabel('accountNameExtra', fields)}}"></app-error-->
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('typeAcct', fields)"  fxFlex>
+                                                        <mat-select [(ngModel)]="customerType"
+                                                                    (selectionChange)="changeCustomerType($event)"
+                                                                    placeholder="{{fieldLabel('typeAcct', fields)}}"
+                                                                    formControlName="typeAcct"
+                                                                    required>
+                                                            <mat-option value="New">
+                                                                New Customer
+                                                            </mat-option>
+                                                            <mat-option value="Existing">
+                                                                Existing Customer
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('typeAcct',fields)" [group]="opportunityForm" field="typeAcct" label="{{fieldLabel('typeAcct', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-icon class="mt-20" class="icon-hint" *ngIf="opportunityForm?.get('contactId')?.value" (click)="redirectContact(opportunityForm?.get('contactId')?.value)">link</mat-icon>
+                                                    <mat-form-field *ngIf="visibleField('contactName', fields)"  fxFlex>
+                                                        <input type="hidden"
+                                                               formControlName="contactId" required/>
+                                                        <input type="text" matInput
+                                                                placeholder="{{fieldLabel('contactName', fields)}}"
+                                                                [matAutocomplete]="autoContact"
+                                                                formControlName="contactName" required>
+                                                        <mat-autocomplete #autoContact="matAutocomplete"
+                                                                            (optionSelected)="selectContact($event)">
+                                                            <mat-option
+                                                                *ngFor="let c of filteredContacts | async"
+                                                                [value]="c"
+                                                                >{{ c.name }}</mat-option>
+                                                                <mat-option [value]="{id: 'add'}">
+                                                                    <mat-icon>add</mat-icon> Create New Contact
+                                                                </mat-option>
+                                                        </mat-autocomplete>
+						                                <button *ngIf="opportunityForm?.get('contactId')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearContact()">
+						                                  <mat-icon>close</mat-icon>
+                                                        </button>
+                                                        <!--app-error *ngIf="requiredField('contactName',fields)" [group]="opportunityForm" field="contactName" label="{{fieldLabel('contactName', fields)}}"></app-error-->
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('contactEmail', fields)"  fxFlex>
+                                                        <input type="text" matInput
+                                                               formControlName="contactEmail"
+                                                               placeholder="{{fieldLabel('contactEmail', fields)}}"
+                                                               >
+														<ng-container *ngIf="isEmailExist">
+															<mat-error>
+																Email already exists
+															</mat-error>
+														</ng-container>
+                                                        <app-error *ngIf="requiredField('contactEmail',fields)" [group]="opportunityForm" field="contactEmail" label="{{fieldLabel('contactEmail', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('leadSource', fields)"  fxFlex>
+                                                        <mat-select
+                                                            placeholder="{{fieldLabel('leadSource', fields)}}"
+                                                            formControlName="leadSource"
+                                                            required>
+                                                            <mat-option [value]="leadSource.value" *ngFor="let leadSource of leadSources">
+                                                                {{ leadSource.label }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('leadSource',fields)" [group]="opportunityForm" field="leadSource" label="{{fieldLabel('leadSource', fields)}}"></app-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('campaignIdExtra', fields)"  fxFlex>
+                                                        <mat-select
+                                                            placeholder="{{fieldLabel('campaignIdExtra', fields)}}"
+                                                            formControlName="campaignIdExtra">
+                                                            <mat-option [value]="campaign.value" *ngFor="let campaign of campaigns">
+                                                                {{ campaign.label }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('campaignIdExtra',fields)" [group]="opportunityForm" field="campaignIdExtra" label="{{fieldLabel('campaignIdExtra', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('inventory', fields)"  fxFlex>
+                                                        <mat-select
+                                                            placeholder="{{fieldLabel('inventory', fields)}}"
+                                                            formControlName="inventory">
+                                                            <mat-option [value]="inventory.value" *ngFor="let inventory of inventories">
+                                                                {{ inventory.label }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('inventory',fields)" [group]="opportunityForm" field="inventory" label="{{fieldLabel('inventory', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                    <mat-form-field *ngIf="visibleField('opportunityNo', fields)"  fxFlex>
+                                                        <input type="text" matInput
+                                                                formControlName="opportunityNo"
+                                                                placeholder="{{fieldLabel('opportunityNo', fields)}}"
+                                                                readonly>
+                                                        <app-error *ngIf="requiredField('opportunityNo',fields)" [group]="opportunityForm" field="opportunityNo" label="{{fieldLabel('opportunityNo', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('description', fields)"  fxFlex>
+                                                        <textarea name="description" formControlName="description" placeholder="{{fieldLabel('description', fields)}}" matInput type="text" rows="4"></textarea>
+                                                        <app-error *ngIf="requiredField('description',fields)" [group]="opportunityForm" field="description" label="{{fieldLabel('description', fields)}}"></app-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('reasonsForLoss', fields) && opportunity.salesStage == 'ClosedLost'" fxFlex>
+                                                        <mat-select
+                                                            placeholder="{{fieldLabel('reasonsForLoss', fields)}}"
+                                                            formControlName="reasonsForLoss">
+                                                            <mat-option [value]="reasonForLoss.value" *ngFor="let reasonForLoss of reasonForLosses">
+                                                                {{ reasonForLoss.label }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                        <app-error *ngIf="requiredField('reasonsForLoss',fields)" [group]="opportunityForm" field="reasonsForLoss" label="{{fieldLabel('reasonsForLoss', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                            </div>
+                                        </mat-tab>
+
+                                        <mat-tab label="Additional Info">
+                                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('nextStep', fields)"  fxFlex>
+                                                        <input matInput
+                                                            name="nextStep"
+                                                            formControlName="nextStep"
+                                                            placeholder="{{fieldLabel('nextStep', fields)}}">
+                                                    </mat-form-field>
+                                                    <app-error *ngIf="requiredField('nextStep',fields)" [group]="opportunityForm" field="nextStep" label="{{fieldLabel('nextStep', fields)}}"></app-error>
+                                                    <div fxFlex></div>
+                                                </div>
+
+                                                <div class="py-16" fxLayout="row">
+                                                    <mat-form-field *ngIf="visibleField('budget', fields)"  fxFlex>
+                                                        <input matInput
+                                                            name="budget"
+                                                            formControlName="budget"
+                                                            placeholder="{{fieldLabel('budget', fields)}}">
+                                                        <app-error *ngIf="requiredField('budget',fields)" [group]="opportunityForm" field="budget" label="{{fieldLabel('budget', fields)}}"></app-error>
+                                                    </mat-form-field>
+
+                                                    <mat-form-field *ngIf="visibleField('location', fields)"  fxFlex>
+                                                        <input matInput
+                                                            name="location"
+                                                            formControlName="location"
+                                                            placeholder="{{fieldLabel('location', fields)}}">
+                                                        <app-error *ngIf="requiredField('location',fields)" [group]="opportunityForm" field="location" label="{{fieldLabel('location', fields)}}"></app-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </mat-tab>
+                                        <ng-container *ngIf="opportunity.accountId && opportunity.opportunityNo">
+                                            <mat-tab label="Files">
+                                                <app-aws-file-manager class="w-100-p" [recordId]="opportunity.opportunityNo" [accountId]="opportunity.accountId"
+                                                    [awsFileManagerType]="awsFileManagerType"></app-aws-file-manager>
+                                            </mat-tab>
+                                        </ng-container>
+										
+                                    </mat-tab-group>
+                                </form>
+
+                            </div>
+                            <!-- / CONTENT -->
+
+                        </div>
+                        <!-- / CONTENT CARD -->
+                    </div>
+                    <!-- / CENTER -->
+
+                    <!-- SIDENAV -->
+                    <!-- <mat-sidenav *ngIf="action ==='edit'"
+                                 class="sidenav" align="end"
+                                 opened="true" mode="side"
+                                 fuseMatSidenavHelper="simple-right-sidenav"
+                                 mat-is-locked-open="gt-md">
+                        <div class="sidenav-content p-24">
+                            <opportunities-main-sidenav></opportunities-main-sidenav>
+                        </div>
+                    </mat-sidenav> -->
+                    <!-- / SIDENAV -->
+
+                </mat-sidenav-container>
+
+            </div>
+        </div>
+        <!-- / CENTER -->
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">
+            SAVE
+        </button>
+        <ng-container *ngIf="opportunity.id">
+            <ng-container *checkPermission="[opportunity.id, 'Opportunity']; requiredPermission 'allowEdit'">
+                <button *ngIf="action ==='edit'"
+                        mat-raised-button
+                        (click)="update()"
+                        class="save-button mat-accent"
+                        aria-label="SAVE">
+                    SAVE
+                </button>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="opportunity.id">
+            <ng-container *ngIf="permissionsEnabled">
+                <permission-entity-group-dialog *checkPermission="[opportunity.id, 'Opportunity']; requiredPermission 'allowPermission'"
+                  [entityId]="opportunity.id" [entityType]="'Opportunity'">
+                </permission-entity-group-dialog>
+            </ng-container>
+        </ng-container>
+
+    </div>
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+
+</div>

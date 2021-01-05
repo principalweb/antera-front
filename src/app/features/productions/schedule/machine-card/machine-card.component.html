@@ -1,0 +1,39 @@
+<div class="list-card-details"
+    cdkDropList
+    (cdkDropListDropped)="dropMachine($event)"
+    [cdkDropListData]="equipment.jobs"
+    (click)="toggle()"
+    >
+    <div class="list-card-name condensed" >
+        {{ equipment.name }}
+    </div>
+    <div class="list-card-badges">
+        <span class="badge">
+            Jobs: {{ equipment.jobs.length }}
+        </span>
+        <span class="badge">
+            Reserved hours: {{ equipment.reservedHours }}
+        </span>
+    </div>
+    <ng-container *ngIf="showJobs">
+        <div class="example-container example-list">
+            <div class="example-box" *ngFor="let job of equipment.jobs" cdkDrag [cdkDragData]="job">
+                {{ job.batchMaster ? 'Batch job' : job.orderName }} : {{ job.variationName }} : {{ job.decoTypeName }}
+            </div>
+        </div>
+    </ng-container>
+    <mat-card>
+        <mat-card-content>
+        Capacity
+        <section>
+            <mat-progress-bar
+                [mode]="'determinate'"
+                [color]="capColor"
+                [value]="calcHours(equipment)"
+            >
+
+            </mat-progress-bar>
+        </section>
+        </mat-card-content>
+    </mat-card>
+</div>

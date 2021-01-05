@@ -1,0 +1,29 @@
+<div class="content-card">
+  <mat-tab-group class="admin-settings-tab-group-1">
+    <mat-tab label="Antera Login System">
+      <ng-template matTabContent>
+        <app-cognito></app-cognito>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="QBO">
+      <ng-template matTabContent>
+        <app-qbo></app-qbo>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="XERO">
+      <ng-template matTabContent>
+        <xero></xero>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="PromoStandards">
+      <ng-template matTabContent>
+        <app-promo></app-promo>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Antera Product Repositories">
+      <ng-template matTabContent>
+        <antera-product-repo></antera-product-repo>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

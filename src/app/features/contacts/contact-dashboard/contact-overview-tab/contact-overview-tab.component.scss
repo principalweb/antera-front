@@ -1,0 +1,160 @@
+@import 'src/@fuse/scss/fuse.scss';
+
+#contact-overview-tab {
+    $icon-size: 16px;
+    overflow-x: hidden;
+    
+    width: 100%;
+    position: absolute;
+
+    .mat-raised-button .mat-icon {
+        color: white;
+    }
+
+    .contact-info {
+        display: block !important
+    }
+
+    .mat-card {
+        position: relative;
+    }
+
+    .refresh-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .mat-icon-button {
+        margin-top: -6px;
+    }
+
+    .accent-text {
+        color: map-get($mat-fuseaccent, 500);
+    }
+
+    .blue {
+        color: map-get($mat-light-blue , 500);
+    }
+
+    .red {
+        color: map-get($mat-red, 500);
+    }
+
+    .amber {
+        color: map-get($mat-amber, 500);
+    }
+
+    .purple {
+        color: map-get($mat-deep-purple, 500);
+    }
+
+    .teal {
+        color: map-get($mat-teal, 500);
+    }
+
+    .green {
+        color: map-get($mat-green, 500);
+    }
+
+    .card-footer {
+        text-align: left;
+        margin-bottom: 0;
+        background-color: #fafafa;
+        border-top: 1px solid #ccc;
+        margin: -8px;
+        padding: 8px;
+    }
+
+    .card-6 {
+        text-align: center;
+        padding: 32px 8px 8px;
+        cursor: pointer;
+    }
+
+    .stats {
+        .chart-container {
+            height: 60px;
+            margin: -12px;
+            margin-bottom: 0px;
+        }
+    }
+
+    .mat-toolbar {
+        background: white;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+
+        .mat-form-field {
+            .mat-form-field-infix {
+                border: 0;
+            }
+        
+            .mat-form-field-wrapper {
+                padding: 0;
+            }
+        
+            .mat-form-field-underline {
+                display: none;
+            }
+        }
+    }
+
+    .mw-170 {
+        min-width: 170px;
+    }
+
+    .member-row {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .table-container {
+        position: relative;
+    }
+
+    .mx--8 {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    .btns-menu {
+        margin: 16px;
+
+        @include media-breakpoint('xs') {
+            height: 0;
+            overflow: hidden;
+            margin: 0;
+
+            .mat-raised-button {
+                width: 100%;
+            }
+
+            &.opened {
+                height: auto;
+                display: block;
+                margin: 16px 16px 0;
+            }
+        }
+    }
+    
+    @include media-breakpoint('gt-xs') {
+        .mobile-menu {
+            display: none !important;
+        }
+    }
+
+    @media screen and (max-width: 400px) {
+       .email-col {
+           display: none !important;
+       } 
+    }
+    .mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar{
+        height:30px;
+    }
+
+    .mat-list-base .mat-subheader {
+      padding-left: 0px;
+      color: #000000;
+    }
+}

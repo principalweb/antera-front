@@ -1,0 +1,328 @@
+<form [formGroup]="projectForm" id="project-details-design" class="mat-white-bg mat-elevation-z2 p-24 m-12" fxLayout="column"
+    *ngIf="project && projectForm">
+    <mat-toolbar class="mb-20" fxLayout fxLayoutAlign="start center">
+        <div class="mr-8">
+            <div class="p-4">Project : {{ project.name }} </div>
+        </div>
+        <ng-container *ngIf="action === 'edit'">
+			<button mat-raised-button color="accent"
+					class="text-capitalize mr-8"
+					fxHide fxShow.gt-md
+					(click)="toggleEdit()" *ngIf="!edit">
+				<mat-icon>edit</mat-icon> Edit
+			</button>
+			<button mat-raised-button color="accent"
+					class="text-capitalize mr-8"
+					fxHide fxShow.gt-md
+					(click)="convert()" *ngIf="!edit && (project.converted != '1')">
+				<mat-icon>transform</mat-icon> Convert
+			</button>
+
+            <ng-container *ngIf="edit">
+			<button mat-raised-button color="accent"
+					class="text-capitalize mr-8"
+					fxHide fxShow.gt-md
+					(click)="saveInfo()">
+				<mat-icon>save</mat-icon> Save
+			</button>
+			<button mat-raised-button color="accent"
+					class="text-capitalize mr-8"
+					fxHide fxShow.gt-md
+					(click)="toggleEdit()">
+				<mat-icon>close</mat-icon> Close
+			</button>
+            </ng-container>
+        </ng-container>
+    </mat-toolbar>
+
+    <div fxLayout="column" class="project-modal">
+        <div fxLayout="row" fxLayoutAlign="start stretch" class="mb-20" fxLayout.lt-md="column">
+            <div class="mr-16" fxFlex fxFlex.lt-md="false" ngClass.lt-md="{'mr-16': false}">
+                <div class="section">
+                    <div fxLayout="column" *ngIf="!edit">
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('name', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('name', fields)}} :</strong> {{ project.name }}</div>
+                        </div>
+
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('accountName', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('accountName', fields)}} :</strong> {{ project.accountName }}</div>
+                        </div>
+
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('assignedUserName', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('assignedUserName', fields)}} :</strong> {{ project.assignedUserName }}</div>
+                        </div>
+
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('accountManagerName', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('accountManagerName', fields)}} :</strong> {{ project.accountManagerName }}</div>
+                        </div>
+
+
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('estimatedStartDate', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('estimatedStartDate', fields)}} :</strong> {{ project.estimatedStartDate | date }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('estimatedEndDate', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('estimatedEndDate', fields)}} :</strong> {{ project.estimatedEndDate | date }}</div>
+                        </div>
+
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('dueDate', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('dueDate', fields)}} :</strong> {{ project.dueDate | date }}</div>
+                        </div>
+
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('status', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('status', fields)}} :</strong> {{ project.status }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('priority', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('priority', fields)}} :</strong> {{ project.priority }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra1', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra1', fields)}} :</strong> {{ project.textFieldExtra1 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra2', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra2', fields)}} :</strong> {{ project.textFieldExtra2 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra3', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra3', fields)}} :</strong> {{ project.textFieldExtra3 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra4', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra4', fields)}} :</strong> {{ project.textFieldExtra4 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra5', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra5', fields)}} :</strong> {{ project.textFieldExtra5 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra6', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra6', fields)}} :</strong> {{ project.textFieldExtra6 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra7', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra7', fields)}} :</strong> {{ project.textFieldExtra7 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra8', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra8', fields)}} :</strong> {{ project.textFieldExtra8 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra9', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra9', fields)}} :</strong> {{ project.textFieldExtra9 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('textFieldExtra10', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('textFieldExtra10', fields)}} :</strong> {{ project.textFieldExtra10 }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column" *ngIf="visibleField('description', fields)">
+                            <div class="p-4"> <strong>{{fieldLabel('description', fields)}} :</strong> {{ project.description }}</div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="p-24 m-0" fxLayout="column" fusePerfectScrollbar *ngIf="edit">
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none"  *ngIf="visibleField('name', fields) || visibleField('accountName', fields) ">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('name', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('name', fields)">
+                                    <input name="name" formControlName="name" placeholder="{{fieldLabel('name', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+								<mat-form-field fxFlex *ngIf="visibleField('accountName', fields)">
+									<input type="hidden" formControlName="accountId" />
+									<input type="text" matInput placeholder="{{fieldLabel('accountName', fields)}}"
+										formControlName="accountName" [matAutocomplete]="autoAccount" />
+									<mat-autocomplete #autoAccount="matAutocomplete" [displayWith]="displayName"
+										(optionSelected)="selectAccount($event)">
+										<mat-option [value]="account" *ngFor="let account of filteredAccounts | async">
+											{{ account.name }}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none"  *ngIf="visibleField('assignedUserName', fields)">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+								<mat-form-field fxFlex *ngIf="visibleField('assignedUserName', fields)">
+									<input type="hidden" formControlName="assignedUserId" />
+									<input type="text" matInput placeholder="{{fieldLabel('assignedUserName', fields)}}"
+										formControlName="assignedUserName" [matAutocomplete]="autoAssignee" />
+									<mat-autocomplete #autoAssignee="matAutocomplete" [displayWith]="displayName"
+										(optionSelected)="selectAssignee($event)">
+										<mat-option [value]="assignee" *ngFor="let assignee of filteredAssignees | async">
+											{{ assignee.name }}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" *ngIf="visibleField('accountManagerName', fields)">
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+								<mat-form-field fxFlex *ngIf="visibleField('accountManagerName', fields)">
+									<input type="hidden" formControlName="accountManagerId" />
+									<input type="text" matInput placeholder="{{fieldLabel('accountManagerName', fields)}}"
+										formControlName="accountManagerName" [matAutocomplete]="autoAccManager" />
+									<mat-autocomplete #autoAccManager="matAutocomplete" [displayWith]="displayName"
+										(optionSelected)="selectAccountManager($event)">
+										<mat-option [value]="accManager" *ngFor="let accManager of filteredAccountManager | async">
+											{{ accManager.name }}
+										</mat-option>
+									</mat-autocomplete>
+								</mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none"  *ngIf="visibleField('estimatedStartDate', fields) || visibleField('estimatedEndDate', fields) ">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('estimatedStartDate', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('estimatedStartDate', fields)">
+                                    <input matInput formControlName="estimatedStartDate" [matDatepicker]="estimatedStartDate" placeholder="{{fieldLabel('estimatedStartDate', fields)}}">
+                                    <mat-datepicker-toggle matSuffix [for]="estimatedStartDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #estimatedStartDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('estimatedEndDate', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('estimatedEndDate', fields)">
+                                    <input matInput formControlName="estimatedEndDate" [matDatepicker]="estimatedEndDate" placeholder="{{fieldLabel('estimatedEndDate', fields)}}">
+                                    <mat-datepicker-toggle matSuffix [for]="estimatedEndDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #estimatedEndDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none"  *ngIf="visibleField('dueDate', fields) || visibleField('presentationLayout', fields)">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('dueDate', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('dueDate', fields)">
+                                    <input matInput formControlName="dueDate" [matDatepicker]="dueDate" placeholder="{{fieldLabel('dueDate', fields)}}">
+                                    <mat-datepicker-toggle matSuffix [for]="dueDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #dueDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('presentationLayout', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('presentationLayout', fields)">
+                                    <mat-select formControlName="presentationLayout" placeholder="{{fieldLabel('presentationLayout', fields)}}">
+                                        <mat-option [value]="pl" *ngFor="let pl of presentationLayouts">{{ pl }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none"  *ngIf="visibleField('status', fields) || visibleField('priority', fields) ">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('status', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('status', fields)">
+                                    <mat-select formControlName="status" placeholder="{{fieldLabel('status', fields)}}">
+                                        <mat-option [value]="st" *ngFor="let st of status">{{ st }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('priority', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('priority', fields)">
+                                    <mat-select formControlName="priority" placeholder="{{fieldLabel('priority', fields)}}">
+                                        <mat-option [value]="priority" *ngFor="let priority of priorities">{{ priority }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none" *ngIf="visibleField('textFieldExtra1', fields) || visibleField('textFieldExtra2', fields)">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra1', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra1', fields)">
+                                    <input name="textFieldExtra1" formControlName="textFieldExtra1" placeholder="{{fieldLabel('textFieldExtra1', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12"  *ngIf="visibleField('textFieldExtra2', fields)"></mat-icon>
+                                <mat-form-field fxFlex  *ngIf="visibleField('textFieldExtra2', fields)">
+                                    <input name="textFieldExtra2" formControlName="textFieldExtra2" placeholder="{{fieldLabel('textFieldExtra2', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none" *ngIf="visibleField('textFieldExtra3', fields) || visibleField('textFieldExtra4', fields)">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12"  *ngIf="visibleField('textFieldExtra3', fields)"></mat-icon>
+                                <mat-form-field fxFlex  *ngIf="visibleField('textFieldExtra3', fields)">
+                                    <input name="textFieldExtra3" formControlName="textFieldExtra3" placeholder="{{fieldLabel('textFieldExtra3', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" >
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra4', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra4', fields)">
+                                    <input name="textFieldExtra4" formControlName="textFieldExtra4" placeholder="{{fieldLabel('textFieldExtra4', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none" *ngIf="visibleField('textFieldExtra5', fields) || visibleField('textFieldExtra6', fields) ">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" >
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra5', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra5', fields)">
+                                    <input name="textFieldExtra5" formControlName="textFieldExtra5" placeholder="{{fieldLabel('textFieldExtra5', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" >
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra6', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra6', fields)">
+                                    <input name="textFieldExtra6" formControlName="textFieldExtra6" placeholder="{{fieldLabel('textFieldExtra6', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none" *ngIf="visibleField('textFieldExtra7', fields) || visibleField('textFieldExtra8', fields) ">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" >
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra7', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra7', fields)">
+                                    <input name="textFieldExtra7" formControlName="textFieldExtra7" placeholder="{{fieldLabel('textFieldExtra7', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none" >
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra8', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra8', fields)">
+                                    <input name="textFieldExtra8" formControlName="textFieldExtra8" placeholder="{{fieldLabel('textFieldExtra8', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.xs="column" fxFlex="none" *ngIf="visibleField('textFieldExtra9', fields) || visibleField('textFieldExtra10', fields) ">
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra9', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra9', fields)">
+                                    <input name="textFieldExtra9" formControlName="textFieldExtra9" placeholder="{{fieldLabel('textFieldExtra9', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-24" fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-icon class="mr-12 mt-12" *ngIf="visibleField('textFieldExtra10', fields)"></mat-icon>
+                                <mat-form-field fxFlex *ngIf="visibleField('textFieldExtra10', fields)">
+                                    <input name="textFieldExtra10" formControlName="textFieldExtra10" placeholder="{{fieldLabel('textFieldExtra10', fields)}}" matInput required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxFlex="none">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex *ngIf="visibleField('description', fields)">
+                                <textarea name="description" formControlName="description" placeholder="{{fieldLabel('description', fields)}}" matInput type="text" max-rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div>
+                        <button mat-raised-button color="accent" (click)="create()"
+                            *ngIf="action!=='edit'">Create</button>
+
+                        <button mat-raised-button color="warn" routerLink="/projects"
+                            *ngIf="action!=='edit'">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div *ngIf="!project || loading">
+    <mat-spinner></mat-spinner>
+</div>

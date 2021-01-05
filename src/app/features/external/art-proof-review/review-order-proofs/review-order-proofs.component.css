@@ -1,0 +1,23 @@
+:host {
+  flex-direction: column;
+  display:flex;
+  height: 100%;
+  width: 100%;
+}
+
+.proof-transition {
+  color: #fff !important;
+  margin-right: 8px;
+}
+
+.proof-transition:last-child {
+  margin-right: 0;
+}
+
+.proof-transition-actions {
+    text-align: center;
+}
+
+.mat-paginator {
+  background: none;
+}

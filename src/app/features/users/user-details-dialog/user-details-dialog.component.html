@@ -1,0 +1,216 @@
+<div class="dialog-content-wrapper" fxLayout="column">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+            {{dialogTitle}}
+            </span>
+            <div>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRef.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+        <div id="user" class="page-layout carded fullwidth" fusePerfectScrollbar>
+            <div class="center" fusePerfectScrollbar>
+                <mat-tab-group>
+                    <mat-tab label="Details">
+                        <div fxFlex fxLayout="column" class="user-form">
+                            <div mat-dialog-content class="m-0" fusePerfectScrollbar>
+                                <form name="form" [formGroup]="userForm" >
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24 pt-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput placeholder="Username" formControlName="userName" [required]="!isEditMode">
+                                            <mat-error *ngIf="userForm.get('userName')?.errors?.required">
+                                                Username is required
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <mat-select formControlName="corpIdentity" placeholder="Corporate Identity">
+                                                <mat-option [value]="dept.id" *ngFor="let dept of corpIdentities">{{ dept.name }}</mat-option>
+                                            </mat-select>
+                                            <button *ngIf="userForm?.get('corpIdentity')?.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearCorporateIdentity()">
+                                                <mat-icon>close</mat-icon>
+                                              </button>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput type="password" placeholder="Password" formControlName="password" [required]="!isEditMode">
+                                            <mat-error *ngIf="action !== 'edit' && userForm.get('password')?.errors?.required"> 
+                                                Password is required
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPass" [required]="!isEditMode">
+                                            <mat-error *ngIf="userForm.get('confirmPass')?.errors?.notEquivalent">Passwords did not match</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput placeholder="First Name" formControlName="firstName" required>
+                                            <mat-error *ngIf="userForm.get('firstName')?.errors?.required"> 
+                                                First Name is required
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput placeholder="Last Name" formControlName="lastName" required>
+                                            <mat-error *ngIf="userForm.get('lastName')?.errors?.required"> 
+                                                Last Name is required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput placeholder="User Email" formControlName="userEmail" email=true required>
+                                            <mat-error *ngIf="userForm.get('userEmail')?.errors?.required && userForm.get('userEmail')?.errors?.email"> 
+                                                Email is <strong>required</strong>
+                                            </mat-error>
+                                            <mat-error *ngIf="userForm.get('userEmail')?.errors?.email"> 
+                                                Please enter a valid email address
+                                            </mat-error>
+                                        </mat-form-field>
+
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <!--span matPrefix>+1 &nbsp;</span-->
+                                            <input matInput placeholder="Phone" formControlName="phone" required> 
+                                            <mat-error *ngIf="userForm.get('phone')?.errors?.required">Phone is required</mat-error>
+                                        </mat-form-field>                    
+                                    </div>
+
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <mat-select placeholder="User Status" formControlName="userStatus" required>
+                                                <mat-option *ngFor="let us of userStatus" [value]="us.id">
+                                                    {{ us.value }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <mat-select placeholder="User Type" formControlName="userType" required>
+                                                <mat-option *ngFor="let ut of userType" [value]="ut.id">
+                                                    {{ ut.value }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24 pt-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <mat-select formControlName="commissionGroup" placeholder="Commission Group">
+                                                <mat-option [value]="group.id" *ngFor="let group of commissionGroups">{{ group.name | capitalizeFirst }}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div> 
+
+                                </form>
+                                <div mat-dialog-actions class="m-0 px-24" fxLayout="row" fxLayoutAlign="space-between center">
+                                    <button *ngIf="action !=='edit'"
+                                            mat-raised-button
+                                            (click)="create()"
+                                            class="save-button mat-accent"
+                                            aria-label="SAVE">
+                                        SAVE
+                                    </button>
+
+                                    <button *ngIf="action ==='edit'"
+                                            mat-raised-button
+                                            (click)="update()"
+                                            class="mb-16 save-button mat-accent"
+                                            aria-label="SAVE">
+                                        SAVE
+                                    </button>
+                                    <!--button mat-raised-button (click)="save(userForm)" class="save-button mat-accent" [disabled]="userForm.invalid" aria-label="Save" matTooltip="Save">
+                                    <button mat-raised-button class="save-button mat-accent" aria-label="Save"
+                                        matTooltip="Save">
+                                        SAVE
+                                    </button-->
+                                </div>
+                                <!-- mat-dialog-content-->
+                            </div> 
+                        </div>
+                            <!--user-form-->
+                        </mat-tab>
+                        <mat-tab label="Dubow Settings" *ngIf="isEditMode && dubowEnabled">
+                            <div mat-dialog-content class="m-0" fusePerfectScrollbar>
+                                <form name="form" [formGroup]="dubowForm" >
+
+
+                                    <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <!--span matPrefix>+1 &nbsp;</span-->
+                                            <input matInput placeholder="Contact ID" formControlName="contactId"> 
+                                        </mat-form-field>                    
+                                    </div>
+                                    <button *ngIf="action ==='edit'"
+                                            mat-raised-button
+                                            (click)="saveDubowSetting()"
+                                            class="mb-16 save-button mat-accent"
+                                            aria-label="SAVE">
+                                        SAVE
+                                    </button>
+                                </form>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Permission Groups" *ngIf="isEditMode">
+                            <mat-dialog-content class="p-16 m-0" fusePerfectScrollbar>
+                                <div fxLayout="row">
+                                    <div fxLayout="column" fxFlex>
+                                        <span class="group-title">Assigned</span>
+                                        <span *ngFor="let group of currentGroups" (click)="remove(group.groupId)" class="grouping">
+                                            <mat-icon>remove</mat-icon>
+                                            {{ group.groupName }}
+                                        </span>
+                                    </div>
+                                    <div fxLayout="column" fxFlex>
+                                        <span class="group-title">Unassigned</span>
+                                        <span *ngFor="let group of otherGroups" (click)="add(group.groupId)" class="grouping">
+                                            <mat-icon>add</mat-icon>
+                                            {{ group.groupName }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </mat-dialog-content>
+                        </mat-tab>
+                        <mat-tab label="Objectives" *ngIf="isEditMode">
+                            <div mat-dialog-content class="m-0" fusePerfectScrollbar>
+                                <form name="form" [formGroup]="objectiveForm" >
+                                   <div fxLayout="row" fxLayoutGap="16px" class="px-24">
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <input matInput placeholder="Sales Quota" formControlName="salesQuota">
+                                        </mat-form-field>
+                                        <mat-form-field fxFlex.xs="100" fxFlex.gt-sm="50">
+                                            <mat-select placeholder="Range" formControlName="salesQuotaRange" required>
+                                                <mat-option *ngFor="let sqt of salesQuotaRange" [value]="sqt.id">
+                                                    {{ sqt.value }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <button *ngIf="action ==='edit'"
+                                            mat-raised-button
+                                            (click)="assignObjective()"
+                                            class="mb-16 save-button mat-accent"
+                                            aria-label="SAVE">
+                                        SAVE
+                                    </button>
+                                </form>
+                            </div>
+                        </mat-tab>
+
+                    </mat-tab-group>
+                </div> <!--center-->
+        </div> <!--main-->
+    <div class="loading"
+         [@animate]="{value:'*',params:{opacity:1}}"
+         *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>

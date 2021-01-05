@@ -1,0 +1,30 @@
+app-history{
+  width: 100%;
+
+  #order-history {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .mat-table {
+          flex: 1;
+          height: 100%;
+      }
+
+      .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
+          opacity: 0;
+      }
+
+      .mat-sort-header-pointer-left.ng-trigger.ng-trigger-leftPointer{
+          transform: rotate(-45deg);
+      }
+
+      .mat-sort-header-pointer-right.ng-trigger.ng-trigger-rightPointer{
+          transform: rotate(45deg);
+      }
+
+      .activity-item {
+          position: relative;
+      }
+  }
+}

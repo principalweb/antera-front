@@ -1,0 +1,36 @@
+@import "src/@fuse/scss/fuse";
+
+.product-stores-dialog {
+
+  width: 20vw;
+  overflow: hidden;
+
+  @include media-breakpoint('xs') {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+
+  @include media-breakpoint('sm') {
+    width: 40vw !important;
+    max-width: 40vw !important;
+  }
+
+  @include media-breakpoint('md') {
+    width: 30vw !important;
+    max-width: 30vw !important;
+  }
+}
+
+
+.dialog-content-webstore {
+  max-height: 250px;
+  overflow-y: scroll;
+}
+
+.webstore-dialog-footer {
+  display: block !important;
+
+  .close {
+    float: right;
+  }
+}

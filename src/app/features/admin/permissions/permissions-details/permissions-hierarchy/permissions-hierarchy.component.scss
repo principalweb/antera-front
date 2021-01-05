@@ -1,0 +1,18 @@
+@import "src/@fuse/scss/fuse";
+permissions-hierarchy {
+    .grouping {
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+
+    .material-icons {
+        vertical-align: middle !important;
+        padding-bottom: 3px;
+    }
+
+    .group-title {
+        font-weight: bold;
+    }
+}
+

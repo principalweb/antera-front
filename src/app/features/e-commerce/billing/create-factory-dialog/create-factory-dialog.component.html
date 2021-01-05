@@ -1,0 +1,35 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+      <span class="title dialog-title">{{dialogTitle}}</span>
+      <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div mat-dialog-content class="p-24 m-0" fusePerfectScrollbar>
+    <form *ngIf="accountForm" name="form" [formGroup]="accountForm" (submit)="save()">
+      <div>
+        <mat-form-field class="w-100-p">
+          <input matInput placeholder="{{fieldLabel('accountName', fields)}}" formControlName="accountName" required>
+          <app-error [group]="accountForm" field="accountName" label="{{fieldLabel('accountName', fields)}}">
+          </app-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-100-p">
+          <input matInput placeholder="{{fieldLabel('phone', fields)}}" formControlName="phone">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="w-100-p">
+          <input matInput placeholder="{{fieldLabel('csRepEmail', fields)}}" formControlName="csRepEmail">
+        </mat-form-field>
+      </div>
+      <div>
+        <button type="submit" mat-raised-button color="accent">Create</button>
+      </div>
+    </form>
+  </div>
+</div>

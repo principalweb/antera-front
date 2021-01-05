@@ -1,0 +1,156 @@
+<div class="dialog-content-wrapper" fusePerfectScrollbar>
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div>{{ dialogTitle }} - {{ vouchingDetail.vendorName }}</div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div mat-dialog-actions class="mb-16 p-16" fxLayout="row" fxLayoutAlign="end center">
+        <button
+                mat-raised-button
+                (click)="save()"
+                class="save-button mat-accent"
+                aria-label="Process">Process
+        </button>
+        <button
+                mat-raised-button
+                (click)="save(1)"
+                class="save-button mat-accent"
+                aria-label="Process & Done"
+                *ngIf="vouchingDetail.id === ''">Process & Done
+        </button>
+
+        <button
+                mat-raised-button
+                (click)="viewPo()"
+                class="save-button mat-accent"
+                aria-label="View PO"
+                *ngIf="false">View Full PO
+        </button>
+
+        <button
+                mat-raised-button
+                (click)="loadRemainingPo()"
+                class="save-button mat-accent"
+                aria-label="View PO"
+                *ngIf="vouchingDetail.id !== ''">View Remaining PO
+        </button>
+        <button
+                mat-raised-button
+                (click)="viewApInvoice()"
+                class="save-button mat-accent"
+                aria-label="A/P Invoice Search">A/P Invoice Search
+        </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="vouch-form-container">
+      <mat-sidenav-container hasBackdrop="false">
+        <mat-sidenav-content [class.width-60]="showApInvoice" fxLayout="row">
+          <form [formGroup]="vouchingForm" class="p-16">
+              <div fxLayout="column">
+                  <div class="mb-4 mr-8" fxLayout="row">
+                    <h3 class="mat-title mb-0 mr-8 font-weight-600 accent-text">PO Details</h3>
+                  </div>
+
+                  <mat-form-field>
+                      <input matInput
+                          name="invoiceNo"
+                          formControlName="invoiceNo"
+                          placeholder="Vendor Invoice Number" required maxlength="21">
+                  </mat-form-field>
+                  <mat-form-field>
+                      <textarea name="notes" formControlName="notes" placeholder="Description" matInput type="text" rows="2"></textarea>
+                  </mat-form-field>
+                  <mat-form-field>
+                      <mat-datetimepicker-toggle [for]="datetimePickerInvoice" matSuffix></mat-datetimepicker-toggle>
+                      <mat-datetimepicker #datetimePickerInvoice></mat-datetimepicker>
+                      <input matInput formControlName="invoiceDate" [matDatetimepicker]="datetimePickerInvoice" placeholder="Invoice Date">
+                  </mat-form-field>
+
+                  <mat-form-field>
+                      <mat-datetimepicker-toggle [for]="datetimePicker" matSuffix></mat-datetimepicker-toggle>
+                      <mat-datetimepicker #datetimePicker></mat-datetimepicker>
+                      <input matInput formControlName="dueDate" [matDatetimepicker]="datetimePicker" placeholder="Due Date">
+                  </mat-form-field>
+
+                  <p *ngIf="taxEnabled">
+                    Invoice Amount: {{vouchingForm.controls.totalTaxOnPo.value  | number:'1.2-2' }} {{(this.currency.fromCurrency ? '(' + this.currency.fromCurrency + ')' : '')}}
+                    <span *ngIf="currency.toCurrency">/{{ (vouchingForm.controls.totalTaxOnPo.value - vouchingForm.controls.totalTaxOnPo.value) * currency.exchangeRate | number:'1.2-2' }} ({{ currency.toCurrency}})</span>
+                  </p>
+
+                  <p>
+                    Invoice Amount: {{vouchingForm.controls.paidAmount.value  | number:'1.2-2' }} {{(this.currency.fromCurrency ? '(' + this.currency.fromCurrency + ')' : '')}}
+                    <span *ngIf="currency.toCurrency">/{{ (vouchingForm.controls.paidAmount.value - vouchingForm.controls.creditAmount.value) * currency.exchangeRate | number:'1.2-2' }} ({{ currency.toCurrency}})</span>
+                  </p>
+
+                  <p>
+                    Credit Amount: {{ vouchingForm.controls.creditAmount.value | number:'1.2-2' }} {{ currency.fromCurrency ? '(' + currency.fromCurrency + ')':''}}
+                    <span *ngIf="currency.toCurrency">/{{ vouchingForm.controls.creditAmount.value * currency.exchangeRate | number:'1.2-2' }} ({{ currency.toCurrency}})</span>
+                  </p>
+                  <p *ngIf="amountDue">
+                    Amount Due: {{ vouchingForm.controls.paidAmount.value - vouchingForm.controls.creditAmount.value | number:'1.2-2' }}  {{ currency.fromCurrency ? '(' + currency.fromCurrency + ')':''}}
+                    <span *ngIf="currency.toCurrency">/{{ (vouchingForm.controls.paidAmount.value - vouchingForm.controls.creditAmount.value) * currency.exchangeRate | number:'1.2-2' }} ({{ currency.toCurrency}})</span>
+                  </p>
+
+              </div>
+              <input type="hidden" formcontrolName="poAmount"/>
+              <input type="hidden" formcontrolName="balanceAmount"/>
+              <input type="hidden" formControlName="orders"/>
+              <input type="hidden" formControlName="createdById"/>
+              <input type="hidden" formControlName="createdByName"/>
+              <input type="hidden" formControlName="modifiedById"/>
+              <input type="hidden" formControlName="modifiedByName"/>
+          </form>
+
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="'true'">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Items   
+                  <span *ngIf="currency.toCurrency"> - ({{currency.toCurrency}})</span>  
+                </mat-panel-title>
+                <mat-panel-description>
+                  <!-- Total # ${{totalInvoice}} -->
+                  Products & Services
+                  
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-vouching-lines-form
+                [vouchingForm]="vouchingForm"
+                #lines
+                (totalAmount)='updateTotalAmount($event)'
+                (viewPo)="viewPurchaseOrder($event)"
+                (currency)="setExchangeRate($event)"
+              ></app-vouching-lines-form>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-sidenav-content>
+        <mat-sidenav #sidenav mode="side" disableClose="true" [opened]="showApInvoice" position="end">
+          <apinvoice-details *ngIf="showApInvoice" [apInvoice]="apInvoice"></apinvoice-details>
+          <apinvoice-lines *ngIf="showApInvoice" [dataSource]="apInvoice.lineItems"></apinvoice-lines>
+        </mat-sidenav>
+      </mat-sidenav-container>
+    </div>
+    <div>
+     <ng-container checkPermissionAction [pAction]="'override_vouching_lock'">
+        <button
+          mat-raised-button
+          (click)="deleteSelectedVouchings()"
+          class="delete-button mat-warn"
+          aria-label="Delete">Delete
+        </button>
+    </ng-container>
+
+      <app-vouchings-list [vendorId]="vouchingDetail.vendorId" [orders]="vouchingDetail.orders" (reload)="ngOnInit()" [vcMode]="vcMode" (viewInvoice)="viewInvoice($event)"></app-vouchings-list>
+    </div>
+    <!-- / CONTENT -->
+</div>
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

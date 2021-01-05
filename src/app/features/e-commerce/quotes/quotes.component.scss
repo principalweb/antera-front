@@ -1,0 +1,107 @@
+:host {
+
+    .header {
+
+        .search-input-wrapper {
+            max-width: 480px;
+        }
+    }
+
+    .mat-tab-group,
+    .mat-tab-body-wrapper,
+    .tab-content{
+        flex: 1 1 auto;
+        max-width: 100%;
+        overflow-x: hidden !important;
+    }
+
+    .orders-table {
+        flex: 1 1 auto;
+        border-bottom: 1px solid rgba(0, 0, 0, .12);
+        overflow: hidden;
+        position: relative;
+
+        .mat-table {
+            margin-top:64px;
+            height: 100%;
+            position: static;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            .mat-header-row {
+                position: absolute;
+                top:0;
+                min-height: 64px;
+                width: 100%;
+                z-index: 1;
+            }
+        }
+
+   
+
+        .order {
+            position: relative;
+            cursor: pointer;
+            max-height: 84px;
+        }
+
+        .mat-cell {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .mat-column-id {
+            flex: 0 1 84px;
+        }
+
+        .mat-column-image {
+            flex: 0 1 84px;
+
+            .product-image {
+                width: 52px;
+                height: 52px;
+                border: 1px solid rgba(0, 0, 0, .12);
+            }
+        }
+
+        .mat-column-buttons {
+            flex: 0 1 80px;
+        }
+
+        .quantity-indicator {
+            display: inline-block;
+            vertical-align: middle;
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+
+            & + span {
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        .active-icon {
+            border-radius: 50%;
+        }
+
+        .mat-row {
+            position: relative;
+            cursor: pointer;
+        }
+    }
+}
+
+.mat-tab-body {
+    margin: 0;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .mat-tab {
+    margin: 0;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }

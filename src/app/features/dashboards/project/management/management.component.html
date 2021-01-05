@@ -1,0 +1,597 @@
+<div id="home-dashboard" class="content">
+
+    <mat-tab-group dynamicHeight>
+
+        <mat-tab label="Home">
+            
+            <div class="widget-group grey-100-bg p-12" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                    [@animateStagger]="{value:'50'}">
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+
+                        <div class="pt-8 pb-8 clickable"
+                             fxLayout="column" fxLayoutAlign="center center"
+                             (click)="goto('/activities', 'Pending')">
+                            <div class="pb-8 blue-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.activitiesCard.open}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Open Activities
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                             fxLayout="row" fxLayoutAlign="start center"
+                             (click)="goto('/activities')">
+                            <div class="mat-caption text-truncate">
+                                All Activities:
+                            </div>
+                            <div class="mat-caption ml-8">
+                                {{widgetMgmData.activitiesCard.total}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                    <!-- Back -->
+                    <div class="fuse-widget-back p-16 pb-8 pt-32 mat-white-bg mat-elevation-z2">
+                        <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button"
+                                aria-label="Flip widget">
+                            <mat-icon class="s-16">close</mat-icon>
+                        </button>
+
+                        <div>
+                            <!-- {{widgetMgmData.activities.detail}} -->
+                        </div>
+                    </div>
+                    <!-- / Back -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/leads','New')">
+                            <div class="pb-8 red-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.leadsCard.open}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Open Leads
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            (click)="goto('/leads')">
+                            <div class="mat-caption text-truncate">
+                                All Leads:
+                            </div>
+                            <div class="mat-caption ml-8">
+                                {{widgetMgmData.leadsCard.total}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/e-commerce/orders',['Billed'], ['Partial','Unpaid'])">
+                            <div class="pb-8 amber-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.unpaidInvoicesCard.open}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Unpaid Invoices
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            (click)="goto('/e-commerce/orders',['Billed'],['Partial'])">
+                            <div class="mat-caption text-truncate">
+                                Partial Paid Invoices:
+                            </div>
+                            <div class="mat-caption ml-8">
+                                {{widgetMgmData.unpaidInvoicesCard.total}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/workflow')">
+                            <div class="pb-8 purple-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.overdueOrdersCard.open}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Overdue Orders
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            (click)="goto('/workflow')">
+                            <div class="mat-caption text-truncate">
+                                Due This Week:
+                            </div>
+                            <div class="mat-caption ml-8">
+                                {{widgetMgmData.overdueOrdersCard.total}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="gotoOrdersWithWebstoreType('/e-commerce/orders',['Booked'])">
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.webstoreOrdersCard.open}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500 text-truncate">
+                                 Webstore Orders
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            (click)="gotoOrdersWithWebstoreType('/e-commerce/orders')">
+                            <div class="mat-caption text-truncate">
+                                Total Webstore Orders:
+                            </div>
+                            <div class="mat-caption ml-8">
+                                {{widgetMgmData.webstoreOrdersCard.total}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="pl-16 pr-8 py-16 h-52 clickable" fxLayout="row"
+                            fxLayoutAlign="end center">
+                        </div>
+
+                        <div class="pt-8 pb-8 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/artworks','Pending')">
+                            <div class="pb-8 green-fg font-size-36 line-height-48 text-truncate">
+                                {{ widgetMgmData.artworkCard.open }}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Pending Artwork
+                            </div>
+                        </div>
+
+                        <div class="p-16 grey-50-bg border-top"
+                            fxLayout="row" fxLayoutAlign="start center"
+                            (click)="goto('/artworks')">
+                            <div class="mat-caption text-truncate">
+                                All Artwork:
+                            </div>
+                            <div class="mat-caption ml-8">
+                                {{widgetMgmData.artworkCard.total}}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+
+                <!-- WIDGET 5 -->
+                <fuse-widget class="widget widget5" [@animate]="{value:'*',params:{y:'100%'}}" fxFlex="66.66">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2" fxLayout="column">
+
+                        <div class="px-16 border-bottom" fxLayout="row"
+                                fxLayoutAlign="space-between center">
+
+                            <div fxFlex class="py-16 h3">{{widgetMgmData.sales.title}}</div>
+
+                            <div fxFlex="0 1 auto" class="py-16 date-range" fxLayout="row">
+                                <button mat-button class="px-16"
+                                        *ngFor="let range of widgetMgmData.sales.ranges | keys"
+                                        (click)="widget5.currentRange = range.key"
+                                        [disabled]="widget5.currentRange == range.key">
+                                    {{range.value}}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="h-420 my-16" fxLayout="row" fxFlex="100" fxFlex.gt-sm="50">
+                            <ngx-charts-bar-vertical-stacked
+                                *fuseIfOnDom
+                                [scheme]="widget5.scheme"
+                                [results]="this.widgetMgmData.sales.mainChart[this.widget5.currentRange]"
+                                [gradient]="widget5.gradient"
+                                [xAxis]="widget5.xAxis"
+                                [yAxis]="widget5.yAxis"
+                                [legend]="widget5.legend"
+                                [showXAxisLabel]="widget5.showXAxisLabel"
+                                [showYAxisLabel]="widget5.showYAxisLabel"
+                                [xAxisLabel]="widget5.xAxisLabel"
+                                [yAxisLabel]="widget5.yAxisLabel"
+                                (select)="widget5.onSelect($event)">
+                            </ngx-charts-bar-vertical-stacked>
+                        </div>
+                    </div>
+                </fuse-widget>
+                <!-- / WIDGET 5 -->
+
+                <div fxFlex fxLayout="column" class="side-cards">
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}"
+                                 class="widget card" fxFlex fxLayout="column">
+                        <!-- Front -->
+                        <div class="fuse-widget-front mat-white-bg mat-elevation-z2 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/e-commerce/quotes','Pending')">
+                            <div class="pb-8 amber-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.quotesCard.open}} / ${{widgetMgmData.quotesCard.amount | number: '1.0-0'}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Open Quotes / Value
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}"
+                                 class="widget card" fxFlex fxLayout="column">
+                        <!-- Front -->
+                        <div class="fuse-widget-front mat-white-bg mat-elevation-z2 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/e-commerce/orders','Booked')">
+                            <div class="pb-8 purple-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.ordersCard.open}} / ${{widgetMgmData.ordersCard.amount | number: '1.0-0'}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Booked Orders / Value
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+
+                    <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}"
+                                 class="widget card" fxFlex fxLayout="column">
+                        <!-- Front -->
+                        <div class="fuse-widget-front mat-white-bg mat-elevation-z2 clickable"
+                            fxLayout="column" fxLayoutAlign="center center"
+                            (click)="goto('/opportunities','Open')">
+                            <div class="pb-8 teal-fg font-size-36 line-height-48 text-truncate">
+                                {{widgetMgmData.opportunitiesCard.open}} / ${{widgetMgmData.opportunitiesCard.amount | number: '1.0-0'}}
+                            </div>
+                            <div class="h3 secondary-text font-weight-500">
+                                Open Opportunities / Value
+                            </div>
+                        </div>
+                        <!-- / Front -->
+                    </fuse-widget>
+                </div>
+
+                <!-- WIDGET 6 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                fxFlex="100" fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+                        <div class="px-16 py-8 border-bottom" fxLayout="row"
+                                fxLayoutAlign="space-between center">
+                            <div class="h3">Leads By Source - Sales Rep</div>
+                            <mat-form-field>
+                                <mat-select class="simplified" [(ngModel)]="widget6.currentRange"
+                                            aria-label="Change range">
+                                    <mat-option *ngFor="let range of widgetMgmData.leadsBySource.ranges | keys"
+                                                [value]="range.key">
+                                        {{range.value}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="h-400">
+                            <ngx-charts-pie-chart
+                                *fuseIfOnDom
+                                [scheme]="widget6.scheme"
+                                [results]="widgetMgmData.leadsBySource.mainChart[widget6.currentRange]"
+                                [legend]="widget6.showLegend"
+                                [explodeSlices]="widget6.explodeSlices"
+                                [labels]="widget6.labels"
+                                [doughnut]="widget6.doughnut"
+                                [gradient]="widget6.gradient"
+                                (select)="widget6.onSelect($event)">
+                            </ngx-charts-pie-chart>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- WIDGET 8 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                fxFlex="100" fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="h3 px-16 py-24">
+                            {{widgetMgmData.opportunities.title}}
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <div class="h-400">
+                            <ngx-charts-pie-chart
+                                *fuseIfOnDom
+                                [scheme]="widget8.scheme"
+                                [results]="widgetMgmData.opportunities.mainChart"
+                                [legend]="widget8.legend"
+                                [explodeSlices]="widget8.explodeSlices"
+                                [labels]="widget8.labels"
+                                [doughnut]="widget8.doughnut"
+                                [gradient]="widget8.gradient"
+                                (select)="widget8.onSelect($event)">
+                            </ngx-charts-pie-chart>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 8 -->
+
+            </div>
+            <!-- / WIDGET GROUP -->
+
+        </mat-tab>
+
+        <mat-tab label="Budget Summary" *ngIf="enableBudgetSummary">
+
+            <!-- WIDGET GROUP -->
+            <div class="widget-group grey-100-bg" fxLayout="row wrap" fxFlex="100" *fuseIfOnDom
+                    [@animateStagger]="{value:'50'}">
+
+                <!-- WIDGET 8 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                fxFlex="100" fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="h3 px-16 py-24">
+                            {{widgetMgmData.opportunities.title}}
+                        </div>
+
+                        <mat-divider></mat-divider>
+
+                        <div class="h-400">
+                            <ngx-charts-pie-chart
+                                *fuseIfOnDom
+                                [scheme]="widget8.scheme"
+                                [results]="widgetMgmData.opportunities.mainChart"
+                                [legend]="widget8.legend"
+                                [explodeSlices]="widget8.explodeSlices"
+                                [labels]="widget8.labels"
+                                [doughnut]="widget8.doughnut"
+                                [gradient]="widget8.gradient"
+                                (select)="widget8.onSelect($event)">
+                            </ngx-charts-pie-chart>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 8 -->
+
+                <!-- WIDGET 9 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column"
+                                fxFlex="100" fxFlex.gt-sm="50">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+                        <div class="px-16 py-12 border-bottom" fxLayout="row"
+                                fxLayoutAlign="space-between center">
+                            <div class="h3">{{widgets.widget9.title}}</div>
+                            <mat-form-field>
+                                <mat-select [(ngModel)]="widget9.currentRange" aria-label="Change range">
+                                    <mat-option *ngFor="let range of widgets.widget9.ranges | keys"
+                                                [value]="range.key">
+                                        {{range.value}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
+                                fxLayout.gt-xs="row"
+                                fxLayoutAlign.gt-xs="space-between end">
+                            <div fxFlex="0 1 auto">
+                                <div class="h4 secondary-text">{{widgets.widget9.weeklySpent.title}}</div>
+                                <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+                                    <span class="secondary-text">$</span>
+                                    <span>{{widgets.widget9.weeklySpent.count[widget9.currentRange]}}</span>
+                                </div>
+                            </div>
+                            <div class="h-52" fxFlex>
+                                <ngx-charts-area-chart
+                                    *fuseIfOnDom
+                                    [results]="widgets.widget9.weeklySpent.chart[widget9.currentRange]"
+                                    [scheme]="widget9.scheme"
+                                    [gradient]="widget9.gradient"
+                                    [xAxis]="widget9.xAxis"
+                                    [yAxis]="widget9.yAxis"
+                                    [legend]="widget9.legend"
+                                    [showXAxisLabel]="widget9.showXAxisLabel"
+                                    [showYAxisLabel]="widget9.showYAxisLabel"
+                                    [xAxisLabel]="widget9.xAxisLabel"
+                                    [yAxisLabel]="widget9.yAxisLabel"
+                                    [curve]="widget9.curve">
+                                </ngx-charts-area-chart>
+                            </div>
+                        </div>
+
+                        <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
+                                fxLayout.gt-xs="row"
+                                fxLayoutAlign.gt-xs="space-between end">
+                            <div fxFlex="0 1 auto">
+                                <div class="h4 secondary-text">{{widgets.widget9.totalSpent.title}}</div>
+                                <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+                                    <span class="secondary-text">$</span>
+                                    <span>{{widgets.widget9.totalSpent.count[widget9.currentRange]}}</span>
+                                </div>
+                            </div>
+                            <div class="h-52" fxFlex>
+                                <ngx-charts-area-chart
+                                    *fuseIfOnDom
+                                    [results]="widgets.widget9.totalSpent.chart[widget9.currentRange]"
+                                    [scheme]="widget9.scheme"
+                                    [gradient]="widget9.gradient"
+                                    [xAxis]="widget9.xAxis"
+                                    [yAxis]="widget9.yAxis"
+                                    [legend]="widget9.legend"
+                                    [showXAxisLabel]="widget9.showXAxisLabel"
+                                    [showYAxisLabel]="widget9.showYAxisLabel"
+                                    [xAxisLabel]="widget9.xAxisLabel"
+                                    [yAxisLabel]="widget9.yAxisLabel"
+                                    [curve]="widget9.curve">
+                                </ngx-charts-area-chart>
+                            </div>
+                        </div>
+
+                        <div class="px-16 py-24" fxLayout="column" fxLayoutAlign="center"
+                                fxLayout.gt-xs="row"
+                                fxLayoutAlign.gt-xs="space-between end">
+                            <div fxFlex="0 1 auto">
+                                <div class="h4 secondary-text">{{widgets.widget9.remaining.title}}</div>
+                                <div class="pt-8 mat-display-1 m-0 font-weight-300 text-nowrap">
+                                    <span class="secondary-text">$</span>
+                                    <span>{{widgets.widget9.remaining.count[widget9.currentRange]}}</span>
+                                </div>
+                            </div>
+                            <div class="h-52" fxFlex>
+                                <ngx-charts-area-chart
+                                    *fuseIfOnDom
+                                    [results]="widgets.widget9.remaining.chart[widget9.currentRange]"
+                                    [scheme]="widget9.scheme"
+                                    [gradient]="widget9.gradient"
+                                    [xAxis]="widget9.xAxis"
+                                    [yAxis]="widget9.yAxis"
+                                    [legend]="widget9.legend"
+                                    [showXAxisLabel]="widget9.showXAxisLabel"
+                                    [showYAxisLabel]="widget9.showYAxisLabel"
+                                    [xAxisLabel]="widget9.xAxisLabel"
+                                    [yAxisLabel]="widget9.yAxisLabel"
+                                    [curve]="widget9.curve">
+                                </ngx-charts-area-chart>
+                            </div>
+                        </div>
+
+                        <div class="px-16 py-24 border-top">
+                            <div class="h4 secondary-text">{{widgets.widget9.totalBudget.title}}</div>
+                            <div class="pt-8 mat-display-1 m-0 font-weight-300">
+                                <span class="secondary-text">$</span>
+                                <span>{{widgets.widget9.totalBudget.count}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 9 -->
+
+                <!-- WIDGET 10 -->
+                <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row"
+                                fxFlex="100">
+
+                    <!-- Front -->
+                    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+
+                        <div class="simple-table-container" ms-responsive-table>
+                            <div class=" table-title">
+                                {{widgets.widget10.title}}
+                            </div>
+
+                            <table class="simple">
+
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let column of widgets.widget10.table.columns">
+                                            {{column.title}}
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr *ngFor="let row of widgets.widget10.table.rows">
+                                        <td *ngFor="let cell of row">
+                                            <span class="p-4" [ngClass]="cell.classes">
+                                                {{cell.value}}
+                                            </span>
+                                            <mat-icon *ngIf="cell.icon" class="s-16">{{cell.icon}}
+                                            </mat-icon>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- / Front -->
+
+                </fuse-widget>
+                <!-- / WIDGET 10 -->
+
+            </div>
+            <!-- / WIDGET GROUP -->
+
+        </mat-tab>
+   </mat-tab-group>
+
+</div>

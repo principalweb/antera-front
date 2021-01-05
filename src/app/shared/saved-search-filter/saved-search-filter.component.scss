@@ -1,0 +1,13 @@
+:host {
+  position: absolute;
+  background: white;
+  top: 56px;
+  z-index: 999;
+
+  .clickable {
+    &:hover {
+      background: #fafafa;
+    }
+  }
+
+}

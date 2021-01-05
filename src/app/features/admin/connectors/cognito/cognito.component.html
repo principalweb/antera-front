@@ -1,0 +1,35 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+<div class="px-32">
+  <div class="px-16">
+    <form [formGroup]="htmlForm" *ngIf="!this.loading"  (ngSubmit)="onSubmit()">
+      <div fxLayout="column" fxLayoutAlign="stretch" fxFlex="100%">
+        <div  fxFlex="100%">
+          <button class="ml-96" mat-raised-button color="accent" type="submit" style="float:right">SAVE</button>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-around start">
+          <div class="mb-24" fxFlex="40%">
+            <mat-form-field fxFlex>
+              <mat-select (selectionChange)="changeType($event)" formControlName="loginTypes" placeholder="Login Type" required>
+                <mat-option [value]="loginType" *ngFor="let loginType of this.loginJSON.loginTypes">{{ loginType }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="mb-24" fxFlex fxFlex.xs="none" fxFlex="10%">
+            &nbsp;
+          </div>
+          <div class="mb-24" fxLayout="row" fxLayoutAlign="space-around start" fxFlex fxFlex.xs="none" fxFlex="50%">
+            <div class="mb-24" fxLayout="column" *ngIf="this.htmlForm.controls.loginTypes.value !== ''" fxFlex="100%">
+              <div *ngFor="let property of this.loginJSON[this.htmlForm.controls.loginTypes.value].properties" fxFlex="100%">
+                <mat-form-field fxFlex="100%">
+                  <input autocomplete="off" formControlName="{{property.id}}" [placeholder]="property.label" matInput required>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</form>
+      </div>
+

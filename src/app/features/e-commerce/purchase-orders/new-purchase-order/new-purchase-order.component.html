@@ -1,0 +1,287 @@
+<div id="new-purchase-order" class="page-layout carded inner-scroll fullwidth">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg">
+
+  </div>
+  <!-- / TOP BACKGROUND -->
+<!-- CENTER -->
+  <div class="center">
+<!-- HEADER -->
+<div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+  <!-- APP TITLE -->
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <button class="mr-16" mat-icon-button routerLink="/e-commerce/purchase_orders">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+      [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+      <div class="h2">
+        New Purchase Order
+      </div>
+    </div>
+  </div>
+  <!-- / APP TITLE -->
+</div>
+<!-- / HEADER -->
+<!-- CONTENT CARD -->
+<div class="content-card mat-white-bg">
+  <mat-horizontal-stepper (selectionChange)="manageSteps($event)" #stepper linear>
+    <mat-step [completed]="phaseOneComplete()">
+      <ng-template  matStepLabel fxLayout="column">
+        <p class="title-closer">Select Product Group(s)</p>
+        <p class="crimson title-closer" *ngIf="!phaseOneComplete()">(You must select a product)</p>
+      </ng-template>
+      <div class="toolbar more-close" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+          <button [disabled]="!phaseOneComplete()" mat-raised-button matStepperNext color="accent">
+            Next <mat-icon>navigate_next</mat-icon></button>
+            <mat-slide-toggle [checked]="itemService.shouldShowInventory" class="ml-16" fxHide fxShow.gt-md (change)="itemService.showInventoryProduct($event)">
+              Include Minimum Inventory
+            </mat-slide-toggle>
+        </div>
+          
+        <p class="mat-h1 mr-16 mb-0 font-weight-800 cener-total">Estimated Total: ${{ itemService.totalSum }}</p>
+      </div>
+      <ng-container [formGroup]="filterForm">
+        <!-- SECOND TOOLBAR -->
+        <div class="toolbar more-close">
+          <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="clearFilters()">
+            <mat-icon>layers_clear</mat-icon> Clear Filters
+          </button>
+          <form [formGroup]="filterForm" class="wider" fxLayout="row" fxLayoutAlign="space-around center">
+            <!-- <mat-form-field>
+                  <mat-label>
+                    Order#
+                  </mat-label>
+                  <input formControlName="refSalesOrderId" matInput placeholder="Order#" type="text">
+                </mat-form-field> -->
+            <!-- <mat-form-field>
+              <mat-select [value]="itemService.productFilters.refSalesOrderNo" id="orderNumberSelector" (selectionChange)="ordersSelected($event)" multiple
+                placeholder="Order Number">
+                <mat-option *ngFor="let orderNumber of itemService.orderNumbers" [value]="orderNumber">
+                  {{orderNumber}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <mat-form-field>
+             
+              <mat-label>
+                Customer
+              </mat-label>
+              <input [value]="itemService.productFilters.customer"  formControlName="customer" matInput placeholder="Customer" type="text" [matAutocomplete]="autoCustomer">
+              <mat-autocomplete #autoCustomer="matAutocomplete" (optionSelected)="selectCustomer($event)">
+                <mat-option *ngFor="let customer of customers | async" [value]="customer">
+                  {{ customer.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>
+                Vendor
+              </mat-label>
+              <input [value]="itemService.productFilters.vendor" formControlName="vendor" matInput placeholder="Vendor" type="text">
+            </mat-form-field>
+          </form>
+        </div>
+        <!-- /SECOND TOOLBAR -->
+        <!-- Third Toolbar -->
+        <div fxLayout="row wrap">
+          <mat-form-field class="wider">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let chip of itemService.chips" color="primary" [selectable]="true" [removable]="true" (removed)="remove(chip)">
+                {{chip}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+              <input (focus)="populateOrderNumbers()" placeholder="Order Numbers" #orderInput [matAutocomplete]="autoOrders" [matChipInputFor]="chipList"
+                formControlName="orderNumbers" (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+            <mat-autocomplete #autoOrders="matAutocomplete" (optionSelected)="selectOrder($event)">
+              <mat-option *ngFor="let orderNumber of itemService.orderNumberData" [value]="orderNumber.refSalesOrderNo">
+                {{ orderNumber.refSalesOrderNo + ' - ' + orderNumber.customer + ' - ' + orderNumber.identity }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <!-- / Third Toolbar -->
+        <!-- TABLE START -->
+        <div class="sticky-table">
+          <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}">
+            <ng-container cdkColumnDef="checkbox">
+              <mat-header-cell class="w-60" *cdkHeaderCellDef>
+                <mat-checkbox (change)="toggleAll()" [checked]="selectedAll">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell class="w-60" *cdkCellDef="let purchaseNeed" (click)="$event.stopPropagation()">
+                <mat-checkbox [checked]="itemService.productCheckboxes[purchaseNeed.productId]"
+                  (change)="getDetail(purchaseNeed.productId, $event, purchaseNeed)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+      
+            <!-- ORDER NUMBER START -->
+            <!-- <ng-container cdkColumnDef="orderNumber">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                  <form>
+                    <span>Order#</span>
+                    
+                    <mat-form-field>
+                      <mat-select (selectionChange)="ordersSelected($event)" multiple placeholder="Order Number">
+                          <mat-option *ngFor="let orderNumber of itemService.distinctOrderNumbers" [value]="orderNumber">
+                            {{orderNumber}}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.name">
+                  <p class="text-truncate">{{purchaseNeed.refSalesOrderId | ellipsis: 15}}</p>
+                </mat-cell>
+              </ng-container> -->
+            <!-- ORDER NUMBER START -->
+            <!-- ITEM COLUMN START -->
+            <ng-container cdkColumnDef="item">
+              <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                *cdkHeaderCellDef>
+                <span>Item</span>
+                <input class="form-control" [value]="itemService.productFilters.supplierProductId" formControlName="supplierProductId" placeholder="">
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.supplierProductId">
+                <p class="text-truncate">{{purchaseNeed.supplierProductId | ellipsis: 15}}</p>
+              </mat-cell>
+            </ng-container>
+            <!-- ITEM COLUMN END -->
+            <!-- NAME COLUMN START -->
+            <ng-container cdkColumnDef="name">
+              <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                *cdkHeaderCellDef>
+                <span>Name</span>
+                <input class="form-control" [value]="itemService.productFilters.name" formControlName="name" placeholder="">
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.name">
+                <p class="text-truncate">{{purchaseNeed.name | ellipsis: 100}}</p>
+              </mat-cell>
+            </ng-container>
+            <!-- NAME COLUMN END -->
+      
+            <!-- DESCRIPTION COLUMN START -->
+            <!-- <ng-container cdkColumnDef="description">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                  *cdkHeaderCellDef>
+                  <span>Description</span>
+                  <input class="form-control" formControlName="description" placeholder="">
+                </mat-header-cell>
+                <mat-cell [matTooltip]="purchaseNeed.description" *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs>
+                  <p class="text-truncate">{{ purchaseNeed.description | ellipsis: 15}}</p>
+                </mat-cell>
+              </ng-container> -->
+            <!-- DESCRIPTION COLUMN END -->
+      
+            <!-- VENDOR COLUMN START-->
+            <!-- <ng-container cdkColumnDef="vendor">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                  *cdkHeaderCellDef>
+                  <span>Vendor</span>
+                  <input class="form-control" formControlName="vendor" placeholder="">
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.vendor"
+                  [matTooltipPosition]="'above'">
+                  <a routerLink="/accounts/{{purchaseNeed.vendorId}}"><p class="text-truncate">{{purchaseNeed.vendor | ellipsis: 15}}</p></a>
+                </mat-cell>
+              </ng-container> -->
+            <!-- VENDOR COLUMN END-->
+            <!-- CUSTOMER COLUMN START-->
+            <!-- <ng-container cdkColumnDef="customer">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                  *cdkHeaderCellDef>
+                  <span>Customer</span>
+                  <input class="form-control" formControlName="customer" placeholder="">
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.customer"
+                  [matTooltipPosition]="'above'">
+                  <p class="text-truncate">{{purchaseNeed.customer | ellipsis: 15}}</p>
+                </mat-cell>
+              </ng-container> -->
+            <!-- CUSTOMER COLUMN END-->
+      
+            <!-- QUANTITY NEEDED START-->
+            <ng-container cdkColumnDef="quantityNeeded">
+              <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                *cdkHeaderCellDef>
+                <span>Quantity Needed</span>
+              </mat-header-cell>
+              <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.quantityNeeded">
+                <p class="text-truncate">{{purchaseNeed.quantityNeeded}}</p>
+              </mat-cell>
+            </ng-container>
+            <!-- QUANTITY NEEDED END -->
+      
+            <!-- QUANTITY ORDERED START-->
+            <!-- <ng-container cdkColumnDef="quantityOrdered">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                  *cdkHeaderCellDef>
+                  <span>Quantity Ordered</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.quantityOrdered">
+                  <p class="text-truncate">{{purchaseNeed.quantityOrdered}}</p>
+                </mat-cell>
+              </ng-container> -->
+            <!-- QUANTITY NEEDED START -->
+      
+            <!-- ESTIMATED COST START-->
+            <!-- <ng-container cdkColumnDef="estimatedCost">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                  *cdkHeaderCellDef>
+                  <span>Estimated Cost</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.estimatedUnitCost.toFixed(2)">
+                  <p class="text-truncate">${{purchaseNeed.estimatedUnitCost.toFixed(2)}}</p>
+                </mat-cell>
+              </ng-container> -->
+            <!-- ESTIMATED COST END -->
+      
+            <!-- ACTUAL COST START-->
+            <!-- <ng-container cdkColumnDef="actualCost">
+                <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+                  *cdkHeaderCellDef>
+                  <span>Actual Cost</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let purchaseNeed" fxHide fxShow.gt-xs [matTooltip]="purchaseNeed.actualUnitCost.toFixed(2)">
+                  <p class="text-truncate">${{purchaseNeed.actualUnitCost.toFixed(2)}}</p>
+                </mat-cell>
+              </ng-container> -->
+            <!-- ACTUAL COST END -->
+            <mat-header-row *cdkHeaderRowDef="displayedColumns;  sticky: true"></mat-header-row>
+            <mat-row (click)="expand(purchaseNeed)" [ngStyle]="{'cursor': 'pointer'}" class="row"
+              *cdkRowDef="let purchaseNeed; columns: displayedColumns;"
+              [ngClass]="[itemService.checkboxes[purchaseNeed.id] ? 'highlight' : '']"></mat-row>
+          </mat-table>
+          <mat-paginator  #paginator (page)="paginate($event)" [length]="itemService.totalCountProducts" [pageIndex]="0" [pageSize]="50"
+            [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+          </mat-paginator>
+        </div>
+      </ng-container>
+    </mat-step>
+    <mat-step [completed]="itemService.selectedNeeds.length > 0" fusePerfectScrollbar (click)="loadVariations()">
+      <ng-template matStepLabel fxLayout="column center">
+        <p class="title-closer">Choose Variations and Quantity</p>
+        <p class="crimson title-closer" *ngIf="itemService.selectedNeeds.length === 0 && stepper.selectedIndex === 1">(Select at least one item)</p>
+      </ng-template>
+      <step-two></step-two>
+      <button mat-button matStepperPrevious>Back</button>
+      <button *ngIf="itemService.selectedNeeds.length > 0" mat-button matStepperNext>Next</button>
+    </mat-step>
+    <mat-step label="Generate Purchase Order(s)">
+      <step-three></step-three>
+      <button mat-button matStepperPrevious>Back</button>
+    </mat-step>
+  </mat-horizontal-stepper>
+  
+  
+  <!-- TABLE END -->
+</div>
+  </div>
+  <!-- / CENTER -->
+<div class="loading" *ngIf="loading || finalLoad">
+  <mat-spinner></mat-spinner>
+</div>
+</div>

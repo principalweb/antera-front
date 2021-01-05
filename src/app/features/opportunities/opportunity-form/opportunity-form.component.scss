@@ -1,0 +1,120 @@
+@import "src/@fuse/scss/fuse";
+
+.opportunity-form-dialog {
+
+    width: 1280px !important;
+
+    @include media-breakpoint('xs') {
+        width: 100%;
+    }
+
+    @include media-breakpoint('gt-xs') {
+        width: 400px;
+    }
+
+    .mat-dialog-container {
+        padding: 0px !important;
+        overflow: hidden;
+
+        .mat-toolbar {
+            min-height: initial;
+        }
+
+        .toolbar-bottom {
+            height: auto;
+        }
+
+        // Added by Benzur on 5.18.18
+        .mat-form-field {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        .icon-hint {
+            cursor: pointer;
+            color: #3f8ec0;
+            margin-top: 18px;
+        }
+    }
+
+    .dialog-content-wrapper {
+        display: flex;
+        flex-direction: column;
+   }
+
+    #opportunity {
+
+        .header {
+    
+            .product-image {
+                overflow: hidden;
+                width: 56px;
+                height: 56px;
+                border: 3px solid rgba(0, 0, 0, 0.12);
+    
+                img {
+                    height: 100%;
+                    width: auto;
+                    max-width: none;
+                }
+            }
+    
+            .subtitle {
+                margin: 6px 0 0 0;
+            }
+        }
+    
+        .center {
+            padding: 0px !important;
+
+                        
+            mat-sidenav-container .sidenav.mat-is-locked-open 
+            {
+                width: 320px;
+                min-width: 320px;
+                max-width: 320px;
+            }
+        }
+        .content {
+    
+            .mat-tab-group,
+            .mat-tab-body-wrapper,
+            .tab-content{
+                flex: 1 1 auto;
+                max-width: 100%;
+            }
+    
+            .mat-tab-body-content {
+                display: flex;
+            }
+    
+            .mat-tab-label {
+                height: 64px;
+            }
+    
+            .product-image {
+                overflow: hidden;
+                width: 128px;
+                height: 128px;
+                margin-right: 16px;
+                margin-bottom: 16px;
+                border: 3px solid rgba(0, 0, 0, 0.12);
+    
+                img {
+                    height: 100%;
+                    width: auto;
+                    max-width: none;
+                }
+            }
+
+            .py-16 {
+                height: 70px !important;
+            }
+
+        }
+    
+    }
+    
+
+}
+

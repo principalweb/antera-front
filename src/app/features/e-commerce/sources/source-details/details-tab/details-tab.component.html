@@ -1,0 +1,374 @@
+<form [formGroup]="form" id="source-details-tab" class="mat-white-bg mat-elevation-z2 p-24 m-12" fxLayout="column"
+    *ngIf="sourceDetails">
+    <div fxLayout="column" fusePerfectScrollbar>
+        <div fxLayout fxLayoutAlign="start stretch" class="mb-20" fxLayout.lt-md="column">
+            <div class="mr-16" fxFlex fxFlex.lt-md="false" ngClass.lt-md="{'mr-16': false}">
+                <div class="section">
+                    <mat-toolbar class="mb-20" fxLayout fxLayoutAlign="start center" fxHide.lt-md>
+                        <div class="mr-8">Basic Info</div>
+                        <ng-container *checkPermission="[sourceDetails.id, 'Source']; requiredPermission 'allowEdit'">
+                            <button mat-icon-button (click)="toggleEdit()" *ngIf="!edit && action==='edit'">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="update()" *ngIf="edit && action==='edit'">
+                                <mat-icon>save</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="toggleEdit()" *ngIf="edit && action==='edit'">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <ng-container *ngIf="permissionsEnabled">
+                                <permission-entity-group-dialog
+                                    *checkPermission="[sourceDetails.id, 'Source']; requiredPermission 'allowPermission'"
+                                    [entityId]="sourceDetails.id" [entityType]="'Source'">
+                                </permission-entity-group-dialog>
+                            </ng-container>
+                        </ng-container>
+                    </mat-toolbar>
+
+                    <div fxLayout="row" *ngIf="!edit">
+                        <div fxFlex fxLayout="column">
+                            <div class="customer-view" fxLayout="column">
+                                <div class="mat-title" fxFlex="none">Product Image</div>
+                                <div class="feature-image" fxFlex>
+                                    <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="upload-button"
+                                        *ngIf="!form.value.featureImage">
+                                        <mat-icon class="font-size-100 secondary-text h-100 w-100">file_upload
+                                        </mat-icon>
+                                        <input type="file" id="fileInput" (change)="onFileChange($event)" #fileInput>
+                                    </div>
+                                    <div fxFlex fxLayout="column" fxLayoutAlign="center center" class="remove-button"
+                                        *ngIf="form.value.featureImage">
+                                        <button mat-raised-button color="warn" (click)="removeFeaturedImage()">
+                                            <mat-icon>delete</mat-icon> Remove
+                                        </button>
+                                    </div>
+                                    <div class="uploaded-image" *ngIf="form.value.featureImage">
+                                        <img [src]="form.value.featureImage" fxFlex
+                                            [default]="'assets/images/ecommerce/product-image-placeholder.png'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div fxFlex fxLayout="column">
+                            <div class="p-8">Name: {{ sourceDetails.gcName }}</div>
+                            <div class="p-8">Item Number: {{ sourceDetails.gcItemNumber }}</div>
+                            <div class="p-8">Size: {{ sourceDetails.size }}</div>
+                            <div class="p-8">Material: {{ sourceDetails.material }}</div>
+                            <div class="p-8">
+                                Quantities:
+                                <ng-container *ngIf="sourceDetails.quantity1">{{ sourceDetails.quantity1 }}
+                                </ng-container>
+                                <ng-container *ngIf="sourceDetails.quantity2">{{ sourceDetails.quantity2 }}
+                                </ng-container>
+                                <ng-container *ngIf="sourceDetails.quantity3">{{ sourceDetails.quantity3 }}
+                                </ng-container>
+                                <ng-container *ngIf="sourceDetails.quantity4">{{ sourceDetails.quantity4 }}
+                                </ng-container>
+                                <ng-container *ngIf="sourceDetails.quantity5">{{ sourceDetails.quantity5 }}
+                                </ng-container>
+                            </div>
+                            <div class="p-8">Decoration Type: {{ sourceDetails.decorationType }}</div>
+                            <div class="p-8">
+                                Specifications:
+                                <div class="pre">
+                                    {{ sourceDetails.specifications }}
+                                </div>
+                            </div>
+                            <div class="p-8">Testing Requirements: {{ sourceDetails.testingRequirements }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column">
+                            <div class="p-8">Opportunity Number: {{ sourceDetails.opportunityNo }}</div>
+                            <div class="p-8">Account Name: {{ sourceDetails.accountName }}</div>
+                            <div class="p-8">Contact Name: {{ sourceDetails.contactName }}</div>
+                            <div class="p-8">Assigned To: {{ sourceDetails.assignedSalesRep}}</div>
+                            <div class="p-8">Sourcing Rep: {{ sourceDetails?.assignedSourcingRep }}</div>
+                            <div class="p-8">Status: {{ sourceDetails.status }}</div>
+
+                            <div class="p-8">Date Modified: {{ sourceDetails.dateModified | date }}</div>
+                            <div class="p-8">Date Created: {{ sourceDetails.dateEntered | date }}</div>
+                            <div class="p-8">Modified By: {{ sourceDetails.modifiedByName }}</div>
+                            <div class="p-8">Created By: {{ sourceDetails.createdByName }}</div>
+                        </div>
+                        <div fxFlex fxLayout="column">
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="edit">
+                        <div class="two-columns pl-16">
+                            <mat-form-field>
+                                <input matInput name="gcName" formControlName="gcName" placeholder="Name">
+                                <app-error [group]="form" field="gcName" label="GC Name"></app-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput type="text" name="gcItemNumber" formControlName="gcItemNumber"
+                                    placeholder="Item Number">
+                                <app-error [group]="form" field="gcItemNumber" label="GC Item Number"></app-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input type="hidden" formControlName="assignedSalesRepId" />
+                                <input type="text" matInput placeholder="Assigned To" formControlName="assignedSalesRep"
+                                    [matAutocomplete]="autoAssignee" />
+                                <mat-autocomplete #autoAssignee="matAutocomplete" [displayWith]="displayName"
+                                    (optionSelected)="selectAssignee($event)">
+                                    <mat-option [value]="salesRep" *ngFor="let salesRep of filteredAssignees | async">
+                                        {{ salesRep.name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <app-error [group]="form" field="assignedSalesRep" label="Assigned To"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex>
+                                <input type="hidden" formControlName="assignedSourcingRep" />
+                                <input type="text" matInput placeholder="Sourcing Rep" formControlName="assignedSourcingRep"
+                                    [matAutocomplete]="autoAssignSourcing" />
+                                <mat-autocomplete #autoAssignSourcing="matAutocomplete" [displayWith]="displayName"
+                                    (optionSelected)="selectAssignedSourcing($event)">
+                                    <mat-option [value]="salesRep" *ngFor="let salesRep of filteredSourceAssignees | async">
+                                        {{ salesRep.name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <app-error [group]="form" field="assignedSourcingRep" label="Sourcing Rep"></app-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput [matDatepicker]="quoteDatePicker" (focus)="quoteDatePicker.open()"
+                                    [matDatepicker]="quoteDatePicker" [(ngModel)]="quoteValidThrough"
+                                    [ngModelOptions]="{standalone: true}" placeholder="Quote Valid Through" required>
+                                <mat-datepicker-toggle matSuffix [for]="quoteDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #quoteDatePicker></mat-datepicker>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input type="hidden" formControlName="accountId" />
+                                <input matInput placeholder="Account Name" formControlName="accountName"
+                                    [matAutocomplete]="autoAccount" autocomplete="off" />
+                                <mat-autocomplete #autoAccount="matAutocomplete" [displayWith]="displayName"
+                                    (optionSelected)="selectAccount($event)">
+                                    <mat-option *ngFor="let acc of filteredAccounts | async" [value]="acc">
+                                        {{ acc.name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <app-error [group]="form" field="accountName" label="Account Name"></app-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input type="hidden" formControlName="contactId" />
+                                <input matInput placeholder="Contact Name" formControlName="contactName"
+                                    [matAutocomplete]="autoContact" autocomplete="off" />
+                                <mat-autocomplete #autoContact="matAutocomplete" [displayWith]="displayName"
+                                    (optionSelected)="selectContact($event)">
+                                    <mat-option *ngFor="let c of filteredContacts | async" [value]="c">
+                                        {{ c.name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <app-error [group]="form" field="contactName" label="Contact Name"></app-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-select placeholder="Status" formControlName="status">
+                                    <mat-option [value]="st.value" *ngFor="let st of statuses">
+                                        {{ st.label }}
+                                    </mat-option>
+                                </mat-select>
+                                <app-error [group]="form" field="status" label="Status"></app-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input type="hidden" formControlName="opportunityId" />
+                                <input matInput placeholder="Opportunity Number" formControlName="opportunityNo"
+                                    [matAutocomplete]="autoOpportunity" autocomplete="off" />
+                                <mat-autocomplete #autoOpportunity="matAutocomplete" [displayWith]="displayOportunityNo"
+                                    (optionSelected)="selectOpportunity($event)">
+                                    <mat-option *ngFor="let o of filteredOpportunities" [value]="o">
+                                        {{ o.opportunityNo }} : {{ o.opportunityName }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <app-error [group]="form" field="opportunityNo" label="Opportunity Number"></app-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput name="size" formControlName="size" placeholder="Size">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput name="material" formControlName="material" placeholder="Material">
+                            </mat-form-field>
+                        </div>
+                        <div class="px-16">
+                            <mat-form-field class="w-100-p">
+                                <textarea matInput name="specifications" formControlName="specifications"
+                                    cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"
+                                    placeholder="Specifications"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <div class="px-16 two-columns">
+                            <mat-form-field>
+                                <input matInput name="decorationType" formControlName="decorationType"
+                                    placeholder="Decoration Type">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput name="testingRequirements" formControlName="testingRequirements"
+                                    placeholder="Testing Requirements">
+                            </mat-form-field>
+
+                            <input type="hidden" formControlName="dateEntered" />
+                            <input type="hidden" formControlName="dateModified" />
+                            <input type="hidden" formControlName="createdById" />
+                            <input type="hidden" formControlName="createdByName" />
+                            <input type="hidden" formControlName="modifiedById" />
+                            <input type="hidden" formControlName="modifiedByName" />
+                        </div>
+
+                        <div class="px-16" fxLayout="row">
+                            <div fxLayout="row" fxLayoutAlign="start start" fxFlex fxFlex.xs="none">
+                                <mat-form-field class="w-100-p" floatPlaceholder="never">
+                                    <mat-chip-list matPrefix #relatedVendorList>
+                                        <mat-chip *ngFor="let vendor of relatedVendors" [selectable]="true"
+                                            [removable]="true" (removed)="removeVendor(vendor)">
+                                            {{ vendor.vendorName }}
+                                            <mat-icon matChipRemove>cancel</mat-icon>
+                                        </mat-chip>
+                                    </mat-chip-list>
+
+                                    <input matInput #relatedVendorInput [formControl]="relatedVendorInputCtrl"
+                                        placeholder="Factories..." [matAutocomplete]="auto"
+                                        [matChipInputFor]="relatedVendorList"
+                                        (keyup.enter)="createFactoryAccountAndRelation(relatedVendorInputCtrl.value); relatedVendorInput.value = ''" />
+                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="vendorSelected($event)">
+                                        <mat-option *ngFor="let vendor of filteredVendors" [value]="vendor">
+                                            {{ vendor.name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <button *ngIf="showAddVendorButton && relatedVendorInputCtrl.value" matSuffix
+                                        mat-button mat-icon-button
+                                        (click)="createFactoryAccountAndRelation(relatedVendorInputCtrl.value); relatedVendorInput.value = ''">
+                                        <mat-icon matTooltip='Add "{{relatedVendorInputCtrl.value}}"'>add</mat-icon>
+                                    </button>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </ng-container>
+                    <mat-toolbar class="mb-20 mt-20 details-section-header" *ngIf="edit">Additional Info</mat-toolbar>
+
+                    <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="50px" class="mb-20"
+                        fxLayout.lt-md="column">
+
+                        <div class="p-16" fxLayout="column" *ngIf="edit">
+                            <div fxLayout="row">
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Quantity 1"
+                                        formControlName="quantity1" />
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Price Per Qty 1"
+                                        formControlName="pricePerQty1" />
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Quantity 2"
+                                        formControlName="quantity2" />
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Price Per Qty 2"
+                                        formControlName="pricePerQty2" />
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Quantity 3"
+                                        formControlName="quantity3" />
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Price Per Qty 3"
+                                        formControlName="pricePerQty3" />
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Quantity 4"
+                                        formControlName="quantity4" />
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Price Per Qty 4"
+                                        formControlName="pricePerQty4" />
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row">
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Quantity 5"
+                                        formControlName="quantity5" />
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Price Per Qty 5"
+                                        formControlName="pricePerQty5" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <mat-toolbar>
+                        <div class="font-weight-900 font-size-16">Factories</div>
+                        <div fxFlex></div>
+                        <button type="button" mat-raised-button color="accent" (click)="sendEmail()">Email
+                            Factories</button>
+                    </mat-toolbar>
+                    <div class="mb-20 mt-20" fxLayout="column" *ngIf="!edit && relatedVendors.length > 0">
+                        <table class="simple">
+                            <thead>
+                                <tr>
+                                    <th>Vendor Name</th>
+                                    <th>Partner Type</th>
+                                    <th>Phone</th>
+                                    <th>Sales Rep</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let vendor of relatedVendors; let i=index;">
+                                    <td>
+                                        <span>
+                                            {{vendor.vendorName}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{vendor.partnerType}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{vendor.phone}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{vendor.salesRep}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a target="_blank"
+                                            [href]="'/external/factory/' + sourceDetails.sourcingId + '/' + vendor.id">Submission
+                                            Link</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <button mat-raised-button color="accent" (click)="create()"
+                            *ngIf="action!=='edit'">Create</button>
+
+                        <button mat-raised-button color="warn" routerLink="/e-commerce/sources"
+                            *ngIf="action!=='edit'">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8" [class.lt-md]='mt-8' *ngIf="action==='edit'">
+
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

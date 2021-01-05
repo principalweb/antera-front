@@ -1,0 +1,55 @@
+<div id="new-ar-invoice" class="page-layout carded inner-scroll fullwidth">
+<!-- TOP BACKGROUND -->
+<div class="top-bg mat-accent-bg">
+
+</div>
+<!-- / TOP BACKGROUND -->
+<!-- CENTER -->
+<div class="center">
+<!-- HEADER -->
+<div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+  <!-- APP TITLE -->
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <button class="mr-16" mat-icon-button routerLink="/e-commerce/invoicing">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+      [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+      <div class="h2">
+        New Invoice
+      </div>
+    </div>
+  </div>
+  <!-- / APP TITLE -->
+</div>
+<!-- / HEADER -->
+<!-- CONTENT CARD -->
+<div class="content-card mat-white-bg">
+<mat-horizontal-stepper (selectionChange)="manageSteps($event)" #stepper linear>
+  <mat-step [completed]="pendingService.phaseOneComplete">
+    <ng-template matStepLabel fxLayout="column">
+      <p class="title-closer">Select Invoice(s)</p>
+      <p class="crimson title-closer" *ngIf="!pendingService.phaseOneComplete">(You must select an Invoice)</p>
+    </ng-template>
+    <invoice-step-one>
+    </invoice-step-one>
+  </mat-step>
+  <mat-step [completed]="pendingService.phaseTwoComplete">
+    <ng-template matStepLabel fxLayout="column">
+      <p class="title-closer">Adjust Quantity and Price</p>
+      <p class="crimson title-closer" *ngIf="!pendingService.phaseTwoComplete">(You must select an Item)</p>
+      </ng-template>
+    <invoice-step-two></invoice-step-two>
+    <button mat-button matStepperPrevious>Back</button>
+    <button [disabled]="!pendingService.phaseTwoComplete" mat-button matStepperNext>Next</button>
+  </mat-step>
+  <mat-step label="Finalize Invoice(s)">
+    <invoice-step-three></invoice-step-three>
+  </mat-step>
+</mat-horizontal-stepper>
+</div>
+</div>
+<div class="loading" *ngIf="pendingService.loading">
+  <mat-spinner></mat-spinner>
+</div>
+</div>

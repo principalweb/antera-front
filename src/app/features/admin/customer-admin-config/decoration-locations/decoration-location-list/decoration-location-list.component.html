@@ -1,0 +1,127 @@
+<mat-table fxFlex #table matSort
+            [dataSource]="dataSource"
+            (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+
+    <!-- Checkbox Column -->
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <mat-checkbox [checked]="checkboxes[row.id]"
+                          (change)="onSelectedChange(row.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Location Image Column -->
+    <ng-container cdkColumnDef="locationImage">
+        <mat-header-cell class="pr-8 header-cell"  fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterDecoLocations()"></mat-header-cell>
+        <mat-cell class="pr-8"
+                  fxHide fxShow.gt-xs
+                  *cdkCellDef="let row">
+            <img class="location-image-wide"
+                [src]="row.locationImage"
+                [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Location Name Column -->
+    <ng-container cdkColumnDef="locationName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Location Name</span>
+            <input class="form-control" formControlName="locationName" (keyup.enter)="filterDecoLocations()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="text text-truncate">{{row.locationName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Location Name Column -->
+    <ng-container cdkColumnDef="locationHexColor">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Location Color</span>
+            <input class="form-control" formControlName="locationHexColor" (keyup.enter)="filterDecoLocations()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs [ngStyle]="{'background-color': row.locationHexColor}">
+            <p class="text text-truncate">{{row.locationHexColor}}</p>
+        </mat-cell>
+    </ng-container>
+
+
+
+    <!-- Description Column -->
+    <ng-container cdkColumnDef="description">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Description</span>
+            <input class="form-control" formControlName="description" (keyup.enter)="filterDecoLocations()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{ row.description }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- CreatedByName Column -->
+    <ng-container cdkColumnDef="createdByName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Created By</span>
+            <input class="form-control" formControlName="createdByName" (keyup.enter)="filterDecoLocations()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-sm>
+            <p class="text text-truncate">{{row.createdByName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- ModifiedByName Column -->
+    <ng-container cdkColumnDef="modifiedByName">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Modified By</span>
+            <input class="form-control" formControlName="modifiedByName" (keyup.enter)="filterDecoLocations()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+            <p class="text text-truncate">{{row.modifiedByName}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Date Modified Column -->
+    <ng-container cdkColumnDef="dateModified">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Date Modified</span>
+            <input class="form-control" formControlName="dateModified" (keyup.enter)="filterDecoLocations()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-md>
+            <p class="text text-truncate">{{row.dateModified | date}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="dropdown"
+        (click)="editDecoLocation(row.id)"
+        matRipple
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="50"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

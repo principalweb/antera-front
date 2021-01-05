@@ -1,0 +1,301 @@
+<div class="loading" *ngIf="!invoiceService.invoice; else detailInvoice">
+<mat-spinner></mat-spinner>
+</div>
+
+<ng-template #detailInvoice>
+  <div id="invoice" class="page-layout carded inner-scroll fullwidth">
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+    <!-- CENTER -->
+    <div class="center">
+      <!-- HEADER -->
+      <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+        <!-- APP TITLE -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button class="mr-16" mat-icon-button routerLink="/e-commerce/invoicing">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+            [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+            <div class="h2">
+              Invoice
+              #{{invoiceService.invoice.number}}
+            </div>
+          </div>
+        </div>
+        <!-- / APP TITLE -->
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div fusePerfectScrollbar class="content-card mat-white-bg">
+        <!-- <div class="toolbar">
+          <div class="order-status mr-8" fxLayout="row" fxFlex>
+            <div [ngClass]="{'invoiceUnpaidStatus': invoiceService.invoice.status.toLowerCase() == 'unpaid',
+          'invoicePaidStatus': invoiceService.invoice.status.toLowerCase() == 'paid' }" fxFlex>
+              Status: {{invoiceService.invoice.status}}
+            </div>
+
+          </div>
+        </div> -->
+
+    <mat-tab-group class="fixed" (selectedTabChange)="tabClicked($event)" #tabs>
+
+        <mat-tab label="Basic Info" >
+            <div class="products tab-content">
+				<div class="section order-details pb-16">
+				  <div class="basic-order-info p8">
+					<mat-card fxFlex>
+					  <div fxLayout="row">
+						<h3 class="mat-title mr-8 accent-text font-weight-800">Basic Invoice Info</h3>
+					  </div>
+					  <div fxLayout="row wrap" [ngStyle]="{'line-height': '3em'}" fxLayoutAlign="start stretch">
+						<div fxFlex fxFlex.xs="100" fxFlex.sm="50"
+							  fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+							  <div class="mb-0 font-weight-500">
+								Customer: {{ invoiceService.invoice.customer }}
+							  </div>
+						</div>
+						<div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+						  <div class="mb-0 font-weight-500">
+							Label: {{ invoiceService.invoice.label }}
+						  </div>
+						</div>
+						<div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+						  <div class="mb-0 font-weight-500">
+							Created: {{ invoiceService.invoice.created | date }}
+						  </div>
+						</div>
+						<div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+						  <div class="mb-0 font-weight-500">
+							Amount: ${{ invoiceService.invoice.invoiceAmount }}
+						  </div>
+						</div>
+						<div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+						  <div class="mb-0 font-weight-500">
+							Balance: ${{ invoiceService.invoice.balance }}
+						  </div>
+						</div>
+						<div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+						  <div class="mb-0 font-weight-500">
+							Terms: {{ invoiceService.invoice.terms }}
+						  </div>
+						</div>
+					  </div>
+
+					</mat-card>
+				  </div>
+				</div>
+				<div class="account-details p-8">
+				  <mat-card fxFlex>
+					<div fxLayout="row wrap" fxLayoutAlign="space-around">
+					  <div class="order-info p-8" fxFlex.xs="100" fxFlex.sm="50" fxLayout="column">
+						<div fxLayout="row">
+						  <h3 class="mat-title mr-8 accent-text font-weight-800">Billing Address</h3>
+						</div>
+						<div>
+						  <div class="mat-body-2 mb-0">
+							Billing Account: {{ getBillingAccountName() }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							Billing Contact: {{invoiceService.invoice.billTo.name}}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							{{ mergeBillingAddress() }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							{{ mergeBillingCityZipState() }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							{{ invoiceService.invoice.billTo.country }}
+						  </div>
+						</div>
+					  </div>
+					  <div class="order-info p-8" fxFlex.xs="100" fxFlex.sm="50" fxLayout="column">
+						<div fxLayout="row">
+						  <h3 class="mat-title mr-8 accent-text font-weight-800">Shipping Address</h3>
+						  <!-- <mat-icon [ngStyle]="{'cursor': 'pointer'}" (click)="changeShipping(true)" *ngIf="!editingShipping">edit</mat-icon> -->
+						  <mat-icon class="mr-8 {{ editShippingForm.invalid ? 'greyed' : '' }}" [ngStyle]="{'cursor': 'pointer'}" (click)="saveShipping()" *ngIf="editingShipping">save
+						  </mat-icon>
+						  <mat-icon [ngStyle]="{'cursor': 'pointer'}" (click)="changeEditing(false)" *ngIf="editingShipping">close</mat-icon>
+						</div>
+						<div *ngIf="!editingShipping">
+						  <div class="mat-body-2 mb-0">
+							Shipping Account: {{ getShippingAccountName() }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							Shipping Contact: {{ invoiceService.invoice.shipTo.name }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							{{ mergeShippingAddress() }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							{{ mergeShippingCityZipState() }}
+						  </div>
+						  <div class="mat-body-2 mb-0">
+							{{ invoiceService.invoice.shipTo.country }}
+						  </div>
+						</div>
+						<div [formGroup]="editShippingForm" *ngIf="editingShipping" fxLayout="column">
+						  <mat-form-field>
+							<input formControlName="accountName" matInput type="text" disabled value="{{ getShippingAccountName() }}">
+						  </mat-form-field>
+						  <mat-form-field>
+							<input matInput type="text" formControlName="name" placeholder="Billing Contact"
+							[matAutocomplete]="autoBillingContactAssigned" required>
+							<mat-autocomplete #autoBillingContactAssigned="matAutocomplete" (optionSelected)="selectContact($event)">
+							  <mat-option *ngFor="let contact of filteredContacts | async" [value]="contact">
+								{{ contact.name | capitalizeFirst }}
+							  </mat-option>
+							</mat-autocomplete>
+						  </mat-form-field>
+						  <mat-form-field>
+							<input matInput type="text" formControlName="addressOne" placeholder="Shipping Street">
+						  </mat-form-field>
+						  <mat-form-field>
+							<input matInput type="text" formControlName="addressTwo" placeholder="Shipping Street2">
+						  </mat-form-field>
+						  <mat-form-field>
+							<input matInput type="text" formControlName="city" placeholder="City">
+						  </mat-form-field>
+						  <mat-form-field>
+							<input matInput type="text" formControlName="state" placeholder="State">
+						  </mat-form-field>
+						  <mat-form-field>
+							<input matInput type="text" formControlName="postalCode" placeholder="Postal Code">
+						  </mat-form-field>
+						  <!-- <mat-form-field>
+							<input matInput type="text" formControlName="country" placeholder="Shipping Country">
+						  </mat-form-field> -->
+						</div>
+					  </div>
+
+					</div>
+				  </mat-card>
+				</div>
+				<div class="section order-details pb-16">
+				  <div class="basic-order-info p-8">
+					<mat-card fxFlex>
+					  <h3 class="mat-title mr-8 accent-text font-weight-600">
+						Line Items
+					  </h3>
+					  <section>
+						<!-- tables will go here -->
+						<div class="full-width-here" fxLayout="row" fxLayoutAlign="space-between center">
+							<span class="font-weight-900 mr-8">Customer:
+								{{invoiceService.invoice.customer}}</span>
+							<span class="font-weight-900 mr-8">Sales Total: ${{invoiceService.invoice.salesAmount | roundString: 2}}</span>
+						</div>
+						<p class="font-weight-900">No. {{invoiceService.invoice.number}}</p>
+						<div class="mb-16 full-width-here" fxLayout="column">
+							<div class="full-width-here" fxLayout="row" fxLayoutAlign="space-around center">
+								<h4 fxFlex="40" class="font-weight-600 mt-0 mb-0 attr-width">Name</h4>
+								<h4 class="font-weight-600 mt-0 mb-0 attr-width">Color</h4>
+								<h4 class="font-weight-600 mt-0 mb-0 attr-width">Size</h4>
+								<h4 class="font-weight-600 mt-0 mb-0 attr-width">Quantity</h4>
+								<h4 class="font-weight-600 mt-0 mb-0 attr-width">Unit Price</h4>
+								<h4 class="font-weight-600 mt-0 mb-0 attr-width">Total Price</h4>
+							</div>
+							<div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let lineItem of filterVariation(invoiceService.invoice.lineItems)">
+								<p fxFlex="40" class="mt-0 mb-0 attr-width">{{lineItem.productName}}</p>
+								<p class="mt-0 mb-0 attr-width">{{lineItem.color}}</p>
+								<p class="mt-0 mb-0 attr-width">{{lineItem.size}}</p>
+								<p class="mt-0 mb-0 attr-width">{{lineItem.invoiceQuantity}}</p>
+								<p class="mt-0 mb-0 attr-width">${{lineItem.unitPrice | roundString: 2}}</p>
+								<p class="mt-0 mb-0 attr-width">${{lineItem.extendedPrice | roundString: 2}}</p>
+							</div>
+						
+							<!-- Addon Charges -->
+						
+							<ng-container *ngIf="filterCharge(invoiceService.invoice.lineItems).length">
+								<div fxLayout="row" fxLayoutAlign="space-around center"
+									*ngFor="let lineItem of filterCharge(invoiceService.invoice.lineItems)">
+									<p fxFlex="40" class="mt-0 mb-0 attr-width">{{lineItem.description || 'Addon Charge'}}</p>
+									<p class="mt-0 mb-0 attr-width">{{lineItem.color}}</p>
+									<p class="mt-0 mb-0 attr-width">{{lineItem.size}}</p>
+									<p class="mt-0 mb-0 attr-width">{{lineItem.invoiceQuantity}}</p>
+									<p class="mt-0 mb-0 attr-width">${{lineItem.unitPrice | roundString: 2}}</p>
+									<p class="mt-0 mb-0 attr-width">${{lineItem.extendedPrice | roundString: 2}}</p>
+								</div>
+							</ng-container>
+						
+							<!-- / End Addon Charges -->
+						
+							<!-- Decorations -->
+						
+							<ng-container *ngIf="filterDecoration(invoiceService.invoice.lineItems).length">
+								<div fxLayout="row" fxLayoutAlign="space-around center"
+									*ngFor="let lineItem of filterDecoration(invoiceService.invoice.lineItems)">
+									<p fxFlex="40" class="mt-0 mb-0 attr-width">{{lineItem.description || 'Decoration'}}</p>
+									<p class="mt-0 mb-0 attr-width">{{lineItem.color}}</p>
+									<p class="mt-0 mb-0 attr-width">{{lineItem.size}}</p>
+									<p class="mt-0 mb-0 attr-width">{{lineItem.invoiceQuantity}}</p>
+									<p class="mt-0 mb-0 attr-width">${{lineItem.unitPrice | roundString: 2}}</p>
+									<p class="mt-0 mb-0 attr-width">${{lineItem.extendedPrice | roundString: 2}}</p>
+								</div>
+							</ng-container>
+							<!-- / Decorations -->
+						</div>
+					  </section>
+					</mat-card>
+				  </div>
+				</div>
+
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Document">
+            <ng-template matTabContent>
+				<mat-toolbar class="doc-toolbar">
+					<ng-container>
+						<button mat-raised-button (click)="sendEmail('customer')" class="mr-8 download-button mat-accent" aria-label="UPLOAD TO CLOUD" [ngClass]="[invoiceService.invoice.status == 'Submitted' ? 'green-500-bg' : '']">
+								<mat-icon>email</mat-icon>
+								E-mail Invoice
+                        </button>
+						<!-- <button *ngIf="!invoiceService.hasPromoStandards" mat-raised-button (click)="sendEmail('customer')" class="mr-8 download-button mat-accent" aria-label="UPLOAD TO CLOUD" [ngClass]="[invoiceService.invoice.status == 'Submitted' ? 'green-500-bg' : '']">
+								<mat-icon>email</mat-icon>
+								E-mail Purchase Order
+            </button>
+            <button *ngIf="invoiceService.hasPromoStandards" mat-raised-button [ngClass]="{'makeGreen': invoiceService.checkIfSubmitted()}"
+              (click)="invoiceService.submitToPromoStandards()" class="mr-8" aria-label="SAVE">
+              <mat-icon>send</mat-icon>
+              {{ invoiceService.checkIfSubmitted() ? 'Submitted' : 'Submit Invoice'}}
+            </button> -->
+						<button mat-raised-button (click)="uploadToCloud()" class="mr-8 download-button mat-accent" aria-label="UPLOAD TO CLOUD">
+								<mat-icon>cloud_upload</mat-icon>
+								Upload to cloud
+						</button>
+						<button mat-raised-button (click)="downloadPDF()" class="mr-8 download-button mat-accent" aria-label="SAVE">
+							<mat-icon>archive</mat-icon>
+							Download PDF
+						</button>
+
+						<button mat-raised-button (click)="printPDF()" class="mr-8 download-button mat-accent" aria-label="SAVE">
+							<mat-icon>print</mat-icon>
+							Print PDF
+                        </button>
+					</ng-container>
+				</mat-toolbar>
+
+                <div class="invoice-doc">
+                <document-pdf #documentRenderer *ngIf="documentDefinition" [definition]="documentDefinition" [filename]="filename">
+                </document-pdf>
+                </div>
+            </ng-template>
+        </mat-tab>
+
+    </mat-tab-group>
+
+
+      </div>
+      <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+
+  </div>
+
+</ng-template>
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

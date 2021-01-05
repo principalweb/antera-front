@@ -1,0 +1,319 @@
+<div id="job-details" class="page-layout simple h-100-p" [formGroup]="form">
+    <div class="header h-80 mat-accent-bg p-16 p-sm-24"
+         fxLayout="row" fxLayoutAlign="space-between center"
+         *ngIf="!embedded">
+
+        <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon mr-16"
+                      [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"
+                      *fuseIfOnDom>work</mat-icon>
+            <div class="logo-text h1"
+                 [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"
+                 *fuseIfOnDom>
+                <a routerLink="/productions">Production</a>
+                <span *ngIf="action==='edit'">
+                    &nbsp;&gt;&nbsp;{{ job.name }}
+                </span>
+            </div>
+        </div>
+    </div>
+    <mat-toolbar class="mb-20" fxLayout fxLayoutAlign="start center" fxHide.lt-md>
+        <div class="mr-8">Job Information</div>
+        <button mat-icon-button
+            (click)="update()">
+            <mat-icon>save</mat-icon>
+        </button>
+        <button mat-icon-button
+            (click)="delete()"
+            *ngIf="edit && isBatchMaster">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </mat-toolbar>
+    <div class="mat-white-bg p-24 pt-12"
+         fusePerfectScrollbar
+         [ngClass]="{'mat-elevation-z2': !embedded}"
+         fxFlex fxLayout="column">
+         <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Order #"
+                    formControlName="orderName"
+                    readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Customer"
+                    formControlName="customerName"
+                    readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Vendor"
+                    formControlName="vendorName"
+                    readonly>
+            </mat-form-field>
+         </div>
+         <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Job #"
+                    formControlName="id"
+                    readonly
+                    >
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Action"
+                    formControlName="action"
+                    readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input matInput [matDatepicker]="picker" 
+                    placeholder="Due"
+                    formControlName="due"
+                    >
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> 
+                    <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+         </div>
+         <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Decoration Type"
+                    formControlName="decoTypeName"
+                    readonly
+                    >
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Decoration Detail"
+                    formControlName="detailName"
+                    readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Decoration Detail Count"
+                    formControlName="detailCount"
+                    readonly>
+            </mat-form-field>
+         </div>
+         <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Quantity"
+                    formControlName="qty"
+                    readonly
+                    >
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Position"
+                    formControlName="position"
+                    readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Decoration Detail Description"
+                    formControlName="detailDescription"
+                    readonly>
+            </mat-form-field>
+         </div>
+         <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <mat-select placeholder="Equipment" (selectionChange)="updateMachine($event)" formControlName="selEquipment" [compareWith]="compareFn">
+                    <mat-option *ngFor="let equipment of equipmentList" [value]="equipment"> {{equipment.name}} </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Hours"
+                    formControlName="hours"
+                    readonly>
+            </mat-form-field>
+         </div>
+         <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                placeholder="Status"
+                formControlName="statusName"
+                readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <mat-select placeholder="Priority" (selectionChange)="updatePriority($event)" formControlName="selPriority" [compareWith]="compareFn">
+                    <mat-option *ngFor="let priority of priorityList" [value]="priority"> {{priority.name}} </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Production Rate"
+                    (blur)="updateProductionRate($event)"
+                    formControlName="productionRate">
+                <mat-error *ngIf="form.get('productionRate').invalid && (form.get('productionRate').dirty || form.get('productionRate').touched)" class="alert alert-danger">
+                    Production Rate must be in the range of 0 - 100
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                placeholder="Processes"
+                formControlName="displayedProcesses"
+                readonly>
+            </mat-form-field>
+         </div>
+        <div fxLayout="row" fxLayoutGap="8px">
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                    placeholder="Product"
+                    formControlName="productName"
+                    readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                placeholder="Size"
+                formControlName="size"
+                readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                placeholder="Color"
+                formControlName="color"
+                readonly>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <input type="text" matInput
+                style="cursor:pointer"
+                (click)="navigateToArtwork()"
+                placeholder="Variation Name (Click for details)"
+                formControlName="variationName"
+                readonly>
+            </mat-form-field>
+        </div>
+        <mat-accordion>
+            <ng-container *ngIf="job.productInfo?.length">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Inventory
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Information about inventory items for this job and where to find them
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div fxLayout="row">
+                        <mat-table fxFlex #table [dataSource]="job.productInfo">
+                            <ng-container cdkColumnDef="site">
+                                <mat-header-cell *cdkHeaderCellDef> Site </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.site}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="bin">
+                                <mat-header-cell *cdkHeaderCellDef> Bin </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.bin}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="quantity">
+                                <mat-header-cell *cdkHeaderCellDef> Quantity Available</mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.quantity}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="color">
+                                <mat-header-cell *cdkHeaderCellDef> Color </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.color}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="size">
+                                <mat-header-cell *cdkHeaderCellDef> Size </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.size}} </mat-cell>
+                            </ng-container>
+                            <mat-header-row *cdkHeaderRowDef="productInfoColumns"></mat-header-row>
+                            <mat-row *cdkRowDef="let productInfo; columns: productInfoColumns"></mat-row>
+                        </mat-table>
+                    </div>
+                </mat-expansion-panel>
+            </ng-container>
+            <ng-container *ngIf="job.batchJobs?.length">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Batch Job Details
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            The jobs that are part of this batch
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div fxLayout="row" fxLayoutGap="8px">
+                        <mat-table fxFlex #table [dataSource]="job.batchJobs">
+                            <ng-container cdkColumnDef="orderName">
+                                <mat-header-cell *cdkHeaderCellDef> Order </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"><a [routerLink]="['/e-commerce/orders/', row.orderId]"> {{row.orderName}} </a> </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="decoTypeName">
+                                <mat-header-cell *cdkHeaderCellDef> Deco Type </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.decoTypeName}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="detailName">
+                                <mat-header-cell *cdkHeaderCellDef> Detail </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.detailName}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="detailCount">
+                                <mat-header-cell *cdkHeaderCellDef> Detail Count </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.detailCount}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="position">
+                                <mat-header-cell *cdkHeaderCellDef> Position </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.position}} </mat-cell>
+                            </ng-container>
+                            <ng-container cdkColumnDef="quantity">
+                                <mat-header-cell *cdkHeaderCellDef> Quantity </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.qty}} </mat-cell>
+                            </ng-container>
+                            <mat-header-row *cdkHeaderRowDef="batchJobsColumns"></mat-header-row>
+                            <mat-row *cdkRowDef="let batchJobs; columns: batchJobsColumns"></mat-row>
+                        </mat-table>
+                    </div>
+                </mat-expansion-panel>
+            </ng-container>
+            <ng-container *ngIf="job.jobHistory?.length">
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Job History
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            Information about job status changes
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div fxLayout="row" fxLayoutGap="8px">
+                        <mat-table fxFlex #table [dataSource]="job.jobHistory">
+                            <ng-container cdkColumnDef="timerState">
+                                <mat-header-cell *cdkHeaderCellDef> Timer State </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.timerState | uppercase}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="jobStatus">
+                                <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.jobStatus}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="time">
+                                <mat-header-cell *cdkHeaderCellDef> Time </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.time}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="reason">
+                                <mat-header-cell *cdkHeaderCellDef> Reason for Pausing</mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.reason}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container cdkColumnDef="elapsed">
+                                <mat-header-cell *cdkHeaderCellDef> Time in Status </mat-header-cell>
+                                <mat-cell *cdkCellDef="let row"> {{row.elapsed}} </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *cdkHeaderRowDef="historyColumns"></mat-header-row>
+                            <mat-row *cdkRowDef="let jobHistory; columns: historyColumns"></mat-row>
+                        </mat-table>
+                    </div>
+                </mat-expansion-panel>
+            </ng-container>
+        </mat-accordion>
+    </div>
+</div>

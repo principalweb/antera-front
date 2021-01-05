@@ -1,0 +1,59 @@
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner> 
+</div>
+<div class="px-32">
+	<div class="mx-400 mt-20 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+		<span class="mat-title mb-0">Dubow</span>
+	</div>
+      <form [formGroup]="credsForm">
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <mat-slide-toggle formControlName="live">Live</mat-slide-toggle>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Customer #" formControlName="customerNumber" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="User ID" formControlName="userId" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input matInput placeholder="Password" formControlName="password" class="form-control">
+                    </mat-form-field>
+                </div>
+            </div>
+          </div>
+        <div class="mx-400 mt-20 mb-8" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="mat-title mb-0">Ship Method Mapping</span>
+        </div>
+          <div class="px-16" *ngFor="let anteraShip of anteraShipMethods">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+                <div class="form-group">
+                    <mat-form-field formGroupName="poShipMap">
+                      <mat-select [placeholder]="'Antera - ' + anteraShip.label" [formControlName]="anteraShip.id" required>
+                          <mat-option *ngFor="let psShipMethod of shipMethods" [value]="psShipMethod.id">
+                            {{psShipMethod.label}}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+          </div>
+          <div class="px-16">
+            <div class="mx-400" fxLayout="row" fxLayoutAlign="start center">
+              <button class="ml-96" mat-raised-button color="accent" (click)="saveConfig()">SAVE</button>
+            </div>
+          </div>
+      </form>
+</div>

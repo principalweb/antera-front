@@ -1,0 +1,38 @@
+app-artwork-details-tab {
+    width: 100%;
+
+    .mat-tab-body-wrapper {
+        flex: 1;
+    }
+
+    .assignee .mat-form-field-infix {
+        display: flex;
+    }
+
+    .priority-btn {
+        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+        margin-top: 8px;
+        border-radius: 24px;
+        padding: 5px 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .selected-priority {
+        padding: 3px 16px;
+        border-radius: 1em;
+        color: white !important;
+        margin-bottom: -3px;
+        margin-top: -3px;
+    }
+
+    .priority-input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+}
+
+.priorities .mat-option {
+    color: white !important;
+}

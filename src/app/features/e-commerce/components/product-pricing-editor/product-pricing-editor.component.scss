@@ -1,0 +1,48 @@
+ 
+.variations-wrapper {
+  margin: 16px;
+}
+
+.variations-header {
+  background: #3b4154;
+  color: #fff;
+  padding: 4px;
+}
+.variation {
+  margin-bottom: 8px;
+
+  .swatch {
+    background:#EFEFEF;
+    border:1px solid #666666;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  .variation-description > div {
+    margin-right: 16px;
+  }
+  .variation-detail-labels {
+    margin-right: 16px;
+  }
+}
+
+.col-quantity {
+  width: 80px;
+}
+.col-selection {
+  width: 60px;
+}
+.table-variations {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 4px;
+    border: 1px solid #efefef;
+  }
+}
+

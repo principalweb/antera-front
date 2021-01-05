@@ -1,0 +1,144 @@
+<div class="toolbar">
+  <div fxFlex="row">
+      <div fxFlex="row" fxLayoutAlign="start center">
+        <button mat-raised-button color="accent"
+                      class="text-capitalize mr-20 ml-20 mt-20 mb-20"
+                      (click)="clearFilters()"
+                      fxHide fxShow.gt-md>
+            <mat-icon>layers_clear</mat-icon> Clear Filters
+        </button>
+      </div>
+  </div>
+</div>
+<mat-table class="cap-table"
+            #table [dataSource]="dataSource"
+            matSort (matSortChange)="sort($event)"
+            [@animateStagger]="{value:'50'}"
+            [formGroup]="filterForm">
+
+    <!-- Code Column -->
+    <ng-container cdkColumnDef="capCode">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Code</span>
+            <input class="form-control" formControlName="capCode" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate fong-weight-600">{{row.capCode}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Cycle Column -->
+    <ng-container cdkColumnDef="capCycle">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Cycle</span>
+            <input class="form-control" formControlName="capCycle" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <p class="text-truncate">{{row.capCycle}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Percent Column -->
+    <ng-container cdkColumnDef="capPercent">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Percent</span>
+            <input class="form-control" formControlName="capPercent" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.capPercent}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Min Column -->
+    <ng-container cdkColumnDef="capMin">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Min</span>
+            <input class="form-control" formControlName="capMin" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.capMin}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Max Column -->
+    <ng-container cdkColumnDef="capMax">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Max</span>
+            <input class="form-control" formControlName="capMax" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.capMax}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Ad Percent Column -->
+    <ng-container cdkColumnDef="adPercent">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Ad Percent</span>
+            <input class="form-control" formControlName="adPercent" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.adPercent}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Ad Min Column -->
+    <ng-container cdkColumnDef="adMin">
+        <mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Ad Min</span>
+            <input class="form-control" formControlName="adMin" (keyup.enter)="filterCap()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let row" fxHide fxShow.gt-xs>
+            <p class="category text-truncate">{{row.adMin}}</p>
+        </mat-cell>
+    </ng-container>
+
+
+    <!-- More Buttons Column -->
+    <!--ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let row">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteFranchise(row)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container-->
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *cdkRowDef="let row; columns: displayedColumns;"
+        class="cap"
+        matRipple
+        [matTooltip]="tooltip(row)"
+        [matTooltipClass]="'cap-row-tooltip'"
+        [matTooltipPosition]="'above'"
+        [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>
+
+<mat-paginator #paginator
+                (page)="paginate($event)"
+                [length]="dataSource.total"
+                [pageIndex]="0"
+                [pageSize]="10"
+                [pageSizeOptions]="[10, 20, 50, 100]"
+                [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

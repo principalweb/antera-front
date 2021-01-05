@@ -1,0 +1,195 @@
+<div class="product-pricing" fxFlex>
+  <div class="variations-wrapper">
+    <div class="variations-filter" fxLayout="row">
+      <form [formGroup]="filterForm" fxFlex>
+        <mat-form-field fxFlex>
+          <input type="text" matInput placeholder="SKU" formControlName="sku">
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-select multiple formControlName="sizes" placeholder="All Sizes">
+            <mat-option *ngFor="let size of sizes" [value]="size">
+              {{ size }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-select multiple formControlName="colors" placeholder="All Colors">
+            <mat-option *ngFor="let color of colors" [value]="color">
+              {{ color }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+    <div fxLayout="row" class="p-8" fxLayoutAlign="space-between center">
+      <div>
+        <mat-form-field *ngIf="currencyDisp">
+          <mat-select placeholder="Currency" [(value)]="product.currencyCode">
+            <mat-option *ngFor="let currency of currencyList" [value]="currency.code">{{currency.symbol}} {{currency.code}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <div class="mr-8" *ngIf="selection.hasValue()">
+          With {{ selection.selected.length }} selected
+        </div>
+        <button type="button" mat-raised-button color="accent" *ngIf="selection.hasValue()" (click)="updateSelectedSkus()" class="mr-20">Update Pricing</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="selection.hasValue()" (click)="activateSkus()" class="mr-20">Activate</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="selection.hasValue()" (click)="deactivateSkus()" class="mr-20">Deactivate</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="!showInactive" (click)="showInactive = true;filterSkus();" class="mr-20">Show Inactive</button>
+        <button type="button" mat-raised-button color="accent" *ngIf="showInactive" (click)="showInactive = false;filterSkus()" class="mr-20">Hide Inactive</button>
+      </div>
+    </div>
+    <div class="variations-header" fxLayout="row">
+      <div class="col-selection" fxLayout="row" fxFlexAlign="center">
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </div>
+      <div fxFlex>Product Variation</div>
+      <ng-container *ngFor="let quantity of quantities">
+        <div class="col-quantity">{{quantity}}</div>
+      </ng-container>
+    </div>
+
+    <div *ngIf="filteredSkus.length > 50; else longList">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Display All {{filteredSkus.length}} variations
+        </mat-expansion-panel-header>
+      
+        <ng-template matExpansionPanelContent>
+          <ng-container *ngFor="let part of filteredSkus">
+            <div class="variation w-100-p" (click)="updateSku(part)">
+              <div fxLayout="row">
+      
+                <div class="col-selection" fxLayout="row" fxFlexAlign="center">
+                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(part) : null"
+                    [checked]="selection.isSelected(part)">
+                  </mat-checkbox>
+                </div>
+      
+                <div fxLayout="row" fxFlex class="variation-description" fxFlexAlign="center">
+                  <div>
+                    <div *ngIf="part.active">{{ part.sku }}</div>
+                    <div *ngIf="!part.active"><del>{{ part.sku }}</del></div>
+                  </div>
+                  <div>
+                    <div>
+                      <div class="swatch" [style.background]="part.ColorArray.Color.hex"></div>
+      
+                      {{ part.ColorArray.Color.colorName }}
+                    </div>
+                  </div>
+                  <div>
+                    {{ part.ApparelSize.labelSize }}
+                  </div>
+                </div>
+                <div class="variation-detail-labels">
+                  <div>
+                    Price:
+                  </div>
+                  <div>
+                    Margin:
+                  </div>
+                  <div>
+                    Cost:
+                  </div>
+                  <div>
+                    Profit:
+                  </div>
+                </div>
+                <ng-container *ngFor="let quantity of quantities">
+                  <div class="col-quantity">
+                    <ng-container *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                      <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                        <div>
+                          {{ priceBreak.salePrice | currency:'USD':'symbol':decimalConfig }}
+                        </div>
+                        <div>
+                          {{ priceBreak.margin / 100 | percent }}
+                        </div>
+                        <div>
+                          {{ priceBreak.price | currency }}
+                        </div>
+                        <div>
+                          {{ priceBreak.unitProfit | currency }}
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
+      </mat-expansion-panel>
+    </div>
+    
+    <ng-template #longList>
+    <ng-container *ngFor="let part of filteredSkus">
+      <div class="variation w-100-p" (click)="updateSku(part)">
+        <div fxLayout="row">
+
+          <div class="col-selection" fxLayout="row" fxFlexAlign="center">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(part) : null"
+              [checked]="selection.isSelected(part)">
+            </mat-checkbox>
+          </div>
+
+          <div fxLayout="row" fxFlex class="variation-description" fxFlexAlign="center">
+            <div>
+              <div *ngIf="part.active">{{ part.sku }}</div>
+              <div *ngIf="!part.active"><del>{{ part.sku }}</del></div>
+            </div>
+            <div>
+              <div>
+                <div class="swatch" [style.background]="part.ColorArray.Color.hex"></div>
+
+                {{ part.ColorArray.Color.colorName }}
+              </div>
+            </div>
+            <div>
+              {{ part.ApparelSize.labelSize }}
+            </div>
+          </div>
+          <div class="variation-detail-labels">
+            <div>
+              Price:
+            </div>
+            <div>
+              Margin:
+            </div>
+            <div>
+              Cost:
+            </div>
+            <div>
+              Profit:
+            </div>
+          </div>
+          <ng-container *ngFor="let quantity of quantities">
+            <div class="col-quantity">
+              <ng-container *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                  <div>
+                    {{ priceBreak.salePrice | currency:'USD':'symbol':decimalConfig }}
+                  </div>
+                  <div>
+                    {{ priceBreak.margin / 100 | percent }}
+                  </div>
+                  <div>
+                    {{ priceBreak.price | currency }}
+                  </div>
+                  <div>
+                    {{ priceBreak.unitProfit | currency }}
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+    </ng-template>
+  </div>
+</div>

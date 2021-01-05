@@ -1,0 +1,126 @@
+<form [formGroup]="extraFilterForm">
+  <div class="sticky-table">
+    <mat-table [dataSource]="dataSource" matSortActive="color" matSortDirection="asc"
+      (matSortChange)="sortChange($event)" matSort [@animateStagger]="{value:'50'}">
+    
+      <!-- NAME COLUMN START -->
+      <ng-container cdkColumnDef="name">
+        <mat-header-cell class="header-cell custom-width-400" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+          *cdkHeaderCellDef>
+          <span mat-sort-header>Name</span>
+          <input class="new-form-control" type="text" [value]="itemService.productFilters.name" formControlName="name"
+            placeholder="">
+        </mat-header-cell>
+        <mat-cell class="custom-width-400" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs
+          [matTooltip]="summaryNeed.name">
+          <p class="text-truncate">{{summaryNeed.name | ellipsis: 150}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- NAME COLUMN END -->
+      <!-- ITEM COLUMN START -->
+      <ng-container cdkColumnDef="item">
+        <mat-header-cell class="header-cell custom-width-100" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+          *cdkHeaderCellDef>
+          <span>Item</span>
+          <input class="form-control" [value]="itemService.productFilters.supplierProductId"
+            formControlName="supplierProductId" placeholder="">
+        </mat-header-cell>
+        <mat-cell class="custom-width-100" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs
+          [matTooltip]="summaryNeed.item">
+          <p class="text-truncate">{{summaryNeed.item | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- ITEM COLUMN END -->
+    
+    
+    
+      <!-- Attribute Column Start -->
+      <!-- <ng-container cdkColumnDef="attributes">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Attributes</span>
+          <input class="form-control" [value]="itemService.productFilters.description" formControlName="description"
+            placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="summaryNeed.description" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs>
+          <p class="full-height">{{ summaryNeed.attribute }}</p>
+        </mat-cell>
+      </ng-container> -->
+      <!-- / Attribute Column End -->
+
+      <!-- COLOR COLUMN -->
+      <ng-container cdkColumnDef="color">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span mat-sort-header>Color</span>
+          <input class="form-control" [value]="itemService.productFilters.color" formControlName="color" placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="summaryNeed.color" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs>
+          <p class="full-height">{{ summaryNeed.color }}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- / COLOR COLUMN -->
+      
+      <!-- SIZE COLUMN -->
+      <ng-container cdkColumnDef="size">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Size</span>
+          <input class="form-control" [value]="itemService.productFilters.size" formControlName="size" placeholder="">
+        </mat-header-cell>
+        <mat-cell [matTooltip]="summaryNeed.size" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs>
+          <p class="full-height">{{ summaryNeed.size }}</p>
+        </mat-cell>
+      </ng-container>
+      <!-- / SIZE COLUMN -->
+    
+      <!-- Quantity Needed Column -->
+    
+      <ng-container cdkColumnDef="quantityNeeded">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs
+          *cdkHeaderCellDef>
+          <span>Quantity Needed</span>
+        </mat-header-cell>
+        <mat-cell class="align-right" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs
+          [matTooltip]="summaryNeed.combinedQuantityNeeded">
+          <!-- <input class="form-control" value={{summaryNeed.quantityNeeded}} placeholder=""> -->
+          <p class="text-truncate">{{summaryNeed.combinedQuantityNeeded | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / Quantity Needed Column -->
+    
+      <!-- Quantity Ordered Column -->
+      <ng-container cdkColumnDef="quantityOrdered">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Quantity Ordered</span>
+        </mat-header-cell>
+        <mat-cell class="align-right" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs
+          [matTooltip]="summaryNeed.combinedQuantityOrdered">
+          <!-- <input class="form-control" value={{summaryNeed.quantityNeeded}} placeholder=""> -->
+          <p class="text-truncate">{{summaryNeed.combinedQuantityOrdered | ellipsis: 15}}</p>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / Quantity Ordered Column -->
+    
+      <!-- Acutal Cost Column -->
+      <ng-container cdkColumnDef="actualCost">
+        <mat-header-cell class="header-cell" fxLayout="column" fxLayoutAlign="start" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+          <span>Actual Cost</span>
+        </mat-header-cell>
+        <mat-cell class="align-right" *cdkCellDef="let summaryNeed" fxHide fxShow.gt-xs>
+          <p class="text-truncate">${{summaryNeed.actualCost.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+            })}}</p>
+        </mat-cell>
+      </ng-container>
+    
+      <!-- / Actual Cost Column -->
+    
+      <mat-header-row *cdkHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      <mat-row class="row" *cdkRowDef="let summaryNeed; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator (page)="paginate($event)" [length]="dataSource.count" [pageIndex]="0"
+      [pageSize]="50" [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
+</form>

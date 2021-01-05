@@ -1,0 +1,94 @@
+@import "src/@fuse/scss/fuse";
+apinvoice-lines {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .mat-table {
+        box-shadow: none;
+        margin-top: 64px;
+        //position: static;
+        //overflow-y: auto;
+
+        .mat-header-row {
+            background: white;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+
+        .mat-header-cell {
+            .mat-sort-header-arrow {
+                opacity: 0;
+                transform: translateY(0px);
+                .mat-sort-header-pointer-left {
+                    transform: rotate(-45deg);
+                }
+                .mat-sort-header-pointer-right {
+                    transform: rotate(45deg);
+                }
+            }
+        }
+
+        .mat-row {
+            position: relative;
+            cursor: pointer;
+                        z-index: 0;
+
+			.mat-column-image {
+				text-align: center;
+
+				.product-image-tall {
+					width: auto;
+					max-height: 40px;
+					max-width: 40px;
+
+					@include media-breakpoint('xs') {
+						max-height: 52px !important;
+						min-height: 52px !important;
+					}
+
+					@include media-breakpoint('sm') {
+						max-height: 44px !important;
+						min-height: 44px !important;
+					}
+				}
+
+				.product-image-wide {
+					height: auto;
+					max-height: 40px;
+					max-width: 40px;
+
+					@include media-breakpoint('xs') {
+						max-height: 52px !important;
+						min-height: 52px !important;
+					}
+
+					@include media-breakpoint('sm') {
+						max-height: 44px !important;
+						min-height: 44px !important;
+					}
+				}
+			}
+
+            .mat-cell {
+                min-width: 0;
+
+                &.mat-column-detail-button {
+                    flex: 0 1 auto;
+                    padding: 0 24px 0 0;
+                    @include media-breakpoint('gt-md') {
+                        display: none;
+                    }
+                }
+
+                p.text-truncate {
+                    width: 90%;
+                }
+            }
+        }
+    }
+}

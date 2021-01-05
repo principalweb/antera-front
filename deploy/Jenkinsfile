@@ -1,0 +1,126 @@
+pipeline {
+    agent any
+    environment {
+        GIT_MESSAGE = sh(script: 'git log $COMMIT --format=format:%s -1', , returnStdout: true).trim()
+        GIT_AUTHOR  = sh(script: 'git log $COMMIT -1 --pretty=format:%an', , returnStdout: true).trim()
+        GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
+    }
+    stages {
+        stage ('Pre Build: Prepare Jenkins Env') {
+            when {
+              anyOf {
+                branch 'stg'
+                branch "dev"
+                    } 
+            }
+            steps {
+                script {
+                    sh 'printenv'
+                }
+            }
+        }
+        stage('Build') {
+            when {
+              anyOf {
+                branch 'stg'
+                branch "dev"
+                    }
+            }
+            steps {
+                sh 'echo $BRANCH_NAME'
+                sh 'echo $GIT_REPO_NAME'
+                script {
+
+                  // It's necessary to define where is the docker that should build the image
+                  // def dockerHome = tool 'default'
+                  // env.PATH = "${dockerHome}/bin:${env.PATH}"
+          
+                  // Build the docker image environment/application:build                
+                  docker.build("${env.GIT_REPO_NAME}/${env.BRANCH_NAME}:${env.BUILD_ID}", "--network host .")
+                        }
+            }
+        }
+
+        stage('Dev Deploy') {
+            when {
+                    branch "dev" 
+            }
+            steps {
+
+                // Check if ECR repo already exists, if it doesn't, create it
+                sh '$(aws ecr get-login --no-include-email)'
+                sh 'aws ecr describe-repositories --repository-names $GIT_REPO_NAME/$BRANCH_NAME || aws ecr create-repository --repository-name $GIT_REPO_NAME/$BRANCH_NAME'
+
+                 // Upload the build to ECR
+                sh 'aws ecr describe-repositories --repository-names $GIT_REPO_NAME/$BRANCH_NAME || aws ecr create-repository --repository-name $GIT_REPO_NAME/$BRANCH_NAME'
+                script {
+                  docker.withRegistry('https://705666639440.dkr.ecr.us-east-1.amazonaws.com/${env.GIT_REPO_NAME}/${env.BRANCH_NAME}') {
+                    docker.image("${env.GIT_REPO_NAME}/${env.BRANCH_NAME}:${env.BUILD_ID}").push('latest')
+                    docker.image("${env.GIT_REPO_NAME}/${env.BRANCH_NAME}:${env.BUILD_ID}").push(env.BUILD_ID)
+                  }
+                }
+
+                  // Apply the files to K8s
+                  // sh 'cd /var/jenkins_home ; rm -rf helm-charts ; GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git clone git@gitlab.com:betterchange/devops/helm-charts.git'
+                  // sh 'cd /var/jenkins_home/helm-charts ; ./feature_deploy.sh $GIT_REPO_NAME $BRANCH_NAME'
+
+                  // Update K8s deployment with the new ECR image
+                sh "kubectl -n $BRANCH_NAME-$GIT_REPO_NAME set image deployment $BRANCH_NAME-$GIT_REPO_NAME=705666639440.dkr.ecr.us-east-1.amazonaws.com/$GIT_REPO_NAME/$BRANCH_NAME:$BUILD_ID --all"
+
+            }
+        }
+
+       stage('Stage Deploy') {
+            when {
+                branch 'stg'
+            }
+            steps {
+                // Check if ECR repo already exists, if it doesn't, create it
+                sh '$(aws ecr get-login --no-include-email)'
+                sh 'aws ecr describe-repositories --repository-names $GIT_REPO_NAME/$BRANCH_NAME || aws ecr create-repository --repository-name $GIT_REPO_NAME/$BRANCH_NAME'
+        
+                // Upload the new builded docker image to ECR 
+                script {
+                  docker.withRegistry('https://705666639440.dkr.ecr.us-east-1.amazonaws.com/${env.GIT_REPO_NAME}/${env.BRANCH_NAME}') {
+                    docker.image("${env.GIT_REPO_NAME}/${env.BRANCH_NAME}:${env.BUILD_ID}").push('latest')
+                    docker.image("${env.GIT_REPO_NAME}/${env.BRANCH_NAME}:${env.BUILD_ID}").push(env.BUILD_ID)
+                  }
+
+                // Tag Build
+                sh 'git fetch --tags --all' 
+                sh 'git tag $BUILD_ID'
+                sh 'git push origin --tags'                
+
+                // Update K8s deployment with the new ECR image
+                sh "kubectl -n stg-${env.GIT_REPO_NAME} set image deployment stg-${env.GIT_REPO_NAME}=705666639440.dkr.ecr.us-east-1.amazonaws.com/${env.GIT_REPO_NAME}/${env.BRANCH_NAME}:${env.BUILD_ID} --all"
+
+                }
+            }
+        }
+
+        stage('Prod Deploy') {
+            when {
+                branch '----master'
+            } 
+            steps {
+                sh 'echo test'
+//                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+            }
+        }
+
+    }
+
+  post {
+        always {
+          script {
+                def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', 'ABORTED': 'danger']
+                slackSend   message: "*${currentBuild.currentResult}:* ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.RUN_DISPLAY_URL}|Open>) - ${env.GIT_MESSAGE} - started by ${env.GIT_AUTHOR}",
+                    baseUrl: "https://anterasoftware.slack.com/services/hooks/jenkins-ci/",
+                    channel: "jenkins",
+                    color: COLOR_MAP[currentBuild.currentResult],
+                    tokenCredentialId: "slack"
+                  }
+              }
+          }
+
+}

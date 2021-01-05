@@ -1,0 +1,23 @@
+<div fxLayout="column" class="webstore-form">
+    <h2 mat-dialog-title class="pb-0">Select Tags</h2>
+    <div class="dialog-content dialog-content-webstore p-16" fxLayout="column">
+        <div  *ngIf="tagList.length > 0"><div *ngFor="let tag of tagList;">
+                <mat-checkbox 
+                    [(ngModel)]="checkboxes[tag.id]" 
+                    (ngModelChange)="onSelectedChange(tag.id)"
+                    (click)="$event.stopPropagation()">
+                    {{tag.tag}}
+                </mat-checkbox>   
+            </div>
+        </div>
+        <div *ngIf="tagList.length === 0">
+            No tags available   
+        </div>
+    </div>
+    <div class="mt-24 webstore-dialog-footer" fxLayout="row" fxLayoutAlign="end start">
+        <button mat-raised-button mat-button class="save-button mat-accent" (click)="onTagsSelected()">Add</button>
+        <button mat-button class="close" matDialogClose>CANCEL</button>
+    </div>
+</div>
+      
+      

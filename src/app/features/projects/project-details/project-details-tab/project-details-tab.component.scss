@@ -1,0 +1,22 @@
+@import "src/@fuse/scss/fuse";
+
+#project-details-design {
+
+  .mw-300 {
+    min-width: 300px;
+  }
+  .note {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .pre {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    text-align: justify;
+  }
+
+  .small-note {
+    -ms-flex: 0 1 auto;
+  }
+}

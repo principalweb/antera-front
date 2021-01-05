@@ -1,0 +1,13 @@
+<div class="h-4 blue-500-bg"></div>
+<div class="list-card-details">
+    <div class="list-card-name condensed" fxLayout="row" fxLayoutAlign="space-between center" [matTooltip]="tooltip"
+        [matTooltipClass]="'logistics-card-tooltip'">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="onSelect($event)">
+            </mat-checkbox>
+            <span class="ml-8 mr-4">{{ card.orderNo}}</span>
+        </div>
+        <span class="accent-800-fg">{{card.dateModified | date }}</span>
+    </div>
+    <div>{{ card.accountName }}</div>
+</div>

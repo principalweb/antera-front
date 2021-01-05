@@ -1,0 +1,73 @@
+<div
+  class="mat-white-bg mat-elevation-z2 p-24 m-12"
+  fxLayout="column"
+>
+  <mat-toolbar class="mb-20">
+    <span class="mr-8" *ngIf="design">{{ data.itemNo + ' - ' + design.name + ' - ' + color }}</span>
+
+    <button mat-icon-button
+            (click)="toggleEditVariations()"
+            *ngIf="!editVariations && !loading && !error">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button
+            (click)="saveVariations()"
+            *ngIf="editVariations && !loading && !error">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button
+            (click)="cancelEditVariations()"
+            *ngIf="editVariations && !loading && !error">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="px-8" fxLayout="column" *ngIf="!loading && !error">
+    <div class="p-8 error" fxFlex="none"
+         *ngIf="!loading && verror">
+      {{ verror }}
+    </div>
+
+    <div fxLayout="row wrap">
+      <div fxFlex="none" *ngFor="let variation of variationForms;let i=index">
+        <app-artwork-variation
+          [form]="variation"
+          [index]="i"
+          [edit]="editVariations"
+          [selectable]="true"
+          [selected]="selectedId === variation.value.design_variation_unique_id"
+          (select)="select(i)"
+          [designDistId]="folderId"
+          [accountId]="design.customerId"
+          [designNumber]="design.model"
+          [source]="order"
+          (add)="addColorThreadPMS(variation)"
+          (close)="closeVariation(i)"
+          (save)="saveVariation()"
+        ></app-artwork-variation>
+      </div>
+      <div class="w-300 mx-8 mt-8"
+           fxLayout="column" fxLayoutAlign="start stretch"
+           *ngIf="editVariations">
+        <button mat-button color="accent" class="add-variation" (click)="addVariation()">
+          <mat-icon class="accent-500-fg">add</mat-icon> Add
+        </button>
+      </div>
+    </div>
+    <div class="p-20 text-center"
+         *ngIf="variationForms.length === 0 && !editVariations">
+      No variations. Please add variations
+    </div>
+  </div>
+
+  <div class="p-8 error" fxFlex
+      *ngIf="!loading && error">
+    {{ error }}
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>
+
+

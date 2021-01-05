@@ -1,0 +1,106 @@
+@import "src/@fuse/scss/fuse";
+
+html, body{
+  @include media-breakpoint('lt-lg'){
+    overflow: unset !important;
+  }
+}
+
+.kpi-executive{
+  background-color: #111314;
+
+  .hint-text{
+    color: #989898;
+  }
+
+  &-title{
+    color: #ffffff;
+  }
+
+  &-panel{
+    background-color: #252525;
+    color: #ffffff;
+  }
+}
+
+mat-divider{
+  border-color: #2c2c2c !important;
+}
+
+canvas{
+  width: 100% !important;
+  padding: 23px;
+  padding-top: 0;
+}
+
+ngx-charts-pie-chart{
+  .pie-label{
+    fill: #fff;
+  }
+
+  .legend-label-color{
+    border-radius: 50% !important;
+  }
+
+  .chart-legend .legend-label .active .legend-label-text{
+    color: #fff;
+  }
+
+  .legend-title-text{
+    display: none !important;
+  }
+
+  .ngx-charts{
+    position: absolute;
+    top: -67px;
+    left: 57px;
+  }
+
+  ngx-charts-legend{
+    position: absolute;
+    right: 100px;
+    top: 29px;
+    .legend-labels{
+      background: none !important;
+      width: unset !important;
+    }
+  }
+}
+
+ngx-gauge{
+  height: 115px !important;
+  padding-top: 15px;
+  .reading-block{
+    font-size: 30px !important;
+    line-height: 150px !important;
+  }
+}
+
+#chart_site_visitors_overview-legend {
+  width:100%;
+
+  ul{
+    margin: 4px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  li{
+    cursor:pointer;
+    margin: 10px;
+    list-style: none;
+
+    span{
+      margin-right: 11px;
+      margin-bottom: 4px;
+      position: relative;
+      height: 3px;
+      display: inline-block;
+      width: 26px;
+      border-radius: 13px;
+      color: white;
+      z-index: 2;
+    }
+  }
+}

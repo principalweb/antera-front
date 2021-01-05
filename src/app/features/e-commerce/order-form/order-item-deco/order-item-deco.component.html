@@ -1,0 +1,375 @@
+<div class="item__deco" [formGroup]="form">
+  <div class="item__deco__header" fxLayout="row" fxLayoutAlign="start start" fxFlexAlign="start center">
+
+    <div class="col col--checkbox" *ngIf="selection && config?.edit">
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(deco) : null"
+        [checked]="selection.isSelected(deco)">
+      </mat-checkbox>
+    </div>
+
+    <div class="col col--icon">
+      <mat-icon [class.orange-fg]="deco.decoStatus !== 'Done'" [class.green-fg]="deco.decoStatus === 'Done'">palette
+      </mat-icon>
+    </div>
+
+
+
+    <div class="col col--image">
+      <div [matMenuTriggerFor]="decorationMenu" class="deco__preview deco__preview--edit"
+        *ngIf="config?.edit; else decoPreview" matTooltip="Edit Design">
+        <img [src]="decorationThumbnail" [default]="'assets/images/ecommerce/product-image-placeholder.png'"
+          [alt]="deco.designName">
+        <div> {{ deco.decoType }} </div>
+        <div *ngIf="deco.decorationDetails[0].decoDesignVariation.design_variation_title"> Variation : {{ deco.decorationDetails[0].decoDesignVariation.design_variation_title }} </div>
+      </div>
+
+      <ng-template #decoPreview>
+        <div class="deco__preview">
+          <img [src]="decorationThumbnail" [alt]="deco.designName">
+          <div> {{ deco.decoType }} </div>
+          <div *ngIf="deco.decorationDetails[0].decoDesignVariation.design_variation_title"> Variation : {{ deco.decorationDetails[0].decoDesignVariation.design_variation_title }} </div>
+        </div>
+      </ng-template>
+
+
+
+      <mat-menu #decorationMenu="matMenu" [overlapTrigger]="true">
+        <button mat-menu-item (click)="previewDecoration()">Preview</button>
+        <button mat-menu-item (click)="changeVariation()">Change variation</button>
+      </mat-menu>
+    </div>
+
+    <!-- Should contain header level details for the line item -->
+    <div class="col col--description">
+
+      <div class="mb-8">
+        <a [routerLink]="" class="accent-fg w-100-p text-center" (click)="previewDecoration()">
+          {{ deco.designModal }}
+        </a>
+        <span> {{ deco.designName }}</span>
+
+      </div>
+
+      <div class="mb-8" *ngIf="deco.decoChargeName">
+        <span> <strong>Deco Charges</strong>: {{ deco.decoChargeName }}</span>
+      </div>
+
+      <ng-container *ngIf="config?.module?.settings?.enableArtProof == '1'">
+        <div *ngIf="(artProofs$ | async) as artProofs">
+          <ng-container *ngIf="artProofs[0] as proof; else noProof">
+            <mat-icon [class.orange-fg]="proof.status == 1" [class.red-fg]="proof.status == 2"
+              [class.green-fg]="proof.status > 2">art_track
+            </mat-icon>
+            <button mat-button (click)="editProof(proof)">Edit Proof</button>
+            <button mat-button (click)="deleteProof(proof)">Delete Proof</button>
+
+          </ng-container>
+          <ng-template #noProof>
+            <button mat-button (click)="createProof()">Create Proof</button>
+          </ng-template>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="config?.edit && !deco.isDecoVouched; else readOnlyDescription">
+
+        <div class="mb-8">
+          <mat-checkbox formControlName="vendorSupplierDecorated"> Supplier Decorated</mat-checkbox>
+        </div>
+
+        <mat-form-field appearance="outline"
+          *ngIf="config?.decoLocations && (!form.get('vendorSupplierDecorated')?.value || !product?.SupplierLocationArray?.Location?.length)">
+          <mat-label>Location</mat-label>
+          <mat-select formControlName="decoLocation" [errorStateMatcher]="matcher">
+            <mat-option *ngFor="let location of config.decoLocations" [value]="location">{{ location }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <ng-container *ngIf="!form.get('vendorSupplierDecorated')?.value && (decoVendors$ | async) as decoVendors;">
+
+          <ng-container *ngIf="decoVendors && decoVendors.length; else noMatchingDecoVendor">
+            <mat-form-field appearance="outline">
+              <mat-label>Vendor</mat-label>
+              <mat-select formControlName="vendorId" [value]="form.get('vendorId').value"
+                (selectionChange)="selectVendor($event)" [compareWith]="compareVendor">
+                <mat-option [value]="vendor" *ngFor="let vendor of decoVendors">{{ vendor.vendor }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+
+          <ng-template #noMatchingDecoVendor>
+            {{ deco.vendorName }}
+          </ng-template>
+
+        </ng-container>
+
+      </ng-container>
+      <ng-container *ngIf="form.get('vendorSupplierDecorated')?.value">
+        <div>
+          <mat-form-field appearance="outline" *ngIf="product?.SupplierLocationArray?.Location?.length">
+            <mat-label>Supplier Decorated Location</mat-label>
+
+            <mat-select [value]="form.get('sourceLocationId').value" [compareWith]="compareSupplierLocation"
+              (selectionChange)="selectSupplierLocation($event)">
+              <mat-option [value]="location" *ngFor="let location of product?.SupplierLocationArray?.Location">
+                {{ location.locationName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" *ngIf="sourceLocation">
+            <mat-label>Supplier Decoration Type </mat-label>
+            <mat-select [value]="form.get('sourceDecorationId').value" [compareWith]="compareSupplierDecoration"
+              (selectionChange)="selectSupplierDecoration($event)">
+              <mat-option [value]="decoration" *ngFor="let decoration of sourceLocation?.DecorationArray?.Decoration">
+                {{ decoration.decorationName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <ng-container *ngIf="sourceDecoration">
+            <button mat-icon-button (click)="openDecorationDialog()">
+              <mat-icon>info</mat-icon>
+            </button>
+          </ng-container>
+
+        </div>
+      </ng-container>
+
+      <ng-template #readOnlyDescription>
+        <div>
+          <div>{{ deco.vendorName }}</div>
+          <div>{{ deco.designName }}</div>
+          <div>{{ deco.decoLocation }}</div>
+          <div>{{ deco.decoStatus }}</div>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- These columns can be dynamic but should remain short -->
+
+    <ng-container *ngIf="config?.edit && !deco.isDecoVouched;  else readOnly">
+      <div class="tighter-margin" fxLayout="column" fxLayoutAlign="start center"
+        *ngIf="!config?.hideCost && !adminFeeEnabled">
+        <p>GP</p>
+        {{ calculateMargin(deco.customerPrice, deco.itemCost) | roundString: 2 }}%
+      </div>
+      
+      <div class="tighter-margin" fxLayout="column" fxLayoutAlign="start center"
+        *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails">
+        <p>GP</p>
+        {{ calculateMargin(deco.customerPrice, calculateAdminFeeCost(deco.customerPrice, deco.itemCost, orderDetails.adminFeeRate)) | roundString: 2 }}%
+      </div>
+      <div class="col col--qty">
+        <div fxLayout="column">
+          <mat-form-field appearance="outline">
+            <!-- <mat-label>Quantity</mat-label> -->
+            <input matInput type="number" step="any" min="0" formControlName="quantity">
+          </mat-form-field>
+          <mat-form-field *ngIf="currencyEnabled && !vendorCurrencyMatches() && !config?.hideCost" class="mt-8"
+            appearance="outline">
+            <mat-label>Rate</mat-label>
+            <input matInput type="number" disabled step="any" [value]="costExchangeRate | roundString: 4"
+              autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="vendor-currency-pair" *ngIf="!config?.hideCost">
+        <div *ngIf="currencyEnabled && baseCurrency" fxLayout="column">
+          <p>{{ baseCurrency }}</p>
+          <p *ngIf="!vendorCurrencyMatches() && vendorCurrencyCode">{{ vendorCurrencyCode }}</p>
+        </div>
+      </div>
+
+      <div class="col col--cost">
+        <div fxLayout="column">
+          <mat-form-field appearance="outline">
+            <!-- <mat-label>Cost</mat-label> -->
+            <input matInput type="number" step="any" min="0" formControlName="itemCost" (keyup)="setCostStrategyToManual($event)">
+          </mat-form-field>
+          <mat-form-field *ngIf="currencyEnabled && !vendorCurrencyMatches()" class="mt-8" appearance="outline">
+            <input formControlName="costConverted" matInput type="number" step="any" [value]="displayCostConverted() | roundString: 2"
+              autocomplete="off">
+          </mat-form-field>
+        </div>
+
+        <button mat-icon-button (click)="toggleCostStrategy()"
+          [disabled]="data?.config?.permissions?.restrict_order_sales_pricing?.data"
+          [matTooltip]="deco.costStrategy === 'PRICE_BREAK' ? 'Automatic price breaks enabled' : 'Automatic price breaks disabled'"
+          [class.grey-300-fg]="deco.costStrategy != 'PRICE_BREAK'"
+          [class.green-fg]="deco.costStrategy === 'PRICE_BREAK'">
+          <mat-icon>{{ deco.costStrategy === 'PRICE_BREAK' ? 'sync' : 'sync_disabled' }}</mat-icon>
+        </button>
+      </div>
+      <!-- ADMIN FEE RATE -->
+      
+      <div class="col col--cost" *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails && orderDetails.adminFeeRate">
+      
+        <ng-container *ngIf="config?.edit && !row.isMatrixVouched; else previewCost">
+      
+          <mat-form-field appearance="outline">
+            <input [value]="orderDetails.adminFeeRate | roundString: 2" matInput formControlName="adminFee">
+          </mat-form-field>
+        </ng-container>
+      
+        <ng-template #previewCost>
+          {{ orderDetails.adminFeeRate | roundString: '2' }}%
+        </ng-template>
+      </div>
+      
+      <!-- / ADMIN FEE RATE -->
+
+      <!-- SUBTOTAL -->
+      
+      <div class="col col--cost" *ngIf="!config?.hideCost && adminFeeEnabled && orderDetails">
+      
+        <ng-container *ngIf="config?.edit && !row.isMatrixVouched; else previewCost">
+      
+          <mat-form-field appearance="outline">
+            <input [value]="this.deco.unitCostIncludingAdminFee | roundString: 2" matInput
+              formControlName="unitCostIncludingAdminFee">
+          </mat-form-field>
+        </ng-container>
+      
+        <ng-template #previewCost>
+          {{ row.unitCostIncludingAdminFee.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+                }) }}
+        </ng-template>
+      </div>
+      
+      <!-- / SUBTOTAL -->
+      <div class="vendor-currency-pair"
+        *ngIf="!config?.hideCost && !row.isMatrixVouched && currencyEnabled && baseCurrency && customerCurrencyCode">
+        <div fxLayout="column">
+          <p>{{ baseCurrency }}</p>
+          <p *ngIf="!customerCurrencyMatches()">{{ customerCurrencyCode }}</p>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #readOnly>
+      <div class="col col--qty">
+        {{ deco.quantity }}
+      </div>
+      <div class="col col--cost" *ngIf="!config?.hideCost">
+        {{ deco.itemCost | currency:'USD':'symbol':'1.2-15' }}
+      </div>
+    </ng-template>
+
+    <ng-container *ngIf="config?.edit;  else readOnlyPrice">
+      <div class="col col--price">
+        <mat-form-field appearance="outline">
+          <!-- <mat-label>Price</mat-label> -->
+          <input matInput type="number" step="any" min="0" formControlName="customerPrice"
+            (keyup)="setPriceStrategyToManual($event)">
+        </mat-form-field>
+        <mat-form-field *ngIf="!config?.hideCost && currencyEnabled && !customerCurrencyMatches()" class="mt-8"
+          appearance="outline">
+          <input formControlName="priceConverted" matInput type="number" step="any" [value]="displayPriceConverted() | roundString: 2"
+            autocomplete="off">
+        </mat-form-field>
+        <button mat-icon-button (click)="togglePriceStrategy()"
+          [matTooltip]="deco.priceStrategy === 'PRICE_BREAK' ? 'Automatic price breaks enabled' : 'Automatic price breaks disabled'"
+          [class.grey-300-fg]="deco.priceStrategy != 'PRICE_BREAK'"
+          [class.green-fg]="deco.priceStrategy === 'PRICE_BREAK'">
+          <mat-icon>{{ deco.priceStrategy === 'PRICE_BREAK' ? 'sync' : 'sync_disabled' }}</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #readOnlyPrice>
+      <div class="col col--price">
+        {{ deco.customerPrice | currency:'USD':'symbol':'1.2-15' }}
+      </div>
+    </ng-template>
+
+    <div class="col col--total">
+
+      <div fxLayout="column" fxLayoutAlign="start center">
+        <ng-container *ngIf="!rollDecoCharges">
+          {{ deco.totalPrice | currency:'USD':'symbol':'1.2-15' }}
+        </ng-container>
+        <ng-container *ngIf="rollDecoCharges">
+          Included
+        </ng-container>
+        <mat-form-field class="margin-rate-top" *ngIf="currencyEnabled && !customerCurrencyMatches() && !config?.hideCost" appearance="outline">
+          <mat-label>Rate</mat-label>
+          <input matInput type="number" disabled step="any" [value]="customerExchangeRate | roundString: 4"
+            autocomplete="off">
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="col col--menu" *ngIf="config?.edit && !deco.isDecoVouched">
+
+      <mat-menu #itemMenu="matMenu">
+        <button mat-menu-item>Edit</button>
+        <button mat-menu-item (click)="copyToClipboard()">Copy</button>
+        <button mat-menu-item (click)="deleteDecoration()">Delete</button>
+      </mat-menu>
+
+      <mat-icon [matMenuTriggerFor]="itemMenu">more_vert</mat-icon>
+    </div>
+  </div>
+  <ng-template #sourceDecorationDetails>
+
+    <div *ngIf="sourceDecoration" class="p-16">
+      {{ sourceDecoration.decorationName }}
+      {{ sourceDecoration.decorationGeometry }}
+      {{ sourceDecoration.decorationHeight | number:'1.0-3' }} x {{ sourceDecoration.decorationWidth | number:'1.0-3' }}
+      {{ sourceDecoration.decorationUom }}
+
+      <ng-container *ngIf="sourceDecoration.imprintPriceKey !== item.priceType">
+        <button mat-button (click)="useImprintPricing()">Use Imprint Pricing</button>
+      </ng-container>
+
+      <div *ngFor="let charge of sourceDecoration?.ChargeArray?.Charge">
+        <table class="simple">
+          <caption>{{ charge.chargeName }}</caption>
+          <thead>
+            <tr>
+              <th>Min X</th>
+              <th>Min Y</th>
+              <th>Price</th>
+              <th>Repeat Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let chargePrice of charge.ChargePriceArray.ChargePrice">
+              <td>{{ chargePrice.xMinQty }} {{ chargePrice.xUom }}</td>
+              <td>{{ chargePrice.yMinQty }} {{ chargePrice.yUom }}</td>
+              <td>{{ chargePrice.price }}</td>
+              <td>{{ chargePrice.repeatPrice }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+  <div class="addons">
+
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="config?.edit" class="addons__toolbar">
+
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="isAnyRowSelected() && isAllSelected()"
+        [indeterminate]="isAnyRowSelected() && !isAllSelected()" [disabled]="deco.addonCharges?.length === 0">
+      </mat-checkbox>
+
+      <h3 class="pr-8 pl-8">Decoration Addon Charges</h3>
+
+      <button mat-button (click)="openChargesDialog()">
+        <mat-icon>edit</mat-icon> Manage
+      </button>
+
+      <div *ngIf="isAnyRowSelected()">
+        With selected decorations:
+        <button mat-button (click)="copyCharges()">Copy</button>
+        <button mat-button color="warn" (click)="bulkDeleteCharges()">Delete</button>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let addon of deco.addonCharges">
+      <app-order-item-addon type="decoration" [selection]="addonSelection" [addon]="addon" [item]="item" [deco]="deco"
+        [config]="config" (addonChange)="handleAddonChange($event)" (actions)="handleAddonActions($event)">
+      </app-order-item-addon>
+    </ng-container>
+  </div>
+</div>

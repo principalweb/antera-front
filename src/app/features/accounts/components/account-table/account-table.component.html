@@ -1,0 +1,167 @@
+<mat-table 
+    fxFlex #table
+    matSort (matSortChange)="sortChange($event)"
+    [dataSource]="dataSource"
+    [@animateStagger]="{value:'50'}"
+    [formGroup]="filterForm">
+
+    <!-- Checkbox Column -->
+    
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox (change)="toggleAll($event)"
+                        [checked]="selection.checkedAll | async"
+                        [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account">
+            <mat-checkbox [checked]="checkboxes[account.id]"
+                          (change)="onSelectedChange(account.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>     
+
+    <ng-container cdkColumnDef="accountName">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input class="form-control" formControlName="accountName"
+            (keyup.enter)="fetchList()"
+            >
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" [matTooltip]="account.accountName" [matTooltipClass]="'account-name-tooltip'">
+            <p class="text-truncate font-weight-600">{{ account.accountName }}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="partnerType">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            <span mat-sort-header>Partner Type</span>
+            <input class="form-control" formControlName="partnerType"
+            (keyup.enter)="fetchList()"
+            >
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" fxHide fxShow.gt-xs>
+            <p class="email text-truncate">
+                {{account.partnerType}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="billState">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>State/Province</span>
+            <input class="form-control" formControlName="billState"
+            (keyup.enter)="fetchList()"
+            >
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" fxHide fxShow.gt-sm>
+            <p class="phone text-truncate">
+                {{account.billState}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="phone">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+            <span mat-sort-header>Phone</span>
+            <input class="form-control" formControlName="phone"
+            (keyup.enter)="fetchList()"
+            >
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" fxHide fxShow.gt-sm>
+            <p class="job-title text-truncate">
+                {{account.phone}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="salesRep">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+            <span mat-sort-header>Assigned To</span>
+            <input class="form-control" formControlName="salesRep"
+            (keyup.enter)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" fxHide fxShow.gt-md>
+            <p class="company text-truncate">
+                {{account.salesRep}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="dateCreated">
+        <!-- Added filter row by Olena -->
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Date Created</span>
+            <input class="form-control" formControlName="dateCreated"
+            (keyup.enter)="fetchList()">
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" fxHide fxShow.gt-lg>
+            <p class="company text-truncate">
+                {{account.dateCreated | date}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="rating">
+        <mat-header-cell class="header-cell" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+            <span mat-sort-header>Rating</span>
+            <input class="form-control" formControlName="rating" disabled>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let account" fxHide fxShow.gt-lg>
+            <p class="ranking text-truncate">
+                {{ account?.rating}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+
+    <ng-container cdkColumnDef="buttons">
+        <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+        <mat-cell *cdkCellDef="let account">
+            <div fxFlex="row" fxLayoutAlign="end center">
+                <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                        (click)="$event.stopPropagation();">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+
+                <mat-menu #moreMenu="matMenu">
+                    <button mat-menu-item aria-label="remove" (click)="deleteAccount(account)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Remove</span>
+                    </button>
+                </mat-menu>
+            </div>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let account; columns: displayedColumns;"
+            class="account"
+            (click)="editAccount(account)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[account.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageIndex]="0"
+            [pageSize]="50"
+            (page)="paginate($event)"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

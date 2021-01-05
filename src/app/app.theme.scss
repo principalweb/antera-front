@@ -1,0 +1,120 @@
+@import 'src/@fuse/scss/variables/theme';
+@import 'src/@fuse/scss/partials/global';
+// -----------------------------------------------------------------------------------------------------
+// @ Custom color maps for Fuse
+// -----------------------------------------------------------------------------------------------------
+$fuse-white: (
+    500: white,
+    contrast: (
+        500: $dark-primary-text
+    )
+);
+
+$fuse-black: (
+    500: black,
+    contrast: (
+        500: $light-primary-text,
+    )
+);
+
+$fuse-navy: (
+    50: #ECECEE,
+    100: #C5C6CB,
+    200: #9EA1A9,
+    300: #7D818C,
+    400: #5C616F,
+    500: #3C4252,
+    600: #353A48,
+    700: #2D323E,
+    800: #262933,
+    900: #1E2129,
+    A100: #C5C6CB,
+    A200: #9EA1A9,
+    A400: #5C616F,
+    A700: #2D323E,
+    contrast: (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $light-primary-text,
+        400: $light-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text,
+        A100: $dark-primary-text,
+        A200: $light-primary-text,
+        A400: $light-primary-text,
+        A700: $light-primary-text,
+    )
+);
+
+// Generate Fuse color classes for custom palettes
+$custom_palettes: (
+    fuse-white: $fuse-white,
+    fuse-black: $fuse-black,
+    fuse-navy: $fuse-navy
+);
+
+@include fuse-color-classes($custom_palettes);
+
+// -----------------------------------------------------------------------------------------------------
+// @ Typography
+// -----------------------------------------------------------------------------------------------------
+
+// Angular Material typography
+$typography: mat-typography-config(
+    $font-family:   'Roboto, "Helvetica Neue", sans-serif',
+    $title: mat-typography-level(20px, 32px, 600),
+    $body-2: mat-typography-level(14px, 24px, 600),
+    $button: mat-typography-level(14px, 14px, 600),
+    $input: mat-typography-level(16px, 1.125, 400) // line-height must be unitless !!!
+);
+
+
+
+// Setup the typography
+@include angular-material-typography($typography);
+
+// -----------------------------------------------------------------------------------------------------
+// @ Component theming
+// -----------------------------------------------------------------------------------------------------
+
+// Import app and page component themes here to enable theming for them
+@import "src/app/layout/components/chat-panel/chat-panel.theme";
+@import "src/app/layout/components/toolbar/toolbar.theme";
+@import '~@mat-datetimepicker/core/datetimepicker/datetimepicker-theme.scss';
+
+// Define a mixin for easier access
+@mixin components-theme($theme) {
+
+    // Layout components
+    @include chat-panel-theme($theme);
+    @include toolbar-theme($theme);
+
+    // Third party components
+    @include mat-datetimepicker-theme($theme);
+}
+
+// -----------------------------------------------------------------------------------------------------
+// @ Define the default theme
+// -----------------------------------------------------------------------------------------------------
+
+// Generate the Angular Material theme
+ @include angular-material-theme($theme);
+
+ // Apply the theme to the Fuse Core
+ @include fuse-core-theme($theme);
+
+ // Apply the theme to the user components
+ @include components-theme($theme);
+
+ // Generate Fuse color classes for primary, accent and warn colors
+ $palettes: (
+     primary: $primary,
+     accent: $accent,
+     warn: $warn,
+ );
+
+ @include fuse-color-classes($palettes);

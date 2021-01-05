@@ -1,0 +1,150 @@
+workflow-list {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+
+  .mat-table {
+      margin-top:64px;
+      flex: 1;
+      position: static;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .mat-header-row {
+          position: absolute;
+          top:0;
+          min-height: 64px;
+          width: 100%;
+          z-index: 1;
+      }
+
+        .highlight{
+          /*background: #D5F2D1;  green */
+          font-weight:bold;
+        }
+        .merge{
+          background: #a6eaff; /* fab9ef */
+          font-weight:normal;
+        }
+
+        .item-box {
+          width: 100%;
+          float: left;
+          display: block;
+        }
+  }
+
+  mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
+    padding-right: 0;
+  }
+
+  .input {
+    width: 80%;
+  }
+
+  .timeline-progress {
+    padding: 4px 12px;
+    background: #555;
+    border-radius: 15px;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+    height: 24px;
+    margin-right: 8px;
+    width: 100%;
+
+    .bar {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      z-index: 0;
+      left: 0;
+      top: 0;
+    }
+
+    .label {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      line-height: 24px;
+      text-align: center;
+    }
+  }
+
+  .d-col {
+    align-self: stretch;
+    background: #A9A9A9;
+    border-right: 1px solid #ccc;
+  }
+
+  .mat-header-cell {
+    position: relative;
+  }
+
+  .mat-column-checkbox {
+    width: 60px;
+    max-width: 60px;
+  }
+
+  .mat-column-shipDate,
+  .mat-column-timeline {
+    position: relative;
+
+    .mat-datepicker-toggle .mat-icon-button {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      position: absolute;
+      right: 10px;
+      top: 30px;
+
+      .mat-datepicker-toggle-default-icon {
+        height: 16px !important;
+      }
+
+      .mat-button-ripple {
+        display: none;
+      }
+    }
+  }
+
+  .mat-column-shipDate {
+    min-width: 110px;
+  }
+
+  .mat-column-timeline {
+    min-width: 120px;
+  }
+
+  p.text-truncate {
+    width: 90%;
+  }
+}
+
+.workflow-orderIdentity-tooltip {
+  white-space: pre-line;
+  font-size: 1.2em;
+}
+
+    .merge-loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+   .merge-loading .mat-progress-spinner, .merge-loading svg {
+        width: 150px !important;
+        height: 150px !important;
+   }

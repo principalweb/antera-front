@@ -1,0 +1,19 @@
+<div class="p-16 mat-elevation-z1" [style.margin-left]="left"
+     [@animate]="{value:'*',params:{delay:'300ms',y:'-25px'}}"
+     *ngIf="visible">
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <mat-form-field class="mr-16">  
+      <input matInput placeholder="Saved search name" [(ngModel)]="name">
+    </mat-form-field>
+
+    <button class="mb-8" mat-raised-button color="accent" (click)="save()">Save</button>
+  </div>
+
+  <mat-list role="list">
+    <mat-list-item class="clickable" role="listitem" *ngFor="let item of savedList">
+      <mat-icon mat-list-icon (click)="editItem(item)">edit</mat-icon>
+      <mat-icon mat-list-icon (click)="deleteItem(item)">delete</mat-icon>
+      <p mat-line (click)="clickItem(item)">{{ item }}</p>
+    </mat-list-item>
+  </mat-list>
+</div>

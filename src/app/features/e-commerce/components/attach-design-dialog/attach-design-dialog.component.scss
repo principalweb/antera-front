@@ -1,0 +1,34 @@
+.remove-button {
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.mat-dialog-content {
+    margin: 0;
+    padding: 0;
+}
+
+.feature-image {
+    position: relative;
+
+    &:hover {
+        .remove-button {
+            transition: .3s opacity;
+            opacity: 1;
+        }
+
+        .uploaded-image {
+            transition: .3s opacity;
+            opacity: 0.2;
+        }
+    }
+
+    .uploaded-image img {
+        max-height: 300px;
+        max-width: 80vw;
+        object-fit: contain;
+    }
+}

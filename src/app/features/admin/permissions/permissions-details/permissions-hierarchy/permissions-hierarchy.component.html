@@ -1,0 +1,31 @@
+<div fxLayout="row">
+    <div fxLayout="column" fxFlex>
+        <span class="group-title">Parent</span>
+        <span *ngFor="let group of hierarchy" class="grouping">
+            <ng-container *ngIf="group.rel == 'parent'">
+                {{ group.groupName }}
+                <mat-icon (click)="unrelate(group.id)">arrow_right</mat-icon>
+            </ng-container>
+        </span>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div fxLayout="column" fxFlex>
+        <span class="group-title">Unrelated</span>
+        <span *ngFor="let group of unrelated" class="grouping">
+            <mat-icon (click)="addAsParent(group.groupId)">arrow_left</mat-icon>
+            {{ group.groupName }}
+            <mat-icon (click)="addAsChild(group.groupId)">arrow_right</mat-icon>
+        </span>
+
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div fxLayout="column" fxFlex>
+        <span class="group-title">Child</span>
+        <span *ngFor="let group of hierarchy" class="grouping">
+            <ng-container *ngIf="group.rel == 'child'">
+                <mat-icon (click)="unrelate(group.id)">arrow_left</mat-icon>
+                {{ group.groupName }}
+            </ng-container>
+        </span>
+    </div>
+</div>

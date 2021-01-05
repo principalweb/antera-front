@@ -1,0 +1,90 @@
+
+<div fxLayout="column" fxFlex>
+  <div class="p-16 py-8">
+      <div class="toolbar">
+          <div fxFlex="row" fxLayoutAlign="start center">
+              <button mat-raised-button color="accent"
+                      class="text-capitalize mr-8" (click)="addGroup()"
+                      fxHide fxShow.gt-md>
+                  <mat-icon>add</mat-icon> Group
+              </button>
+              <button mat-raised-button color="accent"
+                      class="text-capitalize mr-8" (click)="save()"
+                      fxHide fxShow.gt-md>
+                  <mat-icon>save</mat-icon> Save
+              </button>
+              <button mat-raised-button color="accent"
+                      class="text-capitalize mr-8" (click)="listLabels()"
+                      fxHide fxShow.gt-md>
+                  <mat-icon>label</mat-icon> Labels
+              </button>
+          </div>
+      </div>
+  </div>
+  <div fxLayout="row" fxFlex cdkDropListGroup>
+    <mat-card>
+      <h2>Base List</h2>
+      <form class="example-form" [formGroup]="dataForm" (submit)="processData()">
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Search" formControlName="searchText" (change)="processData()" />
+        </mat-form-field>
+        <mat-slide-toggle formControlName="exactSearch">Exact</mat-slide-toggle>
+        <mat-form-field class="example-full-width">
+            <input matInput placeholder="Show" formControlName="show" (change)="processData()" />
+            <mat-hint>Total - {{baseGroup.length}}</mat-hint>
+            <button type="submit" style="display:none"></button>
+        </mat-form-field>
+      </form>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event, 'base')" [cdkDropListData]="['base']">
+        <div class="example-box" *ngFor="let a of filteredBaseGroup" cdkDrag>
+          {{a.value}}
+          <mat-form-field>
+            <mat-label>Label</mat-label>
+            <mat-select [(ngModel)]="a.labelId">
+              <mat-option *ngFor="let label of productAttributeLabels" [value]="label.id">
+                {{label.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card>
+    <div fxLayout="column" fxFlex>
+      <mat-card>
+        <h2>Sorted Groups</h2>
+        <mat-accordion *ngFor="let gr of groupRanks">
+          <mat-expansion-panel (closed)="groupRanksShow[gr]=false" (opened)="groupRanksShow[gr]=true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Group {{gr + 1}} ( {{ranked[gr].length}} )
+              </mat-panel-title>
+              <mat-panel-description *ngIf="ranked[gr][0] && ranked[gr][0].value">
+                {{ranked[gr][0].value}}<span *ngIf="ranked[gr][1] && ranked[gr][1].value">, {{ranked[gr][1].value}}</span>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+            <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event, gr)" [cdkDropListData]="[gr]">
+              <div class="example-box" *ngFor="let a of ranked[gr]" cdkDrag>
+                {{a.value}}
+                <mat-form-field *ngIf="groupRanksShow[gr]">
+                  <mat-label>Label</mat-label>
+                  <mat-select [(ngModel)]="a.labelId">
+                    <mat-option *ngFor="let label of productAttributeLabels" [value]="label.id">
+                      {{label.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="loading"
+*ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>

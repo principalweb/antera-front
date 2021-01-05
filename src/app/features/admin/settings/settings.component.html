@@ -1,0 +1,81 @@
+<div id="admin-settings" class="page-layout carded fullwidth inner-scroll">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+    fxLayoutAlign.gt-xs="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">lock</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Antera Admin</span>
+      </div>
+      <!-- / APP TITLE -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="content-card">
+
+      <mat-tab-group class="admin-settings-tab-group-1 fixed" (selectedTabChange)="reloadTabs()">
+        <mat-tab label="Integrations">
+          <ng-template matTabContent>
+            <app-connectors></app-connectors>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Orders">
+          <ng-template matTabContent>
+            <app-order-settings></app-order-settings>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Products">
+          <ng-template matTabContent>
+            <app-product-configuration></app-product-configuration>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Reports">
+          <ng-template matTabContent>
+            <app-report-settings></app-report-settings>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Documents">
+          <ng-template matTabContent>
+            <app-document-config></app-document-config>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Partners">
+          <ng-template matTabContent>
+            <app-partner></app-partner>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="System Config">
+          <ng-template matTabContent>
+            <app-system-config-tab></app-system-config-tab>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Portal Settings">
+          <ng-template matTabContent>
+            <app-portal-settings></app-portal-settings>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Amazon S3 Settings">
+          <ng-template matTabContent>
+            <app-amazon-s3-settings></app-amazon-s3-settings>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Shopify Settings">
+          <ng-template matTabContent>
+            <app-shopify-settings></app-shopify-settings>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Dropbox Settings">
+          <ng-template matTabContent>
+            <app-dropbox-settings></app-dropbox-settings>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

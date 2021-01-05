@@ -1,0 +1,455 @@
+➜  frontend-upgrade git:(chore/upgrade) ✗ ng serve --port 1080                        
+** Angular Live Development Server is listening on localhost:1080, open your browser on http://localhost:1080/ **
+                                                                                          
+Date: 2019-02-24T20:51:56.820Z
+Hash: ef952b3622b4fd86baab
+Time: 22370ms
+chunk {main} main.js, main.js.map (main) 1.87 kB [initial] [rendered]
+chunk {polyfills} polyfills.js, polyfills.js.map (polyfills) 93.1 kB [initial] [rendered]
+chunk {runtime} runtime.js, runtime.js.map (runtime) 6.08 kB [entry] [rendered]
+chunk {scripts} scripts.js, scripts.js.map (scripts) 1.14 MB [entry] [rendered]
+chunk {styles} styles.js, styles.js.map (styles) 6.39 MB [initial] [rendered]
+chunk {vendor} vendor.js, vendor.js.map (vendor) 327 kB [initial] [rendered]
+
+ERROR in src/@fuse/components/countdown/countdown.component.ts(36,24): error TS2339: Property 'interval' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.component.ts(78,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/@fuse/components/search-bar/search-bar.service.ts(41,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(49,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(57,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(65,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(73,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(81,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(89,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(97,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(105,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/search-bar/search-bar.service.ts(113,25): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/@fuse/components/shortcuts/shortcuts.component.ts(3,10): error TS2305: Module '"../../../../node_modules/@angular/flex-layout/flex-layout"' has no exported member 'ObservableMedia'.
+src/@fuse/components/sidebar/sidebar.component.ts(3,10): error TS2305: Module '"../../../../node_modules/@angular/flex-layout/flex-layout"' has no exported member 'ObservableMedia'.
+src/@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.directive.ts(3,10): error TS2305: Module '"../../../../node_modules/@angular/flex-layout/flex-layout"' has no exported member 'ObservableMedia'.
+src/@fuse/services/match-media.service.ts(1,23): error TS2305: Module '"../../../node_modules/@angular/flex-layout/flex-layout"' has no exported member 'ObservableMedia'.
+src/app/core/services/api.service.ts(13,8): error TS2339: Property 'map' does not exist on type 'Observable<Object>'.
+src/app/core/services/api.service.ts(24,8): error TS2339: Property 'map' does not exist on type 'Observable<Object>'.
+src/app/core/services/api.service.ts(35,8): error TS2339: Property 'map' does not exist on type 'Observable<ArrayBuffer>'.
+src/app/core/services/api.service.ts(46,8): error TS2339: Property 'map' does not exist on type 'Observable<ArrayBuffer>'.
+src/app/core/services/artworks.service.ts(207,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/artworks.service.ts(221,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/artworks.service.ts(317,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/artworks.service.ts(329,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/artworks.service.ts(341,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/artworks.service.ts(382,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/auth.service.ts(80,25): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/auth.service.ts(81,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/opportunities.service.ts(111,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/opportunities.service.ts(144,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/opportunities.service.ts(173,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/opportunities.service.ts(187,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/opportunities.service.ts(201,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/productions.service.ts(266,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/productions.service.ts(280,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/productions.service.ts(382,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/productions.service.ts(394,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/core/services/productions.service.ts(439,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/sources.service.ts(77,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/sources.service.ts(106,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/sources.service.ts(137,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/sources.service.ts(151,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/core/services/sources.service.ts(165,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/accounts/account-list-resolver.service.ts(34,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/accounts/account-list/account-list.component.ts(83,10): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/accounts.service.ts(133,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/accounts/components/account-activity-list/account-activity-list.component.ts(93,36): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+
+
+DELETED
+src/app/features/accounts/components/account-files/account-files.component.ts(7,33): error TS2305: Module '"../../../../../../node_modules/@alfresco/adf-content-services/adf-content-services"' has no exported member 'DownloadZipDialogComponent'.
+src/app/features/accounts/components/account-files/account-files.component.ts(18,5): error TS2305: Module '"../../../../../../node_modules/@alfresco/adf-core/adf-core"' has no exported member 'SettingsService'.
+src/app/features/accounts/components/account-files/account-files.component.ts(95,10): error TS2339: Property 'switchMap' does not exist on type 'Observable<{ type: string; ticket: any; }>'.
+src/app/features/accounts/components/account-files/account-files.component.ts(153,8): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/account-files/account-files.component.ts(167,16): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/account-files/account-files.component.ts(181,20): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/account-files/account-files.component.ts(213,10): error TS2339: Property 'do' does not exist on type 'Observable<MinimalNodeEntryEntity>'.
+src/app/features/accounts/components/account-files/account-files.component.ts(291,12): error TS2339: Property 'flatMap' does not exist on type 'Observable<NodePaging>'.
+src/app/features/accounts/components/account-files/account-files.component.ts(300,33): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+
+FIXED
+src/app/features/accounts/components/account-form/account-form.component.ts(128,22): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/account-form/account-form.component.ts(139,22): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/account-form/account-form.component.ts(150,22): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/account-table/account-table.component.ts(133,40): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/accounts/components/account-table/account-table.component.ts(207,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/accounts/components/contact-lists/contact-lists.component.ts(59,6): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/contact-lists/contact-lists.component.ts(151,17): error TS2339: Property 'map' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/accounts/components/overview-tab/overview-tab.component.ts(244,24): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/accounts/components/overview-tab/overview-tab.component.ts(482,10): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/overview-tab/overview-tab.component.ts(493,10): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/overview-tab/overview-tab.component.ts(504,10): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/accounts/components/related-contact-lists/related-contact-lists.component.ts(164,17): error TS2339: Property 'map' does not exist on type 'BehaviorSubject<any[]>'.
+src/app/features/activities/activities.component.ts(50,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/activities/activities.component.ts(144,40): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/commissions/commission-form/commission-form.component.ts(131,10): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/admin/commissions/commission-list/commission-list.component.ts(149,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/commissions/commissions.component.ts(37,6): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/admin/commissions/commissions.service.ts(54,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/additional-charges/additional-charge-form/additional-charge-form.component.ts(61,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/additional-charges/additional-charge-list/additional-charge-list.component.ts(155,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/customer-admin-config/additional-charges/additional-charges.service.ts(40,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/bin/bin-list/bin-list.component.ts(173,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/admin/customer-admin-config/category/category-list/category-list.component.ts(167,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/admin/customer-admin-config/customer-admin-config.service.ts(14,23): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/decoration-locations/decoration-location-list/decoration-location-list.component.ts(151,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/customer-admin-config/decoration-locations/decoration-locations.service.ts(38,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/decoration-types/decoration-type-list/decoration-type-list.component.ts(132,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/customer-admin-config/decoration-types/decoration-types.service.ts(38,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/dropdowns/dropdown-list/dropdown-list.component.ts(127,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/customer-admin-config/dropdowns/dropdown.service.ts(27,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/dropdowns/dropdowns.service.ts(38,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/module-fields/module-fields-list/module-fields-list.component.ts(130,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/customer-admin-config/module-fields/module-fields.service.ts(37,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/customer-admin-config/order-configuration/order-configuration.component.ts(43,12): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/admin/customer-admin-config/site/site-list/site-list.component.ts(183,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/admin/decoration-fees/decoration-fee-form/decoration-fee-form.component.ts(66,8): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/admin/decoration-fees/decoration-fee-form/decoration-fee-form.component.ts(73,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/decoration-fees/decoration-fees-list/decoration-fees-list.component.ts(176,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/decoration-fees/decoration-fees.component.ts(36,6): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/admin/decoration-fees/decoration-fees.service.ts(59,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/manage-menu/manage-menu.component.ts(256,36): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/partner/partner-list/partner-list.component.ts(168,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/admin/royalty/franchise-list/franchise-list.component.ts(219,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/royalty/royalty-caps/cap-list/cap-list.component.ts(188,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/admin/royalty/royalty.component.ts(59,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/admin/royalty/royalty.service.ts(90,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/admin/royalty/royalty.service.ts(176,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+
+DELETED
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(5,33): error TS2305: Module '"../../../../../../node_modules/@alfresco/adf-content-services/adf-content-services"' has no exported member 'DownloadZipDialogComponent'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(16,5): error TS2305: Module '"../../../../../../node_modules/@alfresco/adf-core/adf-core"' has no exported member 'SettingsService'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(98,10): error TS2339: Property 'switchMap' does not exist on type 'Observable<{ type: string; ticket: any; }>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(148,23): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(153,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(159,8): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(164,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(168,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(172,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(176,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(199,10): error TS2339: Property 'do' does not exist on type 'Observable<MinimalNodeEntryEntity>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(277,12): error TS2339: Property 'flatMap' does not exist on type 'Observable<NodePaging>'.
+src/app/features/artworks/artwork-details/artwork-files/artwork-files.component.ts(286,33): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artwork-details/design-tab/design-tab.component.ts(493,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+
+FIXED
+src/app/features/artworks/artwork-resolver.service.ts(19,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artwork-resolver.service.ts(20,20): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artwork-resolver.service.ts(21,20): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artwork-resolver.service.ts(30,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artwork-resolver.service.ts(31,18): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artworks-list/artworks-list.component.ts(152,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/artworks/artworks-list/artworks-list.component.ts(217,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/artworks/artworks/artworks.component.ts(65,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/artworks/artworks/artworks.component.ts(73,18): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/artworks/board/list/artist-dialog/artist-dialog.component.ts(78,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/cases/cases-list/cases-list.component.ts(194,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/app/features/cases/cases/cases.component.ts(49,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/contacts/contact-dashboard/contact-activity-list/contact-activity-list.component.ts(93,36): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/contacts/contact-dashboard/contact-overview-tab/contact-overview-tab.component.ts(118,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/contacts/contact-dashboard/contact-overview-tab/contact-overview-tab.component.ts(221,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/contacts/contact-dashboard/contact-overview-tab/contact-overview-tab.component.ts(233,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/contacts/contacts.component.ts(53,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/contacts/contacts.component.ts(111,36): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/contacts/contacts.component.ts(201,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/additional-charges/additional-charges.component.ts(61,8): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+
+INVESTIGATE
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(47,23): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(50,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(52,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(57,8): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(61,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(140,10): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(140,37): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/attach-design-dialog/attach-design-dialog.component.ts(141,34): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/decoration-variation-select/decoration-variation-select.component.ts(162,23): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/decoration-variation-select/decoration-variation-select.component.ts(167,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/decoration-variation-select/decoration-variation-select.component.ts(172,8): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/lineitem-image-upload-dialog/lineitem-image-upload-dialog.component.ts(44,8): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+
+FIXED
+src/app/features/e-commerce/components/decoration-charges/decoration-charges.component.ts(61,8): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/documents/documents.component.ts(22,25): error TS2307: Cannot find module 'date-fns'.
+src/app/features/e-commerce/components/inventory-list/inventory-list.component.ts(162,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/e-commerce/components/order-activity-list/order-activity-list.component.ts(93,36): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/order-details-overview/order-details-overview.component.ts(251,6): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/order-details-overview/order-details-overview.component.ts(261,6): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/order-details-overview/order-details-overview.component.ts(271,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/order-details-overview/order-details-overview.component.ts(281,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-add-widget/product-add-widget.component.ts(44,8): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-basic-form/product-basic-form.component.ts(115,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-config-dialog/product-config-dialog.component.ts(31,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-deco/product-deco-list/product-deco-list.component.ts(192,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/e-commerce/components/product-detail-form/product-detail-form.component.ts(35,6): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(5,28): error TS2305: Module '"../../../../../../node_modules/@alfresco/adf-core/adf-core"' has no exported member 'SettingsService'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(117,18): error TS2339: Property 'switchMap' does not exist on type 'Subject<{}>'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(196,18): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(251,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(281,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(338,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(431,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(432,22): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(433,22): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(449,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(450,18): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(486,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(540,23): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(545,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(567,10): error TS2339: Property 'switchMap' does not exist on type 'Observable<{ type: string; ticket: any; }>'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(578,18): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(582,18): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-step/product-step.component.ts(586,18): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/components/product-universal-search/product-universal-search.component.ts(245,36): error TS2341: Property '_pageIndex' is private and only accessible within class 'MatPaginator'.
+src/app/features/e-commerce/components/product-universal-search/product-universal-search.component.ts(266,12): error TS2339: Property 'switchMap' does not exist on type 'Subject<{}>'.
+src/app/features/e-commerce/components/product-universal-search/product-universal-search.component.ts(285,31): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-universal-search/product-universal-search.component.ts(288,26): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/product-universal-search/product-universal-search.component.ts(315,34): error TS2341: Property '_pageIndex' is private and only accessible within class 'MatPaginator'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(271,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(377,18): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(428,29): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(532,10): error TS2339: Property 'switchMap' does not exist on type 'Subject<{}>'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(894,8): error TS2339: Property 'switchMap' does not exist on type 'Subject<{}>'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(936,36): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/components/products-list/products-list.component.ts(949,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/order.service.ts(106,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/orders/orders.component.ts(119,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/orders/orders.component.ts(383,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/orders/orders.component.ts(465,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/orders/orders.component.ts(565,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/e-commerce/products/product-images/product-images.component.ts(85,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/e-commerce/products/product-images/product-images.component.ts(157,14): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-images/product-images.component.ts(166,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-images/product-images.component.ts(181,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-list/product-list.component.ts(118,14): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-list/product-list.component.ts(143,14): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-list/product-list.component.ts(157,14): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-list/product-list.component.ts(166,14): error TS2339: Property 'distinctUntilChanged' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/products/product-list/product-list.component.ts(372,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/e-commerce/products/products.component.ts(57,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/quotes/quotes.component.ts(316,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/e-commerce/sources/source-details/details-tab/details-tab.component.ts(107,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/details-tab/details-tab.component.ts(119,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/details-tab/details-tab.component.ts(223,10): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+
+INVESTIGATE
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(5,33): error TS2305: Module '"../../../../../../../node_modules/@alfresco/adf-content-services/adf-content-services"' has no exported member 'DownloadZipDialogComponent'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(16,5): error TS2305: Module '"../../../../../../../node_modules/@alfresco/adf-core/adf-core"' has no exported member 'SettingsService'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(95,10): error TS2339: Property 'switchMap' does not exist on type 'Observable<{ type: string; ticket: any; }>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(145,23): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(150,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(156,8): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(161,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(165,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(169,14): error TS2339: Property 'switchMap' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(192,10): error TS2339: Property 'do' does not exist on type 'Observable<MinimalNodeEntryEntity>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(270,12): error TS2339: Property 'flatMap' does not exist on type 'Observable<NodePaging>'.
+src/app/features/e-commerce/sources/source-details/source-files/source-files.component.ts(279,33): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+
+FIXED
+src/app/features/e-commerce/sources/source-form/source-form.component.ts(170,8): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-form/source-form.component.ts(255,10): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-list/source-list.component.ts(81,18): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/e-commerce/sources/source-list/source-list.component.ts(130,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/sources/source-list/source-list.component.ts(169,14): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/e-commerce/sources/source-list/source-list.component.ts(175,14): error TS2339: Property 'map' does not exist on type 'BehaviorSubject<any[]>'.
+src/app/features/e-commerce/sources/source-resolver.service.ts(17,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/sources/source-resolver.service.ts(18,20): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/sources/source-resolver.service.ts(19,20): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/sources/source-resolver.service.ts(24,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/e-commerce/sources/source-resolver.service.ts(25,18): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/faqs/faq.service.ts(45,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/leads/convert-lead-form/convert-lead-form.component.ts(164,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/leads/convert-lead-form/convert-lead-form.component.ts(176,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/leads/convert-lead-form/convert-lead-form.component.ts(189,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/leads/convert-lead-form/convert-lead-form.component.ts(200,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/leads/convert-lead-form/convert-lead-form.component.ts(211,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/leads/leads-form/leads-form.component.ts(95,22): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/leads/leads-form/leads-form.component.ts(103,22): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/leads/leads-list/leads-list.component.ts(182,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/leads/leads.component.ts(59,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/leads/leads.service.ts(88,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/locations/locations-list/locations-list.component.ts(187,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<Number>'.
+src/app/features/locations/locations/locations.component.ts(49,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/opportunities/opportunities.component.ts(75,18): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/opportunities/opportunities.component.ts(149,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/opportunities/opportunity-form/opportunity-form.component.ts(150,26): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/opportunities/opportunity-form/opportunity-form.component.ts(157,26): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/opportunities/opportunity-form/opportunity-form.component.ts(402,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/features/opportunities/opportunity-list/opportunity-list.component.ts(77,18): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/opportunities/opportunity-list/opportunity-list.component.ts(159,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/opportunities/opportunity-list/opportunity-list.component.ts(198,14): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/opportunities/opportunity-list/opportunity-list.component.ts(204,14): error TS2339: Property 'map' does not exist on type 'BehaviorSubject<any[]>'.
+src/app/features/productions/production-resolver.service.ts(18,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/productions/production-resolver.service.ts(19,20): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/productions/production-resolver.service.ts(20,20): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/productions/production-resolver.service.ts(27,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/productions/production-resolver.service.ts(28,18): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/features/productions/productions-list/productions-list.component.ts(152,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/productions/productions-list/productions-list.component.ts(211,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/productions/productions/productions.component.ts(70,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/productions/productions/productions.component.ts(78,18): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/projects/projects-list/projects-list.component.ts(193,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/app/features/projects/projects/projects.component.ts(49,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/receivings/receiving-items/receiving-items.component.ts(167,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/receivings/receiving-items/receiving-items.component.ts(172,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/app/features/receivings/receiving-list/receiving-list.component.ts(165,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/receivings/receiving-list/receiving-list.component.ts(170,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/app/features/receivings/receivings.component.ts(46,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/reports/filter-form/filter-form.component.ts(118,10): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/app/features/reports/filter-form/filter-form.component.ts(122,10): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/app/features/reports/filter-form/filter-form.component.ts(126,10): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/app/features/reports/filter-form/filter-form.component.ts(130,10): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/app/features/reports/filter-form/filter-form.component.ts(134,10): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/app/features/reports/report-list/report-list.component.ts(209,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/app/features/reports/report.component.ts(48,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/settings/components/promostandards/promostandards.component.ts(134,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/store/store-list/store-list.component.ts(176,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<any>'.
+src/app/features/team-members/team-members/team-members.component.ts(43,6): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/users/users.component.ts(60,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/users/users.component.ts(124,40): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/vouchings/open-po-list/open-po-list.component.ts(171,18): error TS2339: Property 'delay' does not exist on type 'BehaviorSubject<number>'.
+src/app/features/vouchings/vouching-form/vouching-form.component.ts(105,12): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/vouchings/vouchings.service.ts(54,23): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/features/webstore/webstore-list/webstore-list.component.ts(232,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/app/features/webstore/webstore/webstore.component.ts(51,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/features/workflow/workflow-list/workflow-list.component.ts(196,27): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+
+INVESTIGATE
+src/app/fuse-fake-db/calendar.ts(10,8): error TS2307: Cannot find module 'date-fns'.
+src/app/main/content/apps/calendar/calendar.component.ts(5,52): error TS2307: Cannot find module 'date-fns'.
+src/app/main/content/apps/calendar/calendar.module.ts(43,9): error TS2554: Expected 1-2 arguments, but got 0.
+src/app/main/content/apps/calendar/event.model.ts(2,38): error TS2307: Cannot find module 'date-fns'.
+src/app/main/content/apps/chat/sidenavs/left/chats/chats.component.ts(2,10): error TS2305: Module '"../../../../../../../../../node_modules/@angular/flex-layout/flex-layout"' has no exported member 'ObservableMedia'.
+src/app/main/content/apps/chat/sidenavs/left/user/user.component.ts(31,34): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/directives/node-copy.directive.ts(31,20): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-copy.directive.ts(97,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-delete.directive.ts(38,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-delete.directive.ts(66,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-delete.directive.ts(109,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-download.directive.ts(5,10): error TS2305: Module '"../../../../../../../../node_modules/@alfresco/adf-content-services/adf-content-services"' has no exported member 'DownloadZipDialogComponent'.
+src/app/main/content/apps/file-manager/common/directives/node-move.directive.ts(34,20): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-move.directive.ts(148,20): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-move.directive.ts(148,64): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-move.directive.ts(164,35): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-move.directive.ts(164,70): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-permanent-delete.directive.ts(53,20): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-permanent-delete.directive.ts(78,27): error TS2339: Property 'from' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-permanent-delete.directive.ts(85,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-restore.directive.ts(47,14): error TS2339: Property 'do' does not exist on type 'Observable<MinimalNodeEntity[]>'.
+src/app/main/content/apps/file-manager/common/directives/node-restore.directive.ts(72,27): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-restore.directive.ts(83,27): error TS2339: Property 'from' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-restore.directive.ts(91,27): error TS2339: Property 'from' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/directives/node-restore.directive.ts(99,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(76,39): error TS2339: Property 'toArray' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(82,42): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(205,36): error TS2551: Property 'hasPermission' does not exist on type 'ContentService'. Did you mean 'hasPermissions'?
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(317,39): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(344,26): error TS2339: Property 'flatMap' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(360,51): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(362,47): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(367,39): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(379,18): error TS2339: Property 'flatMap' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(383,43): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(394,30): error TS2339: Property 'flatMap' does not exist on type 'Subject<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(401,42): error TS2339: Property 'flatMap' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(403,63): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(406,51): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(410,39): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(428,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(445,26): error TS2339: Property 'flatMap' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(461,51): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(463,47): error TS2339: Property 'zip' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(467,39): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(478,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(483,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(502,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(511,36): error TS2551: Property 'hasPermission' does not exist on type 'ContentService'. Did you mean 'hasPermissions'?
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(525,34): error TS2551: Property 'hasPermission' does not exist on type 'ContentService'. Did you mean 'hasPermissions'?
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(576,27): error TS2339: Property 'fromPromise' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/common/services/node-actions.service.ts(588,27): error TS2339: Property 'fromPromise' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/components/about/about.component.ts(61,82): error TS2339: Property 'dependencies' does not exist on type 'Object'.
+src/app/main/content/apps/file-manager/components/about/about.component.ts(65,43): error TS2339: Property 'dependencies' does not exist on type 'Object'.
+src/app/main/content/apps/file-manager/components/about/about.component.ts(73,48): error TS2339: Property 'version' does not exist on type 'Object'.
+src/app/main/content/apps/file-manager/components/files/files.component.ts(7,33): error TS2305: Module '"../../../../../../../../node_modules/@alfresco/adf-content-services/adf-content-services"' has no exported member 'DownloadZipDialogComponent'.
+src/app/main/content/apps/file-manager/components/files/files.component.ts(78,18): error TS2339: Property 'do' does not exist on type 'Observable<MinimalNodeEntryEntity>'.
+src/app/main/content/apps/file-manager/components/files/files.component.ts(212,14): error TS2339: Property 'flatMap' does not exist on type 'Observable<NodePaging>'.
+src/app/main/content/apps/file-manager/components/files/files.component.ts(221,35): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/components/files/files.component.ts(323,12): error TS2339: Property 'do' does not exist on type 'Observable<MinimalNodeEntryEntity>'.
+src/app/main/content/apps/file-manager/components/layout/layout.component.ts(10,33): error TS2305: Module '"../../../../../../../../node_modules/@alfresco/adf-core/adf-core"' has no exported member 'SettingsService'.
+src/app/main/content/apps/file-manager/components/layout/layout.component.ts(39,18): error TS2339: Property 'filter' does not exist on type 'Observable<Event>'.
+src/app/main/content/apps/file-manager/components/location-link/location-link.component.ts(76,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/components/location-link/location-link.component.ts(81,31): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/components/location-link/location-link.component.ts(103,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/components/location-link/location-link.component.ts(148,27): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/file-manager/file-manager.component.ts(6,33): error TS2305: Module '"../../../../../../node_modules/@alfresco/adf-core/adf-core"' has no exported member 'SettingsService'.
+src/app/main/content/apps/file-manager/file-manager.component.ts(56,14): error TS2339: Property 'filter' does not exist on type 'Observable<Event>'.
+src/app/main/content/apps/mail-ngrx/mail.component.ts(80,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/mail-ngrx/store/effects/filters.effects.ts(25,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/folders.effects.ts(25,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/labels.effects.ts(25,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(41,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(50,52): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(62,33): error TS2339: Property 'map' does not exist on type 'Observable<Mail[]>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(80,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(83,63): error TS2339: Property 'payload' does not exist on type '{}'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(84,33): error TS2339: Property 'map' does not exist on type 'Observable<Object>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(85,85): error TS2339: Property 'payload' does not exist on type '{}'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(97,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(100,39): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(101,32): error TS2339: Property 'payload' does not exist on type '{}'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(115,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(132,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(152,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(166,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(181,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(196,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/effects/mails.effects.ts(224,14): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/main/content/apps/mail-ngrx/store/guards/resolve.guard.ts(41,14): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/mail/mail-details/mail-details.component.ts(75,24): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/mail/mail-list/mail-list.component.ts(69,45): error TS2339: Property 'interval' does not exist on type 'typeof Observable'.
+src/app/main/content/apps/mail/mail.service.ts(55,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/todo/todo-details/todo-details.component.ts(57,34): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/main/content/apps/todo/todo.component.ts(62,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+
+
+
+
+FIXED
+src/app/main/content/content.component.ts(35,14): error TS2339: Property 'filter' does not exist on type 'Observable<Event>'.
+src/app/main/content/pages/knowledge-base/knowledge-base.component.ts(45,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/main/toolbar/shortcuts/toolbar-shortcuts.component.ts(3,10): error TS2305: Module '"../../../../../node_modules/@angular/flex-layout/flex-layout"' has no exported member 'ObservableMedia'.
+src/app/shared/activities-list/activities-list.component.ts(124,10): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/activities-list/activities-list.component.ts(167,28): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/shared/activities-list/activities-list.component.ts(193,36): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/shared/activity-form/activity-form.component.ts(131,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/activity-form/activity-form.component.ts(139,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/activity-form/activity-form.component.ts(147,14): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/activity-form/activity-form.component.ts(265,32): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/shared/contact-form/contact-form.component.ts(117,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/shared/contact-form/contact-form.component.ts(129,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/shared/contact-form/contact-form.component.ts(141,14): error TS2339: Property 'map' does not exist on type 'Observable<any>'.
+src/app/shared/order-form-dialog/order-form-dialog.component.ts(198,6): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/order-form-dialog/order-form-dialog.component.ts(204,8): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/order-form-dialog/order-form-dialog.component.ts(213,8): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/order-form-dialog/order-form-dialog.component.ts(219,8): error TS2339: Property 'debounceTime' does not exist on type 'Observable<any>'.
+src/app/shared/related-accounts-dialog/related-accounts-dialog.component.ts(110,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/shared/related-contacts-dialog/related-contacts-dialog.component.ts(111,16): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/shared/templates/embedded-purchase-order-decoration-modern/embedded-purchase-order-decoration-modern.component.ts(64,25): error TS2339: Property 'forkJoin' does not exist on type 'typeof Observable'.
+src/app/shared/templates/pick-list-modern/pick-list-modern.component.ts(70,35): error TS2339: Property 'from' does not exist on type 'typeof Observable'.
+src/app/store/effects/router.effect.ts(19,29): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/store/effects/router.effect.ts(28,6): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/app/store/effects/router.effect.ts(33,6): error TS2339: Property 'ofType' does not exist on type 'Actions<Action>'.
+src/assets/angular-material-examples/autocomplete-display/autocomplete-display-example.ts(38,37): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/assets/angular-material-examples/autocomplete-filter/autocomplete-filter-example.ts(31,37): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/assets/angular-material-examples/autocomplete-overview/autocomplete-overview-example.ts(52,36): error TS2339: Property 'startWith' does not exist on type 'Observable<any>'.
+src/assets/angular-material-examples/form-field-custom-control/form-field-custom-control-example.ts(33,14): error TS2720: Class 'MyTelInput' incorrectly implements class 'MatFormFieldControl<MyTel>'. Did you mean to extend 'MatFormFieldControl<MyTel>' and inherit its members as a subclass?
+  Property 'shouldLabelFloat' is missing in type 'MyTelInput' but required in type 'MatFormFieldControl<MyTel>'.
+src/assets/angular-material-examples/form-field-custom-control/form-field-custom-control-example.ts(138,9): error TS2554: Expected 1-2 arguments, but got 3.
+src/assets/angular-material-examples/table-http/table-http-example.ts(44,20): error TS2339: Property 'merge' does not exist on type 'typeof Observable'.
+src/assets/angular-material-examples/table-http/table-http-example.ts(67,41): error TS2339: Property 'of' does not exist on type 'typeof Observable'.
+ℹ ｢wdm｣: Failed to compile.

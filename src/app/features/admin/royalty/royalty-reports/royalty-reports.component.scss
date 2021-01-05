@@ -1,0 +1,24 @@
+#royalty-reports {
+  .content-card {
+    background: white;
+  }
+
+  .invoice-report-container,
+  .openorder-report-container,
+  .franchise-report-container,
+  .adjusted-report-container {
+    width: 100%;
+  }
+
+  .mat-tab-label {
+    height: 64px;
+  }
+
+  .mat-tab-header {
+    background: #fafafa;
+  }
+
+  table {
+    width: 100%;
+  }
+}

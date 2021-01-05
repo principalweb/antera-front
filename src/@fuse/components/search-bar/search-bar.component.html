@@ -1,0 +1,405 @@
+<div class="fuse-search-bar" [ngClass]="{'expanded':!collapsed}">
+
+    <div class="fuse-search-bar-content">
+
+        <mat-icon class="s-24">search</mat-icon>
+        <input matInput type="text"
+            fxFlex
+            placeholder="Global Search"
+            (input)="search($event)"
+            [formControl]="searchInput">
+
+        <button mat-icon-button class="fuse-search-bar-collapser"
+                *ngIf="searchInput.value"
+                (click)="collapse()"
+                aria-label="Collapse Search Bar">
+                <mat-icon class="s-24" *ngIf="!loading">close</mat-icon>
+                <mat-spinner [diameter]="24" *ngIf="loading"></mat-spinner>
+        </button>
+
+    </div>
+
+    <mat-accordion class="search-list" *ngIf="searched && totalCount > 0">
+        <mat-expansion-panel *ngIf="accountsCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>work</mat-icon>
+                    <span class="ml-8">Accounts</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ accountsCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let account of accounts">
+                    <a [routerLink]="['/accounts', account.id]"
+                       [innerHTML]="account['Account Name']|keyword:searchText"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="accountsCount > 5">
+                    <a class="more" routerLink="/accounts"
+                       [queryParams]="{search: searchText}"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="accountsEmailsCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>work</mat-icon>
+                    <span class="ml-8">Accounts (Email Match)</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ accountsEmailsCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let accountemail of accountsEmails">
+                    <a [routerLink]="['/accounts', accountemail.refId]"
+                       [innerHTML]="accountemail.name|keyword:searchText"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="accountsEmailsCount > 5">
+                    <a class="more" routerLink="/accounts"
+                       [queryParams]="{search: searchText}"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="accountsByContactCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>work</mat-icon>
+                    <span class="ml-8">Accounts (By Contact)</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ accountsByContactCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let account of accountsByContact">
+                    <a [routerLink]="['/accounts', account.id]"
+                       (click)="collapse()">{{ account.accountName }} ({{ account.contactName }})</a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="accountsByContactCount > 5">
+                    <a class="more" routerLink="/accounts"
+                       [queryParams]="{search: searchText}"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="contactsCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>person</mat-icon>
+                    <span class="ml-8">Contacts</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ contactsCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let contact of contacts">
+                    <a [innerHTML]="contact['Contact Name']|keyword:searchText"
+                       [routerLink]="['/contacts', contact.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="contactsCount > 5">
+                    <a class="more"
+                       routerLink="/contacts"
+                       [queryParams]="{search: searchText}"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="contactsEmailsCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>person</mat-icon>
+                    <span class="ml-8">Contacts (Email Match)</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ contactsEmailsCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let contactemail of contactsEmails">
+                    <a [innerHTML]="contactemail.name|keyword:searchText"
+                       [routerLink]="['/contacts', contactemail.refId]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="contactsEmailsCount > 5">
+                    <a class="more"
+                       routerLink="/contacts"
+                       [queryParams]="{search: searchText}"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="productsCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>shopping_basket</mat-icon>
+                    <span class="ml-8">Products</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ productsCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let product of products">
+                    <a [innerHTML]="product['Product Name']|keyword:searchText"
+                       [routerLink]="['/e-commerce/products', product['Antera ID']]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="productsCount > 5">
+                    <a class="more"
+                       routerLink="/e-commerce/products"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="ordersCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>shopping_cart</mat-icon>
+                    <span class="ml-8">Orders</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{ ordersCount }} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let order of orders">
+                    <a [innerHTML]="(order['Order Number'] + '. ' + order['Order Identity'])|keyword:searchText"
+                       [routerLink]="['/e-commerce/orders', order.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="ordersCount > 5">
+                    <a class="more"
+                       routerLink="/e-commerce/orders"
+                       (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="quotesCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>assignment</mat-icon>
+                    <span class="ml-8">Quotes</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{quotesCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let quote of quotes">
+                    <a [innerHTML]="(quote['Order Number'] + '. ' + quote['Order Identity'])|keyword:searchText"
+                       [routerLink]="['/e-commerce/quotes', quote.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="quotesCount > 5">
+                    <a class="more" routerLink="/e-commerce/quotes" (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <!-- API not working -->
+        <mat-expansion-panel *ngIf="activitiesCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>access_time</mat-icon>
+                    <span class="ml-8">Activities</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{activitiesCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let activity of activities">
+                    <a [innerHTML]="activity['Activity']|keyword:searchText"
+                       [routerLink]="['/activities', activity.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="activitiesCount > 5">
+                    <a class="more" routerLink="/activities" (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="opportunitiesCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>lightbulb_outline</mat-icon>
+                    <span class="ml-8">Opportunities</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{opportunitiesCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let opportunity of opportunities">
+                    <a [innerHTML]="(opportunity['Account Name'] + ' ' + opportunity['Contact Name'])|keyword:searchText"
+                       [routerLink]="['/opportunities', opportunity.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="opportunitiesCount > 5">
+                    <a class="more" routerLink="/opportunities" (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="leadsCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>style</mat-icon>
+                    <span class="ml-8">Leads</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{leadsCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let lead of leads">
+                    <a [innerHTML]="lead['Lead Name']|keyword:searchText"
+                       [routerLink]="['/leads']" [queryParams]="{id: lead.id}"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="leadsCount > 5">
+                    <a class="more" routerLink="/leads" (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="artworksCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>style</mat-icon>
+                    <span class="ml-8">Artwork</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{artworksCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let artwork of artworks">
+                    <a [innerHTML]="(artwork['designNo'] + ' ' + artwork['AccountName'])|keyword:searchText"
+                       [routerLink]="['/artworks', artwork.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="artworksCount > 5">
+                    <a class="more" routerLink="/artworks" [queryParams]="{search: searchText}" (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="productionCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>style</mat-icon>
+                    <span class="ml-8">Production</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{productionCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let job of production">
+                    <a [innerHTML]="job['Job'] | keyword:searchText"
+                       [routerLink]="['/productions', job.id]"
+                       (click)="collapse()"></a>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="productionCount> 5">
+                    <a class="more" routerLink="/production" (click)="collapse()">
+                        See More Results
+                    </a>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <!-- API not working -->
+        <mat-expansion-panel *ngIf="filesCount > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>folder</mat-icon>
+                    <span class="ml-8">Files</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayout="row" fxLayoutAlign="end center">
+                    <span class="result-count mr-8">{{filesCount}} results</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <mat-list role="list">
+                <mat-list-item role="listitem"
+                               *ngFor="let file of files">
+                    <div [innerHTML]="file['File Name']|keyword:searchText"></div>
+                </mat-list-item>
+                <mat-list-item role="listitem" *ngIf="filesCount > 5">
+                    <span class="more">See More Results</span>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <div class="mat-white-bg px-24 pb-8 pt-8 no-search-results"
+         *ngIf="searched && totalCount === 0 && !loading && searchText">
+        No results found
+    </div>
+
+</div>

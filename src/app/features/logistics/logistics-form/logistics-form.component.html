@@ -1,0 +1,278 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div id="logistic" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+        <!-- CENTER -->
+        <div class="center">
+
+            <div class="page-layout simple right-sidenav" fusePerfectScrollbar>
+
+                <mat-sidenav-container>
+
+                    <!-- CENTER -->
+                    <div class="center" fusePerfectScrollbar>
+
+                        <!-- CONTENT CARD -->
+                        <div class="content-card mat-white-bg">
+
+                            <!-- CONTENT -->
+                            <div class="content">
+                                <div fxFlex>
+
+                                    <form [formGroup]="logisticStepForm" *ngIf="logisticStepForm">
+                                        <div class="p-16">
+                                            <div fxLayout="row">
+                                                <mat-form-field>
+                                                    <input type="text" matInput readonly formControlName="orderNo"
+                                                        placeholder="Order Number">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex>
+                                                    <input type="text" matInput readonly formControlName="accountName"
+                                                        placeholder="Account Name">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex>
+                                                    <input matInput type="text" formControlName="trackingNumber"
+                                                        placeholder="Tracking Number">
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div fxLayout="row">
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="cutOffDatePicker"
+                                                        (focus)="cutOffDatePicker.open()" formControlName="cutOffDate"
+                                                        placeholder="Cut Off Date">
+                                                    <mat-datepicker-toggle matSuffix [for]="cutOffDatePicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #cutOffDatePicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="etdPicker"
+                                                        (focus)="etdPicker.open()" formControlName="ETD"
+                                                        placeholder="ETD">
+                                                    <mat-datepicker-toggle matSuffix [for]="etdPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #etdPicker></mat-datepicker>
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="adtPicker"
+                                                        (focus)="adtPicker.open()" formControlName="ADT"
+                                                        placeholder="ADT">
+                                                    <mat-datepicker-toggle matSuffix [for]="adtPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #adtPicker></mat-datepicker>
+                                                </mat-form-field>
+                                            </div>
+                                            <div fxLayout="row">
+                                                <mat-checkbox formControlName="ISF" class="mr-8">
+                                                    ISF
+                                                </mat-checkbox>
+                                                <mat-checkbox formControlName="inRoute" class="mr-8">
+                                                    In Route
+                                                </mat-checkbox>
+                                            </div>
+
+
+                                        </div>
+                                        <mat-horizontal-stepper [@.disabled]="true" #stepper formArrayName="steps">
+                                            <!-- Pending -->
+                                            <mat-step formGroupName="0" [stepControl]="stepsFormArray.get([0])">
+                                                <ng-template matStepLabel>Pending</ng-template>
+                                                <ng-template matStepperIcon="edit">
+                                                    <mat-icon>check</mat-icon>
+                                                </ng-template>
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="frdPicker"
+                                                        (focus)="frdPicker.open()" formControlName="FRD"
+                                                        placeholder="FRD" required>
+                                                    <mat-datepicker-toggle matSuffix [for]="frdPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #frdPicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <mat-form-field>
+                                                    <input matInput type="text" formControlName="expectedCartonCount"
+                                                        placeholder="Expected Carton Count" required>
+                                                </mat-form-field>
+                                                <mat-form-field>
+                                                    <input matInput type="text" formControlName="expectedPieceCount"
+                                                        placeholder="Expected Piece Count" required>
+                                                </mat-form-field>
+                                                <div fxLayout="row">
+
+                                                    <div fxFlex></div>
+                                                    <button mat-raised-button color="accent"
+                                                        *ngIf="logisticStepForm.get('status').value === 'Pending'"
+                                                        (click)="setStatus('ConfirmedBooked')"
+                                                        [disabled]="stepsFormArray.get([0]).invalid">Confirm
+                                                        Booked</button>
+                                                </div>
+                                            </mat-step>
+                                            <!-- Confirmed Booked -->
+                                            <mat-step formGroupName="1" [stepControl]="stepsFormArray.get([1])">
+                                                <ng-template matStepLabel>Confirmed Booked</ng-template>
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="etaPicker"
+                                                        (focus)="etaPicker.open()" formControlName="ETA"
+                                                        placeholder="ETA" required>
+                                                    <mat-datepicker-toggle matSuffix [for]="etaPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #etaPicker></mat-datepicker>
+                                                </mat-form-field>
+                                                <div fxLayout="row">
+
+                                                    <div fxFlex></div>
+
+                                                    <button mat-raised-button color="accent" (click)="setStatus('InTransit')" *ngIf="logisticStepForm.get('status').value === 'ConfirmedBooked'"
+                                                        [disabled]="stepsFormArray.get([1]).invalid">
+                                                        Move to In Transit
+                                                    </button>
+                                                </div>
+                                            </mat-step>
+                                            <!-- In Transit -->
+                                            <mat-step formGroupName="2" [stepControl]="stepsFormArray.get([2])">
+                                                <ng-template matStepLabel>In Transit</ng-template>
+
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="ataPicker"
+                                                        (focus)="ataPicker.open()" formControlName="ATA"
+                                                        placeholder="ATA">
+                                                    <mat-datepicker-toggle matSuffix [for]="ataPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #ataPicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <div fxLayout="row">
+                                                    <div fxFlex></div>
+                                                    <button mat-raised-button color="accent" (click)="setStatus('Customs')" *ngIf="logisticStepForm.get('status').value === 'InTransit'"
+                                                        [disabled]="stepsFormArray.get([2]).invalid">
+                                                        Move to Customs 
+                                                    </button>
+                                                </div>
+                                            </mat-step>
+                                            <!-- Customs -->
+                                            <mat-step formGroupName="3" [stepControl]="stepsFormArray.get([3])">
+                                                <ng-template matStepLabel>Customs</ng-template>
+
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="ccdPicker"
+                                                        (focus)="ccdPicker.open()" formControlName="CCD"
+                                                        placeholder="CCD">
+                                                    <mat-datepicker-toggle matSuffix [for]="ccdPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #ccdPicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <mat-checkbox formControlName="customsCleared">Customs Cleared
+                                                </mat-checkbox>
+                                                <mat-checkbox formControlName="customsAvailable">Customs Available
+                                                </mat-checkbox>
+
+                                                <div fxLayout="row">
+                                                    <div fxFlex></div>
+                                                    <button mat-raised-button color="accent" (click)="setStatus('Dispatched')" *ngIf="logisticStepForm.get('status').value === 'Customs'"
+                                                        [disabled]="stepsFormArray.get([3]).invalid">
+                                                        Move to Dispatched 
+                                                    </button>
+                                                </div>
+                                            </mat-step>
+                                            <!-- Dispatched -->
+                                            <mat-step formGroupName="4" [stepControl]="stepsFormArray.get([4])">
+                                                <ng-template matStepLabel>Dispatched</ng-template>
+
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="pudPicker"
+                                                        (focus)="pudPicker.open()" formControlName="PUD"
+                                                        placeholder="PUD">
+                                                    <mat-datepicker-toggle matSuffix [for]="pudPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #pudPicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="pddPicker"
+                                                        (focus)="pddPicker.open()" formControlName="PDD"
+                                                        placeholder="PDD">
+                                                    <mat-datepicker-toggle matSuffix [for]="pddPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #pddPicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <mat-form-field fxFlex>
+                                                    <input matInput [matDatepicker]="addPicker"
+                                                        (focus)="addPicker.open()" formControlName="ADD"
+                                                        placeholder="ADD">
+                                                    <mat-datepicker-toggle matSuffix [for]="addPicker">
+                                                    </mat-datepicker-toggle>
+                                                    <mat-datepicker #addPicker></mat-datepicker>
+                                                </mat-form-field>
+
+                                                <div fxLayout="row">
+                                                    <div fxFlex></div>
+                                                    <button mat-raised-button color="accent" (click)="setStatus('Delivered')" *ngIf="logisticStepForm.get('status').value === 'Dispatched'"
+                                                        [disabled]="stepsFormArray.get([4]).invalid">
+                                                        Move to Delivered
+                                                    </button>
+                                                </div>
+                                            </mat-step>
+                                            <!-- Delivered -->
+                                            <mat-step formGroupName="5" [stepControl]="stepsFormArray.get([5])">
+                                                <ng-template matStepLabel>Delivered</ng-template>
+
+                                                <mat-checkbox formControlName="POD">Require Proof Of Delivery
+                                                </mat-checkbox>
+                                            </mat-step>
+                                        </mat-horizontal-stepper>
+                                    </form>
+
+                                </div>
+                                <!-- / CONTENT -->
+                            </div>
+
+                        </div>
+                        <!-- / CONTENT CARD -->
+                    </div>
+                    <!-- / CENTER -->
+
+                    <!-- SIDENAV -->
+                    <!-- <mat-sidenav *ngIf="action ==='edit'"
+                                 class="sidenav" align="end"
+                                 opened="true" mode="side"
+                                 fuseMatSidenavHelper="simple-right-sidenav"
+                                 mat-is-locked-open="gt-md">
+                        <div class="sidenav-content p-24">
+                            <logistics-main-sidenav></logistics-main-sidenav>
+                        </div>
+                    </mat-sidenav> -->
+                    <!-- / SIDENAV -->
+
+                </mat-sidenav-container>
+
+            </div>
+        </div>
+        <!-- / CENTER -->
+    </div>
+
+    <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <button mat-raised-button class="text-upper" aria-label="Cancel" mat-dialog-close>
+            Cancel
+        </button>
+        <div fxFlex></div>
+        <button mat-raised-button (click)="update()" class="save-button mat-accent" aria-label="Save">
+            Save
+        </button>
+    </div>
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+
+</div>

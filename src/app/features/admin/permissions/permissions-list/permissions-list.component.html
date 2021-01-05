@@ -1,0 +1,90 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm"
+        [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="id">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Group #</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let permission">
+            <p class="company text-truncate">
+                {{ permission.id }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="name">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let permission">
+            <p class="company text-truncate">
+                <button mat-icon-button (click)="editGroupName(permission, $event)">
+                          <mat-icon>edit</mat-icon>
+                </button>
+
+                {{ permission.name }}
+            </p>
+            
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="numUsers">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>No. Users</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let permission">
+            <p class="company text-truncate">
+                {{ permission.users.length }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="numEntities">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>No. Entities</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let permission">
+            <p class="company text-truncate">
+                {{ permission.entities.length}}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Status</span>
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let permission">
+            <p class="company text-truncate">
+                {{ permission.active ? 'Active' : 'Inactive' }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let permission; columns: displayedColumns;"
+            class="permission"
+            (click)="editGroup(permission)"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+
+</mat-table>

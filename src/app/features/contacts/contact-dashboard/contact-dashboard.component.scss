@@ -1,0 +1,62 @@
+$icon-size: 16px;
+
+#contact-details{
+
+    .header {
+        max-height: 50px;
+        height: 50px;
+        min-height: 50px;
+    
+        .logo-text h1 {
+            margin-top: 7px;
+        }
+
+        .logo-text {
+            a {
+                text-decoration: none;
+                color: white;
+            }
+        
+            .mat-icon {
+                width: $icon-size;
+                height: $icon-size;
+                line-height: $icon-size;
+                min-width: $icon-size;
+                min-height: $icon-size;
+                font-size: $icon-size;
+            }
+        
+            .mat-icon-button {
+                transform: translate(-8px, -3px);
+                width: 32px;
+                height: 32px;
+                min-height: 32px;
+                margin-left: 16px;
+                line-height: 32px;
+            }
+        }
+        
+    }
+    .mat-tab-group,
+    .mat-tab-body-wrapper,
+    .tab-content {
+        flex: 1 1 auto;
+        max-width: 100%;
+        height: calc(100vh - 100px);
+    }
+
+
+
+    .tab-content {
+        flex: 1 1 auto;
+        &.products {
+            display: flex;
+        }
+    }
+
+    .mat-tab-body-content {
+        display: flex;
+    }  
+
+} 
+

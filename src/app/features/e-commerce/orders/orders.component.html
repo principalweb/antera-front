@@ -1,0 +1,365 @@
+<div id="orders" class="page-layout carded fullwidth inner-scroll list-page">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg h-80" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom
+                    [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_cart</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom
+                    [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Orders</span>
+            </div>
+            <!-- / APP TITLE -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <div class="toolbar e-orders-toolbar">
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="newOrder()">
+                    <mat-icon>add</mat-icon> Order
+                </button>
+
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="newOrder('CreditMemo')"
+                    *ngIf="creditMemo">
+                    <mat-icon>add</mat-icon> Credit Memo
+                </button>
+
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    (click)="clearFilters()">
+                    <mat-icon>layers_clear</mat-icon> Clear Filters
+                </button>
+
+                <!--button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="merge()"
+                    [disabled]="selectedCheckboxCount() == 0 || selectedCheckboxCount() == 1" fxHide fxShow.gt-md>
+                    <mat-icon>merge_type</mat-icon> Merge
+                </button-->
+
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="mergeBeta()"
+                    [disabled]="selectedCheckboxCount() == 0 || selectedCheckboxCount() == 1" fxHide fxShow.gt-md>
+                    <mat-icon>merge_type</mat-icon>Merge
+                </button>
+
+
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    [disabled]="selectedCheckboxCount() == 0" (click)="payOrders()">
+                    <mat-icon>monetization_on</mat-icon> Pay Orders
+                </button>
+
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-md
+                    [disabled]="selectedCheckboxCount() != 1" (click)="cloneOrder()">
+                    <mat-icon>content_copy</mat-icon> Clone
+                </button>
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    [disabled]="selectedCheckboxCount() == 0" (click)="navigateToInvoice()">
+                    <mat-icon>receipt</mat-icon> Invoice
+                </button>
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    [disabled]="selectedCheckboxCount() == 0" (click)="callInvoiceBackDate()" *ngIf="isAdmin == true">
+                    <mat-icon>receipt</mat-icon> Invoice Back Date
+                </button>
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    [disabled]="selectedCheckboxCount() == 0" (click)="callCreditMemoBackDate()" *ngIf="isAdmin == true">
+                    <mat-icon>receipt</mat-icon> Credit Memo Back Date
+                </button>
+                <button [disabled]="selectedCheckboxCount() == 0" mat-raised-button color="warn" class="text-capitalize mr-8" (click)="cancelOrders()">
+                    <mat-icon>highlight_off</mat-icon> Cancel
+                </button>
+
+                <mat-checkbox class="ml-16 mt-4" [(ngModel)]="viewMyItems" (ngModelChange)="fetchList()">
+                    View My Items
+                </mat-checkbox>
+                <mat-checkbox class="ml-16 mt-4" [(ngModel)]="readyToBill" (ngModelChange)="fetchList()">
+                    Ready To Bill
+                </mat-checkbox>
+
+
+                <ng-template #formTemplate>
+                                <mat-form-field class="ml-16 mt-24 p-0">
+                                        <mat-label>Set Invoice Back Date</mat-label>
+                                        <input matInput (focus)="picker.open()" [(ngModel)]="invoiceBackDate" (dateChange)="selectInvoiceBackDate($event)"
+                                                [matDatepicker]="picker" [disabled]="selectedCheckboxCount() == 0 && qbService.backDateProcessing == true">
+                                        <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="selectedCheckboxCount() == 0 && qbService.backDateProcessing"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    (click)="updateInvoiceBackDate()"> UPDATE
+                </button>
+                <p><span class="mat-caption"><i class="mat-caption">Note: Process will be running in background.</i></span></p>
+                </ng-template>
+
+                <ng-template #formTemplateCreditMemoBackDate>
+                                <mat-form-field class="ml-16 mt-24 p-0">
+                                        <mat-label>Set Credit Memo Back Date</mat-label>
+                                        <input matInput (focus)="cmpicker.open()" [(ngModel)]="creditMemoBackDate" (dateChange)="selectCreditMemoBackDate($event)"
+                                                [matDatepicker]="cmpicker" [disabled]="selectedCheckboxCount() == 0 && qbService.backDateProcessing == true">
+                                        <mat-datepicker-toggle matSuffix [for]="cmpicker" [disabled]="selectedCheckboxCount() == 0 && qbService.backDateProcessing"></mat-datepicker-toggle>
+                                        <mat-datepicker #cmpicker></mat-datepicker>
+                                </mat-form-field>
+                <button mat-raised-button color="accent" class="text-capitalize mr-8" fxHide fxShow.gt-xs
+                    (click)="updateCreditMemoBackDate()"> UPDATE
+                </button>
+                <p><span class="mat-caption"><i class="mat-caption">Note: Process will be running in background.</i></span></p>
+                </ng-template>
+            </div>
+            <div class="orders-table" [formGroup]="filterForm">
+                <mat-table #table [dataSource]="dataSource" [@animateStagger]="{value:'50'}" matSort
+                    (matSortChange)="sortChange($event)">
+
+                    <ng-container cdkColumnDef="checkbox">
+                        <mat-header-cell class="w-60" *cdkHeaderCellDef>
+                            <mat-checkbox (change)="toggleAll()" [checked]="selectedAll" [indeterminate]="selectedAny">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell class="w-60" *cdkCellDef="let order" (click)="$event.stopPropagation()">
+                            <mat-checkbox [checked]="checkboxes[order.id]"
+                                (change)="onSelectedChange(order.id, $event)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Order Number Column -->
+                    <ng-container cdkColumnDef="orderNo">
+                        <mat-header-cell class="header-cell" *cdkHeaderCellDef>
+                            <span mat-sort-header>Order #</span>
+                            <input class="form-control" formControlName="orderNo" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order">
+                            <p class="text-truncate">{{order.orderNo}}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Identity Column -->
+                    <ng-container cdkColumnDef="orderIdentity">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                            <span mat-sort-header>Identity</span>
+                            <input class="form-control" formControlName="orderIdentity" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-xs [matTooltip]="order.orderIdentity"
+                            [matTooltipClass]="'order-row-tooltip'" [matTooltipPosition]="'above'">
+                            <p class="text-truncate">{{order.orderIdentity}}</p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Contact Column -->
+                    <ng-container cdkColumnDef="contactName">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                            <span mat-sort-header>Contact</span>
+                            <input class="form-control" formControlName="contactName" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-xs>
+                            <p (click)="handleContact($event, order.contactId)" class="text-truncate clickable">
+                                {{order.contactName}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Contact Column -->
+                    <ng-container cdkColumnDef="salesPerson">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                            <span mat-sort-header>Sales Rep</span>
+                            <input class="form-control" formControlName="salesPerson" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm>
+                            <p class="text-truncate">
+                                {{order.salesPerson}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Account Column -->
+                    <ng-container cdkColumnDef="accountName">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                            <span mat-sort-header>Account</span>
+                            <input class="form-control" formControlName="accountName" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm [matTooltip]="order.accountName"
+                            [matTooltipClass]="'order-row-tooltip'" [matTooltipPosition]="'above'">
+                            <p (click)="handleAccount($event, order.accountId)" class="total-price text-truncate clickable">
+                                {{order.accountName}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Type Column -->
+                    <ng-container cdkColumnDef="orderType">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                            <span mat-sort-header>Type</span>
+                            <mat-select multiple disableRipple class="form-control" [(ngModel)]="selectedOrderTypes"
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="fetchList()">
+                                <mat-option *ngFor="let type of orderTypeList" [value]="type.value">
+                                    {{type.label}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-xs>
+                            <p class="text-truncate">
+                                {{displayOrderType(order.orderType) | capitalizeFirst}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Date Column -->
+                    <ng-container cdkColumnDef="orderDate">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+                            <span mat-sort-header>Date</span>
+                            <input class="form-control" formControlName="orderDate" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-md>
+                            <p class="text-truncate">
+                                {{order.orderDate | date}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Booked Date Column -->
+                    <ng-container cdkColumnDef="bookedDate">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+                            <span mat-sort-header>Booked Date</span>
+                            <input class="form-control" formControlName="bookedDate" placeholder=""
+                                (keyup.enter)="fetchList()">
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-md>
+                            <p class="text-truncate" *ngIf="order.bookedDate != '' && order.bookedDate != '0000-00-00'">
+                                {{order.bookedDate | date}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Status Column -->
+                    <ng-container cdkColumnDef="orderStatus">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+                            <span mat-sort-header>Status</span>
+                            <mat-select multiple disableRipple class="form-control" [(ngModel)]="selectedOrderStatues"
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="fetchList()">
+                                <mat-option *ngFor="let type of ordersService.statuses" [value]="type.name">
+                                    {{type.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-md>
+                            <p class="status text-truncate h6 p-4" [ngClass]="colors[order.orderStatus]">
+                                {{order.orderStatus}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Payment Status Column -->
+                    <ng-container cdkColumnDef="paymentStatus">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-md *cdkHeaderCellDef>
+                            <span mat-sort-header>Payment</span>
+                            <mat-select multiple disableRipple class="form-control" [(ngModel)]="selectedPaymentStatues"
+                                [ngModelOptions]="{standalone: true}" (ngModelChange)="fetchList()">
+                                <mat-option *ngFor="let type of ordersService.paymentStatusList" [value]="type.label">
+                                    {{type.label}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-md (click)="editPayment(order, $event)">
+                            <p class="status text-truncate h6 p-4" [ngClass]="colors[order.paymentStatus]">
+                                {{order.paymentStatus}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Total Price Column -->
+                    <ng-container cdkColumnDef="totalPrice">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                            <span mat-sort-header>Total</span>
+                            <mat-select class="form-control" [(value)]="showTotalOrBalance" (selectionChange)="updateColumnShown($event)">
+                                <mat-option *ngFor="let el of selectOptions" [value]="el">
+                                    {{el}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm>
+                            <p class="total-price text-truncate">
+                                {{order.totalPrice | currency:'USD':'symbol':'1.0-2'}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Balance Column -->
+
+                    <ng-container cdkColumnDef="balance">
+                        <mat-header-cell class="header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                            <span mat-sort-header>Balance</span>
+                            <mat-select class="form-control" [(value)]="showTotalOrBalance" (selectionChange)="updateColumnShown($event)">
+                                <mat-option  *ngFor="let el of selectOptions" [value]="el">
+                                    {{el}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxHide fxShow.gt-sm>
+                            <p class="total-price text-truncate">
+                                {{order.balance | currency:'USD':'symbol':'1.0-2'}}
+                            </p>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- / Balance Column -->
+
+
+
+                    <ng-container cdkColumnDef="actions">
+                        <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm
+                            fxLayoutAlign="center center">Actions</mat-header-cell>
+                        <mat-cell *cdkCellDef="let order" fxLayoutAlign="center center" fxHide fxShow.gt-sm>
+                            <button mat-icon-button (click)="openBottomSheet($event)">
+                                <mat-icon>settings</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+                    <mat-row class="order" matRipple *cdkRowDef="let order; columns: displayedColumns;"
+                        [routerLink]="'/e-commerce/orders/'+order.id" [ngClass]="[checkboxes[order.id] ? 'highlight': '', mergeProcessedOrders[order.id] ? 'merge' : '', (order?.readyToBill == '1' && order.orderStatus == 'Booked' && (order.orderType == 'Order' || order.orderType == 'StoreOrder' )) ? 'readyToBill' : '']">
+                    </mat-row>
+                </mat-table>
+
+                <div class="p-24 text-center" *ngIf="dataSource.total===0">
+                    There are no orders
+                </div>
+            </div>
+
+            <mat-paginator #paginator [length]="dataSource.total" [pageIndex]="0" [pageSize]="50"
+                (page)="paginate($event)" [pageSizeOptions]="[10, 20, 50, 100]" [showFirstLastButtons]="true">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+
+<div class="merge-loading"
+     *ngIf="mergeLoading">
+        <mat-progress-spinner [color]="mergePColor"
+                        [mode]="mergePMode"
+                        value="100"
+                        diameter="150"
+                        aria-label="Merge Progress">
+        </mat-progress-spinner>
+        <div style="position:relative; top: 0px; left: -150px;color:#FF0000;font-size:48px;font-wheight:bold;"><div style="width:150px;text-align:center;">{{mergeProgress}}%</div></div>
+</div>

@@ -1,0 +1,73 @@
+<div id="dashboard-project" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- CENTER -->
+    <div class="center" >
+
+        <!-- HEADER -->
+        <div class="header mat-accent-bg p-24 pb-0" fxLayout="column"> 
+
+            <div fxLayout="row"fxLayoutAlign="space-between center">
+                    <button mat-icon-button class="project-selector" [matMenuTriggerFor]="projectsMenu"
+                            aria-label="Select project">
+                        {{selectedProject.name}}<mat-icon>keyboard_arrow_down</mat-icon>
+                    </button>
+
+                    <mat-menu #projectsMenu="matMenu">
+                        <button mat-menu-item *ngFor="let project of projects" (click)="selectProject(project)">
+                            <span>{{project.name}}</span>
+                        </button>
+                    </mat-menu>
+
+                <div class="mat-display-1 mb-0 welcome-message" *fuseIfOnDom
+                        [@animate]="{value:'*',params:{x:'50px'}}"
+                        >
+                        Welcome back, {{fullname}}!
+                </div>
+            </div>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT -->
+        <marketing-dashboard
+            [widgets]="widgets"
+            [widgetData]="widgetData"
+            [enableBudgetSummary]=false
+            *ngIf="selectedProject.name==='User'">
+        </marketing-dashboard>
+        <management-dashboard
+            [widgets]="widgets"
+            [widgetMgmData]="widgetMgmData"
+            [enableBudgetSummary]=false
+            *ngIf="selectedProject.name==='Management'">
+        </management-dashboard>
+        <receiving-dashboard
+            [widgets]="widgets"
+            [widgetRecevingData]="widgetRecevingData"
+            *ngIf="selectedProject.name==='Receiving'">
+        </receiving-dashboard>
+        <artwork-dashboard             
+            [widgetArtData]="widgetArtData"
+            *ngIf="selectedProject.name==='Artwork'">
+        </artwork-dashboard>
+        <groupdashboard-dashboard                          
+            [widgetData]="widgetData"
+            *ngIf="selectedProject.name==='Group Dashboard'">
+        </groupdashboard-dashboard>
+        <finance-dashboard
+            [widgets]="widgets"
+            [enableBudgetSummary]=false
+            *ngIf="selectedProject.name==='Finance'">
+        </finance-dashboard>
+        <executive-dashboard                          
+            [widgetsExecutiveData]="widgetsExecutiveData"
+            *ngIf="selectedProject.name==='Executive'">
+        </executive-dashboard>
+ 	<artwork-type-dashboard                          
+        [widgetArtWorkTypeData]="widgetArtWorkTypeData"
+        *ngIf="selectedProject.name==='Heatseal' || selectedProject.name==='Neck Labeling'">
+    </artwork-type-dashboard>
+        <!-- / CONTENT -->
+    </div>
+    <!-- / CENTER -->
+
+</div>

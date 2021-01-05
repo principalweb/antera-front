@@ -1,0 +1,69 @@
+@import "src/@fuse/scss/fuse";
+
+.order-payment-message-dialog {
+    width: 20%;
+
+    @include media-breakpoint('xs') {
+        width: 70vw !important;
+    }
+
+    @include media-breakpoint('sm') {
+        width: 50vw !important;
+    }
+
+    @include media-breakpoint('md') {
+        width: 35vw !important;
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+        overflow: hidden;
+
+        .mat-toolbar {
+            min-height: initial;
+            flex: none;
+        }
+
+        .toolbar-bottom {
+            height: auto;
+        }
+    }
+
+    .dialog-content-wrapper {
+        max-height: 85vh;
+
+        @include media-breakpoint('xs') {
+            height: 100vh;
+        }
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mat-toolbar-row {
+        position: relative;
+    }
+
+    .dialog-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+    }
+
+    div[mat-dialog-content] {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .mat-dialog-content {
+        max-height: auto;
+        flex: 1;
+        max-height: none;
+    }
+
+    .mat-sidenav-content,
+    .mat-sidenav-container {
+        display: flex;
+        flex-direction: column;
+    }
+}

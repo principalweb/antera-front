@@ -1,0 +1,94 @@
+<div id="accounts" class="vendor-selector" fusePerfectScrollbar>
+
+
+
+
+      <div class="toolbar">
+        <div fxFlex="row">
+          <div fxFlex="row" fxLayoutAlign="start center" >
+
+            <button mat-raised-button color="accent"
+                    class="text-capitalize mr-8"
+                    *ngIf="vendorForm.valid"
+                    (click)="save()">
+              <mat-icon>save</mat-icon> Save
+            </button>
+            <button mat-raised-button color="accent"
+                    class="text-capitalize mr-8"
+                    (click)="cancel()">
+              <mat-icon>delete</mat-icon> Cancel
+            </button>
+
+
+
+
+          </div>
+        </div>
+      </div>
+  <hr  *ngIf="vendorForm.valid" />
+  <p>The product you selected will create a new vendor. Select the new vendor name to add this product with the new vendor or select the appropriate vendor from the list to match them.</p>
+  <hr />
+  
+  <div class="vendor-aliases-list" *ngIf="!loading">
+
+    <form [formGroup]="vendorForm" fxFlex="100" fxLayoutAlign="space-between cente" fxLayout="column" class="user-form p-2">
+      <mat-card>
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle><h2>Select Vendors</h2></mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div>
+            <mat-selection-list>
+              
+              <mat-list-option class="matDivClass nocheckbox" role="list">
+                <div fxLayoutAlign="space-between center" >
+                  <span class="text-truncate">New Vendor</span>
+                  <ul><li>Your Existing</li></ul>
+                  <ul><li>% Match</li></ul>
+                  
+                </div>
+              </mat-list-option>
+              <mat-list-option class="matDivClass nocheckbox" style="height:auto" *ngFor="let item of getActiveItems()" checkboxPosition="before" (mouseenter)="item.isActive=true" (mouseleave)="item.isActive=false">
+                <div fxLayoutAlign="space-between center">
+                  <span class="text-truncate"><mat-checkbox (click)="vendorOption($event,item)">{{ item.vendor }}</mat-checkbox></span>
+
+                  <mat-selection-list  checkboxPosition="before" [disableRipple]="true" class="vendor-list" (selectionChange)="handleSelection($event,item.formControlName)">
+                    <ul *ngIf="item.final == ''">
+                      <li *ngFor="let data of item.matchItems | slice:0:10">
+                        <mat-list-option checkboxPosition="before" class="autoheight" [value]="data.name" >
+                          <span class="text-truncate">{{data.name}}</span>
+                        </mat-list-option>
+                      </li>
+                      <li>
+                        <mat-error *ngIf="vendorForm.controls[item.formControlName].errors?.required">Vendor is required</mat-error>
+                      </li>
+                    </ul>
+                  </mat-selection-list>
+                  <ul *ngIf="item.final == ''">
+                    <li *ngFor="let data of item.matchItems | slice:0:10">
+                      <span>{{data.perc.toFixed(0)}}</span>
+                    </li>
+
+                  </ul>
+                  <!--
+  <button mat-icon-button (click)="item.final = item.vendor;decreaseSelector();" color="warn">
+    <mat-icon>delete_forever</mat-icon>
+  </button>
+      -->
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+      </form>
+
+  </div>
+  
+  <div class="loading"
+       [@animate]="{value:'*',params:{opacity:1}}"
+       *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+   

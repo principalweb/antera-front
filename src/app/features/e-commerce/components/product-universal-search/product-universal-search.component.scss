@@ -1,0 +1,98 @@
+@import "src/@fuse/scss/fuse";
+
+.product-universal-search {
+    width: 80vw;
+    position: relative;
+
+    @include media-breakpoint('gt-xs') {
+        .sources {
+            transform: translateY(20px);
+        }
+    }
+
+    .search-dialog-content {
+        height: 80vh;
+        padding: 24px;
+    }
+
+    .mat-column-checkbox {
+        flex: 0 1 64px;
+    }
+
+    .mat-chip-list {
+        display: inline-block;
+    }
+
+    .mat-dialog-container {
+        padding: 0;
+    }
+
+    .product-image {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+    }
+
+    .product {
+        position: relative;
+    }
+
+    .advertisement {
+        background-color: #d9edf7;
+    }
+
+    .mw-60 {
+        min-width: 60px;
+    }
+
+    .mw-80 {
+        min-width: 80px;
+    }
+
+    .mw-120 {
+        min-width: 120px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .mat-checkbox-ripple {
+        display: none;
+    }
+
+    .clear-search {
+        position: absolute;
+        top: -4px;
+        right: -6px;
+
+        &.s-loading .mat-button-wrapper {
+            position: absolute;
+            margin-left: -8px;
+            margin-top: -8px;
+        }
+    }
+
+    .search-actions {
+        .mat-spinner {
+            display: inline-block;
+        }
+    }
+
+    .header-cell .form-control {
+        margin-top: 0 !important;
+    }
+
+    .header-cell .price-input {
+        width: 30% !important;
+    }
+
+    .info {
+      color: red;
+    }
+
+    .search-btn {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}

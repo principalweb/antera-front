@@ -1,0 +1,74 @@
+#admin-manage-menu-page {
+
+    $icon-size: 16px;
+
+    .mat-raised-button .mat-icon {
+        color: white;
+    }
+
+    .mat-icon-button {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        margin-top: -4px;
+
+        .mat-icon {
+            width: $icon-size;
+            height: $icon-size;
+            line-height: $icon-size;
+            min-width: $icon-size;
+            min-height: $icon-size;
+            font-size: $icon-size;
+        }
+    }
+
+    .content-card {
+
+        width: 100%;
+        min-width: 100%;
+
+        @media screen and (min-width: 1280px) {
+            min-width: 50%;
+            width: 50%;
+        }
+
+        @media (min-width: 720px) and (max-width: 1280px) {
+            min-width: 70%;
+            width: 70%;
+        }
+    }
+
+    .menu-list {
+
+        min-width: 100%;
+        width: 100%;
+
+        display: block !important;
+
+        .menu {
+            margin-top: 20px;
+
+            span {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            mat-slide-toggle {
+                float: right;
+            }
+
+            .sub-list {
+                padding-left: 24px;
+
+                span {
+                    font-size: 16px;
+                    font-weight: normal;
+                }
+
+                .item {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}

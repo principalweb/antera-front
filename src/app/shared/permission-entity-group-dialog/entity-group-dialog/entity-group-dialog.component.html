@@ -1,0 +1,30 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">Assign a permission group</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-dialog-content class="p-16 m-0">
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex>
+                <span class="group-title">Assigned</span>
+                <span *ngFor="let group of currentGroups" (click)="remove(group.groupId)" class="grouping">
+                    <mat-icon>remove</mat-icon>
+                    {{ group.groupName }}
+                </span>
+            </div>
+            <div fxLayout="column" fxFlex>
+                <span class="group-title">Unassigned</span>
+                <span *ngFor="let group of otherGroups" (click)="add(group.groupId)" class="grouping">
+                    <mat-icon>add</mat-icon>
+                    {{ group.groupName }}
+                </span>
+            </div>
+        </div>
+    </mat-dialog-content>
+</div>

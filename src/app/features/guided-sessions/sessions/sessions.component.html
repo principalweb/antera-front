@@ -1,0 +1,95 @@
+<div id="guided-sessions" class="page-layout simple" fusePerfectScrollbar>
+
+    <!-- HEADER -->
+    <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="column" fxLayoutAlign="center center">
+
+        <div class="hero-text">
+            <h1>WELCOME TO GUIDED SESSIONS</h1>
+            <h3>
+                Please select a training session below. In the event you do not see a session you would like, please send a request to <a href="mailto:support@anterasoftware.com">support@anterasoftware.com</a>.
+            </h3>
+        </div>
+
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <div fxLayout="column" fxLayoutAlign="center">
+
+            <div class="filters" fxLayout="column" fxLayoutAlign="center center"
+                 fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+                <mat-form-field class="session-search">
+
+                    <input matInput placeholder="Search for a session" [(ngModel)]="searchTerm"
+                           (input)="filterSessionsByTerm()">
+
+                </mat-form-field>
+
+                <mat-form-field class="category-selector">
+
+                    <mat-select placeholder="Select Category" [(ngModel)]="currentCategory"
+                                (selectionChange)="filterSessionsByCategory()">
+                        <mat-option [value]="'all'">
+                            All
+                        </mat-option>
+                        <mat-option *ngFor="let category of categories" [value]="category.value">
+                            {{ category.label }}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+
+            </div>
+
+            <div class="sessions" fxLayout="row wrap" fxLayoutAlign="center">
+
+                <div class="session" *ngFor="let session of filteredSessions" fxFlex="100" fxFlex.gt-xs="50"
+                     fxFlex.gt-sm="33" [ngClass]="session.category">
+
+                    <div class="session-content" fxLayout="column">
+
+                        <div class="header" fxLayout="row" fxLayoutAlign="center center"
+                             [ngClass]="session.category + '-bg'">
+
+                            <div class="category" fxFlex>
+                                {{session.category}}
+                            </div>
+
+                            <div class="length" fxLayout="row" fxLayoutAlign="center center">
+                                <mat-icon class="length-icon s-20">access_time</mat-icon>
+                                <div class="min">{{session.length}} min</div>
+                            </div>
+
+                        </div>
+
+                        <div class="content" fxLayout="column" fxLayoutAlign="center center" fxFlex>
+                            <div class="h1">{{session.title}}</div>
+                            <div class="updated">Updated {{session.updated}}</div>
+                        </div>
+
+                        <div class="footer" fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-button color="accent"
+                                    [routerLink]="[session.id, session.slug]">
+                                START
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="no-sessions" *ngIf="filteredSessions.length === 0">
+                    No sessions found!
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

@@ -1,0 +1,33 @@
+<div fxLayout="row wrap" fxLayoutAlign="start stretch">
+  <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+    <div class="mb-8 mr-8" fxLayout="row">
+      <h3 class="mat-title mb-0 mr-8 font-weight-600 accent-text">A/P Invoice Details</h3>
+    </div>
+    <div fxLayout="column">
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Number: {{ apInvoice.number}}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        PO#: {{ apInvoice.purchaseOrderNumber}}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Invoice Date: {{ apInvoice.invoiceDate | date:'M/d/yyyy' }}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Terms: {{ apInvoice.terms}}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Sales Amount: {{apInvoice.currency=='USD'?'$':''}}{{ apInvoice.salesAmount | number:'.2-2'}}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Shipping Amount: {{apInvoice.currency=='USD'?'$':''}}{{ apInvoice.shippingAmount | number:'.2-2'}}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Total Amount: {{apInvoice.currency=='USD'?'$':''}}{{ apInvoice.totalAmount | number:'.2-2'}}
+      </div>
+      <div class="mat-subheading-1 mb-0 font-weight-500">
+        Invoice Amount: {{apInvoice.currency=='USD'?'$':''}}{{ apInvoice.invoiceAmount | number:'.2-2'}}
+      </div>
+    </div>
+  </div>
+</div>

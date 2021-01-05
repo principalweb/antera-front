@@ -1,0 +1,154 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>{{data.name}}</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner>
+    </div>
+
+    <mat-dialog-content class="p-24 m-0">
+        <form [formGroup]="credsForm" (submit)="cfSubmit()">
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="User Name" formControlName="username" class="form-control">
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="password" matInput placeholder="Password" formControlName="password" class="form-control">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-select formControlName="country"
+                                placeholder="Localization">
+                        <mat-option [value]="country.code" *ngFor="let country of countries">
+                            {{ country.country }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-slide-toggle formControlName="enabled">Enabled</mat-slide-toggle>
+                <mat-slide-toggle formControlName="poEnabled" *ngIf="poEndpointAvail">PO Enabled</mat-slide-toggle>
+                <mat-slide-toggle formControlName="poLive" *ngIf="poEndpointAvail">PO Live(Some vendors require confirmation before going live)</mat-slide-toggle>
+            </div>
+        </form>
+        <mat-tab-group id="integrations-tab">
+          <mat-tab label="Endpoints">
+
+            <mat-table #table
+                       [dataSource]="dataSource"
+                       [@animateStagger]="{value:'50'}">
+
+                <ng-container cdkColumnDef="Code">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>Code</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate">
+                            {{endpoint.Service.ServiceType.Code}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="Name">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>Name</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate">
+                            {{endpoint.Service.ServiceType.Name}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="Status">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>Status</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate">
+                            {{endpoint.Service.Status}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="Version">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>Version</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate">
+                            {{endpoint.Service.Version}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="WSDL">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>WSDL</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate" [title]="endpoint.Service.WSDL">
+                            {{endpoint.Service.WSDL}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="TestURL">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>TestURL</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate" [title]="endpoint.TestURL">
+                            {{endpoint.TestURL}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container cdkColumnDef="URL">
+                    <mat-header-cell *cdkHeaderCellDef
+                                     fxHide fxShow.gt-xs>URL</mat-header-cell>
+                    <mat-cell *cdkCellDef="let endpoint" fxHide fxShow.gt-xs>
+                        <p class="email text-truncate" [title]="endpoint.URL">
+                            {{endpoint.URL}}
+                        </p>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *cdkRowDef="let endpoint; columns: displayedColumns;"
+                        class="product"
+                        matRipple
+                        [@animate]="{value:'*',params:{y:'100%'}}">
+                </mat-row>
+            </mat-table>
+          </mat-tab>
+          <mat-tab label="PO Ship Method Map" *ngIf="poEndpointAvail">
+            <form [formGroup]="credsForm" (submit)="cfSubmit()" *ngIf="psShipMethods.length > 0">
+                <div class="form-group" *ngFor="let anteraShip of anteraShipMethods">
+                    <mat-form-field formGroupName="poShipMap">
+                      <mat-select [placeholder]="anteraShip.label" [formControlName]="anteraShip.id" required>
+                          <mat-option *ngFor="let psShipMethod of psShipMethods" [value]="psShipMethod.id">
+                            {{psShipMethod.carrier}} - {{psShipMethod.service}}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+            </form>
+            <div *ngIf="psShipMethods.length == 0" class="ship-warning">
+              <div>Please contact supplier to obtain accepted shipping information. Following is sample data:</div>
+              <div>Carrier -   Service</div>
+              <div>FedEx   -   FedEx GRD P</div>
+              <div>TRUCK   -   TRUCK</div>
+              <div>USPS    -   PRIORITY</div>
+              <div>Please contact Antera Support with list of Carriers/Services. Both fields are required for PO submission to work.</div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <div fxLayout="row" fxLayoutAlign="end center" class="mt-20 mr-16">
+            <button mat-raised-button color="accent" (click)="save();" [disabled]="loading">
+                Save
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

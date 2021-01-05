@@ -1,0 +1,101 @@
+<div class="dialog-content-wrapper">
+  <mat-toolbar matDialogTitle class="mat-accent m-0">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+          <span class="title dialog-title">{{dialogTitle}}</span>
+          <button mat-button class="mat-icon-button"
+                  (click)="dialogRef.close()"
+                  aria-label="Close dialog">
+              <mat-icon>close</mat-icon>
+          </button>
+      </mat-toolbar-row>
+  </mat-toolbar>
+
+  <div class="tab-content p-24" fxLayout="column" fusePerfectScrollbar>
+    <form [formGroup]="faqForm">
+
+        <mat-form-field class="w-100-p">
+            <textarea matInput
+                      name="question"
+                      formControlName="question"
+                      placeholder="Please ask your question..."
+                      rows="6">
+            </textarea>
+        </mat-form-field>
+
+        <mat-form-field class="w-100-p" *ngIf="action !== 'new'">
+            <textarea matInput
+                      name="answer"
+                      formControlName="answer"
+                      placeholder="Please answer for this question..."
+                      rows="5">
+            </textarea>
+        </mat-form-field>
+
+        <mat-form-field class="w-100-p" *ngIf="action !== 'new'">
+            <textarea matInput
+                      name="link"
+                      formControlName="link"
+                      placeholder="Please add links to improve answer..."
+                      rows="2">
+            </textarea>
+        </mat-form-field>
+        <mat-checkbox *ngIf="this.faqForm.value.answer!=''"
+        class="ml-16 mt-4"
+        formControlName="publish"            
+        (change)="onSelectedChange()"
+                        (click)="$event.stopPropagation()"           
+            > 
+         Publish
+        </mat-checkbox> 
+        <div class="h-60 mt-5" *ngIf="action !== 'new'">
+            <input type="file" id="uploadAwsVariationFile" (change)="fileuploadForAws($event)" hidden #uploadAwsVariationFile>
+            <button mat-stroked-button class="mt-8" color="accent" (click)="uploadAwsVariationFile.click()">Upload Image</button>
+        </div>
+        <ng-container *ngIf="imageContent && imageContent.length > 0">
+            <div class="mr-16 mb-16" *ngFor="let image of imageContent; let i=index">
+                <div *ngIf="imageContent.length > 0"
+                    class="product-image" fxlayout="row" fxLayoutAlign="center center">
+                    <img class="media" width="50%" [src]="image.url" (click)="editLogoBlock(i)">
+
+                    <button mat-button class="w-10-p"
+                            (click)="deleteImage(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>                 
+            </div>
+      </ng-container>
+        <!-- <input type="hidden" formControlName="status"/> -->
+        <input type="hidden" formControlName="assignedUserId"/>
+        <input type="hidden" formControlName="assignedUser"/>
+
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <button *ngIf="action !=='edit'"
+                    mat-raised-button
+                    (click)="create()"
+                    class="save-button mat-accent"
+                    aria-label="SAVE">
+                SAVE
+            </button>
+      
+            <button *ngIf="action ==='edit'"
+                    mat-raised-button
+                    (click)="update()"
+                    class="save-button mat-accent"
+                    aria-label="SAVE">
+                SAVE
+            </button>
+      
+            <!-- <button *ngIf="action ==='edit'"
+                    mat-button
+                    class="mat-icon-button"
+                    (click)="dialogRef.close(['delete',faqForm])"
+                    aria-label="Delete"
+                    matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+            </button> -->
+      
+        </div>
+    </form>
+  </div>
+</div>

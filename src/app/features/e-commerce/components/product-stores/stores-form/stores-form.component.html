@@ -1,0 +1,68 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>Manage Store</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner> 
+    </div>
+
+    <mat-dialog-content class="p-12 m-0">
+        <form [formGroup]="dataForm" (submit)="save()" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+            <div fxLayout="row" fxLayout.xs="column">
+                <div fxLayout="column" fxFlex class="mr-20">
+                    <div class="form-group">
+                        <mat-form-field>
+                          <mat-select placeholder="Store" formControlName="storeId" required>
+                              <mat-option *ngFor="let store of stores" [value]="store.id">
+                                {{store.store}}
+                              </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput placeholder="Margin" formControlName="margin">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                          <mat-select placeholder="Color" formControlName="colors" multiple>
+                              <mat-option *ngFor="let color of formData.Attributes.color.storeDetails" [value]="color.color">
+                                {{color.color}}
+                              </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                          <mat-select placeholder="Size" formControlName="size" multiple>
+                              <mat-option *ngFor="let size of formData.Attributes.size.storeDetails" [value]="size.size">
+                                {{size.size}}
+                              </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+            <button mat-raised-button
+                    (click)="save()"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

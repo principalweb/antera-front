@@ -1,0 +1,96 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="title dialog-title">
+                <span>Edit Category</span>
+            </div>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="loading" *ngIf="loading">
+		<mat-spinner></mat-spinner>
+    </div>
+
+    <mat-dialog-content class="p-24 m-0">
+        <form [formGroup]="dataForm" (submit)="save()" class="p-16 pb-0" fxLayout="column" fusePerfectScrollbar>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput placeholder="Category" formControlName="category" class="form-control">
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Expense Account" formControlName="qbExpenseAccount">
+                      <mat-option [value]="">---</mat-option>
+                      <mat-option *ngFor="let account of financialAccounts.expenseAccounts" [value]="account.id">
+                        {{account.name}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Income Account" formControlName="qbIncomeAccount">
+                      <mat-option [value]="">---</mat-option>
+                      <mat-option *ngFor="let account of financialAccounts.incomeAccounts" [value]="account.id">
+                        {{account.name}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Asset Account" formControlName="qbAssetAccount">
+                      <mat-option [value]="">---</mat-option>
+                      <mat-option *ngFor="let account of financialAccounts.assetAccounts" [value]="account.id">
+                        {{account.name}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="QB Class" formControlName="qbClass">
+                      <mat-option [value]="">---</mat-option>
+                      <mat-option *ngFor="let class of qbClass" [value]="class.qbId">
+                        {{class.qbName}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field>
+                  <mat-select placeholder="Locations" formControlName="locations" multiple>
+                      <mat-option *ngFor="let location of designLocations" [value]="location.id">
+                        {{location.item}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-form-field>
+                  <input type="text" placeholder="TaxJar Category" matInput [formControl]="newTaxCat" [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let category of categories | async" [value]="category">
+                      {{category.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+              </mat-form-field>
+            </div>
+        </form>
+        <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+            <button mat-raised-button
+                    (click)="save()"
+                    class="save-button mat-accent"
+                    aria-label="Save"
+                    matTooltip="Save">
+                SAVE
+            </button>
+        </div>
+    </mat-dialog-content>
+
+</div>

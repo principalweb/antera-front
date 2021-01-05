@@ -1,0 +1,207 @@
+<div id="art-proof-modern" class="modern page-layout blank" fxLayout="row" fusePerfectScrollbar>
+
+    <div class="art-proof-container">
+
+        <!-- Art Proof -->
+        <div class="card-art-proof">
+            <div *ngFor="let product of lineItems; let i=index; let last=last">
+                <div *ngIf="isProductIncludeVendors(i) && !product?.lineItem?.hideLine" class="page"
+                    [class.page-break]="!last">
+                    <!-- HEADER -->
+
+                    <table class="header-art-proof">
+                        <tr>
+                            <td class="col col-ids">
+                                <div fxLayout="row" class="seller" fxLayoutAlign="center start"
+                                    *ngIf="order?.corporateIdentity?.logo">
+                                    <img class="logo" [src]="order?.corporateIdentity?.logo">
+                                </div>
+                                <div fxLayout="row" class="seller" fxLayoutAlign="center start"
+                                    *ngIf="!order?.corporateIdentity?.logo">
+                                    <img class="logo" [src]="logoUrl">
+                                </div>
+                                <div fxLayout="row" class="client" fxLayoutAlign="start center">
+                                    <div class="label" fxLayout="row" fxLayoutAlign="end center">
+                                        <div>CLIENT</div>
+                                    </div>
+
+                                    <div class="divider"></div>
+
+                                    <div class="detail">
+                                        <div class="title">{{order.shippingCompanyName}}</div>
+                                        <div class="title">{{order.shippingCustomerName}}</div>
+                                        <div class="address">
+                                            {{order.shippingStreet}}
+                                        </div>
+                                        <div class="address">
+                                            {{order.shippingStreet2}}
+                                        </div>
+                                        <div class="address">
+                                            {{order.shippingCity}} {{order.shippingState}} {{order.shipPostalcode}}
+                                        </div>
+                                        <div *ngIf="order.shippingEmail" class="email">
+                                            {{order.shippingEmail}}
+                                        </div>
+                                        <div *ngIf="order.shipCountry" class="address">
+                                            {{order.shipCountry}}
+                                        </div>
+                                        <div *ngIf="order.shippingPhone" class="address">
+                                            {{order.shippingPhone}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col col-header">
+                                <div class="order-title">
+                                    <span>ELECTRONIC PROOF</span>
+                                </div>
+
+                                <table class="summary ml-56">
+
+                                    <tr
+                                        *ngIf="docOptions[4].value && order.dueDate != '' && order.dueDate != '0000-00-00'">
+                                        <td class="label">{{fieldLabel('dueDate', fields)}}</td>
+                                        <td class="value">{{order.dueDate}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[8].value && order.salesPerson != ''">
+                                        <td class="label">{{fieldLabel('salesPerson', fields)}}</td>
+                                        <td class="value">{{order.salesPerson}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[9].value && order.salesPersonPhone != ''">
+                                        <td class="label">{{fieldLabel('salesPersonPhone', fields)}}</td>
+                                        <td class="value">{{order.salesPersonPhone}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[10].value && order.salesPersonEmail != ''">
+                                        <td class="label">{{fieldLabel('salesPersonEmail', fields)}}</td>
+                                        <td class="value">{{order.salesPersonEmail}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[11].value && order.csrName && order.csrName != ''">
+                                        <td class="label">{{fieldLabel('csrName', fields)}}</td>
+                                        <td class="value">{{order.csrName}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[12].value && order.csrPhone && order.csrPhone != ''">
+                                        <td class="label">{{fieldLabel('csrPhone', fields)}}</td>
+                                        <td class="value">{{order.csrPhone}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[13].value && order.csrEmail && order.csrEmail != ''">
+                                        <td class="label">{{fieldLabel('csrEmail', fields)}}</td>
+                                        <td class="value">{{order.csrEmail}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[26]?.value && order.alternateAccountNumber && order.alternateAccountNumber != ''">
+                                        <td class="label">{{fieldLabel('alternateAccountNumber', accountFields)}}</td>
+                                        <td class="value">{{order.alternateAccountNumber}}</td>
+                                    </tr>
+
+                                    <tr *ngIf="docOptions[27]?.value && order.attentionTo && order.attentionTo != ''">
+                                        <td class="label">{{fieldLabel('attentionTo', fields)}}</td>
+                                        <td class="value">{{order.attentionTo}}</td>
+                                    </tr>
+
+
+                                </table>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <!-- CONTENT -->
+                    <div id="container">
+                        <table class="content-art-proof" width="100%">
+                            <caption>Please review and approve this proof</caption>
+                            <tr>
+                                <td class="col-decorations">
+                                    <div *ngFor="let decoVendor of product.decoVendors; let i=index;" class="image">
+                                        <img class="decoration-image" [src]="decoVendor.image | urlFix"
+                                            [default]="'assets/images/ecommerce/product-image-placeholder.png'" />
+                                        <div class="h5">{{decoVendor.decoLocation}}</div>
+                                    </div>
+                                </td>
+                                <td class="col-image">
+                                    <div class="image-item">
+                                        <img class="product-item"
+                                            [default]="'assets/images/ecommerce/product-image-placeholder.png'"
+                                            [src]="product.image | urlFix" />
+                                    </div>
+                                </td>
+                                <td class="col-info">
+                                    <div class="font-weight-600 h5">Product Info</div>
+                                    <div class="label">
+                                        Item Description: <span
+                                            class="value">{{product.decoVendors[0].decorationDetails[0].decoProductName}}</span>
+                                    </div>
+                                    <div class="label">
+                                        Item Color: <span
+                                            class="kkkk">{{product.decoVendors[0].decorationDetails[0].decoProductColor}}</span>
+                                    </div>
+                                    <div class="label">
+                                        Imprint Color(s): <span
+                                            class="value">{{product.decoVendors[0].decoColors}}</span>
+                                    </div>
+                                    <div class="label">
+                                        Imprint Location: <span
+                                            class="value">{{groupDecoLocations(product.decoVendors)}}</span>
+                                    </div>
+                                    <div class="label">
+                                        Imprint Method: <span class="value">{{product.decoVendors[0].decoTypeName}}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- FOOTER -->
+
+                    <div id="footer" class="footer-art-proof pt-8" fxLayout="column" fxLayoutAlign="start stretch">
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <mat-icon class="accent-text mr-8">check_box_outline_blank</mat-icon>
+                            <div class="h5 padding">Approved. I have reviewed the profile of graphics, color, spelling
+                                and accuracy and approve it to be produced as is.</div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <mat-icon class="accent-text mr-8">check_box_outline_blank</mat-icon>
+                            <div fxLayout="column" class="w-100-p padding">
+                                <div class="h5 pb-4">Proof is approved with the following changes. There is No need to
+                                    send an additional proof.</div>
+                                <hr />
+                                <hr />
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start start">
+                            <mat-icon class="accent-text mr-8">check_box_outline_blank</mat-icon>
+                            <div fxLayout="column" class="w-100-p padding">
+                                <div class="h5 pb-4">Proof is not approved. Please make the changes indicated here.
+                                </div>
+                                <hr />
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="h4 w-100-p note"
+                            *ngIf="docSettings.artworkProofFax && docSettings.artworkProofEmailAddress">Please fax back
+                            to {{docSettings.artworkProofFax}}, or scan and email to
+                            {{docSettings.artworkProofEmailAddress}}</div>
+                        <div class="h4 w-100-p note"
+                            *ngIf="!docSettings.artworkProofFax && docSettings.artworkProofEmailAddress">Please scan and
+                            email to {{docSettings.artworkProofEmailAddress}}</div>
+                        <div class="h4 w-100-p note"
+                            *ngIf="docSettings.artworkProofFax && !docSettings.artworkProofEmailAddress">Please fax back
+                            to {{docSettings.artworkProofFax}}</div>
+
+						<div *ngIf="docOptions[29]?.value" fxLayout="row" fxLayoutAlign="start start">
+							<div class="footer-note pre">{{ displaydocDefaultOptions(docOptions[29]?.name)}}</div>
+						</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- / Art Proof -->
+
+    </div>
+
+</div>

@@ -1,0 +1,95 @@
+<div id='order-vouching-history' class="p-32">
+  <h3>Total cost based on Purchase Orders: <b>{{totalCost | number:'1.2-2'}}</b></h3>
+  <button
+    mat-button
+    class="mat-button warn mb-4 mr-4"
+    (click)="showDeletedLines=!showDeletedLines"
+    title="4 Lines Removed from Order"
+    *ngIf="deletedItems.length > 0"
+    >
+    {{ deletedItems.length }} Vouched Lines Removed from Order
+  </button>
+  <ng-container checkPermissionAction [pAction]="'override_vouching_lock'">
+    <button
+      mat-button
+      class="mat-button warn mb-4"
+      (click)="undoDelete()"
+      title="Undo Delete"
+      *ngIf="deletedItems.length > 0 && showDeletedLines"
+      >
+      Undo Delete
+    </button>
+  </ng-container>
+  <table mat-table [dataSource]="deletedItems" class="mat-elevation-z8 mb-4" *ngIf="deletedItems.length > 0 && showDeletedLines">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Item</th>
+      <td mat-cell *matCellDef="let item">{{item.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Amount</th>
+      <td mat-cell *matCellDef="let item">{{item.vouchedAmount | currency}}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['name', 'amount']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'amount'];"></tr>
+  </table>
+  <table mat-table [dataSource]="data" class="mat-elevation-z8">
+    <ng-container matColumnDef="vendorName">
+      <th mat-header-cell *matHeaderCellDef>Vendor</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.vendorName}}</td>
+    </ng-container>
+    <ng-container matColumnDef="poAmount">
+      <th mat-header-cell *matHeaderCellDef>PO Amount</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.poAmount | number:'1.2-2'}}</td>
+    </ng-container>
+    <ng-container matColumnDef="invoiceNumber">
+      <th mat-header-cell *matHeaderCellDef>Invoice #</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.invoiceNumber}}</td>
+    </ng-container>
+    <ng-container matColumnDef="paidAmount">
+      <th mat-header-cell *matHeaderCellDef>Vouched</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.paidAmount | number:'1.2-2'}}</td>
+    </ng-container>
+    <ng-container matColumnDef="invoiceCredit">
+      <th mat-header-cell *matHeaderCellDef>Credit</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.credit | number:'1.2-2'}}</td>
+    </ng-container>
+    <ng-container matColumnDef="invoiceTotal">
+      <th mat-header-cell *matHeaderCellDef>Vouched Total</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.total | number:'1.2-2'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="vouchedDate">
+      <th mat-header-cell *matHeaderCellDef>Date Vouched</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.vouchedDate | date:'shortDate'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let vouch">{{vouch.deleted ? 'Deleted' : vouch.status}}</td>
+    </ng-container>
+    <ng-container matColumnDef="qbsync">
+      <th mat-header-cell *matHeaderCellDef>QB Sync</th>
+      <td mat-cell *matCellDef="let data">
+        <button
+          mat-button
+          class="mat-button"
+          [ngClass]="{'accent':data.qbBillId && data.qbJeId, 'warn': !data.qbBillId || !data.qbJeId}"
+          (click)="qbPush(data.id)"
+          title="Sync to QB"
+          *ngIf="data.vendorName!='SUM'"
+          >
+            QB Sync {{ !data.qbBillId ? 'Bill' : (!data.qbJeId ? 'JE' : '')}}
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row (click)="editVouching(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+
+<div class="loading"
+[@animate]="{value:'*',params:{opacity:1}}"
+*ngIf="loading">
+<mat-spinner></mat-spinner>
+</div>

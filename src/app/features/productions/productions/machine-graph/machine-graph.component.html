@@ -1,0 +1,25 @@
+<fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget card" fxLayout="column">
+    <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+        <div class="px-16 border-bottom" fxLayout="row"
+                fxLayoutAlign="space-between center">
+            <ng-container *ngIf="data.length">
+                <ngx-charts-bar-horizontal-2d
+                    *fuseIfOnDom
+                    [scheme]="scheme"
+                    [results]="data"
+                    [gradient]="false"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [xAxisLabel]="Time"
+                    [yAxisLabel]="Machine"
+                    [barPadding]=0
+                    (select)="selectEv($event)"
+                    >
+                </ngx-charts-bar-horizontal-2d>
+            </ng-container>
+            <ng-container *ngIf="!data.length">
+            No graph data to display - populate this component by assigning equipment to jobs.
+            </ng-container>
+        </div>
+    </div>
+</fuse-widget>

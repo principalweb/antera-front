@@ -1,0 +1,63 @@
+<div id="imports" class="page-layout carded fullwidth list-page" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header white-fg h-80" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
+
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxFlex.gt-xs="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">cloud_upload</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Imports</span>
+      </div>
+      <!-- / APP TITLE -->
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="content-card">
+      <mat-tab-group class="imports-tab-group-1" (selectedTabChange)="importTabClicked($event)">
+        <mat-tab label="Accounts">
+            <app-accounts-import></app-accounts-import>
+        </mat-tab>
+        <mat-tab label="Contacts">
+             <app-contacts-import></app-contacts-import>
+        </mat-tab>
+        <mat-tab label="Deco Charges">
+             <app-deco-charges-import></app-deco-charges-import>
+        </mat-tab>
+        <mat-tab label="Products">
+             <app-products-import></app-products-import>
+        </mat-tab>
+        <mat-tab label="Warehouse" *ngIf="inventoryEnabled">
+             <app-site></app-site>
+        </mat-tab>
+        <mat-tab label="Artwork">
+             <app-artworks-import></app-artworks-import>
+        </mat-tab>
+        <mat-tab label="Leads">
+             <app-leads-import></app-leads-import>
+        </mat-tab>
+        <mat-tab label="Additional Charges">
+          <app-additional-charges-import></app-additional-charges-import>
+        </mat-tab>
+        <mat-tab label="Decoration Locations">
+          <app-deco-locations-import></app-deco-locations-import>
+        </mat-tab>
+        <mat-tab label="Commission Plans">
+          <app-commission-plans-import></app-commission-plans-import>
+        </mat-tab>
+        <mat-tab label="Users">
+          <app-users-import></app-users-import>
+        </mat-tab>
+        <mat-tab label="Opportunities">
+          <app-opportunities-import></app-opportunities-import>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

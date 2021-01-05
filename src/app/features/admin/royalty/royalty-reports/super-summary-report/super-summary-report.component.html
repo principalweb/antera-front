@@ -1,0 +1,39 @@
+<div class="toolbar">
+    <div class="mail-selection" fxFlex="row">
+        <div fxFlex="row" fxLayoutAlign="start center">
+            <a class="link text-capitalize mr-8 mat-raised-button mat-accent" routerLink="/admin/royalty">Go back</a>
+            <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="downloadCSV()">
+                Download CSV
+            </button>           
+        </div>
+      
+    </div>
+</div>
+<div class="super-summary-report tab-content" fusePerfectScrollbar>
+    <div id="super-summary-report-table" class="compact page-layout blank" fxLayout="row" fusePerfectScrollbar>
+        <div class="super-summary-report-container">
+            <div class="card">
+                <div class="content">
+                    <span class="text-capitalize p-24 no-data-span" *ngIf="summary?.data?.length === 0">No Data Found.</span>
+                    <table class="simple super-summary-report-table" *ngIf="summary?.data?.length > 0">
+                        <thead>
+                            <tr>
+                                <th *ngFor="let key of summary.data[0] | keys">{{ key.key }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <ng-container *ngFor="let data of summary.data; let i=index">
+                                <tr>
+                                    <td *ngFor="let obj of data | keys">
+                                        {{ data[obj.key] }}
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

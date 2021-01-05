@@ -1,0 +1,125 @@
+<div id="account-balance-info">
+  <div class="p-24 balance-credit-top">
+    <mat-card fxFlex>
+      <div fxLayout="row" class="px-24">
+        <h3 class="mat-title accent-text"> Add {{tabName}}</h3>
+        <ng-container *checkPermission="[account.id, 'Account']; requiredPermission 'allowEdit'">
+            <button *ngIf="editingInfo" mat-icon-button (click)="saveBalanceInfo()">
+                <mat-icon>save</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="editBalanceInfo()">
+              <mat-icon *ngIf="!editingInfo">add</mat-icon>
+              <mat-icon *ngIf="editingInfo">close</mat-icon>
+            </button>
+        </ng-container>
+      </div>
+      <form name="balanceInfoForm" [formGroup]="balanceInfoForm">
+        <div  fxLayout="row wrap" fxLayoutAlign="start stretch" class="credit px-16 mx--8" >
+            <ng-container *ngIf="tabName == 'Credits'">
+              <div class="balance-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+                  <div *ngIf="visibleField('creditAmount', fields)" class="mat-subheading-2">
+                    {{fieldLabel('creditAmount', fields)}}: <span class="accent-text">{{credit.precredit}}{{ credit.creditAmount | currency:'USD':'symbol'}}{{credit.procredit}}</span>
+                  </div>
+                  <!--div *ngIf="visibleField('reason', fields)" class="mat-subheading-2">
+                    {{fieldLabel('reason', fields)}}: <span class="accent-text">{{ credit.reason }}</span>
+                  </div-->
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <mat-form-field *ngIf="visibleField('creditAmount', fields)">
+                      <input matInput placeholder="Credit Amount"
+                             [value]="balanceInfoForm.value.creditAmount"
+                             formControlName="creditAmount"
+                             type="number"
+                             min="0"
+                             step="1">
+                  </mat-form-field>
+                  <mat-form-field *ngIf="visibleField('reason', fields)">
+                      <mat-label>Types</mat-label>
+                        <mat-select formControlName="reasonId" (selectionChange)="selectReason($event)">
+                            <mat-option [value]="rea.id" *ngFor="let rea of filteredReasons">{{ rea.reason }}</mat-option>
+                        </mat-select>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="visibleField('creditNotes', fields)">
+                      <textarea matInput placeholder="{{fieldLabel('creditNotes', fields)}}"
+                             [value]="balanceInfoForm.value.creditNotes"
+                             formControlName="creditNotes"
+                             rows="2"
+                             ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-container>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" class="p-16 mx--8 credit-list-tab">
+    <div class="m-8" fxFlex="100">
+        <div class="pb-16" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="m-0">attach_money</mat-icon>
+            <div class="h2 secondary-text">Credit Status</div>
+        </div>
+        <table class="simple">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Types</th>
+                    <th>Notes</th>
+                    <th>Date</th>
+                    <th>Order No</th>
+                    <!--th>Payment</th-->
+                    <th>
+                        <!-- Actions -->
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let credit of creditList; let i=index;">
+                    <td>
+                        <span>
+                            {{credit.creditAmount | currency:'USD':'symbol'}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{credit.reason}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{credit.notes}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{credit.creditIssueDate}}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{credit.orderNo}}
+                        </span>
+                    </td>
+                    <!--td>
+                        <span>
+                            {{credit.paymentAmount | currency:'USD':'symbol'}}
+                        </span>
+                    </td-->
+                </tr>
+            </tbody>
+        </table>
+
+
+
+    </div>
+</div>
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

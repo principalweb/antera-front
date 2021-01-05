@@ -1,0 +1,73 @@
+<mat-toolbar>
+    <button mat-raised-button color="accent" class="text-capitalize mr-8" (click)="save()">
+        <mat-icon color="accent">save</mat-icon>
+        save
+    </button>
+</mat-toolbar>
+<div class="table-container">
+    <table mat-table [dataSource]="entityTypes" matSort
+            [@animateStagger]="{value:'50'}"
+            [trackBy]="trackById">
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *matHeaderCellDef>
+                <span mat-sort-header>Name</span>
+            </th>
+            <td mat-cell class="pr-8" fxHide fxShow.gt-xs *matCellDef="let entityType">
+                <p class="company text-truncate">
+                    {{ entityType.name == 'Order' ? 'Quote/Order' : entityType.name }}
+                </p>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="allowView">
+            <th mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *matHeaderCellDef>
+                <span mat-sort-header>Allow View</span>
+            </th>
+            <td mat-cell class="pr-8" fxHide fxShow.gt-xs *matCellDef="let entityType">
+                <mat-checkbox [(ngModel)]="entityType.allowView"></mat-checkbox>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="allowEdit">
+            <th mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *matHeaderCellDef>
+                <span mat-sort-header>Allow Edit</span>
+            </th>
+            <td mat-cell class="pr-8" fxHide fxShow.gt-xs *matCellDef="let entityType">
+                <mat-checkbox [(ngModel)]="entityType.allowEdit"></mat-checkbox>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="allowPermission">
+            <th mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *matHeaderCellDef>
+                <span mat-sort-header>Allow Permission Change</span>
+            </th>
+            <td mat-cell class="pr-8" fxHide fxShow.gt-xs *matCellDef="let entityType">
+                <mat-checkbox [(ngModel)]="entityType.allowPermission"></mat-checkbox>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="allowDelete">
+            <th mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *matHeaderCellDef>
+                <span mat-sort-header>Allow Delete</span>
+            </th>
+            <td mat-cell class="pr-8" fxHide fxShow.gt-xs *matCellDef="let entityType">
+                <mat-checkbox [(ngModel)]="entityType.allowDelete"></mat-checkbox>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="unrestricted">
+            <th mat-header-cell class="pr-8 header-cell" fxHide fxShow.gt-xs *matHeaderCellDef>
+                <span mat-sort-header>Unrestricted</span>
+            </th>
+            <td mat-cell class="pr-8" fxHide fxShow.gt-xs *matCellDef="let entityType">
+                <mat-checkbox [(ngModel)]="entityType.unrestricted"></mat-checkbox>
+            </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let entityType; columns: displayedColumns;" class="permission" matRipple>
+        </tr>
+    </table>
+</div>

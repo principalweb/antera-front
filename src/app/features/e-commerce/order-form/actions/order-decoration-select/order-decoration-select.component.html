@@ -1,0 +1,41 @@
+<!-- Select Artwork -->
+<ng-container *ngIf="!designsToModify">
+
+  <div class="p-16 pb-8" fxLayout="row" fxLayoutAlign="start center">
+
+    <button mat-icon-button class="mr-8" (click)="emitClose()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="h3 mr-8">Select artwork</div>
+
+    <ng-container *ngIf="action === 'select'">
+      <button mat-raised-button color="accent" (click)="selectArtwork()">Add to line item</button>
+    </ng-container>
+    <ng-container *ngIf="action === 'modify'">
+      <button mat-raised-button color="accent" (click)="selectToModify()">Modify as copy</button>
+    </ng-container>
+  </div>
+
+  <fuse-artworks-list fxLayout="column" [embedded]="true" [multiselect]="action === 'select'" #artworksList>
+  </fuse-artworks-list>
+</ng-container>
+
+<!-- Choose Variation -->
+<ng-container *ngIf="designsToModify">
+  <div class="p-16 pb-8" fxLayout="row" fxLayoutAlign="start center">
+    <button mat-icon-button class="mr-8" (click)="resetSelection()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="h3 mr-8" *ngIf="!isValid">Select Variations to Continue</div>
+  
+    <button mat-raised-button color="accent" (click)="addToLineItem()" *ngIf="isValid">Apply Variation(s)</button>
+  </div>
+
+  <div class="warn" *ngIf="error">{{ error }}</div>
+
+  <app-decoration-variation-select [data]="data" [color]="data.color" [verror]="data.error"
+    (onSelect)="selectVariation(i, $event)" *ngFor="let data of designsToModify; let i = index">
+  </app-decoration-variation-select>
+</ng-container>

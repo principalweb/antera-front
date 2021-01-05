@@ -1,0 +1,375 @@
+<div class="loading" *ngIf="!orderService.purchaseOrder; else detailPage">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-template #detailPage>
+<div id="purchase-order" class="page-layout carded inner-scroll fullwidth">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <button class="mr-16" mat-icon-button routerLink="/e-commerce/purchase_orders">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom
+          [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          <div class="h2">
+            Purchase Order
+            #{{orderService.purchaseOrder.number}}
+          </div>
+        </div>
+      </div>
+      <!-- / APP TITLE -->
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div fusePerfectScrollbar class="content-card mat-white-bg">
+      <div class="toolbar">
+        <div class="order-status mr-8" fxLayout="row" fxFlex>
+          <div fxFlex>
+            Status:
+            <span class="status h6 p-4" [ngClass]="colors[orderService.purchaseOrder.status]">
+              {{orderService.purchaseOrder.status}}
+            </span>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="editVendor" (click)="cancelEdit()" mat-raised-button color="warn" class="text-capitalize mr-8">
+            <mat-icon>clear</mat-icon> Cancel
+          </button>
+          <button *ngIf="!editVendor" (click)="changeVendor()" mat-raised-button color="accent" class="text-capitalize ml-8">
+            <mat-icon>update</mat-icon> Change PO Vendor
+          </button>
+          <button [disabled]="!vendorForm.valid" *ngIf="editVendor" (click)="saveVendor()" mat-raised-button color="accent"
+            class="text-capitalize ml-8">
+            <mat-icon>save</mat-icon> Save PO Vendor
+          </button>
+        </div>
+      </div>
+
+    <mat-tab-group class="fixed" (selectedTabChange)="tabClicked($event)" #tabs>
+
+        <mat-tab label="Basic Info" >
+            <div class="products tab-content">
+
+              <div class="section order-details pb-16">
+                <div class="basic-order-info p8">
+                  <mat-card fxFlex>
+                    <div fxLayout="row wrap" [ngStyle]="{'line-height': '3em'}" fxLayoutAlign="start stretch">
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                      fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                      <div class="mb-0 font-weight-500">
+                        Vendor: <span *ngIf="!editVendor" class="accent-text">{{orderService.purchaseOrder.vendor | capitalizeFirst}}</span>
+                        <span *ngIf="editVendor" class="accent-text" [formGroup]="vendorForm">
+                          <mat-form-field>
+                            <input matInput placeholder="New Vendor" required formControlName="vendor" type="text"
+                              [matAutocomplete]="autoAccount">
+                            <mat-autocomplete #autoAccount="matAutocomplete" (optionSelected)="selectVendor($event)">
+                              <mat-option *ngFor="let account of accounts | async" [value]="account">
+                                {{ account.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                            <mat-error
+                              *ngIf="vendorForm.controls.vendor.errors && vendorForm.controls.vendor.errors.verifyVendor">
+                              Vendor not found. Please select a valid vendor.
+                            </mat-error>
+                          </mat-form-field>
+                        </span>
+
+                          <span *ngIf="!editVendor" [ngStyle]="{'cursor': 'pointer'}" data-role="vendorEditButton" class="mr-l8 ml-8" (click)="changeVendor()">
+                            <mat-icon color="accent">edit</mat-icon>
+                          </span>
+                          <span [ngStyle]="{'cursor': 'pointer'}" (click)="saveVendor()" *ngIf="editVendor" data-role="vendorSaveButton" class="mr-l8">
+                            <mat-icon [ngClass]="{'greyed': !vendorForm.valid }" color="accent">save</mat-icon>
+                          </span>
+                          <span [ngStyle]="{'cursor': 'pointer'}" (click)="cancelEdit()" *ngIf="editVendor" data-role="vendorCancelButton" class="mr-l8">
+                            <mat-icon color="warn">clear</mat-icon>
+                          </span>
+
+                      </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column"
+                        class="pr-16">
+                        <div class="mb-0 font-weight-500">
+                          Label: <span class="accent-text">{{ orderService.purchaseOrder.label }}</span>
+                        </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Created: <span class="accent-text">{{ orderService.purchaseOrder.created | date: 'medium' }}</span>
+                        </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Purchase Order Amount: <span class="accent-text">${{ orderService.purchaseOrder.salesAmount.toFixed(2) }}</span>
+                        </div>
+                      </div>
+                      <!-- <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Shipping Amount: <span class="accent-text">${{ orderService.purchaseOrder.shippingAmount.toFixed(2) }}</span>
+                        </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Advance Payment Amount: <span class="accent-text">${{ orderService.purchaseOrder.advancePaymentAmount.toFixed(2) }}</span>
+                        </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Adjusted Total Amount: <span
+                            class="accent-text">${{ orderService.purchaseOrder.adjustedTotalAmount.toFixed(2) }}</span>
+                        </div>
+                      </div> -->
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Currency: <span
+                            class="accent-text">{{ orderService.purchaseOrder.currency }}</span>
+                        </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div class=" mb-0 font-weight-500">
+                          Terms: <span class="accent-text">{{ orderService.purchaseOrder.terms }}</span>
+                        </div>
+                      </div>
+                      <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxFlex.gt-sm="25" fxLayout="column" class="pr-16">
+                        <div fxLayout="row" *ngIf="!editInHandDate">
+                          <div class=" mb-0 font-weight-500">
+                            In Hand Date: <span
+                              class="accent-text">{{ !orderService.purchaseOrder.inhandDate ? 'None' : orderService.purchaseOrder.inhandDate | date }}</span>
+                          </div>
+                          <mat-icon [ngStyle]="{'cursor': 'pointer'}" (click)="changeInHandDate(true)" class="ml-8" data-role="InHandDateEditButton" color="accent">edit</mat-icon>
+                        </div>
+                        <div fxLayout="row">
+                          <div *ngIf="editInHandDate" [formGroup]="inHandDateForm">
+                            <mat-form-field>
+                              <mat-label>In Hand Date</mat-label>
+                            <input #pickerInput matInput [matDatepicker]="picker" formControlName="inHandDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <mat-icon data-role="InHandDateSaveButton" color="accent" [ngClass]="{'greyed': !inHandDateForm.valid }" *ngIf="editInHandDate" [ngStyle]="{'cursor': 'pointer'}" (click)="updateInHandDate()">save</mat-icon>
+                          <mat-icon data-role="InHandDateCloseButton" color="warn" *ngIf="editInHandDate" [ngStyle]="{'cursor': 'pointer'}" (click)="changeInHandDate(false)">close</mat-icon>
+                        </div>
+                      </div>
+                      <div fxLayout="column" class="pr-16 more-full-width">
+                        <div class="mb-0 font-weight-500">
+                          Notes: <span class="ml-8"><mat-icon data-role="notesEditButton" color="accent" [ngStyle]="{'cursor': 'pointer'}" *ngIf="!editNotes" (click)="changeNotes(true)">edit</mat-icon>
+                          <mat-icon data-role="notesSaveButton" color="accent" [ngStyle]="{'cursor': 'pointer'}" *ngIf="editNotes" (click)="updateNotes(false)">save</mat-icon>
+                        <mat-icon data-role="notesCloseButton" color="warn" class="ml-8" [ngStyle]="{'cursor': 'pointer'}" *ngIf="editNotes" (click)="changeNotes(false)">close</mat-icon></span><span *ngIf="!editNotes" class="more-color">{{ poNotes }}</span>
+                        </div>
+                        <div *ngIf="editNotes" class="mb-0 font-weight-500">
+                          <mat-form-field class="fuller">
+                            <mat-label>Notes</mat-label>
+                            <textarea [(ngModel)]="poNotes" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                              cdkAutosizeMaxRows="7"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-card>
+                </div>
+
+              </div>
+
+              <div class="section order-details pb-16">
+                <div class="basic-order-info p-8">
+                  <mat-card fxFlex>
+                    <h3 class="mat-title mr-8 accent-text font-weight-600">
+                      Line Items
+                    </h3>
+            <div class="differentLeftRight" fxLayout="row" fxLayoutAlign="space-between center">
+                      <div class="equal-width"></div>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Item Number
+                      </h4>
+                      <!-- <h4 class="font-weight-600 mt-0 mb-0 longer-width">Description</h4> -->
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Shipping Info</h4>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Color</h4>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Size</h4>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Quantity</h4>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Unit Price</h4>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Total Price</h4>
+                      <h4 class="font-weight-600 mt-0 mb-0 equal-width">Status</h4>
+                    </div>
+                    <div fxLayout="column" class="BasicInfoLeft">
+                      <mat-tree [dataSource]="treeList" [treeControl]="treeControl" class="example-tree">
+                        <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                          <button mat-icon-button disabled></button>
+                          <div fxLayout="row" fxLayoutAlign="space-between center" class="border-black">
+                            <div class="equal-width">
+                              <img class="detail-col-img" src="{{node.config.image ? node.config.image : '../../../../../assets/images/ecommerce/placeholder-image.png'}}" alt="">
+                            </div>
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0">{{node.supplierProductId}}</p>
+                            </div>
+                    <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                        <span fxLayout="row">
+                          <p [matTooltip]="arrayNewLine(node.shipInfo)" matTooltipClass="addressTip" class="mt-0 mb-0">
+                            {{node.shipInfo.accountName}}</p>
+                          <mat-icon [ngStyle]="{'cursor': 'pointer'}" (click)="editShipping(node.shipInfo)" data-role="shippingEdit1Button">edit</mat-icon>
+                        </span>
+                      <!-- <p>{{ node.shipInfo.addressLines | comma }}</p>
+                              <p>{{ node.shipInfo.city }}, {{ node.shipInfo.postalCode }}</p>
+                              <p>{{ node.shipInfo.phone }}</p>
+                              <a href="mailto:{{ node.shipInfo.email }}">{{ node.shipInfo.email }}</a> -->
+                            </div>
+                    <!-- <div fxLayout="column" fxLayoutAlign="start center" class="middle-width">
+
+                              <p class="mt-0 mb-0">{{node.description}}</p>
+                            </div> -->
+
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0">{{node.color}}</p>
+                            </div>
+
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0">{{node.size}}</p>
+                            </div>
+
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0">{{node.quantity}}</p>
+                            </div>
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0">${{node.unitPrice.toFixed(2)}}</p>
+                            </div>
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0">${{node.extendedPrice.toFixed(2)}}</p>
+                            </div>
+                            <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                              <p class="mt-0 mb-0 status h6 p-4" [ngClass]="colors[node.status]">{{node.status}}</p>
+                            </div>
+                          </div>
+                        </mat-tree-node>
+                        <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                          <li>
+                            <div class="mat-tree-node">
+                              <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.id">
+                                <mat-icon class="mat-icon-rtl-mirror">
+                                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                </mat-icon>
+                              </button>
+                              <!-- {{node.id}} -->
+                      <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="border-black">
+                        <div class="middle-width">
+                          <img class="detail-col-img" src="{{node.config.image ? node.config.image : '../../../../../assets/images/ecommerce/placeholder-image.png'}}" alt="">
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                          <p class="mt-0 mb-0">{{node.supplierProductId}}</p>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                          <span fxLayout="row">
+                            <p [matTooltip]="arrayNewLine(node.shipInfo)" matTooltipClass="addressTip" class="mt-0 mb-0">
+                              {{node.shipInfo.accountName}}</p>
+                            <mat-icon [ngStyle]="{'cursor': 'pointer'}" (click)="editShipping(node.shipInfo)" data-role="shippingEdit2Button">edit</mat-icon>
+                          </span>
+                          <!-- <p>{{ node.shipInfo.addressLines | comma }}</p>
+                                              <p>{{ node.shipInfo.city }}, {{ node.shipInfo.postalCode }}</p>
+                                              <p>{{ node.shipInfo.phone }}</p>
+                                              <a href="mailto:{{ node.shipInfo.email }}">{{ node.shipInfo.email }}</a> -->
+                        </div>
+                        <!-- <div fxLayout="column" fxLayoutAlign="start center" class="longer-width">
+                          <p class="mt-0 mb-0">{{node.description}}</p>
+                        </div> -->
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                          <p class="mt-0 mb-0">{{node.color}}</p>
+                        </div>
+
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+
+                          <p class="mt-0 mb-0">{{node.size}}</p>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+                          <p class="mt-0 mb-0">{{node.quantity}}</p>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+                          <p class="mt-0 mb-0">${{node.unitPrice.toFixed(2)}}</p>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+                          <p class="mt-0 mb-0">${{node.extendedPrice.toFixed(2)}}</p>
+                        </div>
+                        <div fxLayout="column" fxLayoutAlign="start center" class="equal-width">
+                          <p class="mt-0 mb-0 status h6 p-4" [ngClass]="colors[node.status]">{{node.status}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                      <ng-container matTreeNodeOutlet></ng-container>
+                    </ul>
+                          </li>
+                        </mat-nested-tree-node>
+                      </mat-tree>
+                    </div>
+
+                  </mat-card>
+                </div>
+              </div>
+
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Document">
+            <ng-template matTabContent>
+				<mat-toolbar class="doc-toolbar">
+					<ng-container>
+						<button *ngIf="!orderService.hasPromoStandards" mat-raised-button (click)="sendEmail('vendor')" class="mr-8 download-button mat-accent" aria-label="UPLOAD TO CLOUD" [ngClass]="[orderService.purchaseOrder.status == 'Submitted' ? 'green-500-bg' : '']">
+								<mat-icon>email</mat-icon>
+								E-mail Purchase Order
+            </button>
+            <button *ngIf="orderService.hasPromoStandards" mat-raised-button [ngClass]="{'makeGreen': orderService.checkIfSubmitted()}"
+              (click)="orderService.submitToPromoStandards()" class="mr-8" aria-label="SAVE">
+              <mat-icon>send</mat-icon>
+              {{ orderService.checkIfSubmitted() ? 'Submitted' : 'Submit Purchase Order'}}
+            </button>
+						<button mat-raised-button (click)="uploadToCloud()" class="mr-8 download-button mat-accent" aria-label="UPLOAD TO CLOUD">
+								<mat-icon>cloud_upload</mat-icon>
+								Upload to cloud
+						</button>
+						<button mat-raised-button (click)="downloadPDF()" class="mr-8 download-button mat-accent" aria-label="SAVE">
+							<mat-icon>archive</mat-icon>
+							Download PDF
+						</button>
+
+						<button mat-raised-button (click)="printPDF()" class="mr-8 download-button mat-accent" aria-label="SAVE">
+							<mat-icon>print</mat-icon>
+							Print PDF
+            </button>
+					</ng-container>
+				</mat-toolbar>
+
+                <div class="po-doc">
+                <document-pdf #documentRenderer *ngIf="documentDefinition" [definition]="documentDefinition" [filename]="filename">
+                </document-pdf>
+                </div>
+            </ng-template>
+        </mat-tab>
+
+    </mat-tab-group>
+
+    </div>
+  </div>
+  <!-- / CENTER -->
+
+</div>
+</ng-template>
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

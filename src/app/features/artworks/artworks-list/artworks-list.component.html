@@ -1,0 +1,229 @@
+<mat-table fxFlex #table matSort
+        (matSortChange)="sort($event)"
+        [dataSource]="dataSource"
+        [formGroup]="filterForm"
+        [@animateStagger]="{value:'50'}">
+
+    <ng-container cdkColumnDef="checkbox">
+        <mat-header-cell *cdkHeaderCellDef>
+            <mat-checkbox
+                (change)="toggleAll($event)"
+                [checked]="selection.checkedAll | async"
+                [indeterminate]="selection.checkedAny | async">
+            </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *cdkCellDef="let artwork">
+            <mat-checkbox [checked]="checkboxes[artwork.id]"
+                          (change)="onSelectedChange(artwork.id)"
+                          (click)="$event.stopPropagation()">
+            </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="customerName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-xs
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Customer</span>
+            <input class="form-control"
+                   formControlName="customerName"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-xs
+                  *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.customerName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Feature Image Column -->
+    <ng-container cdkColumnDef="featureImage">
+        <mat-header-cell class="pr-8 header-cell"  fxHide fxShow.gt-xs *cdkHeaderCellDef (keyup.enter)="filterArtworks()"></mat-header-cell>
+        <mat-cell class="pr-8"
+                  fxHide fxShow.gt-xs
+                  *cdkCellDef="let artwork">
+            <img class="artwork-image-wide"
+                [src]="artwork.thumbnail"
+                [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="designNo">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Artwork #</span>
+            <input class="form-control"
+                   formControlName="designNo"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.designNo }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="identity">
+        <mat-header-cell class="pr-8 header-cell" *cdkHeaderCellDef>
+            <span mat-sort-header>Name</span>
+            <input class="form-control"
+                   formControlName="identity"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let artwork">
+            <p class="company text-truncate" [matTooltip]="artwork.identity">
+                {{ artwork.identity }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="designTypeName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Artwork Type</span>
+            <input class="form-control"
+                   formControlName="designTypeName"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.designTypeName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="category">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Category</span>
+            <input class="form-control"
+                   formControlName="category"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.category }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="color">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Color</span>
+            <input class="form-control"
+                   formControlName="color"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" *cdkCellDef="let artwork" fxHide fxShow.gt-sm>
+            <p class="company text-truncate">
+                <!-- Show one color from multiple colors - Changed by Lasha -->
+                {{ extractArtworkColor(artwork.color) }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="statusName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-sm
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Status</span>
+            <input class="form-control"
+                   formControlName="statusName"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-sm
+                  *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.statusName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="projectName">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-md
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Project</span>
+            <input class="form-control"
+                   formControlName="projectName"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-md
+                  *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.projectName }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="relatedOrders">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-md
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Orders</span>
+            <input class="form-control"
+                   formControlName="relatedOrders"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-md
+                  *cdkCellDef="let artwork" (click)="$event.stopPropagation()">
+            <!-- <p class="company" *ngFor="let order of artwork.relatedOrders; let i = index">
+                {{artwork.relatedOrders.length}}
+				<a mat-button class="accent-900-fg"
+				(click)="openRelatedOrderDetailDialog(order.orderId, artwork.designId)">
+				{{ order.orderNum }}
+				</a>
+            </p> -->
+            <mat-select (selectionChange)="openRelatedOrderDetailDialog($event.value, artwork.designId)" placeholder="Select Order">
+                <mat-option *ngFor="let order of artwork.relatedOrders" [value]="order.orderId">
+                  #{{order.orderNum}}
+                </mat-option>
+              </mat-select>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="assignee">
+        <mat-header-cell class="pr-8 header-cell"
+                         fxHide fxShow.gt-md
+                         *cdkHeaderCellDef>
+            <span mat-sort-header>Assigned To</span>
+            <input class="form-control"
+                   formControlName="assignee"
+                   (keyup.enter)="filterArtworks()">
+        </mat-header-cell>
+        <mat-cell class="pr-8" fxHide fxShow.gt-md
+                  *cdkCellDef="let artwork">
+            <p class="company text-truncate">
+                {{ artwork.assignee }}
+            </p>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *cdkRowDef="let artwork; columns: displayedColumns;"
+            class="artwork"
+            (click)="editArtwork(artwork)"
+            [ngClass]="{'mat-light-blue-50-bg':checkboxes[artwork.id]}"
+            matRipple
+            [@animate]="{value:'*',params:{y:'100%'}}">
+    </mat-row>
+</mat-table>
+
+<mat-paginator *ngIf="dataSource && dataSource.total" #paginator fxFlex="none"
+            [length]="dataSource.total"
+            [pageSize]="50"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            [showFirstLastButtons]="true"
+            (page)="paginate($event)">
+</mat-paginator>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

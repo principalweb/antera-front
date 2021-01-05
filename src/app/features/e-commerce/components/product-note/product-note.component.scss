@@ -1,0 +1,27 @@
+@import "src/@fuse/scss/fuse";
+
+.product-note-dialog {
+
+  $icon-size: 56px;
+  width: 35vw;
+  overflow: hidden;
+
+  @include media-breakpoint('xs') {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+
+  @include media-breakpoint('sm') {
+    width: 60vw !important;
+    max-width: 60vw !important;
+  }
+
+  @include media-breakpoint('md') {
+    width: 45vw !important;
+    max-width: 45vw !important;
+  }
+
+  .dialog-content {
+
+  }
+}

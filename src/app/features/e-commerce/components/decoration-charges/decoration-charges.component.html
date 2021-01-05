@@ -1,0 +1,189 @@
+<div class="order-additional-charges">
+    <h1 class="mat-dialog-title">Decorator Additional Charges</h1>
+    <mat-dialog-content>
+        <div fxLayout fxLayoutAlign="end">
+
+            <!-- <div fxFlex>
+                <button
+                mat-raised-button
+                color="accent"
+                (click)="addCharge()"
+                >
+                <mat-icon>add</mat-icon> Add
+                </button>
+            </div> -->
+
+            <mat-form-field>
+                <mat-select
+                    placeholder="Select Additional Charges"
+                    panelClass="order-additional-charges-select"
+                    [formControl]="selectCharges"
+                    (selectionChange)="changeSelectedCharges($event.value)"
+                    multiple>
+                    <mat-select-trigger>{{selectedCharges.length}} charges selected</mat-select-trigger>
+                    <mat-option class="filter-input" (click)="$event.preventDefault()" disabled>
+                        <input matInput placeholder="Search Additional Charges"
+                               [formControl]="search"
+                               (keydown)="$event.stopPropagation()">
+                        <button mat-icon-button (click)="clearSearch()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-option>
+                    <mat-option *ngFor="let row of filteredCharges" [value]="row.code">{{row.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-table [dataSource]="selectedCharges" matSort fusePerfectScrollbar>
+
+            <!-- Item Code Column -->
+            <ng-container cdkColumnDef="code">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef fxHide.xs>
+                    <span mat-sort-header>Item Code</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element" fxHide.xs>
+                    <div class="text-truncate">{{ element.code }}</div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container cdkColumnDef="name">
+                <mat-header-cell class="header-cell" *cdkHeaderCellDef fxFlex="20" fxFlex.lt-md="40">
+                    <span mat-sort-header>Name</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element" fxFlex="20" fxFlex.lt-md="40">
+                    <div class="text-truncate"> {{ element.name }}</div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container cdkColumnDef="description">
+                <mat-header-cell class="header-cell w-p-30" *cdkHeaderCellDef fxShow fxHide.lt-lg fxFlex="20">
+                    <span mat-sort-header>Description</span>
+                </mat-header-cell>
+                <mat-cell class="w-p-30" *cdkCellDef="let element" fxShow fxHide.lt-lg fxFlex="20">
+                    <div class="text-truncate"> {{ element.description }}</div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Qty Column -->
+            <ng-container cdkColumnDef="quantity">
+                <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef>
+                    <span mat-sort-header>Qty</span>
+                </mat-header-cell>
+                <mat-cell class="w-60" *cdkCellDef="let element">
+                    <div class="text-truncate"> {{ element.matchOrderQty ? totalCount : element.quantity }}</div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Cost Column -->
+            <ng-container cdkColumnDef="cost">
+                <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef>
+                    <span mat-sort-header>Cost</span>
+                </mat-header-cell>
+                <mat-cell class="w-60" *cdkCellDef="let element">
+                    <div class="text-truncate"> {{ element.cost }}</div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container cdkColumnDef="price">
+                <mat-header-cell class="header-cell w-60" *cdkHeaderCellDef>
+                    <span mat-sort-header>Price</span>
+                </mat-header-cell>
+                <mat-cell class="w-60" *cdkCellDef="let element">
+                    <div class="text-truncate"> {{ element.price }}</div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Tax Column -->
+            <ng-container cdkColumnDef="itemTaxOff">
+                <mat-header-cell class="header-cell mat-cell-checkbox w-60" *cdkHeaderCellDef fxShow fxHide.lt-md>
+                    <span>Tax</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element"
+                        class="mat-cell-checkbox w-60"
+                        fxShow fxHide.lt-md
+                        (click)="$event.stopPropagation()"
+                        >
+                    <mat-checkbox [checked]="!element.itemTaxOff" (change)="element.itemTaxOff =! element.itemTaxOff"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <!-- GST Tax on PO Column -->
+            <ng-container cdkColumnDef="chargeGstTaxOnPo">
+                <mat-header-cell class="header-cell mat-cell-checkbox w-60" *cdkHeaderCellDef fxShow fxHide.lt-md>
+                    <span>GST on PO</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element"
+                        class="mat-cell-checkbox w-60"
+                        fxShow fxHide.lt-md
+                        (click)="$event.stopPropagation()"
+                        >
+                    <mat-checkbox [(ngModel)]="element.chargeGstTaxOnPo"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+
+            <!-- Commision Column -->
+            <ng-container cdkColumnDef="isCommissionEnabled">
+                <mat-header-cell class="header-cell mat-cell-checkbox" *cdkHeaderCellDef fxShow fxHide.lt-md>
+                    <span>Commission</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element"
+                        class="mat-cell-checkbox"
+                        fxShow fxHide.lt-md
+                        (click)="$event.stopPropagation()"
+                        >
+                    <mat-checkbox [(ngModel)]="element.isCommissionEnabled"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Commision Column -->
+            <ng-container cdkColumnDef="matchOrderQty">
+                <mat-header-cell class="header-cell mat-cell-checkbox" *cdkHeaderCellDef fxShow fxHide.lt-md>
+                    <span>Match Order Qty</span>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element"
+                        class="mat-cell-checkbox"
+                        fxShow fxHide.lt-md
+                        (click)="$event.stopPropagation()"
+                        >
+                    <mat-checkbox
+                        [(ngModel)]="element.matchOrderQty"
+                        (ngModelChange)="checkQuantity(element)">
+                    </mat-checkbox>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Commision Column -->
+            <ng-container cdkColumnDef="actions">
+                <mat-header-cell class="header-cell mat-cell-checkbox" *cdkHeaderCellDef fxShow fxHide.lt-md>
+                </mat-header-cell>
+                <mat-cell *cdkCellDef="let element; let i=index;"
+                          (click)="$event.stopPropagation()">
+                    <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                            (click)="$event.stopPropagation();">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <mat-menu #moreMenu="matMenu">
+                        <button mat-menu-item aria-label="remove" (click)="deleteCharge(i)">
+                            <mat-icon>delete</mat-icon>
+                            <span>Remove</span>
+                        </button>
+                    </mat-menu>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *cdkHeaderRowDef="displayColumns"></mat-header-row>
+
+            <mat-row *cdkRowDef="let row; columns: displayColumns;"
+                    (click)="onEditCharge(row)"></mat-row>
+
+        </mat-table>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button color="accent" mat-dialog-close>Close</button>
+        <button mat-raised-button color="accent" (click)="save()" *checkPermission="[orderId, 'Order']; requiredPermission 'allowEdit'">Save</button>
+    </mat-dialog-actions>
+</div>

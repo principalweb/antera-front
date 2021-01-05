@@ -1,0 +1,55 @@
+@import "src/@fuse/scss/fuse";
+
+product-add-widget {
+
+.widget-container {
+    padding-top: 20px;
+
+    .mat-form-field {
+        margin-top: -15px !important;
+        position: relative;
+
+        .collapse-btn {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+        }
+    }
+    
+    .mat-option {
+        height: auto;
+    }
+}
+
+@include media-breakpoint('gt-xs') {
+
+.px-gtxs-20 {
+    padding: 0 20px;
+}
+
+}
+@include media-breakpoint('lt-md') {
+
+.mt-ltmd-20 {
+    margin-top: 20px;
+}
+
+}
+
+}
+
+.product-auto-complete-item {
+    height: auto;
+    line-height: normal;
+    padding: 10px 0px;
+    color: #888;
+
+    .mat-option-text {
+        width: 100%;
+        padding: 0 8px;
+    }
+
+    .product-name {
+        font-size: 0.7em;
+    }
+}

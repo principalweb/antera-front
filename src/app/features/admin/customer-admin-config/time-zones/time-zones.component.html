@@ -1,0 +1,62 @@
+
+<div fxLayout="column" fxFlex>
+  <div class="mt-20 px-24" fusePerfectScrollbar>
+    <table class="time-zones-table">
+        <thead>
+            <tr>
+                <th>Country Code</th>
+                <th>Country Name</th>
+                <th>TimeZone</th>
+                <th>GMT Offset</th>
+                <th>Default</th>
+                <th>Visible</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr *ngFor="let timezone of timezones; let i=index;">
+                <td>
+                    <span>
+                        {{timezone.countryCode}}
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        {{timezone.countryName | titlecase}}
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        {{timezone.timeZone}}
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        {{timezone.gmtOffset}}
+                    </span>
+                </td>
+                <td>
+                    <button mat-icon-button *ngIf="timezone.isDefault == '1'" (click)="updateDefault(timezone, $event)">
+                      <mat-icon class="active-icon green-500-bg white-fg s-24">check_box</mat-icon>
+                    </button>
+                    <button mat-icon-button *ngIf="timezone.isDefault == '0'" (click)="updateDefault(timezone, $event)">
+                      <mat-icon class="active-icon orange-500-fg s-32">check_box_outline_blank</mat-icon>
+                    </button>
+                </td>
+                <td>
+                    <button mat-icon-button *ngIf="timezone.status == '1'" (click)="updateStatus(timezone, $event)">
+                      <mat-icon class="active-icon green-500-bg white-fg s-24">check_box</mat-icon>
+                    </button>
+                    <button mat-icon-button *ngIf="timezone.status == '0'" (click)="updateStatus(timezone, $event)">
+                      <mat-icon class="active-icon orange-500-fg s-32">check_box_outline_blank</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

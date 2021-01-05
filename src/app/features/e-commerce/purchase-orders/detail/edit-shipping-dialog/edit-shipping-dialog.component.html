@@ -1,0 +1,93 @@
+<div class="dialog-content-wrapper slim-down">
+<mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Edit Shipping Details</div>
+    <button mat-button class="mat-icon-button" (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div fusePerfectScrollbar class="center scroll">
+  <div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div fxFlex fxLayout="column">
+    <div mat-dialog-content class="m-0 scroll">
+      <form (ngSubmit)="editShipping()" [formGroup]="editShippingForm">
+        <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="p-16">
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input matInput 
+              placeholder="Account Name"
+              required 
+              formControlName="accountName" 
+              type="text"
+              [matAutocomplete]="autoAccount">
+              <mat-autocomplete #autoAccount="matAutocomplete" (optionSelected)="selectAccount($event)">
+                <mat-option *ngFor="let account of accounts | async" [value]="account">
+                  {{ account.name }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="editShippingForm.controls.accountName.errors && editShippingForm.controls.accountName.errors.realAccount">
+                Account not found. Please select a valid account.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="text" placeholder="Address" formControlName="address">
+            </mat-form-field>
+          
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="p-16">
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="text" placeholder="City" formControlName="city">
+            </mat-form-field>
+          </div>
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="text" placeholder="State" formControlName="state">
+            </mat-form-field>
+          </div>
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="text" placeholder="Postal Code" formControlName="postalCode">
+            </mat-form-field>
+          </div>
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="text" placeholder="Country" formControlName="country">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="p-16">
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="text" placeholder="Phone Number" formControlName="phone">
+            </mat-form-field>
+          </div>
+          <div fxFlex fxFlex.xs="100" fxFlex.sm="50" fxLayout="column" class="p-8">
+            <mat-form-field>
+              <input [errorStateMatcher]="matcher" required matInput type="email" placeholder="Email" formControlName="email">
+              <mat-error
+                *ngIf="editShippingForm.controls.email.errors && editShippingForm.controls.email.errors.email">
+                Please Enter a Valid Email Address.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <button [disabled]="dontAllow()" class="full-width" mat-raised-button color="accent"> <mat-icon class="larger-icon">update</mat-icon> Update Info</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+

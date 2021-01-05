@@ -1,0 +1,333 @@
+<product-add-widget
+    (onAdd)="addLineItem($event)"
+    (onDelete)="deleteSelectedLineItems()"
+    (onShowProductsView)="showProductsView()"
+    (onDecorationChange)="toggleDecoration($event)"
+></product-add-widget>
+
+<ng-container *ngIf="dataSource.data.length > 0">
+
+    <mat-table class="products-table"
+                [formGroup]="form"
+                [dataSource]="dataSource"
+                fusePerfectScrollbar>
+
+        <ng-container cdkColumnDef="checkbox">
+            <mat-header-cell class="checkbox" *cdkHeaderCellDef>
+                <mat-checkbox (change)="toggleAll($event)"
+                            [checked]="selection.checkedAll | async"
+                            [indeterminate]="selection.checkedAny | async">
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell class="checkbox" *cdkCellDef="let product; let i=index;">
+                <mat-checkbox [checked]="checkboxes[product.id]"
+                            (change)="checkSelection(product.id)"
+                            (click)="$event.stopPropagation()">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="vendor">
+            <mat-header-cell class="header-cell mw-80" *cdkHeaderCellDef>Vendor</mat-header-cell>
+            <mat-cell class="mw-80" *cdkCellDef="let product" (click)="showProductDetails($event, product)">
+                <p class="text-truncate">{{product.vendorName}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="id">
+            <mat-header-cell class="header-cell" fxHide fxShow.gt-xs *cdkHeaderCellDef>Item #</mat-header-cell>
+            <mat-cell  fxHide fxShow.gt-xs *cdkCellDef="let product" (click)="showProductDetails($event, product)">
+                <p class="text-truncate">{{product.productId}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="image">
+            <mat-header-cell class="header-cell" *cdkHeaderCellDef>Image</mat-header-cell>
+            <mat-cell (click)="openLineItemImageDialog(product)"
+                      *cdkCellDef="let product">
+                <img class="product-image"
+                    [alt]="product.productName"
+                    [src]="product.image | urlFix"/>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="color">
+                <mat-header-cell class="header-cell mw-60" *cdkHeaderCellDef>Color</mat-header-cell>
+                <mat-cell class="mw-60"
+                          *cdkCellDef="let product">
+                          <p class="text-truncate" [matTooltip]="product.color">{{ product.color }}</p>
+                </mat-cell>
+            </ng-container>
+
+        <ng-container cdkColumnDef="name">
+            <mat-header-cell class="header-cell mw-120" *cdkHeaderCellDef>Name</mat-header-cell>
+            <mat-cell class="mw-120"
+                        (click)="showProductDescription(product)"
+                        *cdkCellDef="let product">
+                <p class="text-truncate" [matTooltip]="product.productName">{{product.productName}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="size">
+            <mat-header-cell class="header-cell mw-60" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                Size
+            </mat-header-cell>
+            <mat-cell class="mw-60"
+                        fxHide fxShow.gt-sm
+                        (click)="pricingInventory(product)"
+                        [matTooltip]="sizeTooltip(product)"
+                        *cdkCellDef="let product">
+                <span class="p-16">
+                    {{ product.multiple ? 'Multiple' : product.size }}
+                </span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="quantity">
+            <mat-header-cell class="header-cell mw-60" fxHide fxShow.gt-sm *cdkHeaderCellDef>
+                Quantity
+            </mat-header-cell>
+            <mat-cell class="mw-60"
+                        fxHide fxShow.gt-sm
+                        (click)="pricingInventory(product)"
+                        matTooltip="Select"
+                        *cdkCellDef="let product">
+                <ng-container *ngIf="product.quantity > 0">
+                    <span class="mr-4">
+                        {{ product.unitQuantity | number:sysconfigOrderFormQtyDecimalUpto }} 
+                    </span>
+                    <span class="mr-4">
+                        {{ product.uomAbbreviation || 'EA'}} 
+                    </span>
+                    <span *ngIf="product.unitQuantity !== product.quantity">
+                        ({{ product.quantity }})
+                    </span>
+                </ng-container>
+                <span class="p-16" *ngIf="product.quantity < 1">
+                    <mat-icon>shopping_cart</mat-icon>
+                </span>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="price">
+            <mat-header-cell class="header-cell mw-60" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                Price
+            </mat-header-cell>
+            <mat-cell class="mw-60"
+                        fxHide fxShow.gt-xs
+                        (click)="openPriceOverrideDialog(product)"
+                        matTooltip="Select"
+                        *cdkCellDef="let product">
+                <p class="price text-truncate">
+                    <ng-container *ngIf="product.uomConversionRatio; else defaultPriceTemplate">
+                        {{ product.price * product.uomConversionRatio | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                    </ng-container>
+                    <ng-template #defaultPriceTemplate>
+                        {{product.price | currency:'USD':'symbol':sysconfigOrderFormCostDecimalUpto}}
+                    </ng-template>
+                </p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="charges">
+            <mat-header-cell class="mw-60 header-cell" fxHide fxShow.gt-sm *cdkHeaderCellDef matTooltip="Place additional charges payable to this vendor">
+                Charges
+            </mat-header-cell>
+            <mat-cell class="mw-60" *cdkCellDef="let product" fxHide fxShow.gt-sm>
+                <div (click)="charge(product)" *ngIf="product.showAddonCharges">
+                    <mat-icon [class.green-fg]="product.hasAddonCharges">add_to_photos</mat-icon>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoType">
+            <mat-header-cell class="header-cell mw-80" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                Decoration
+            </mat-header-cell>
+            <mat-cell class="mw-80" *cdkCellDef="let product" fxHide fxShow.gt-xs
+                      (click)="showDecorationsList(product)">
+                <mat-icon
+                    [matTooltip]="product.decoTooltip"
+                    [class.orange-fg]="product.hasDecorations && !product.decoStatus"
+                    [class.green-fg]="product.hasDecorations && product.decoStatus"
+                >palette</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoVendor">
+            <mat-header-cell class="header-cell mw-100" fxHide *cdkHeaderCellDef>
+                Deco Vendor
+            </mat-header-cell>
+            <mat-cell class="mw-100" *cdkCellDef="let product" fxHide
+                        (click)="openDecoration()">
+                <mat-icon>card_giftcard</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoDetails">
+            <mat-header-cell class="header-cell mw-160" fxHide fxShow.gt-lg *cdkHeaderCellDef>
+                Deco Details
+            </mat-header-cell>
+            <mat-cell class="mw-160" *cdkCellDef="let product" fxHide fxShow.gt-lg
+                        (click)="openDecoration()">
+                <mat-icon>card_giftcard</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="artwork">
+            <mat-header-cell class="header-cell mw-60" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+                Artwork
+            </mat-header-cell>
+            <mat-cell class="mw-60" *cdkCellDef="let product" fxHide fxShow.gt-xs>
+                <mat-icon style="color: #dddddd" >palette</mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="config">
+            <mat-header-cell
+                class="header-cell mw-60"
+                fxHide fxShow.gt-xs *cdkHeaderCellDef
+                >Config</mat-header-cell>
+            <mat-cell class="mw-60"
+                      *cdkCellDef="let product; let i = index"
+                      fxHide fxShow.gt-xs>
+                <div (click)="showConfigDialog(product, i)"
+                     *ngIf="product.showAddonCharges">
+                    <mat-icon [class.green-fg]="product.hasConfigs">settings_applications</mat-icon>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="warehouse">
+            <mat-header-cell class="header-cell p-8" *cdkHeaderCellDef>
+                Warehouse
+            </mat-header-cell>
+            <mat-cell *cdkCellDef="let product; let i = index" class="p-8">
+
+                <mat-form-field class="w-100-p" *ngIf="product.poType === 'DropShip'">
+                    <mat-select [formControlName]="'distributorWarehouseId' + i" (selectionChange)="selectWarehouse($event, i)">
+                        <mat-option [value]="warehouse.fobId"
+                                    *ngFor="let warehouse of filteredWarehouses$ | async">
+                                    {{ warehouse.fobCity }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoration1">
+            <mat-header-cell class="header-cell p-8" *cdkHeaderCellDef>
+                Decoration 1
+            </mat-header-cell>
+            <mat-cell class="p-8" *cdkCellDef="let product"
+                      (click)="showDecorationsList(product)">
+                <div *ngIf="product.decoImages[0]">
+                    {{ product.decoImages[0].location ? product.decoImages[0].location : 'No Location' }}
+                </div>
+                <img [src]="product.decoImages[0].url" alt="Decoration 1"
+                     *ngIf="product.decoImages[0]"
+                     class="product-image"
+                     [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoration2">
+            <mat-header-cell class="header-cell p-8" *cdkHeaderCellDef>
+                Decoration 2
+            </mat-header-cell>
+            <mat-cell class="p-8" *cdkCellDef="let product; let i = index"
+                      (click)="showDecorationsList(product)">
+                <div *ngIf="product.decoImages[1]">
+                    {{ product.decoImages[1].location ? product.decoImages[1].location : 'No Location' }}
+                </div>
+                <img [src]="product.decoImages[1].url" alt="Decoration 2"
+                     *ngIf="product.decoImages[1]"
+                     class="product-image"
+                     [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoration3">
+            <mat-header-cell class="header-cell p-8" *cdkHeaderCellDef>
+                Decoration 3
+            </mat-header-cell>
+            <mat-cell class="p-8" *cdkCellDef="let product"
+                      (click)="showDecorationsList(product)">
+                <div *ngIf="product.decoImages[2]">
+                    {{ product.decoImages[2].location ? product.decoImages[2].location : 'No Location' }}
+                </div>
+                <img [src]="product.decoImages[2].url" alt="Decoration 3"
+                     *ngIf="product.decoImages[2]"
+                     class="product-image"
+                     [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="decoration4">
+            <mat-header-cell class="header-cell p-8" *cdkHeaderCellDef>
+                Decoration 4
+            </mat-header-cell>
+            <mat-cell class="p-8" *cdkCellDef="let product"
+                      (click)="showDecorationsList(product)">
+                <div *ngIf="product.decoImages[3]">
+                    {{ product.decoImages[3].location ? product.decoImages[3].location : 'No Location' }}
+                </div>
+                <img [src]="product.decoImages[3].url" alt="Decoration 4"
+                     *ngIf="product.decoImages[3]"
+                     class="product-image"
+                     [default]= "'assets/images/ecommerce/product-image-placeholder.png'"/>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="actions">
+            <mat-header-cell class="header-cell w-40" fxHide fxShow.gt-xs *cdkHeaderCellDef>
+            </mat-header-cell>
+            <mat-cell class="w-40" *cdkCellDef="let product" fxHide fxShow.gt-xs>
+                <div fxFlex="row" fxLayoutAlign="end center">
+                    <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                            (click)="$event.stopPropagation();">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #moreMenu="matMenu">
+                        <button mat-menu-item aria-label="remove" (click)="deleteLineItem(product)" *checkPermission="[order.id, 'Order']; requiredPermission 'allowEdit'">
+                            <mat-icon>delete</mat-icon>
+                            <span>Remove</span>
+                        </button>
+                        <button mat-menu-item aria-label="remove" (click)="editVendorPONote(product)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Vendor Notes</span>
+                        </button>
+                        <button mat-menu-item aria-label="remove" (click)="editOrderNote()">
+                            <mat-icon>edit</mat-icon>
+                            <span>Order Notes</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *cdkRowDef="let product; columns: displayedColumns; let i = index"
+                class="product" matRipple>
+        </mat-row>
+
+    </mat-table>
+
+    <mat-paginator #paginator
+                    [pageIndex]="0"
+                    [pageSize]="10"
+                    (page)="refreshChecks()"
+                    [pageSizeOptions]="[10, 20, 50, 100]"
+                    [showFirstLastButtons]="true">
+    </mat-paginator>
+</ng-container>
+<div class="p-24 text-center" *ngIf="dataSource.data.length === 0">
+    There are currently no line items
+</div>
+
+<div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+

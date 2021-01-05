@@ -1,0 +1,50 @@
+<!-- TODO: Permissions - Can add new items? -->
+<div class="add__item" [formGroup]="form" fxLayout="row">
+  <div fxFlex class="col">
+    <mat-form-field appearance="outline" style="width: 100%;" class="mat-form-field-appearance-outline-original">
+
+      <!-- <mat-label>New line item</mat-label> -->
+
+      <input type="text" placeholder="Add a new line" matInput formControlName="productName" [matAutocomplete]="auto">
+
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectProduct($event)">
+        <mat-option *ngIf="form.get('productName').value" [value]="form.get('productName').value">
+          <mat-icon>add</mat-icon>
+          Create New Product
+        </mat-option>
+        <mat-option *ngFor="let p of products" [value]="p" class="product-auto-complete-item" fxLayout="column">
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <div class="img pr-8">
+              <img *ngIf="p.MediaContent && p.MediaContent[0]; else defaultImage" [alt]="p.name"
+                style="max-width: 25px;" [src]="p.MediaContent[0].url"
+                [default]="'assets/images/ecommerce/product-image-placeholder.png'" />
+              <ng-template #defaultImage>
+                <img [src]="'assets/images/ecommerce/product-image-placeholder.png'" />
+              </ng-template>
+            </div>
+            <div>
+              <span class="pr-4">{{ p.vendorName }}</span>
+              <span>{{ p.productId }}</span>
+              <div class="product-name">{{ p.productName }}</div>
+            </div>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <!-- 
+  <div class="col col--qty">
+    <mat-form-field appearance="outline" style="width: 100%;" class="mr-8">
+      <mat-label>Quantity</mat-label>
+      <input type="text" matInput>
+    </mat-form-field>
+  </div>
+  <div class="col col--price">
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Unit Price</mat-label>
+      <input type="text" matInput>
+    </mat-form-field>
+  </div>
+  <div class="col col--total"></div>
+  -->
+</div>

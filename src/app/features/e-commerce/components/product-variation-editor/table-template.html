@@ -1,0 +1,92 @@
+<table class="w-100-p table-variations">
+    <thead>
+        <th>Sku</th>
+        <th>Color</th>
+        <th>Size</th>
+        <th>&nbsp;</th>
+        <ng-container *ngFor="let quantity of quantities">
+            <th>{{quantity}}</th>
+        </ng-container>
+    </thead>
+    <ng-container *ngFor="let part of product.ProductPartArray.ProductPart">
+        <tbody>
+            <tr>
+                <td rowspan="4">{{ part.sku }}</td>
+                <td rowspan="4">
+                    <div class="swatch"
+                        style="width:16px; height:16px; display:inline-block; margin-right:5px;"
+                        [style.background]="part.ColorArray.Color.hex"></div>
+                    {{ part.ColorArray.Color.colorName }}
+                </td>
+                <td rowspan="4">{{ part.ApparelSize.labelSize }}</td>
+                <td>
+                    <div>Price: </div>
+
+                </td>
+                <ng-container *ngFor="let quantity of quantities">
+                    <td>
+                        <ng-container
+                            *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                            <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                                <div>
+                                    <input type="text" [value]="priceBreak.salePrice">
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr>
+                <td>
+                    <div>Margin: </div>
+                </td>
+                <ng-container *ngFor="let quantity of quantities">
+                    <td>
+                        <ng-container
+                            *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                            <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                                <div>
+                                    <input type="text" [value]="priceBreak.margin">
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr>
+                <td>
+                    <div>Cost: </div>
+                </td>
+                <ng-container *ngFor="let quantity of quantities">
+                    <td>
+                        <ng-container
+                            *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                            <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                                <div>
+                                    <input type="text" [value]="priceBreak.price">
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr>
+                <td>
+                    <div>Profit: </div>
+                </td>
+                <ng-container *ngFor="let quantity of quantities">
+                    <td>
+                        <ng-container
+                            *ngFor="let priceBreak of part.partPrice.PartPriceArray.PartPrice">
+                            <ng-container *ngIf="priceBreak.minQuantity == quantity">
+                                <div>
+                                    <input type="text" [value]="priceBreak.unitProfit">
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </ng-container>
+</table>

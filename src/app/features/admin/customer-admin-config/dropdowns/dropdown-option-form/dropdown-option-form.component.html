@@ -1,0 +1,97 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0 toolbar-margin">
+        <mat-toolbar-row class="toolbar-row" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <mat-dialog-content class="m-0 p-0">
+
+        <form name="dropdownOptionForm" [formGroup]="dropdownOptionForm" class="w-100-p" fxLayout="column" fxFlex>
+          <div class="tab-content p-24" fxLayout="column">
+            <div class="py-16" fxLayout="row">
+              <mat-form-field fxFlex>
+                  <input matInput
+                      name="name"
+                      formControlName="name"
+                      placeholder="Name">
+                  <app-error [group]="dropdownOptionForm" field="name" label="Name"></app-error>
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                  <input matInput
+                      name="label"
+                      formControlName="label"
+                      placeholder="Label" required>
+                  <app-error [group]="dropdownOptionForm" field="label" label="Label"></app-error>
+              </mat-form-field>
+            </div>
+            <div class="py-16" fxLayout="row">
+              <mat-form-field fxFlex>
+                  <input matInput
+                      type="number"
+                      name="orderSequence"
+                      formControlName="orderSequence"
+                      placeholder="Order Sequence" required>
+                  <app-error [group]="dropdownOptionForm" field="orderSequence" label="Order Sequence"></app-error>
+              </mat-form-field>
+
+              <mat-form-field fxFlex>
+                  <input matInput
+                      name="value"
+                      formControlName="value"
+                      placeholder="Value" required>
+                  <app-error [group]="dropdownOptionForm" field="value" label="Value"></app-error>
+              </mat-form-field>
+            </div>
+            <div class="py-16" fxLayout="row">
+                <mat-checkbox 
+                    formControlName="isDefault">
+                    Default
+                </mat-checkbox>
+            </div>
+            <div class="py-16" fxLayout="row">
+                <mat-form-field fxFlex>
+                    <textarea name="description" formControlName="description" placeholder="Description" matInput type="text" rows="4"></textarea>
+                </mat-form-field>
+            </div>
+
+          </div>
+          <input type="hidden" formControlName="dateCreated"/>
+          <input type="hidden" formControlName="dateModified"/>
+          <input type="hidden" formControlName="createdById"/>
+          <input type="hidden" formControlName="createdByName"/>
+          <input type="hidden" formControlName="modifiedById"/>
+          <input type="hidden" formControlName="modifiedByName"/>
+        </form>
+
+    </mat-dialog-content>
+    <!-- / CONTENT -->
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+        
+    </mat-dialog-actions>
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
+

@@ -1,0 +1,66 @@
+@import "../order";
+
+$border-color: #efefef;
+
+:host {
+  border: 1px solid $border-color;
+  display: block;
+  margin: 0 0 8px 16px;
+}
+
+.item__deco {
+
+  .deco__preview {
+    padding: 4px;
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .deco__preview--edit {
+    &:hover {
+      border-color: #058ec0;
+    }
+  }
+
+  .item__deco__header:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    border-bottom: 1px solid #dcdcdc;
+    width: 16px;
+    left: 0;
+    margin-top: -20px;
+  }
+
+  &__header {
+    align-items: center;
+
+    img {
+      max-width: 50px;
+    }
+
+    @extend %orderColumns;
+  }
+
+  .addons {
+    border-left: 1px solid #dcdcdc;
+    margin-left: 16px;
+    position: relative;
+
+    &__toolbar {
+      margin-left: 16px;
+    }
+  }
+
+  &__expand {
+    margin-left: 50px;
+  }
+
+  &__actions {
+    display: none;
+  }
+}
+
+.margin-rate-top {
+  margin-top: 28px;
+}

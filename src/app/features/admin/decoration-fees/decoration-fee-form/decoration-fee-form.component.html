@@ -1,0 +1,256 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0 toolbar-margin">
+        <mat-toolbar-row class="toolbar-row" fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">{{dialogTitle}}</span>
+            <button mat-button class="mat-icon-button"
+                    (click)="dialogRef.close()"
+                    aria-label="Close dialog">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <!-- CONTENT -->
+    <mat-dialog-content class="m-0 p-0">
+
+        <form name="decoChargeForm" [formGroup]="decoChargeForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+            <mat-tab-group>
+                <mat-tab label="Basic Info">
+                  <div class="tab-content p-24" fxLayout="column">
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12">account_circle</mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                        name="name"
+                                        formControlName="name"
+                                        placeholder="Name"
+                                        required>
+                            </mat-form-field>
+
+                            <mat-icon class="mr-12 mt-12">work</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input type="hidden" formControlName="vendorId"/>
+                                    <input type="text"
+                                            matInput
+                                            formControlName="vendorName"
+                                            minlength="3"
+                                            placeholder="Vendor Name"
+                                            [matAutocomplete]="autoVendor"
+                                            required>
+                                    <mat-autocomplete #autoVendor="matAutocomplete"
+                                                    [displayWith]="displayName"
+                                                    (optionSelected)="selectVendor($event)">
+                                        <mat-option [value]="vendor"
+                                                    *ngFor="let vendor of filteredVendors | async">
+                                            {{ vendor.name | capitalizeFirst }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                        </div>
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12">palette</mat-icon>
+                            <mat-form-field fxFlex>
+                                <mat-select placeholder="Decorator Type"
+                                            formControlName="decoratorType" required>
+                                    <mat-option [value]="decoType.code" *ngFor="let decoType of decoTypes">
+                                        {{ decoType.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                        name="price"
+                                        formControlName="price"
+                                        placeholder="Cost" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                        type="number"
+                                        name="stitchesStart"
+                                        formControlName="stitchesStart"
+                                        placeholder="Detail Count From" required>
+                            </mat-form-field>
+
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                        type="number"
+                                        name="stitchesUpto"
+                                        formControlName="stitchesUpto"
+                                        placeholder="Detail Count To" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                        type="number"
+                                        name="qunatityStart"
+                                        formControlName="qunatityStart"
+                                        placeholder="Quantity Start" required>
+                            </mat-form-field>
+
+                            <mat-icon class="mr-12 mt-12"></mat-icon>
+                            <mat-form-field fxFlex>
+                                <input matInput
+                                        type="number"
+                                        name="quantityUpto"
+                                        formControlName="quantityUpto"
+                                        placeholder="Quantity Upto" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="py-16" fxLayout="row">
+                            <mat-icon class="mr-12 mt-12">note</mat-icon>
+                            <mat-form-field fxFlex>
+                                <textarea matInput
+                                            name="description"
+                                            formControlName="description"
+                                            placeholder="Description"
+                                            rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Additional Info">
+                    <div class="tab-content p-24" fxLayout="column">
+                            <div class="py-16" fxLayout="row">
+                                <mat-icon class="mr-12 mt-12">monetization_on</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            name="salePrice"
+                                            formControlName="salePrice"
+                                            placeholder="Price">
+                                </mat-form-field>
+
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            name="rank"
+                                            type="number"
+                                            formControlName="rank"
+                                            placeholder="Rank">
+                                </mat-form-field>
+                            </div>
+                            <div class="py-16" fxLayout="row">
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            name="setupCharge"
+                                            formControlName="setupCharge"
+                                            placeholder="Setup Charge Cost">
+                                </mat-form-field>
+
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            name="setupChargeSalePrice"
+                                            formControlName="setupChargeSalePrice"
+                                            placeholder="Setup Charge Price">
+                                </mat-form-field>
+                            </div>
+                            <div class="py-16" fxLayout="row">
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            type="number"
+                                            name="priority"
+                                            formControlName="priority"
+                                            placeholder="Priority">
+                                </mat-form-field>
+
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <mat-select placeholder="Expense Account"
+                                                formControlName="expenseAccount">
+                                        <mat-option [value]="e.name" *ngFor="let e of expenseAccounts">
+                                            {{ e.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="py-16" fxLayout="row">
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <mat-select placeholder="Income Account"
+                                                formControlName="incomeAccount">
+                                        <mat-option [value]="i.name" *ngFor="let i of incomeAccounts">
+                                            {{ i.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <mat-icon class="mr-12 mt-12"></mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            type="number"
+                                            name="showClient"
+                                            formControlName="showClient"
+                                            placeholder="Show Client">
+                                </mat-form-field>
+                            </div>
+                            <div class="py-16" fxLayout="row">
+                                <mat-icon class="mr-12 mt-12">note</mat-icon>
+                                <mat-form-field fxFlex>
+                                    <input matInput
+                                            name="decorationDetail"
+                                            formControlName="decorationDetail"
+                                            placeholder="Decoration Detail" required>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="py-16" fxLayout="row">
+                                <mat-icon class="mr-12 mt-12">note</mat-icon>
+								<mat-form-field fxFlex="100%" fxFlex.gt-xs="50%">
+								  <mat-select placeholder="Addon Charges" formControlName="addonCharges" [compareWith]="compareCharges" multiple>
+									  <mat-option *ngFor="let ac of addonChargesList" [value]="ac">
+										{{ac.name}}
+									  </mat-option>
+								  </mat-select>
+								  <mat-hint>The charges will be added to decoration fee</mat-hint>
+								</mat-form-field>
+                            </div>
+
+
+                            <div class="py-16" fxLayout="row">
+                                <mat-checkbox
+                                    class="w-100-p"
+                                    formControlName="taxable">
+                                    Taxable
+                                </mat-checkbox>
+                            </div>
+
+                    </div>
+                    </mat-tab>
+            </mat-tab-group>
+        </form>
+
+    </mat-dialog-content>
+    <!-- / CONTENT -->
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <button *ngIf="action !=='edit'"
+                mat-raised-button
+                (click)="create()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+
+        <button *ngIf="action ==='edit'"
+                mat-raised-button
+                (click)="update()"
+                class="save-button mat-accent"
+                aria-label="SAVE">SAVE</button>
+
+    </mat-dialog-actions>
+
+    <div class="loading" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
+

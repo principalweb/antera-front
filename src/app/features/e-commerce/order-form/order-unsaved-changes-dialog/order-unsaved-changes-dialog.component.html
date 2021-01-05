@@ -1,0 +1,10 @@
+<h2 matDialogTitle>Unsaved Changes</h2>
+<mat-dialog-content>
+  <p>You have unsaved changes which would be lost if you navigate away. Are you sure you wish to discard these
+    changes?</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="discard()" color="warn">Discard Changes</button>
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button (click)="save()" color="primary">Save</button>
+</mat-dialog-actions>

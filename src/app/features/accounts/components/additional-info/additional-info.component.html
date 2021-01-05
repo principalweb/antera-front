@@ -1,0 +1,943 @@
+<div id="account-additional-info">
+  <div class="p-24">
+    <mat-card fxFlex>
+      <div fxLayout="row" class="px-24">
+        <h3 class="mat-title accent-text">{{tabName}}</h3>
+        <ng-container *checkPermission="[account.id, 'Account']; requiredPermission 'allowEdit'">
+            <button *ngIf="editingInfo" mat-icon-button (click)="saveAdditionalInfo()">
+                <mat-icon>save</mat-icon>
+            </button>
+
+            <button mat-icon-button (click)="editAdditionalInfo()">
+              <mat-icon *ngIf="!editingInfo">edit</mat-icon>
+              <mat-icon *ngIf="editingInfo">close</mat-icon>
+            </button>
+        </ng-container>
+      </div>
+
+      <form name="form" [formGroup]="additionInfoForm">
+        <div fxLayout="row wrap" fxLayoutAlign="start stretch" class="px-16 mx--8" >
+            <ng-container *ngIf="tabName == 'Additional Info'">
+            <div fxLayout="row wrap" class="px-16 mx-8">
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+                  <div *ngIf="visibleField('website', fields)" class="mat-subheading-2">
+                    {{fieldLabel('website', fields)}}: <span class="accent-text" *ngIf="isUrl(account.website)"><a class="link" href="{{ account.website }}" target=_new>{{ account.website }}</a></span><span class="accent-text" *ngIf="!isUrl(account.website)">{{ account.website }}</span>
+                  </div>
+
+
+
+
+                  <div *ngIf="visibleField('fax', fields)" class="mat-subheading-2">
+                    {{fieldLabel('fax', fields)}}: <span class="accent-text">{{ account.fax }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('defaultCurrency', fields) && currencyList.length > 0 " class="mat-subheading-2">
+                    {{fieldLabel('defaultCurrency', fields)}}: <span class="accent-text">{{ getDefaultCurrency(account.defaultCurrency) }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('logo', fields)" class="mat-subheading-2">
+                    Logo:
+                  </div>
+
+                  <div *ngIf="visibleField('logo', fields)" class="w-15-p">
+                    <img *ngIf="logoUrl" class="logoImage" [src]="logoUrl" [default]= "'assets/images/ecommerce/placeholder-image.png'">
+                  </div>
+
+                  <div *ngIf="visibleField('leadsChannel', fields)">
+                    <mat-list >
+                        <h3 matSubheader>{{fieldLabel('leadsChannel', fields)}}</h3>
+                        <mat-list-item *ngFor="let ch of selectedLeadsChannels">
+                            <mat-icon mat-list-icon>check_box</mat-icon>
+                            <h4 mat-line>{{ leadsChannelLabel(ch) }}</h4>
+                        </mat-list-item>
+                    </mat-list>
+                  </div>
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <mat-form-field *ngIf="visibleField('website', fields)">
+                      <input matInput placeholder="{{fieldLabel('website', fields)}}" formControlName="website">
+                      <app-error *ngIf="requiredField('website',fields)" [group]="additionInfoForm" field="website" label="{{fieldLabel('website', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('fax', fields)">
+                      <input matInput placeholder="{{fieldLabel('fax', fields)}}" formControlName="fax">
+                      <app-error *ngIf="requiredField('fax',fields)" [group]="additionInfoForm" field="fax" label="{{fieldLabel('fax', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('defaultCurrency', fields)">
+                    <mat-select formControlName="defaultCurrency" placeholder="{{fieldLabel('defaultCurrency', fields)}}" [required]="requiredField('defaultCurrency',fields)">
+                        <mat-option [value]="currency.id" *ngFor="let currency of currencyList">{{currency.currency}} {{currency.code}} {{currency.symbol}}</mat-option>
+                    </mat-select>
+                    <app-error *ngIf="requiredField('defaultCurrency',fields)" [group]="additionInfoForm" field="defaultCurrency" label="{{fieldLabel('defaultCurrency', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <div *ngIf="visibleField('logo', fields)" class="upload-image mt-20 w-100-p">
+                    <input type="file" id="fileInput" (change)="onFileChange($event)" #fileInput>
+                    <div class="mat-subheading-2">{{fieldLabel('logo', fields)}}</div>
+                    <div class="mt-8 w-15-p">
+                        <img class="logoImage" [src]="logoUrl" [default]= "'assets/images/ecommerce/placeholder-image.png'">
+                    </div>
+                  </div>
+                  <mat-form-field floatPlaceholder="never" class="input-full-width"  *ngIf="visibleField('leadsChannel', fields)">
+                      <mat-chip-list matPrefix #leadsChannelsList>
+                          <mat-chip
+                              *ngFor="let ch of selectedLeadsChannels"
+                              [selectable]="true"
+                              [removable]="true"
+                              (removed)="removeLeadsChannels(ch)">
+                              {{ leadsChannelLabel(ch) }}
+                              <mat-icon matChipRemove>cancel</mat-icon>
+                          </mat-chip>
+                      </mat-chip-list>
+                      <input matInput
+                          #leadsChannelsInput
+                          [formControl]="leadsChannelsListInputCtrl"
+                          placeholder="Add Leads Channel..."
+                          [matAutocomplete]="auto"
+                          [matChipInputFor]="leadsChannelsList"
+                      />
+                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="leadsChannelSelected($event)">
+                          <mat-option *ngFor="let ch of leadsChannels" [value]="ch">
+                          {{ ch.label }}
+                          </mat-option>
+                      </mat-autocomplete>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+
+                  <div *ngIf="visibleField('webstoreUrl', fields)" class="mat-subheading-2">
+                    {{fieldLabel('webstoreUrl', fields)}}: <span class="accent-text" *ngIf="isUrl(account.webstoreUrl)"><a class="link" href="{{ account.webstoreUrl }}" target=_new>{{ account.webstoreUrl }}</a></span><span class="accent-text" *ngIf="!isUrl(account.webstoreUrl)">{{ account.webstoreUrl }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('priorSalesRep', fields)" class="mat-subheading-2">
+                    {{fieldLabel('priorSalesRep', fields)}}: <span class="accent-text">{{ account.priorSalesRep }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('generalInfo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('generalInfo', fields)}}: <span class="accent-text">{{ account.generalInfo }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('merchandiseInterest', fields)">
+                    <mat-list >
+                        <h3 matSubheader>{{fieldLabel('merchandiseInterest', fields)}}</h3>
+                        <mat-list-item *ngFor="let mi of selectedMerchandiseInterests">
+                            <mat-icon mat-list-icon>check_box</mat-icon>
+                            <h4 mat-line>{{ merchandiseInterestLabel(mi) }}</h4>
+                        </mat-list-item>
+                    </mat-list>
+                  </div>
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+
+                  <mat-form-field *ngIf="visibleField('webstoreUrl', fields)" class="w-100-p">
+                      <input matInput placeholder="{{fieldLabel('webstoreUrl', fields)}}" formControlName="webstoreUrl">
+                      <app-error *ngIf="requiredField('webstoreUrl',fields)" [group]="additionInfoForm" field="webstoreUrl" label="{{fieldLabel('webstoreUrl', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('priorSalesRep', fields)">
+                      <input matInput placeholder="{{fieldLabel('priorSalesRep', fields)}}" formControlName="priorSalesRep">
+                      <app-error *ngIf="requiredField('priorSalesRep',fields)" [group]="additionInfoForm" field="priorSalesRep" label="{{fieldLabel('priorSalesRep', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('generalInfo', fields)" class="mt-24">
+                      <textarea matInput placeholder="{{fieldLabel('generalInfo', fields)}}" formControlName="generalInfo" rows="2"></textarea>
+                      <app-error *ngIf="requiredField('generalInfo',fields)" [group]="additionInfoForm" field="generalInfo" label="{{fieldLabel('generalInfo', fields)}}"></app-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+
+                  <div *ngIf="visibleField('accountExtension', fields)" class="mat-subheading-2">
+                    {{fieldLabel('accountExtension', fields)}}: <span class="accent-text">{{ account.accountExtension }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('timeZone', fields)" class="mat-subheading-2">
+                    {{fieldLabel('timeZone', fields)}}: <span class="accent-text">{{ timezone }} </span>
+                  </div>
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+
+                  <mat-form-field *ngIf="visibleField('accountExtension', fields)">
+                      <input matInput placeholder="{{fieldLabel('accountExtension', fields)}}" formControlName="accountExtension" [required]="requiredField('accountExtension',fields)">
+                      <app-error *ngIf="requiredField('accountExtension',fields)" [group]="additionInfoForm" field="accountExtension" label="{{fieldLabel('accountExtension', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('timeZone', fields)">
+                    <mat-select formControlName="timeZone" placeholder="{{fieldLabel('timeZone', fields)}}" [required]="requiredField('timeZone',fields)">
+                        <mat-option [value]="tz.timeZone" *ngFor="let tz of timezones">{{tz.timeZone}} {{tz.gmtOffset}}</mat-option>
+                    </mat-select>
+                    <app-error *ngIf="requiredField('timeZone',fields)" [group]="additionInfoForm" field="timeZone" label="{{fieldLabel('timeZone', fields)}}"></app-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row wrap" class="px-16 mx-12">
+
+                <div *ngIf="!editingInfo" fxLayout="column mx-6">
+                  <div *ngIf="visibleField('popupNotes', fields)" class="mat-subheading-2">
+                    {{fieldLabel('popupNotes', fields)}}: <span class="accent-text">{{ account.popupNotes }}</span>
+                  </div>
+                  <div *ngIf="visibleField('popupNotes', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2"> Show at order: </div>
+                    <mat-icon *ngIf="account.popupNotes_show_order == '0'" class="ml-4 mb-16 accent-text" >check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.popupNotes_show_order == '1'" class="ml-4 mb-16 accent-text" >check_box</mat-icon>
+                  </div>
+                  <div *ngIf="visibleField('popupNotes', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2"> Show at at account view and order.: </div>
+                    <mat-icon *ngIf="account.popupNotes_show_order_accview == '0'" class="ml-4 mb-16 accent-text" >check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.popupNotes_show_order_accview == '1'" class="ml-4 mb-16 accent-text" >check_box</mat-icon>
+                  </div>
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                    <mat-form-field *ngIf="visibleField('popupNotes', fields)" class="mt-24">
+                      <textarea matInput placeholder="{{fieldLabel('popupNotes', fields)}}" formControlName="popupNotes" rows="2"></textarea>
+                      <app-error *ngIf="requiredField('popupNotes',fields)" [group]="additionInfoForm" field="popupNotes" label="{{fieldLabel('popupNotes', fields)}}"></app-error>
+                    </mat-form-field>
+                  <!-- </div>
+                  <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50" -->
+                  <!-- fxLayout="column" class="p-8"> -->
+                    <mat-checkbox *ngIf="visibleField('popupNotes', fields)" class="mb-20 mt-20"
+                      formControlName="popupNotes_show_order">
+                    Show at order
+                    </mat-checkbox>
+                  <!-- </div>
+                  <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50" -->
+                  <!-- fxLayout="column" class="p-8"> -->
+                    <mat-checkbox *ngIf="visibleField('popupNotes', fields)" class="mb-20 mt-20"
+                      formControlName="popupNotes_show_order_accview">
+                    Show at at account view and order.
+                    </mat-checkbox>
+                  </div>
+
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="tabName == 'Customer Info'">
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+
+                  <!-- <div class="mat-subheading-2">
+                    Tax Status: <span class="accent-text">{{ account.taxStatus }}</span>
+                  </div> -->
+
+                  <div *ngIf="visibleField('taxExempt', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('taxExempt', fields)}}: </div>
+                    <mat-icon *ngIf="account.taxExempt == '0'" class="ml-4 mb-16 accent-text" >check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.taxExempt == '1'" class="ml-4 mb-16 accent-text" >check_box</mat-icon>
+                  </div>
+
+                  <div *ngIf="visibleField('taxExemptNo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('taxExemptNo', fields)}}: <span class="accent-text">{{ account.taxExemptNo }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('taxExemptionReasonId', fields) && account.taxExempt == '1'" class="mat-subheading-2">
+                    {{fieldLabel('taxExemptionReasonId', fields)}}: <span class="accent-text">{{ displayTaxExemptionReason(account.taxExemptionReasonId) }}</span>
+                  </div>
+
+                  <!-- <div class="mat-subheading-2">
+                    Tax Exempt: <span class="accent-text">{{ account.taxExempt }}</span>
+                  </div> -->
+
+                  <div *ngIf="visibleField('defaultTaxRate', fields)" class="mat-subheading-2">
+                    {{fieldLabel('defaultTaxRate', fields)}}: <span class="accent-text">{{ account.defaultTaxRate }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('multiTaxRate', fields)" class="mat-subheading-2">
+                    {{fieldLabel('multiTaxRate', fields)}}: <span class="accent-text">{{ account.multiTaxRate }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('rating', fields)" class="mat-subheading-2">
+                    {{fieldLabel('rating', fields)}}: <span class="accent-text">{{ account.rating }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('customerOrderNote', fields)" class="mat-subheading-2">
+                    {{fieldLabel('customerOrderNote', fields)}}: <span class="accent-text pre">{{ account.customerOrderNote }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('inhouseCustomer', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('inhouseCustomer', fields)}}: </div>
+                    <mat-icon *ngIf="account.inhouseCustomer == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.inhouseCustomer == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+                  <div *ngIf="visibleField('franchiseVendor', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('franchiseVendor', fields)}}: </div>
+                    <mat-icon *ngIf="account.franchiseVendor == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.franchiseVendor == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+
+                  <div *ngIf="adminFeeEnabled && visibleField('adminFeeType', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('adminFeeType', fields)}}: </div>
+                    <span *ngIf="account.adminFeeType == 'PERCENT'" class="ml-4 mb-16 accent-text">{{account.adminFeeRate}}%</span>
+                    <span *ngIf="account.adminFeeType == 'FLAT'" class="ml-4 mb-16 accent-text">${{account.adminFeeRate | number: '1.0-3' }}</span>
+                  </div>
+                  <div *ngIf="visibleField('csrEmbroideryUserName', fields)" class="mat-subheading-2">
+                      {{fieldLabel('csrEmbroideryUserName', fields)}}: <span>{{ account.csrEmbroideryUserName }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('csrScreenprintUserName', fields)" class="mat-subheading-2">
+                      {{fieldLabel('csrScreenprintUserName', fields)}}: <span>{{ account.csrScreenprintUserName }}</span>
+                  </div>
+
+                  <div class="shipping-customer" fxFlex fxFlex.sm="100"><h2> Shipping Settings</h2>
+                    <div *ngIf="visibleField('doNotSendToShipStation', fields)" fxLayout="row" fxLayoutAlign="start center">
+                      <div class="mat-subheading-1">{{fieldLabel('doNotSendToShipStation', fields)}}: </div>
+                      <mat-icon *ngIf="account.doNotSendToShipStation == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                      <mat-icon *ngIf="account.doNotSendToShipStation == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                    </div>
+
+                    <!--div *ngIf="visibleField('useStoreBoth', fields)" fxLayout="row" fxLayoutAlign="start center">
+                      <div class="mat-subheading-1">{{fieldLabel('useStoreBoth', fields)}}: </div>
+                      <mat-icon *ngIf="account.useStoreCostPrice == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                      <mat-icon *ngIf="account.useStoreCostPrice == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                    </div-->
+                    <div *ngIf="visibleField('useStorePrice', fields)" fxLayout="row" fxLayoutAlign="start center">
+                      <div class="mat-subheading-1">{{fieldLabel('useStorePrice', fields)}}: </div>
+                      <mat-icon *ngIf="account.useStorePrice == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                      <mat-icon *ngIf="account.useStorePrice == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                    </div>
+                    <div *ngIf="visibleField('useShipCost', fields)" fxLayout="row" fxLayoutAlign="start center">
+                      <div class="mat-subheading-1">{{fieldLabel('useShipCost', fields)}}: </div>
+                      <mat-icon *ngIf="account.useShipCost == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                      <mat-icon *ngIf="account.useShipCost == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                    </div>
+                    <!--div *ngIf="visibleField('useShipBothM', fields)" fxLayout="row" fxLayoutAlign="start center">
+                      <div class="mat-subheading-1">{{fieldLabel('useShipBothM', fields)}}: </div>
+                      <mat-icon *ngIf="account.useShipCostPriceMargin == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                      <mat-icon *ngIf="account.useShipCostPriceMargin == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                    </div-->
+                    <div *ngIf="visibleField('bookingOrderNotSentShipStation', fields)" fxLayout="row" fxLayoutAlign="start center">
+                      <div class="mat-subheading-1">{{fieldLabel('bookingOrderNotSentShipStation', fields)}}: </div>
+                      <mat-icon *ngIf="account.bookingOrderNotSentShipStation == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                      <mat-icon *ngIf="account.bookingOrderNotSentShipStation == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <!-- <mat-form-field>
+                    <input matInput placeholder="Tax Status" formControlName="taxStatus">
+                  </mat-form-field> -->
+                  <ng-container  checkPermissionAction [pAction]="'account_is_tax_exempt'">
+                      <mat-checkbox *ngIf="visibleField('taxExempt', fields)" class="mb-20 mt-20"
+                          formControlName="taxExempt" [required]="requiredField('taxExempt',fields)">
+                          {{fieldLabel('taxExempt', fields)}}
+                      </mat-checkbox>
+                  </ng-container>
+                  <mat-form-field *ngIf="visibleField('taxExemptNo', fields)" >
+                      <input matInput placeholder="{{fieldLabel('taxExemptNo', fields)}}" formControlName="taxExemptNo" [required]="requiredField('taxExemptNo',fields)">
+                      <app-error *ngIf="requiredField('taxExemptNo',fields)" [group]="additionInfoForm" field="taxExemptNo" label="{{fieldLabel('taxExemptNo', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('taxExemptionReasonId', fields) && account.taxExempt == '1'">
+                      <mat-select formControlName="taxExemptionReasonId" placeholder="{{fieldLabel('taxExemptionReasonId', fields)}}">
+                          <mat-option [value]="0" ></mat-option>
+                          <mat-option [value]="taxExemptionReason.value" *ngFor="let taxExemptionReason of accTaxExemptionReasonTypes">{{ taxExemptionReason.label }}</mat-option>
+                      </mat-select>
+                      <app-error *ngIf="requiredField('taxExemptionReasonId',fields)" [group]="additionInfoForm" field="taxExemptionReasonId" label="{{fieldLabel('taxExemptionReasonId', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('defaultTaxRate', fields)">
+                      <input matInput placeholder="{{fieldLabel('defaultTaxRate', fields)}}" formControlName="defaultTaxRate" [required]="requiredField('defaultTaxRate',fields)">
+                      <app-error *ngIf="requiredField('defaultTaxRate',fields)" [group]="additionInfoForm" field="defaultTaxRate" label="{{fieldLabel('defaultTaxRate', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('multiTaxRate', fields)">
+                    <mat-select formControlName="multiTaxRate" placeholder="{{fieldLabel('multiTaxRate', fields)}}" [required]="requiredField('multiTaxRate',fields)">
+                        <mat-option [value]="multiTaxRate.value" *ngFor="let multiTaxRate of multiTaxRates">
+                            {{ multiTaxRate.label }}
+                        </mat-option>
+                    </mat-select>
+                    <app-error *ngIf="requiredField('multiTaxRate',fields)" [group]="additionInfoForm" field="multiTaxRate" label="{{fieldLabel('multiTaxRate', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('rating', fields)">
+                    <mat-select formControlName="rating" placeholder="{{fieldLabel('rating', fields)}}" [required]="requiredField('rating',fields)">
+                        <mat-option [value]="rating.value" *ngFor="let rating of ratings">
+                            {{ rating.label }}
+                        </mat-option>
+                    </mat-select>
+                    <app-error *ngIf="requiredField('rating',fields)" [group]="additionInfoForm" field="rating" label="{{fieldLabel('rating', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('customerOrderNote', fields)">
+                    <textarea matInput placeholder="{{fieldLabel('customerOrderNote', fields)}}" formControlName="customerOrderNote" rows="2" [required]="requiredField('customerOrderNote',fields)"></textarea>
+                    <app-error *ngIf="requiredField('customerOrderNote',fields)" [group]="additionInfoForm" field="customerOrderNote" label="{{fieldLabel('customerOrderNote', fields)}}"></app-error>
+                </mat-form-field>
+
+                  <mat-checkbox *ngIf="visibleField('inhouseCustomer', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="inhouseCustomer" [required]="requiredField('inhouseCustomer',fields)">
+                      {{fieldLabel('inhouseCustomer', fields)}}
+                   </mat-checkbox>
+                   <mat-checkbox *ngIf="visibleField('franchiseVendor', fields)"
+                   class="mt-20 w-100-p"
+                   formControlName="franchiseVendor">
+                   {{fieldLabel('franchiseVendor', fields)}}
+                 </mat-checkbox>
+ 
+                 <mat-form-field *ngIf="visibleField('adminFeeRate', fields)">
+                   <input matInput placeholder="{{fieldLabel('adminFeeType', fields)}}" formControlName="adminFeeRate">
+                 </mat-form-field>
+ 
+                     <mat-form-field *ngIf="visibleField('csrEmbroideryUserName', fields)">
+                         <input type="hidden" formControlName="csrEmbroideryUserId" />
+                         <input type="text" formControlName="csrEmbroideryUserName" matInput
+                             placeholder="{{fieldLabel('csrEmbroideryUserName', fields)}}"
+                             [matAutocomplete]="autoCsrEmbroideryUserName" >
+                         <mat-autocomplete #autoCsrEmbroideryUserName="matAutocomplete" [displayWith]="displayName"
+                             (optionSelected)="selectCsrEmbroidery($event)">
+                             <mat-option *ngFor="let csrEmbroideryUserName of filteredCsrEmb" [value]="csrEmbroideryUserName">
+                                 {{ csrEmbroideryUserName.name | capitalizeFirst }}
+                             </mat-option>
+                         </mat-autocomplete>
+                         <app-error *ngIf="requiredField('csrEmbroideryUserName',fields)" [group]="additionInfoForm" field="csrEmbroideryUserName" label="{{fieldLabel('csrEmbroideryUserName', fields)}}"></app-error>
+                     </mat-form-field>
+ 
+                     <mat-form-field *ngIf="visibleField('csrScreenprintUserName', fields)">
+                         <input type="hidden" formControlName="csrScreenprintUserId" />
+                         <input type="text" formControlName="csrScreenprintUserName" matInput
+                             placeholder="{{fieldLabel('csrScreenprintUserName', fields)}}"
+                             [matAutocomplete]="autoCsrScreenprintUserName" >
+                         <mat-autocomplete #autoCsrScreenprintUserName="matAutocomplete" [displayWith]="displayName"
+                             (optionSelected)="selectCsrScreenprint($event)">
+                             <mat-option *ngFor="let csrScreenprintUserName of filteredCsrScr" [value]="csrScreenprintUserName">
+                                 {{ csrScreenprintUserName.name | capitalizeFirst }}
+                             </mat-option>
+                         </mat-autocomplete>
+                         <app-error *ngIf="requiredField('csrScreenprintUserName',fields)" [group]="additionInfoForm" field="csrScreenprintUserName" label="{{fieldLabel('csrScreenprintUserName', fields)}}"></app-error>
+                     </mat-form-field>
+ 
+                   <div class="shipping-customer" fxFlex fxFlex.sm="100"><h2> Shipping Settings</h2><h4><u>(Please Select One Only.)</u></h4>
+                    
+                      <mat-checkbox *ngIf="visibleField('doNotSendToShipStation', fields)"
+                          class="mt-20 w-100-p"
+                          formControlName="doNotSendToShipStation" [required]="requiredField('doNotSendToShipStation',fields)">
+                          {{fieldLabel('doNotSendToShipStation', fields)}}
+                      </mat-checkbox>
+
+                      <!--mat-checkbox *ngIf="visibleField('useStoreBoth', fields)"
+                          class="mt-20 w-100-p"
+                          formControlName="useStoreCostPrice" [required]="requiredField('useStoreBoth',fields)">
+                          {{fieldLabel('useStoreBoth', fields)}}
+                      </mat-checkbox-->
+
+                      <mat-checkbox *ngIf="visibleField('useStorePrice', fields)"
+                          class="mt-20 w-100-p"
+                          formControlName="useStorePrice" [required]="requiredField('useStorePrice',fields)">
+                          {{fieldLabel('useStorePrice', fields)}}
+                      </mat-checkbox>
+
+                      <mat-checkbox *ngIf="visibleField('useShipCost', fields)"
+                          class="mt-20 w-100-p"
+                          formControlName="useShipCost" [required]="requiredField('useShipCost',fields)">
+                          {{fieldLabel('useShipCost', fields)}}
+                      </mat-checkbox>
+                      <mat-checkbox *ngIf="visibleField('bookingOrderNotSentShipStation', fields)"
+                          class="mt-20 w-100-p"
+                          formControlName="bookingOrderNotSentShipStation" [required]="requiredField('bookingOrderNotSentShipStation',fields)">
+                          {{fieldLabel('bookingOrderNotSentShipStation', fields)}}
+                        </mat-checkbox>
+
+                      <!--mat-checkbox *ngIf="visibleField('useShipBothM', fields)"
+                          class="mt-20 w-100-p"
+                          formControlName="useShipCostPriceMargin" [required]="requiredField('useShipBothM',fields)">
+                          {{fieldLabel('useShipBothM', fields)}}
+                      </mat-checkbox-->
+                   </div>
+
+                  <!-- <mat-radio-group formControlName="adminFeeType" *ngIf="visibleField('adminFeeType', fields)">
+                    {{fieldLabel('adminFeeType', fields)}}:
+                    <mat-radio-button [value]="'PERCENT'">
+                      Percent of Cost
+                    </mat-radio-button>
+                    <mat-radio-button [value]="'FLAT'">
+                      Flat Fee
+                    </mat-radio-button>
+                  </mat-radio-group> -->
+                </div>
+              </div>
+
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+                  <div *ngIf="visibleField('vipDiscountsForOrders', fields)" class="mat-subheading-2">
+                    {{fieldLabel('vipDiscountsForOrders', fields)}}: <span class="accent-text">{{ account.vipDiscountsForOrders | integer }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('ytdSales', fields)" class="mat-subheading-2">
+                    {{fieldLabel('ytdSales', fields)}}: <span class="accent-text">{{ account.ytdSales | currency }}</span>
+                    <button mat-icon-button (click)="processYtdDetails()">
+                      <mat-icon>refresh</mat-icon>
+                    </button>
+                  </div>
+
+                  <div *ngIf="visibleField('lastYearSales', fields)" class="mat-subheading-2">
+                    {{fieldLabel('lastYearSales', fields)}}: <span class="accent-text">{{ account.lastYearSales | integer }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('highCreditLimit', fields)" class="mat-subheading-2">
+                    {{fieldLabel('highCreditLimit', fields)}}: <span class="accent-text">{{ account.highCreditLimit | currency }}</span>
+                  </div>
+                  <div *ngIf="visibleField('customerPO', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-1">{{fieldLabel('customerPO', fields)}}: </div>
+                    <mat-icon *ngIf="account.customerPO == '0' || account.customerPO == ''" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.customerPO == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+                  <div *ngIf="visibleField('firstOrderDate', fields)" class="mat-subheading-2">
+                    {{fieldLabel('firstOrderDate', fields)}}: <span class="accent-text">{{ account.firstOrderDate}}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('brandAffiliation', fields)" class="mat-subheading-2">
+                    {{fieldLabel('brandAffiliation', fields)}}: <span class="accent-text">{{ account.brandAffiliation}}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('annualBudget', fields)" class="mat-subheading-2">
+                    {{fieldLabel('annualBudget', fields)}}: <span class="accent-text">{{ account.annualBudget}}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('salesManagerId', fields)" class="mat-subheading-2">
+                    {{fieldLabel('salesManagerId', fields)}}: <span class="accent-text">{{ account.salesManagerName}}</span>
+                  </div>
+
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <mat-form-field *ngIf="visibleField('vipDiscountsForOrders', fields)">
+                      <input matInput placeholder="{{fieldLabel('vipDiscountsForOrders', fields)}}"
+                             [value]="additionInfoForm.value.vipDiscountsForOrders"
+                             formControlName="vipDiscountsForOrders"
+                             type="number"
+                             min="0"
+                             step="1"
+                             [required]="requiredField('vipDiscountsForOrders',fields)"
+                             >
+                             <app-error *ngIf="requiredField('vipDiscountsForOrders',fields)" [group]="additionInfoForm" field="vipDiscountsForOrders" label="{{fieldLabel('vipDiscountsForOrders', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('ytdSales', fields)">
+                      <input matInput placeholder="{{fieldLabel('ytdSales', fields)}}"
+                             [value]="additionInfoForm.value.ytdSales"
+                             formControlName="ytdSales"
+                             type="number"
+                             min="0"
+                             step="1">
+                             <app-error *ngIf="requiredField('ytdSales',fields)" [group]="additionInfoForm" field="ytdSales" label="{{fieldLabel('ytdSales', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('lastYearSales', fields)">
+                      <input matInput placeholder="{{fieldLabel('lastYearSales', fields)}}"
+                             [value]="additionInfoForm.value.lastYearSales"
+                             formControlName="lastYearSales"
+                             type="number"
+                             min="0"
+                             step="1">
+                             <app-error *ngIf="requiredField('lastYearSales',fields)" [group]="additionInfoForm" field="lastYearSales" label="{{fieldLabel('lastYearSales', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('highCreditLimit', fields)">
+                    <ng-container checkPermissionAction [pAction]="'account_credit_limit'">
+                          <input matInput placeholder="{{fieldLabel('highCreditLimit', fields)}}"
+                                 [value]="additionInfoForm.value.highCreditLimit"
+                                 formControlName="highCreditLimit"
+                                 type="number"
+                                 min="0"
+                                 step="1">
+                                 <app-error *ngIf="requiredField('highCreditLimit',fields)" [group]="additionInfoForm" field="highCreditLimit" label="{{fieldLabel('highCreditLimit', fields)}}"></app-error>
+                    </ng-container>
+                </mat-form-field>
+                <mat-checkbox *ngIf="visibleField('customerPO', fields)"
+                    class="mt-20 w-100-p"
+                    formControlName="customerPO" [required]="requiredField('customerPO',fields)">
+                    {{fieldLabel('customerPO', fields)}}
+                </mat-checkbox>
+
+                 <mat-form-field *ngIf="visibleField('firstOrderDate', fields)">
+                     <input matInput formControlName="firstOrderDate" [matDatepicker]="pickerFirstOrderDate"
+                         placeholder="{{fieldLabel('firstOrderDate', fields)}}">
+                      <app-error *ngIf="requiredField('firstOrderDate',fields)" [group]="additionInfoForm" field="firstOrderDate" label="{{fieldLabel('firstOrderDate', fields)}}"></app-error>
+                      <mat-datepicker-toggle matSuffix [for]="pickerFirstOrderDate">
+                     </mat-datepicker-toggle>
+                     <mat-datepicker #pickerFirstOrderDate></mat-datepicker>
+                 </mat-form-field>
+
+
+                  <mat-form-field *ngIf="visibleField('brandAffiliation', fields)">
+                      <mat-select formControlName="brandAffiliation" placeholder="{{fieldLabel('brandAffiliation', fields)}}">
+                          <mat-option [value]="" ></mat-option>
+                          <mat-option [value]="brandAffiliation.value" *ngFor="let brandAffiliation of accBrandAffiliationTypes">{{ brandAffiliation.label }}</mat-option>
+                      </mat-select>
+                      <app-error *ngIf="requiredField('brandAffiliation',fields)" [group]="additionInfoForm" field="brandAffiliation" label="{{fieldLabel('brandAffiliation', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('annualBudget', fields)">
+                      <mat-select formControlName="annualBudget" placeholder="{{fieldLabel('annualBudget', fields)}}">
+                          <mat-option [value]="" ></mat-option>
+                          <mat-option [value]="annualBudget.value" *ngFor="let annualBudget of accAnnualBudgetTypes">{{ annualBudget.label }}</mat-option>
+                      </mat-select>
+                      <app-error *ngIf="requiredField('annualBudget',fields)" [group]="additionInfoForm" field="annualBudget" label="{{fieldLabel('annualBudget', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('salesManagerId', fields)">
+                      <input type="hidden" formControlName="salesManagerId" />
+                      <input type="text"
+                             formControlName="salesManagerName"
+                             minlength="3"
+                             matInput
+                             placeholder="{{fieldLabel('salesManagerId', fields)}}"
+                             [matAutocomplete]="autoAssigned"
+                             >
+                      <mat-autocomplete #autoAssigned="matAutocomplete"
+                                        [displayWith]="displayName"
+                                        (optionSelected)="selectSalesManager($event)">
+                          <mat-option *ngFor="let salesManager of filteredUsers" [value]="salesManager">
+                              {{ salesManager.name | capitalizeFirst }}
+                          </mat-option>
+                      </mat-autocomplete>
+                      <app-error *ngIf="requiredField('salesManagerId',fields)" [group]="additionInfoForm" field="salesManagerId" label="{{fieldLabel('salesManagerId', fields)}}"></app-error>
+                  </mat-form-field>
+
+
+
+                </div>
+              </div>
+
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+                  <div *ngIf="visibleField('leadSource', fields)" class="mat-subheading-2">
+                    {{fieldLabel('leadSource', fields)}}: <span class="accent-text">{{ account.leadSource }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('industry', fields)" class="mat-subheading-2">
+                    {{fieldLabel('industry', fields)}}: <span class="accent-text">{{ account.industry }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('shippingAccountNo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('shippingAccountNo', fields)}}: <span class="accent-text">{{ account.shippingAccountNo }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('shippingAccountType', fields)" class="mat-subheading-2">
+                    {{fieldLabel('shippingAccountType', fields)}}: <span class="accent-text">{{ account.shippingAccountType }}</span>
+                  </div>
+
+                <div *ngIf="visibleField('pricingMethods', fields)" class="mat-subheading-2">
+                  {{fieldLabel('pricingMethods', fields)}}: <span class="accent-text pre">{{ getPricingMethod(account.pricingMethods) }}</span>
+                </div>
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <mat-form-field *ngIf="visibleField('leadSource', fields)">
+                      <mat-select formControlName="leadSource" placeholder="{{fieldLabel('leadSource', fields)}}">
+                          <mat-option [value]="source.value" *ngFor="let source of leadSources">{{ source.label }}</mat-option>
+                      </mat-select>
+                      <app-error *ngIf="requiredField('leadSource',fields)" [group]="additionInfoForm" field="leadSource" label="{{fieldLabel('leadSource', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('industry', fields)">
+                      <mat-select formControlName="industry" placeholder="{{fieldLabel('industry', fields)}}">
+                          <mat-option [value]="industry.value" *ngFor="let industry of industries">{{ industry.label }}</mat-option>
+                      </mat-select>
+                      <app-error *ngIf="requiredField('industry',fields)" [group]="additionInfoForm" field="industry" label="{{fieldLabel('industry', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('shippingAccountNo', fields)">
+                      <input matInput placeholder="{{fieldLabel('shippingAccountNo', fields)}}" formControlName="shippingAccountNo">
+                      <app-error *ngIf="requiredField('shippingAccountNo',fields)" [group]="additionInfoForm" field="shippingAccountNo" label="{{fieldLabel('shippingAccountNo', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('shippingAccountType', fields)">
+                      <mat-select formControlName="shippingAccountType" placeholder="{{fieldLabel('shippingAccountType', fields)}}">
+                          <mat-option [value]="accType.value" *ngFor="let accType of shipAccTypes">{{ accType.label }}</mat-option>
+                      </mat-select>
+                      <app-error *ngIf="requiredField('shippingAccountType',fields)" [group]="additionInfoForm" field="shippingAccountType" label="{{fieldLabel('shippingAccountType', fields)}}"></app-error>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="visibleField('pricingMethods', fields)">
+                    <mat-select formControlName="pricingMethods" placeholder="{{fieldLabel('pricingMethods', fields)}}" [required]="requiredField('pricingMethods',fields)">
+                        <mat-option [value]="pricingMethods.id" *ngFor="let pricingMethods of pricingMethodsList">{{pricingMethods.name}}</mat-option>
+                    </mat-select>
+                    <app-error *ngIf="requiredField('pricingMethods',fields)" [group]="additionInfoForm" field="pricingMethods" label="{{fieldLabel('pricingMethods', fields)}}"></app-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="tabName == 'Vendor Info'">
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+                  <div *ngIf="visibleField('artContactName', fields)" class="mat-subheading-2">
+                    {{fieldLabel('artContactName', fields)}}: <span class="accent-text">{{ account.artContactName }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('artContactEmail', fields)" class="mat-subheading-2">
+                    {{fieldLabel('artContactEmail', fields)}}: <span class="accent-text">{{ account.artContactEmail }}</span>
+                  </div>
+
+
+                  <div *ngIf="visibleField('csRepEmail', fields)" class="mat-subheading-2">
+                    {{fieldLabel('csRepEmail', fields)}}: <span class="accent-text">{{ account.csRepEmail }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('vendorProductNotes', fields)" class="mat-subheading-2">
+                    {{fieldLabel('vendorProductNotes', fields)}}: <span class="accent-text pre">{{ account.vendorProductNotes }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('industry', fields)" class="mat-subheading-2">
+                    {{fieldLabel('industry', fields)}}: <span class="accent-text">{{ account.industry }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('gstTaxRateOnPo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('gstTaxRateOnPo', fields)}}: <span class="accent-text">{{ account.gstTaxRateOnPo }} %</span>
+                  </div>
+
+                  <div *ngIf="visibleField('gstCountryTaxRateOnPo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('gstCountryTaxRateOnPo', fields)}}: <span class="accent-text">{{ account.gstCountryTaxRateOnPo }} % </span>
+                  </div>
+
+                  <div *ngIf="visibleField('pstTaxRateOnPo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('pstTaxRateOnPo', fields)}}: <span class="accent-text">{{ account.pstTaxRateOnPo }} % </span>
+                  </div>
+                  <div *ngIf="visibleField('hstTaxRateOnPo', fields)" class="mat-subheading-2">
+                    {{fieldLabel('hstTaxRateOnPo', fields)}}: <span class="accent-text">{{ account.hstTaxRateOnPo }} % </span>
+                  </div>
+                  <div *ngIf="visibleField('importVendor', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('importVendor', fields)}}: </div>
+                    <mat-icon *ngIf="account.importVendor == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.importVendor == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+                  <div *ngIf="visibleField('doNotSendToShipStation', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('doNotSendToShipStation', fields)}}: </div>
+                    <mat-icon *ngIf="account.doNotSendToShipStation == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.doNotSendToShipStation == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+                  <div *ngIf="visibleField('doNotIssuePo', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('doNotIssuePo', fields)}}: </div>
+                    <mat-icon *ngIf="account.doNotIssuePo == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.doNotIssuePo == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+                  <div *ngIf="visibleField('required1099', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('required1099', fields)}}: </div>
+                    <mat-icon *ngIf="account.required1099 == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.required1099 == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+
+                  <mat-form-field *ngIf="visibleField('artContactName', fields)">
+                    <input matInput placeholder="{{fieldLabel('artContactName', fields)}}" formControlName="artContactName">
+                    <app-error *ngIf="requiredField('artContactName',fields)" [group]="additionInfoForm" field="artContactName" label="{{fieldLabel('artContactName', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('artContactEmail', fields)">
+                    <input matInput placeholder="{{fieldLabel('artContactEmail', fields)}}" formControlName="artContactEmail">
+                    <app-error *ngIf="requiredField('artContactEmail',fields)" [group]="additionInfoForm" field="artContactEmail" label="{{fieldLabel('artContactEmail', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('csRepEmail', fields)">
+                      <input matInput placeholder="{{fieldLabel('csRepEmail', fields)}}" formControlName="csRepEmail">
+                      <app-error *ngIf="requiredField('csRepEmail',fields)" [group]="additionInfoForm" field="csRepEmail" label="{{fieldLabel('csRepEmail', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('vendorProductNotes', fields)">
+                    <textarea matInput placeholder="{{fieldLabel('vendorProductNotes', fields)}}" formControlName="vendorProductNotes" rows="2"></textarea>
+                    <app-error *ngIf="requiredField('vendorProductNotes',fields)" [group]="additionInfoForm" field="vendorProductNotes" label="{{fieldLabel('vendorProductNotes', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('industry', fields)">
+                    <mat-select formControlName="industry" placeholder="{{fieldLabel('industry', fields)}}">
+                        <mat-option [value]="industry.value" *ngFor="let industry of industries">{{ industry.label }}</mat-option>
+                    </mat-select>
+                    <app-error *ngIf="requiredField('industry',fields)" [group]="additionInfoForm" field="industry" label="{{fieldLabel('industry', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('gstTaxRateOnPo', fields)">
+                      <input matInput placeholder="{{fieldLabel('gstTaxRateOnPo', fields)}}" formControlName="gstTaxRateOnPo" [required]="requiredField('gstTaxRateOnPo',fields)">
+                      <app-error *ngIf="requiredField('gstTaxRateOnPo',fields)" [group]="additionInfoForm" field="gstTaxRateOnPo" label="{{fieldLabel('gstTaxRateOnPo', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('gstCountryTaxRateOnPo', fields)">
+                      <input matInput placeholder="{{fieldLabel('gstCountryTaxRateOnPo', fields)}}" formControlName="gstCountryTaxRateOnPo" [required]="requiredField('gstCountryTaxRateOnPo',fields)">
+                      <app-error *ngIf="requiredField('gstCountryTaxRateOnPo',fields)" [group]="additionInfoForm" field="gstCountryTaxRateOnPo" label="{{fieldLabel('gstCountryTaxRateOnPo', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('pstTaxRateOnPo', fields)">
+                      <input matInput placeholder="{{fieldLabel('pstTaxRateOnPo', fields)}}" formControlName="pstTaxRateOnPo" [required]="requiredField('pstTaxRateOnPo',fields)">
+                      <app-error *ngIf="requiredField('pstTaxRateOnPo',fields)" [group]="additionInfoForm" field="pstTaxRateOnPo" label="{{fieldLabel('pstTaxRateOnPo', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('hstTaxRateOnPo', fields)">
+                      <input matInput placeholder="{{fieldLabel('hstTaxRateOnPo', fields)}}" formControlName="hstTaxRateOnPo" [required]="requiredField('hstTaxRateOnPo',fields)">
+                      <app-error *ngIf="requiredField('hstTaxRateOnPo',fields)" [group]="additionInfoForm" field="hstTaxRateOnPo" label="{{fieldLabel('hstTaxRateOnPo', fields)}}"></app-error>
+                  </mat-form-field>
+                  <mat-checkbox *ngIf="visibleField('importVendor', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="importVendor" [required]="requiredField('importVendor',fields)">
+                      {{fieldLabel('importVendor', fields)}}
+                   </mat-checkbox>
+                  <mat-checkbox *ngIf="visibleField('doNotSendToShipStation', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="doNotSendToShipStation" [required]="requiredField('doNotSendToShipStation',fields)">
+                      {{fieldLabel('doNotSendToShipStation', fields)}}
+                   </mat-checkbox>
+                  <mat-checkbox *ngIf="visibleField('doNotIssuePo', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="doNotIssuePo" [required]="requiredField('doNotIssuePo',fields)">
+                      {{fieldLabel('doNotIssuePo', fields)}}
+                   </mat-checkbox>
+                   
+                   <mat-checkbox *ngIf="visibleField('required1099', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="required1099" [required]="requiredField('required1099',fields)">
+                      {{fieldLabel('required1099', fields)}}
+                   </mat-checkbox>
+
+                </div>
+              </div>
+
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+                  <div *ngIf="visibleField('csRepName', fields)" class="mat-subheading-2">
+                    {{fieldLabel('csRepName', fields)}}: <span class="accent-text">{{ account.csRepName }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('sampleEmail', fields)" class="mat-subheading-2">
+                    {{fieldLabel('sampleEmail', fields)}}: <span class="accent-text">{{ account.sampleEmail }}</span>
+                  </div>
+
+                  <div *ngIf="visibleField('vendorPoNotes', fields)" class="mat-subheading-2">
+                    {{fieldLabel('vendorPoNotes', fields)}}: <span class="accent-text pre">{{ account.vendorPoNotes }}</span>
+                  </div>
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+                  <mat-form-field *ngIf="visibleField('csRepName', fields)">
+                    <input matInput placeholder="{{fieldLabel('csRepName', fields)}}" formControlName="csRepName">
+                    <app-error *ngIf="requiredField('csRepName',fields)" [group]="additionInfoForm" field="csRepName" label="{{fieldLabel('csRepName', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('sampleEmail', fields)">
+                      <input matInput placeholder="{{fieldLabel('sampleEmail', fields)}}" formControlName="sampleEmail">
+                      <app-error *ngIf="requiredField('sampleEmail',fields)" [group]="additionInfoForm" field="sampleEmail" label="{{fieldLabel('sampleEmail', fields)}}"></app-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="visibleField('vendorPoNotes', fields)">
+                    <textarea matInput placeholder="{{fieldLabel('vendorPoNotes', fields)}}" formControlName="vendorPoNotes" rows="2"></textarea>
+                    <app-error *ngIf="requiredField('vendorPoNotes',fields)" [group]="additionInfoForm" field="vendorPoNotes" label="{{fieldLabel('vendorPoNotes', fields)}}"></app-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="account-info" fxFlex fxFlex.xs="100" fxFlex.sm="50"
+                  fxLayout="column" class="p-8">
+                <div *ngIf="!editingInfo" fxLayout="column">
+
+                  <div *ngIf="visibleField('eqp', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('eqp', fields)}}: </div>
+                    <mat-icon *ngIf="account.eqp == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.eqp == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+
+                  <div *ngIf="visibleField('inhouseVendor', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('inhouseVendor', fields)}}: </div>
+                    <mat-icon *ngIf="account.inhouseVendor == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.inhouseVendor == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+
+                  <div *ngIf="visibleField('preferredVendor', fields)" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="mat-subheading-2">{{fieldLabel('preferredVendor', fields)}}: </div>
+                    <mat-icon *ngIf="account.preferredVendor == '0'" class="ml-4 mb-16 accent-text">check_box_outline_blank</mat-icon>
+                    <mat-icon *ngIf="account.preferredVendor == '1'" class="ml-4 mb-16 accent-text">check_box</mat-icon>
+                  </div>
+
+                </div>
+                <div *ngIf="editingInfo" fxLayout="column">
+
+                  <mat-checkbox *ngIf="visibleField('eqp', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="eqp">
+                      {{fieldLabel('eqp', fields)}}
+                  </mat-checkbox>
+
+                  <mat-checkbox *ngIf="visibleField('inhouseVendor', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="inhouseVendor">
+                      {{fieldLabel('inhouseVendor', fields)}}
+                   </mat-checkbox>
+
+
+                  <mat-checkbox *ngIf="visibleField('preferredVendor', fields)"
+                      class="mt-20 w-100-p"
+                      formControlName="preferredVendor">
+                      {{fieldLabel('preferredVendor', fields)}}
+                  </mat-checkbox>
+
+                </div>
+              </div>
+            </ng-container>
+        </div>
+            <ng-container *ngIf="tabName == 'Vendor Info'" fxLayout="row wrap">
+                  <div *ngIf="editingInfo && visibleField('vendorPaymentTerms', fields)" fxLayout="row" fxLayoutAlign="start stretch">
+                      <mat-form-field floatPlaceholder="never" class="input-full-width">
+                          <mat-chip-list matPrefix #vendorPaymentTermsList>
+                              <mat-chip
+                                  *ngFor="let vpt of selectedVendorPaymentTerms"
+                                  [selectable]="true"
+                                  [removable]="true"
+                                  (removed)="removeVendorPaymentTerms(vpt)">
+                                  {{ vendorPaymentTermsLabel(vpt) }}
+                                  <mat-icon matChipRemove>cancel</mat-icon>
+                              </mat-chip>
+                          </mat-chip-list>
+                          <input matInput
+                              #vendorPaymentTermsInput
+                              [formControl]="vendorPaymentTermsInputCtrl"
+                              placeholder="Add Terms..."
+                              [matAutocomplete]="auto"
+                              [matChipInputFor]="vendorPaymentTermsList"
+                          />
+                          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="vendorPaymentTermsSelected($event)">
+                              <mat-option *ngFor="let vpt of vendorPaymentTerms" [value]="vpt">
+                              {{ vpt.label }}
+                              </mat-option>
+                          </mat-autocomplete>
+                      </mat-form-field>
+                  </div>
+                  <div *ngIf="!editingInfo  && visibleField('vendorPaymentTerms', fields)" fxLayout="row" fxLayoutAlign="start stretch">
+                    <mat-list >
+                        <h3 matSubheader>{{fieldLabel('vendorPaymentTerms', fields)}}</h3>
+                        <mat-list-item *ngFor="let vpt of selectedVendorPaymentTerms">
+                            <mat-icon mat-list-icon>note</mat-icon>
+                            <h4 mat-line>{{ vendorPaymentTermsLabel(vpt) }}</h4>
+                        </mat-list-item>
+                    </mat-list>
+                  </div>
+          </ng-container>
+      </form>
+
+    </mat-card>
+  </div>
+</div>
+
+<div class="loading"
+    [@animate]="{value:'*',params:{opacity:1}}"
+    *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>

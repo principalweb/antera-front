@@ -1,0 +1,93 @@
+<div id="account-details" class="page-layout simple inner-scroll">
+
+  <!-- HEADER -->
+  <div class="header mat-accent-bg p-16 p-sm-24" fxLayout="row" fxLayoutAlign="space-between center">
+
+    <!-- APP TITLE -->
+    <div fxLayout="row" fxLayoutAlign="start center">
+
+      <div class="logo" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *ngIf="!account.logo">work</mat-icon>
+        <img [src]="account.logo" alt="Account Logo" *ngIf="account.logo">
+        <div class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          <a routerLink="/accounts">Accounts</a>&nbsp;>&nbsp;
+          <span>{{ account.accountName }}</span>
+        </div>
+      </div>
+
+    </div>
+    <!-- / APP TITLE -->
+
+    <div class="rank" fxFlex="none" fxLayout="row" fxLayoutAlign="start center"
+      matTooltip="Company Rank automatically updates on the 1st of each month" *ngIf="account.partnerType==='Customer'">
+      <div fxLayout="column" class="mr-8" fxHide.xs>
+        <div class="label1">Rank</div>
+        <div class="label2">Top {{ topRank }}%</div>
+      </div>
+      <div class="rank-number">{{ account.ranking }}</div>
+    </div>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Overview">
+      <accounts-overview-tab [account]="account" [team]="team" (edit)="editAccount($event)"></accounts-overview-tab>
+    </mat-tab>
+
+    <mat-tab label="Additional Info">
+      <account-additional-info [account]="account" [tabName]="'Additional Info'" (edit)="editAccount($event)">
+      </account-additional-info>
+    </mat-tab>
+
+    <mat-tab *ngIf="account.partnerType == 'Customer'" label="Customer Info">
+      <account-additional-info [account]="account" [tabName]="'Customer Info'" (edit)="editAccount($event)">
+      </account-additional-info>
+    </mat-tab>
+
+    <mat-tab *ngIf="account.partnerType == 'Vendor'" label="Vendor Info">
+      <account-additional-info [account]="account" [tabName]="'Vendor Info'" (edit)="editAccount($event)">
+      </account-additional-info>
+    </mat-tab>
+
+    <mat-tab *ngIf="account.partnerType == 'Vendor'" label="Decoration Price Strategy">
+      <vendor-decoration-price-strategy [account]="account" [tabName]="'PriceStrategys'" (edit)="editAccount($event)">
+      </vendor-decoration-price-strategy>
+    </mat-tab>
+
+
+    <mat-tab *ngIf="account.partnerType == 'Customer'" label="Credits">
+      <account-balance-info [account]="account" [tabName]="'Credits'" (edit)="editAccount($event)">
+      </account-balance-info>
+    </mat-tab>
+
+
+    <mat-tab label="Activities">
+      <div class="products tab-content">
+        <app-account-activity-list [account]="account" style="position:absolute;max-height:100%;"></app-account-activity-list>
+      </div>
+    </mat-tab>
+
+    <!-- commented out by Benzur -->
+    <!-- <mat-tab label="Admin Settings">
+      <account-admin-settings [info]="account"></account-admin-settings>
+    </mat-tab> -->
+
+    <!--mat-tab label="Files">
+      <account-files-tab [info]="account"></account-files-tab>
+    </mat-tab-->
+    <mat-tab label="Files">
+      <app-aws-file-manager class="w-100-p" [recordId]="account.id" [accountId]="account.id"
+        [awsFileManagerType]="awsFileManagerType"></app-aws-file-manager>
+    </mat-tab>
+
+    <mat-tab label="Artwork" *ngIf="account.partnerType === 'Customer' && account.accountName != ''">
+      <fuse-artworks-list fxLayout="column" #artworksList [customerName]="account.accountName"></fuse-artworks-list>
+    </mat-tab>
+
+  </mat-tab-group>
+
+
+</div>
+
+<div class="loading" [@animate]="{value:'*',params:{opacity:1}}" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

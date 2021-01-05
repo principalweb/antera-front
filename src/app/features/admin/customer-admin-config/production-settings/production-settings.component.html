@@ -1,0 +1,30 @@
+<div class="p-16">
+  <div fxLayout="row">
+    <span class="mat-title">Production Management</span>
+  </div>
+  <button mat-button color="primary" (click)="save()">Save</button>
+  <mat-divider></mat-divider>
+    <mat-list-item class="mat-h3">Operations</mat-list-item>
+    <mat-list-item>
+      <button mat-raised-button color="primary" class="button" (click)="batchAllByDesign()">Batch jobs by design</button>
+      This operation will batch all jobs currently in 'Pending', or 'Ready' status based on the Design Number. This operation is irreversible.
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <button mat-raised-button color="primary" class="button" (click)="unbatchAll()">Unbatch all jobs</button>
+      This operation will unbatch all jobs currently in 'Pending', or 'Ready' status. This operation is irreversible.
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>
+      <mat-list-item class="mat-h3">Settings</mat-list-item>
+      <form [formGroup]="settingsForm" *ngIf="settingsForm">
+        <mat-checkbox formControlName="autoBatchByDesign">
+          Automatically add job to a batch based on design number. This triggers when an order is in 'Booked' status, and an in-house decoration is added to an item.
+        </mat-checkbox>
+        <mat-checkbox formControlName="allowNoEquipment">
+          Allow Job Card Move to 'Scheduled' Without Requirement of Assigning Equipment.
+        </mat-checkbox>
+      </form>
+
+    </mat-list-item>
+</div>

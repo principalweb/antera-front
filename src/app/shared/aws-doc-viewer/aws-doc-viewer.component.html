@@ -1,0 +1,76 @@
+<div class="dialog-content-wrapper">
+    <mat-toolbar matDialogTitle class="mat-accent m-0" fxFlex="none">
+        <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="title dialog-title">
+                {{fileName}}
+            </span>
+            <div>
+                <button *ngIf="this.previewFileIndex > 0" mat-button class="mat-icon-button"
+                        (click)="prev()"
+                        aria-label="Previous">
+                    <mat-icon>navigate_before</mat-icon>
+                </button>
+                <button *ngIf="(this.previewFileIndex + 1) < this.gallary.length" mat-button class="mat-icon-button"
+                        (click)="next()"
+                        aria-label="Next">
+                    <mat-icon>navigate_next</mat-icon>
+                </button>
+                <button *ngIf="loading" mat-button class="mat-icon-button"
+                        (click)="downloadUrlClick.click()"
+                        aria-label="Download" >
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+                <button mat-button class="mat-icon-button"
+                        (click)="dialogRefPreview.close()"
+                        aria-label="Close dialog">
+                    <mat-icon>close</mat-icon>
+                </button>
+
+            </div>
+        </mat-toolbar-row>
+
+    </mat-toolbar>
+
+    <mat-dialog-content class="p-24 m-0">
+    <div *ngIf="!isDoc && !isVideo && !this.loading" style="width:50vw;height:250vh;background: #FFFFFF;text-align:center;">
+        <!--iframe  [src]="src" style="width:100%;height:250vh;background: #d1d1d1;" frameborder="0" ></iframe-->
+        <img  [src]="src" align="center" valign="top">
+    </div>
+    <video *ngIf="isVideo && !this.loading" controls><source [src]="downloadUrl">our browser does not support HTML5 video.</video>
+    <div  *ngIf="isDoc && !this.loading">
+        <ngx-doc-viewer [url]="url" viewer="google" style="width:50vw;height:250vh;"></ngx-doc-viewer>
+    </div>
+
+<div class="loading"
+     [@animate]="{value:'*',params:{opacity:1}}"
+     *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+			<a mat-stroked-button  color="accent" href="{{downloadUrl}}" target=_new style="text-decoration: none;" id="downloadUrlClick" #downloadUrlClick>Download</a> &nbsp;&nbsp;
+            <button
+                mat-raised-button
+                (click)="dialogRefPreview.close()"
+                class="save-button mat-accent"
+                aria-label="Close">
+             Close
+            </button>
+
+        </div>
+
+    </mat-dialog-actions>
+
+    <div class="center">
+        <div class="loading"
+             [@animate]="{value:'*',params:{opacity:1}}"
+             *ngIf="loading">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+</div>
+
